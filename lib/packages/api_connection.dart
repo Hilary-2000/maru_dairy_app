@@ -394,4 +394,36 @@ class ApiConnection{
       client.close();
     }
   }
+
+  // get member data
+  Future<String> updatePassword(
+      String token,
+      String username,
+      String password
+      ) async{
+    var client = rq.Client();
+    var url = Uri.http(apiLink,"/api/technician/update/credentials");
+    var body = jsonEncode({
+      "username": username,
+      "password": password
+    });
+    try{
+      var response = await client.post(
+          url,
+          headers: {
+            'Content-Type': 'application/json',
+            'maru-authentication_code' : token
+          },
+          body: body
+      ).timeout(Duration(seconds: 10));
+      client.close();
+      return response.body;
+    }on TimeoutException {
+      return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
+    } catch(e){
+      return "{\"success\":false, \"message\":\"$e\"}";
+    }finally{
+      client.close();
+    }
+  }
 }

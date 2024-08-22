@@ -1,5 +1,8 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 enum Type { primary, secondary, warning, danger, info, dark, white, success }
 
@@ -659,6 +662,39 @@ class CustomThemes {
     );
   }
 
+  Container maruPassword({
+    TextEditingController? editingController,
+    bool? hidePassword,
+    void Function(String)? isChanged,
+    void Function()? passwordStatus,
+    String? Function(String?)? validator,
+    String label = "",
+    String hintText = "",
+    FloatingLabelBehavior floatingBehaviour = FloatingLabelBehavior.always
+  }){
+    return Container(
+      child: Stack(
+        alignment: Alignment(1,0),
+        children: [
+          maruTextFormField(
+            label: label,
+            editingController: editingController,
+            textType: TextInputType.text,
+            hideText: hidePassword!,
+            isChanged: isChanged,
+            validator: validator,
+            floatingBehaviour: floatingBehaviour,
+            hintText: hintText
+          ),
+          Container(
+            width: 60,
+            child: IconButton(onPressed: passwordStatus, icon: Icon(hidePassword ? FontAwesomeIcons.eye : FontAwesomeIcons.eyeSlash), iconSize: 15,),
+          )
+        ],
+      ),
+    );
+  }
+
   TextFormField maruTextFormField(
       {String? hintText,
       TextEditingController? editingController,
@@ -666,6 +702,7 @@ class CustomThemes {
       TextInputType textType = TextInputType.text,
       bool hideText = false,
       String label = "",
+      FloatingLabelBehavior floatingBehaviour = FloatingLabelBehavior.auto,
       String? Function(String?)? validator}) {
     return TextFormField(
       validator: validator,
@@ -682,6 +719,7 @@ class CustomThemes {
           size: 15,
         ),
         isDense: true,
+        floatingLabelBehavior: floatingBehaviour,
         focusedErrorBorder: OutlineInputBorder(
             borderRadius: const BorderRadius.all(Radius.circular(5.0)),
             borderSide: BorderSide(color: dangerColor)),
