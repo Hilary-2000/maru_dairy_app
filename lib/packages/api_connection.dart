@@ -325,4 +325,73 @@ class ApiConnection{
       client.close();
     }
   }
+
+  // get member data
+  Future<String> getTechnicianDetails(String token) async{
+    var client = rq.Client();
+    var url = Uri.http(apiLink,"/api/technician/details/$token");
+    var body = jsonEncode({});
+    try{
+      var response = await client.post(
+          url,
+          headers: {
+            'Content-Type': 'application/json',
+            'maru-authentication_code' : token
+          },
+          body: body
+      ).timeout(Duration(seconds: 10));
+      client.close();
+      return response.body;
+    }on TimeoutException {
+      return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
+    } catch(e){
+      return "{\"success\":false, \"message\":\"$e\"}";
+    }finally{
+      client.close();
+    }
+  }
+
+  // get member data
+  Future<String> updateTechnician(
+  String token,
+  String fullname,
+  String gender,
+  String phonenumber,
+  String email,
+  String residence,
+  String region,
+  String username,
+  String national_id
+  ) async{
+    var client = rq.Client();
+    var url = Uri.http(apiLink,"/api/technician/update/details");
+    var body = jsonEncode({
+      "fullname" : fullname,
+      "gender" : gender,
+      "phone_number" : phonenumber,
+      "email" : email,
+      "residence": residence,
+      "region": region,
+      "username": username,
+      "national_id": national_id
+    });
+    try{
+      var response = await client.post(
+          url,
+          headers: {
+            'Content-Type': 'application/json',
+            'maru-authentication_code' : token
+          },
+          body: body
+      ).timeout(Duration(seconds: 10));
+      client.close();
+      return response.body;
+    }on TimeoutException {
+      return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
+    } catch(e){
+      return "{\"success\":false, \"message\":\"$e\"}";
+    }finally{
+      client.close();
+    }
+  }
 }

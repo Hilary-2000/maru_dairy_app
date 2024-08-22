@@ -58,9 +58,11 @@ class _EditMemberMilkDataState extends State<EditMemberMilkData> {
   bool saveLoader = false;
   int index = 0;
   bool accepted = false;
+  List<Widget> milkEditHistory = [];
 
   List<Color> colors_shade = [];
   List<TextStyle> textStyles = [];
+  List<TextStyle> textStylesTitle = [];
   List<Color> fullcolor = [];
 
   Future<void> _selectTime(BuildContext context) async {
@@ -123,6 +125,7 @@ class _EditMemberMilkDataState extends State<EditMemberMilkData> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+    double width = MediaQuery.of(context).size.width;
     setState(() {
       colors_shade = [
         customs.primaryShade,
@@ -138,7 +141,7 @@ class _EditMemberMilkDataState extends State<EditMemberMilkData> {
         customs.darkColor,
         customs.successColor
       ];
-      textStyles = [
+      textStylesTitle = [
         customs.primaryTextStyle(
             size: 30, fontweight: FontWeight.bold
         ),
@@ -155,7 +158,159 @@ class _EditMemberMilkDataState extends State<EditMemberMilkData> {
             size: 30, fontweight: FontWeight.bold
         ),
       ];
+      textStyles = [
+        customs.primaryTextStyle(
+            size: 18, fontweight: FontWeight.bold
+        ),
+        customs.secondaryTextStyle(
+            size: 18, fontweight: FontWeight.bold
+        ),
+        customs.warningTextStyle(
+            size: 18, fontweight: FontWeight.bold
+        ),
+        customs.darkTextStyle(
+            size: 18, fontweight: FontWeight.bold
+        ),
+        customs.secondaryTextStyle(
+            size: 18, fontweight: FontWeight.bold
+        ),
+      ];
+      milkEditHistory = [
+        GestureDetector(
+          onTap : (){
+
+          },
+          child: Container(
+            margin: EdgeInsets.zero,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(5),
+              color: customs.secondaryShade_2.withOpacity(0.2),
+            ),
+            child: Material(
+              color: Colors.transparent,
+              child: ListTile(
+                dense: true,
+                leading: CircleAvatar(
+                  backgroundColor: customs.primaryShade,
+                  child: Skeleton.ignore(child: Text("PM", style: customs.primaryTextStyle(size: 18, fontweight: FontWeight.bold),)),
+                ),
+                title: Text(
+                  "Patrick Mugoh",
+                  style: customs.darkTextStyle(size: 14),
+                ),
+                subtitle: Text(
+                  "20.4 Litres",
+                  style: customs.secondaryTextStyle(size: 12),
+                ),
+                trailing: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text("10:03AM",
+                        style: customs.darkTextStyle(size: 10)),
+                    Text(
+                      "15th July 2024",
+                      style: customs.secondaryTextStyle(
+                          size: 10, fontweight: FontWeight.normal),
+                    ),
+                    Text("edit", style: customs.secondaryTextStyle(size: 10, fontweight: FontWeight.bold))
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+        Container(width: width * 0.5, child: Divider(color: customs.secondaryShade_2.withOpacity(0.2),),),
+        GestureDetector(
+          onTap : (){
+          },
+          child: Container(
+            margin: EdgeInsets.zero,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(5),
+              color: customs.secondaryShade_2.withOpacity(0.2),
+            ),
+            child: Material(
+              color: Colors.transparent,
+              child: ListTile(
+                dense: true,
+                leading: CircleAvatar(
+                  backgroundColor: customs.successShade_2,
+                  child: Skeleton.ignore(child: Text("OM", style: customs.successTextStyle(size: 18, fontweight: FontWeight.bold),)),
+                ),
+                title: Text(
+                  "Owen Malingu",
+                  style: customs.darkTextStyle(size: 14),
+                ),
+                subtitle: Text(
+                  "20.4 Litres",
+                  style: customs.secondaryTextStyle(size: 12),
+                ),
+                trailing: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text("09:56AM",
+                        style: customs.darkTextStyle(size: 10)),
+                    Text(
+                      "15th July 2024",
+                      style: customs.secondaryTextStyle(
+                          size: 10, fontweight: FontWeight.normal),
+                    ),
+                    Text("edit", style: customs.secondaryTextStyle(size: 10, fontweight: FontWeight.bold))
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+        Container(width: width * 0.5, child: Divider(color: customs.secondaryShade_2.withOpacity(0.2),),),
+        GestureDetector(
+          onTap : (){
+          },
+          child: Container(
+            margin: EdgeInsets.zero,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(5),
+              color: customs.secondaryShade_2.withOpacity(0.2),
+            ),
+            child: Material(
+              color: Colors.transparent,
+              child: ListTile(
+                dense: true,
+                leading: CircleAvatar(
+                  backgroundColor: customs.secondaryShade_2,
+                  child: Skeleton.ignore(child: Text("EB", style: customs.secondaryTextStyle(size: 18, fontweight: FontWeight.bold),)),
+                ),
+                title: Text(
+                  "Esmond Bwire",
+                  style: customs.darkTextStyle(size: 14),
+                ),
+                subtitle: Text(
+                  "16.4 Litres",
+                  style: customs.secondaryTextStyle(size: 12),
+                ),
+                trailing: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text("09:53AM",
+                        style: customs.darkTextStyle(size: 10)),
+                    Text(
+                      "15th July 2024",
+                      style: customs.secondaryTextStyle(
+                          size: 10, fontweight: FontWeight.normal),
+                    ),
+                    Text("initial", style: customs.successTextStyle(size: 10, fontweight: FontWeight.bold))
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+        Container(width: width * 0.5, child: Divider(color: customs.secondaryShade_2.withOpacity(0.2),),),];
     });
+
   }
 
   Future<void> getCollectionDetails() async {
@@ -172,8 +327,60 @@ class _EditMemberMilkDataState extends State<EditMemberMilkData> {
       if(isValidJson(response)){
         var res = jsonDecode(response);
         if(res['success']){
-          print(res['collection']);
+          print(res['collection_history']);
+          // var listHistory = res['collection_history'];
+          double width = MediaQuery.of(context).size.width;
+          List<Widget> history = (res['collection_history'] as List<dynamic>).asMap().entries.map((entry) {
+            var item = entry.value;
+            var index = entry.key;
+            return Column(
+              children: [
+                Container(
+                  margin: EdgeInsets.zero,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5),
+                    color: customs.secondaryShade_2.withOpacity(0.2),
+                  ),
+                  child: Material(
+                    color: Colors.transparent,
+                    child: ListTile(
+                      dense: true,
+                      leading: CircleAvatar(
+                        backgroundColor: colors_shade[index % colors_shade.length],
+                        child: Skeleton.ignore(child: Text(nameAbbr(item['collector_name']), style: textStyles[index % textStyles.length],)),
+                      ),
+                      title: Text(
+                        toCamelCase(item['collector_name']),
+                        style: customs.darkTextStyle(size: 14),
+                      ),
+                      subtitle: Text(
+                        "${item['reading']} Litres",
+                        style: customs.secondaryTextStyle(size: 12),
+                      ),
+                      trailing: Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(item['full_time'],
+                              style: customs.darkTextStyle(size: 10)),
+                          Text(
+                            item['full_date'],
+                            style: customs.secondaryTextStyle(
+                                size: 10, fontweight: FontWeight.normal),
+                          ),
+                          index == (res['collection_history'].length - 1) ? Text("Initial", style: customs.successTextStyle(size: 10, fontweight: FontWeight.bold)) : Text("edit", style: customs.secondaryTextStyle(size: 10, fontweight: FontWeight.bold))
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                Container(width: width * 0.5, child: Divider(color: customs.secondaryShade_2.withOpacity(0.2),),),
+              ],
+            );
+          }).toList();
+
           setState(() {
+            milkEditHistory = history;
             memberName = toCamelCase(res['collection']['fullname'].toString());
             collection_id = res['collection']['collection_id'].toString();
             memberShipNumber = res['collection']['membership'].toString();
@@ -244,7 +451,7 @@ class _EditMemberMilkDataState extends State<EditMemberMilkData> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          "Collect Milk Data",
+                          "Edit Milk Data",
                           style: customs.darkTextStyle(
                               size: 15, fontweight: FontWeight.bold),
                         ),
@@ -263,42 +470,11 @@ class _EditMemberMilkDataState extends State<EditMemberMilkData> {
                           itemBuilder: (BuildContext context) =>
                           <PopupMenuEntry<String>>[
                             PopupMenuItem<String>(
-                              value: 'edit_history',
-                              height: 15,
-                              padding: EdgeInsets.symmetric(horizontal: 5),
-                              child: Container(
-                                padding: EdgeInsets.zero,
-                                margin: EdgeInsets.zero,
-                                child: Column(
-                                  children: [
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.start,
-                                      children: [
-                                        Icon(
-                                          Icons.history,
-                                          size: 15,
-                                          color: customs.secondaryColor,
-                                        ),
-                                        Text(
-                                          ' Edit History',
-                                          style: customs.secondaryTextStyle(
-                                            size: 12,
-                                            fontweight: FontWeight.bold
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    Divider(height: 10,)
-                                  ],
-                                ),
-                              ),
-                            ),
-                            PopupMenuItem<String>(
                               value: 'delete',
                               height: 15,
                               padding: EdgeInsets.symmetric(horizontal: 5),
                               child: Container(
-                                padding: EdgeInsets.symmetric(vertical: 2),
+                                padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
                                 margin: EdgeInsets.zero,
                                 child: Row(
                                   mainAxisAlignment:
@@ -306,13 +482,13 @@ class _EditMemberMilkDataState extends State<EditMemberMilkData> {
                                   children: [
                                     Icon(
                                       FontAwesomeIcons.trash,
-                                      size: 10,
+                                      size: 12,
                                       color: customs.dangerColor,
                                     ),
                                     Text(
                                       ' Delete',
                                       style: customs.dangerTextStyle(
-                                        size: 12,
+                                        size: 10,
                                         fontweight: FontWeight.bold
                                       ),
                                     ),
@@ -331,7 +507,7 @@ class _EditMemberMilkDataState extends State<EditMemberMilkData> {
                       Container(
                         margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
                         width: width,
-                        height: 330,
+                        height: 400,
                         child: Column(
                           children: [
                             Container(
@@ -381,81 +557,124 @@ class _EditMemberMilkDataState extends State<EditMemberMilkData> {
                                   const SizedBox(
                                     height: 5,
                                   ),
-                                  Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                    children: [
-                                      // its the widest container
-                                      Container(),
-                                      Column(
-                                        crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            "Collection Date : ",
-                                            style: customs.secondaryTextStyle(
-                                                size: 12,
-                                                fontweight: FontWeight.bold),
-                                          ),
-                                          Text(
-                                            "$date @ $time",
-                                            style: customs.secondaryTextStyle(
-                                                size: 12,
-                                                fontweight: FontWeight.normal),
-                                          ),
-                                        ],
-                                      ),
-                                      const SizedBox(
-                                        height: 10,
-                                      ),
-                                      Column(
-                                        crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            "Collection Amount",
-                                            style: customs.secondaryTextStyle(
-                                                size: 12,
-                                                fontweight: FontWeight.bold),
-                                          ),
-                                          Text(
-                                            "$collection_amount",
-                                            style: customs.secondaryTextStyle(
-                                                size: 12,
-                                                fontweight: FontWeight.normal),
-                                          ),
-                                        ],
-                                      ),
-                                      const SizedBox(
-                                        height: 10,
-                                      ),
-                                      Column(
-                                        crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            "Status",
-                                            style: customs.secondaryTextStyle(
-                                                size: 12,
-                                                fontweight: FontWeight.bold),
-                                          ),
-                                          Container(
-                                            padding: EdgeInsets.all(2),
-                                            decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.circular(2),
-                                              color: accepted ? customs.successColor : customs.secondaryColor
+                                  Container(
+                                    height: 197,
+                                    color: customs.whiteColor,
+                                    child: DefaultTabController(
+                                      length: 2, // Number of tabs
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                                        children: <Widget>[
+                                          TabBar(
+                                            labelColor: customs.primaryColor,
+                                            unselectedLabelColor: customs.secondaryColor,
+                                            indicatorColor: customs.primaryColor,
+                                            labelStyle: customs.secondaryTextStyle(
+                                              size: 12,
+                                              fontweight: FontWeight.normal,
+                                              underline: false
                                             ),
-                                            child: Text(
-                                              accepted ? "Accepted" : "Not-Accepted",
-                                              style: customs.whiteTextStyle(
-                                                  size: 10,
-                                                  fontweight: FontWeight.bold),
+                                            tabs: [
+                                              Tab(icon: Icon(Icons.info_outline, size: 20)),
+                                              Tab(icon: Icon(Icons.history, size: 20)),
+                                            ],
+                                          ),
+                                          Expanded(
+                                            child: TabBarView(
+                                              children: <Widget>[
+                                                Container(
+                                                  padding: EdgeInsets.all(10),
+                                                  child: Column(
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    mainAxisAlignment:
+                                                    MainAxisAlignment.spaceAround,
+                                                    children: [
+                                                      // its the widest container
+                                                      Container(),
+                                                      Column(
+                                                        crossAxisAlignment:
+                                                        CrossAxisAlignment.start,
+                                                        children: [
+                                                          Text(
+                                                            "Collection Date : ",
+                                                            style: customs.secondaryTextStyle(
+                                                                size: 12,
+                                                                fontweight: FontWeight.bold),
+                                                          ),
+                                                          Text(
+                                                            "$date @ $time",
+                                                            style: customs.secondaryTextStyle(
+                                                                size: 12,
+                                                                fontweight: FontWeight.normal),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      const SizedBox(
+                                                        height: 10,
+                                                      ),
+                                                      Column(
+                                                        crossAxisAlignment:
+                                                        CrossAxisAlignment.start,
+                                                        children: [
+                                                          Text(
+                                                            "Collection Amount",
+                                                            style: customs.secondaryTextStyle(
+                                                                size: 12,
+                                                                fontweight: FontWeight.bold),
+                                                          ),
+                                                          Text(
+                                                            "$collection_amount",
+                                                            style: customs.secondaryTextStyle(
+                                                                size: 12,
+                                                                fontweight: FontWeight.normal),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      const SizedBox(
+                                                        height: 10,
+                                                      ),
+                                                      Column(
+                                                        crossAxisAlignment:
+                                                        CrossAxisAlignment.start,
+                                                        children: [
+                                                          Text(
+                                                            "Status",
+                                                            style: customs.secondaryTextStyle(
+                                                                size: 12,
+                                                                fontweight: FontWeight.bold),
+                                                          ),
+                                                          Container(
+                                                            padding: EdgeInsets.all(2),
+                                                            decoration: BoxDecoration(
+                                                                borderRadius: BorderRadius.circular(2),
+                                                                color: accepted ? customs.successColor : customs.secondaryColor
+                                                            ),
+                                                            child: Text(
+                                                              accepted ? "Accepted" : "Not-Accepted",
+                                                              style: customs.whiteTextStyle(
+                                                                  size: 10,
+                                                                  fontweight: FontWeight.bold),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                                Container(
+                                                  padding: EdgeInsets.all(10),
+                                                  child: SingleChildScrollView(
+                                                    child: Column(
+                                                      children: milkEditHistory
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
                                             ),
                                           ),
                                         ],
                                       ),
-                                    ],
+                                    ),
                                   )
                                 ],
                               ),
@@ -471,7 +690,7 @@ class _EditMemberMilkDataState extends State<EditMemberMilkData> {
                           child: CircleAvatar(
                               radius: width * 0.1,
                               backgroundColor: colors_shade[index % colors_shade.length],
-                              child: Text(nameAbbr(memberName), style: textStyles[index % textStyles.length],)
+                              child: Text(nameAbbr(memberName), style: textStylesTitle[index % textStylesTitle.length],)
                           ),
                         ),
                       ),
@@ -522,7 +741,7 @@ class _EditMemberMilkDataState extends State<EditMemberMilkData> {
                                 disabled: saveLoader,
                                 fontSize: 15,
                                 type: Type.success,
-                                text: "Save",
+                                text: "Update",
                                 onPressed: () async {
                                   setState(() {
                                     saveLoader = true;
@@ -541,6 +760,8 @@ class _EditMemberMilkDataState extends State<EditMemberMilkData> {
                                             context: context,
                                             text: res['message']
                                         );
+                                        // get collection details
+                                        getCollectionDetails();
                                       }else{
                                         customs.maruSnackBarDanger(
                                             context: context,

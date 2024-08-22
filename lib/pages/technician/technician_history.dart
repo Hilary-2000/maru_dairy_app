@@ -34,6 +34,7 @@ class _TechnicianHistoryState extends State<TechnicianHistory> {
   }
 
   List<Widget> collectionHistory = [];
+  var collections = [];
 
   bool isValidJson(String jsonString) {
     try {
@@ -80,82 +81,21 @@ class _TechnicianHistoryState extends State<TechnicianHistory> {
       if(res['success'] == true){
         confirmedCollection = res['confirmed'];
         notConfirmedCollection = res['not_confirmed'];
-        double width = MediaQuery.of(context).size.width;
-        List<Widget> history = (res['collection_history'] as List<dynamic>).asMap().entries.map((entry) {
-          var item = entry.value;
-          var index = entry.key;
-          return Column(
-            children: [
-              GestureDetector(
-                onTap : () async {
-                  await Navigator.pushNamed(context, "/edit_member_milk_data", arguments: {"collection_id": item['collection_id'], "index": index});
-                  // after the window comes back reload the page
-                  loadTechnicianHistory(context);
-                },
-                child: Container(
-                  margin: EdgeInsets.zero,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5),
-                    color: customs.secondaryShade_2.withOpacity(0.2),
-                  ),
-                  child: Material(
-                    color: Colors.transparent,
-                    child: ListTile(
-                      dense: true,
-                      leading: CircleAvatar(
-                        backgroundColor: colors_shade[index % colors_shade.length],
-                        child: Skeleton.ignore(child: Text(nameAbbr(item['fullname']), style: textStyles[index % textStyles.length],)),
-                      ),
-                      title: Text(
-                        toCamelCase(item['fullname']),
-                        style: customs.darkTextStyle(size: 14),
-                      ),
-                      subtitle: Text(
-                        "${item['collection_amount']} Litres",
-                        style: customs.secondaryTextStyle(size: 12),
-                      ),
-                      trailing: Column(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(item['time'],
-                              style: customs.darkTextStyle(size: 10)),
-                          Text(
-                            item['date'],
-                            style: customs.secondaryTextStyle(
-                                size: 10, fontweight: FontWeight.normal),
-                          ),
-                          SizedBox(height: 5,),
-                          Container(
-                            width: 5,
-                            height: 5,
-                            decoration: BoxDecoration(
-                                color: item['collection_status'] == 1 ? customs.successColor : customs.dangerColor,
-                                borderRadius: BorderRadius.circular(5)
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              Container(width: width * 0.5, child: Divider(color: customs.secondaryShade_2.withOpacity(0.2),),),
-            ],
-          );
-        }).toList();
+        displayCollectionHistory(res['collection_history']);
 
         //set state
         setState(() {
-          collectionHistory = history;
+          collections = res['collection_history'];
         });
       }else{
         setState(() {
+          collections = [];
           collectionHistory = [];
         });
       }
     }else{
       setState(() {
+        collections = [];
         collectionHistory = [];
       });
     }
@@ -168,7 +108,7 @@ class _TechnicianHistoryState extends State<TechnicianHistory> {
     super.didChangeDependencies();
     // set the technicians history
     double width = MediaQuery.of(context).size.width;
-    setState(() {
+    setState((){
       collectionHistory = [
         GestureDetector(
           onTap : (){
@@ -329,7 +269,6 @@ class _TechnicianHistoryState extends State<TechnicianHistory> {
         ),
         Container(width: width * 0.5, child: Divider(color: customs.secondaryShade_2.withOpacity(0.2),),),
       ];
-
       colors_shade = [customs.primaryShade, customs.secondaryShade, customs.warningShade, customs.darkShade, customs.successShade];
       textStyles = [
         customs.primaryTextStyle(
@@ -348,6 +287,113 @@ class _TechnicianHistoryState extends State<TechnicianHistory> {
             size: 18, fontweight: FontWeight.bold
         ),
       ];
+    });
+  }
+  void findKeyWord(keyword){
+    var newHistory = [];
+    for(var item in collections){
+      int present = 0;
+      if(item['fullname'].toString().toLowerCase().contains(keyword.toString().toLowerCase())){
+        present++;
+      }
+      if(item['phone_number'].toString().toLowerCase().contains(keyword.toString().toLowerCase())){
+        present++;
+      }
+      if(item['email'].toString().toLowerCase().contains(keyword.toString().toLowerCase())){
+        present++;
+      }
+      if(item['region'].toString().toLowerCase().contains(keyword.toString().toLowerCase())){
+        present++;
+      }
+      if(item['membership'].toString().toLowerCase().contains(keyword.toString().toLowerCase())){
+        present++;
+      }
+      if(item['collection_amount'].toString().toLowerCase().contains(keyword.toString().toLowerCase())){
+        present++;
+      }
+      if(item['technician_id'].toString().toLowerCase().contains(keyword.toString().toLowerCase())){
+        present++;
+      }
+
+      // present
+      if(present > 0){
+        newHistory.add(item);
+      }
+    }
+
+    // display
+    displayCollectionHistory(newHistory);
+  }
+
+  void displayCollectionHistory(var list){
+    double width = MediaQuery.of(context).size.width;
+    List<Widget> history = (list as List<dynamic>).asMap().entries.map((entry) {
+      var item = entry.value;
+      var index = entry.key;
+      return Column(
+        children: [
+          GestureDetector(
+            onTap : () async {
+              await Navigator.pushNamed(context, "/edit_member_milk_data", arguments: {"collection_id": item['collection_id'], "index": index});
+              // after the window comes back reload the page
+              loadTechnicianHistory(context);
+            },
+            child: Container(
+              margin: EdgeInsets.zero,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(5),
+                color: customs.secondaryShade_2.withOpacity(0.2),
+              ),
+              child: Material(
+                color: Colors.transparent,
+                child: ListTile(
+                  dense: true,
+                  leading: CircleAvatar(
+                    backgroundColor: colors_shade[index % colors_shade.length],
+                    child: Skeleton.ignore(child: Text(nameAbbr(item['fullname']), style: textStyles[index % textStyles.length],)),
+                  ),
+                  title: Text(
+                    toCamelCase(item['fullname']),
+                    style: customs.darkTextStyle(size: 14),
+                  ),
+                  subtitle: Text(
+                    "${item['collection_amount']} Litres",
+                    style: customs.secondaryTextStyle(size: 12),
+                  ),
+                  trailing: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(item['time'],
+                          style: customs.darkTextStyle(size: 10)),
+                      Text(
+                        item['date'],
+                        style: customs.secondaryTextStyle(
+                            size: 10, fontweight: FontWeight.normal),
+                      ),
+                      SizedBox(height: 5,),
+                      Container(
+                        width: 5,
+                        height: 5,
+                        decoration: BoxDecoration(
+                            color: item['collection_status'] == 1 ? customs.successColor : customs.dangerColor,
+                            borderRadius: BorderRadius.circular(5)
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+          Container(width: width * 0.5, child: Divider(color: customs.secondaryShade_2.withOpacity(0.2),),),
+        ],
+      );
+    }).toList();
+
+    //set state
+    setState(() {
+      collectionHistory = history;
     });
   }
 
@@ -546,41 +592,48 @@ class _TechnicianHistoryState extends State<TechnicianHistory> {
                       onChange: (value) {
                         setState(() {
                           drop_down = value!;
-                          loadTechnicianHistory(context);
                         });
+                        loadTechnicianHistory(context);
                       },
                     ),
                   ),
                   Spacer()
                 ]),
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  const SizedBox(),
-                  Container(
-                    margin: EdgeInsets.symmetric(horizontal: 10),
-                    child: customs.maruSearchTextField(
-                      isChanged: (value){},
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Container(
+                        width: width * 0.8,
+                        child: customs.maruSearchTextField(
+                            isChanged: (value){
+                              findKeyWord(value);
+                            },
+                            label: "Type to Search",
+                            hintText: "Enter keyword")
                     ),
-                  ),
-                  Container(
-                    margin: EdgeInsets.fromLTRB(0, 0, 5, 0),
-                    child: CircleAvatar(
-                      backgroundColor: customs.successShade_2,
-                      child: IconButton(
-                        onPressed: (){
-                          Navigator.pushNamed(context, "/technician_collect_milk");
-                        },
-                        icon: Icon(Icons.add, color: customs.successColor,),
+                    Spacer(),
+                    Container(
+                      margin: EdgeInsets.fromLTRB(0, 0, 5, 0),
+                      child: CircleAvatar(
+                        backgroundColor: customs.successShade_2,
+                        child: IconButton(
+                          onPressed: () async {
+                            await Navigator.pushNamed(context, "/technician_collect_milk");
+                            loadTechnicianHistory(context);
+                          },
+                          icon: Icon(Icons.add, color: customs.successColor,),
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
               Container(
                 margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                height: height - 315,
+                height: height - 316,
                 decoration: BoxDecoration(
                   color: customs.whiteColor,
                   borderRadius: BorderRadius.circular(10),
