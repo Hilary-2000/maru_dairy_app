@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:ffi';
 
 import 'package:flutter/material.dart';
@@ -52,6 +53,16 @@ class CustomThemes {
       decorationColor: primaryColor, // Optional: Change the underline color
       decorationThickness: 2, // Optional: Change the underline thickness
     );
+  }
+
+
+  bool isValidJson(String jsonString) {
+    try {
+      jsonDecode(jsonString);
+      return true;
+    } catch (e) {
+      return false;
+    }
   }
 
   TextStyle secondaryTextStyle(
@@ -304,56 +315,77 @@ class CustomThemes {
       bool showLoader = false,
       required String text,
       double fontSize = 15,
+      bool disabled = false,
       FontWeight fontWeight = FontWeight.normal,
       required void Function()? onPressed}) {
     Color foreground = whiteColor;
     Color background = primaryColor;
-    TextStyle Function({double size, FontWeight fontweight}) textStyle =
-        whiteTextStyle;
+    Color disabledForeground = secondaryShade;
+    Color disabledBackground = primaryShade;
+    TextStyle Function({double size, FontWeight fontweight})
+    textStyle = whiteTextStyle;
     switch (type) {
       case Type.primary:
         foreground = primaryColor;
         background = whiteColor;
+        disabledForeground = primaryShade;
+        disabledBackground = whiteShade;
         textStyle = primaryTextStyle;
         break;
       case Type.secondary:
         foreground = secondaryColor;
         background = whiteColor;
+        disabledForeground = secondaryShade;
+        disabledBackground = whiteShade;
         textStyle = secondaryTextStyle;
         break;
       case Type.success:
         foreground = successColor;
         background = whiteColor;
+        disabledForeground = successShade;
+        disabledBackground = whiteShade;
         textStyle = successTextStyle;
         break;
       case Type.danger:
         foreground = dangerColor;
         background = whiteColor;
+        disabledForeground = dangerShade;
+        disabledBackground = whiteShade;
         textStyle = dangerTextStyle;
         break;
       case Type.warning:
         foreground = warningColor;
         background = whiteColor;
+        disabledForeground = warningShade;
+        disabledBackground = whiteShade;
         textStyle = warningTextStyle;
         break;
       case Type.info:
         foreground = infoColor;
         background = whiteColor;
+        disabledForeground = infoShade;
+        disabledBackground = whiteShade;
         textStyle = infoTextStyle;
         break;
       case Type.dark:
         foreground = darkColor;
         background = whiteColor;
+        disabledForeground = darkShade;
+        disabledBackground = whiteShade;
         textStyle = darkTextStyle;
         break;
       case Type.white:
         foreground = whiteColor;
         background = darkColor;
+        disabledForeground = whiteShade;
+        disabledBackground = darkShade_2;
         textStyle = whiteTextStyle;
         break;
       default:
         foreground = whiteColor;
         background = darkColor;
+        disabledForeground = whiteShade;
+        disabledBackground = darkShade_2;
         textStyle = whiteTextStyle;
         break;
     }
@@ -377,8 +409,18 @@ class CustomThemes {
 
     return TextButton(
       style: ButtonStyle(
-        foregroundColor: WidgetStateProperty.all<Color>(foreground),
-        backgroundColor: WidgetStateProperty.all<Color>(background),
+        foregroundColor: WidgetStateProperty.resolveWith<Color>((states) {
+          if (disabled) {
+            return disabledForeground; // Color when the button is disabled
+          }
+          return foreground; // Color when the button is enabled
+        }),
+        backgroundColor: WidgetStateProperty.resolveWith<Color>((states) {
+          if (disabled) {
+            return disabledBackground; // Background color when disabled
+          }
+          return background; // Background color when enabled
+        }),
         padding: WidgetStateProperty.all<EdgeInsets>(edgeInsets),
         textStyle: WidgetStateProperty.all<TextStyle>(
           textStyle(size: fontSize, fontweight: fontWeight),
@@ -391,7 +433,7 @@ class CustomThemes {
           ),
         ),
       ),
-      onPressed: onPressed,
+      onPressed: disabled ? null : onPressed,
       child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
         children: [

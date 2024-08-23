@@ -1,6 +1,7 @@
 import "dart:async";
 import "dart:convert";
 
+import "package:flutter_secure_storage/flutter_secure_storage.dart";
 import "package:http/http.dart" as rq;
 class ApiConnection{
   String apiLink = "192.168.88.236:8000";
@@ -413,6 +414,116 @@ class ApiConnection{
           headers: {
             'Content-Type': 'application/json',
             'maru-authentication_code' : token
+          },
+          body: body
+      ).timeout(Duration(seconds: 10));
+      client.close();
+      return response.body;
+    }on TimeoutException {
+      return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
+    } catch(e){
+      return "{\"success\":false, \"message\":\"$e\"}";
+    }finally{
+      client.close();
+    }
+  }
+
+  // get member data
+  Future<String> getMemberDash(String period) async{
+    var client = rq.Client();
+    var url = Uri.http(apiLink,"/api/member/dashboard/$period");
+    var body = jsonEncode({});
+    FlutterSecureStorage storage = new FlutterSecureStorage();
+    String? token = await storage.read(key: "token");
+    try{
+      var response = await client.post(
+          url,
+          headers: {
+            'Content-Type': 'application/json',
+            'maru-authentication_code' : token!
+          },
+          body: body
+      ).timeout(Duration(seconds: 10));
+      client.close();
+      return response.body;
+    }on TimeoutException {
+      return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
+    } catch(e){
+      return "{\"success\":false, \"message\":\"$e\"}";
+    }finally{
+      client.close();
+    }
+  }
+
+  // get member data
+  Future<String> getMemberHistory() async{
+    var client = rq.Client();
+    var url = Uri.http(apiLink,"/api/member/history");
+    var body = jsonEncode({});
+    FlutterSecureStorage storage = new FlutterSecureStorage();
+    String? token = await storage.read(key: "token");
+    try{
+      var response = await client.post(
+          url,
+          headers: {
+            'Content-Type': 'application/json',
+            'maru-authentication_code' : token!
+          },
+          body: body
+      ).timeout(Duration(seconds: 10));
+      client.close();
+      return response.body;
+    }on TimeoutException {
+      return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
+    } catch(e){
+      return "{\"success\":false, \"message\":\"$e\"}";
+    }finally{
+      client.close();
+    }
+  }
+
+  // get member data
+  Future<String> getMilkDetails(String collection_id) async{
+    var client = rq.Client();
+    var url = Uri.http(apiLink,"/api/member/milk_details/$collection_id");
+    var body = jsonEncode({});
+    FlutterSecureStorage storage = new FlutterSecureStorage();
+    String? token = await storage.read(key: "token");
+    try{
+      var response = await client.post(
+          url,
+          headers: {
+            'Content-Type': 'application/json',
+            'maru-authentication_code' : token!
+          },
+          body: body
+      ).timeout(Duration(seconds: 10));
+      client.close();
+      return response.body;
+    }on TimeoutException {
+      return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
+    } catch(e){
+      return "{\"success\":false, \"message\":\"$e\"}";
+    }finally{
+      client.close();
+    }
+  }
+
+  // get member data
+  Future<String> changeMilkStatus(String status, String collection_id) async{
+    var client = rq.Client();
+    var url = Uri.http(apiLink,"/api/member/milk_status/$collection_id");
+    var body = jsonEncode({
+      "status": status
+    });
+    FlutterSecureStorage storage = new FlutterSecureStorage();
+    String? token = await storage.read(key: "token");
+    try{
+      var response = await client.post(
+          url,
+          headers: {
+            'Content-Type': 'application/json',
+            'maru-authentication_code' : token!
           },
           body: body
       ).timeout(Duration(seconds: 10));

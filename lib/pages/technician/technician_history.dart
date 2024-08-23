@@ -289,6 +289,7 @@ class _TechnicianHistoryState extends State<TechnicianHistory> {
       ];
     });
   }
+
   void findKeyWord(keyword){
     var newHistory = [];
     for(var item in collections){

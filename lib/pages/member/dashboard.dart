@@ -1,11 +1,14 @@
+import 'dart:convert';
+
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:maru/packages/api_connection.dart';
 import 'package:maru/packages/maru_theme.dart';
 import 'package:maru/pages/member/history.dart';
 import 'package:maru/pages/member/notification.dart';
 import 'package:maru/pages/member/settings.dart';
-import 'package:maru/pages/member/view_profile.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class memberDashboard extends StatefulWidget {
   const memberDashboard({super.key});
@@ -50,12 +53,17 @@ class _memberDashboardState extends State<memberDashboard> {
               children: [
                 SizedBox(
                   height: 45,
-                  child: Image(image: AssetImage("assets/images/maru-nobg.png")),
+                  child:
+                      Image(image: AssetImage("assets/images/maru-nobg.png")),
                 ),
                 SizedBox(
                   width: 10,
                 ),
-                Text("Maru Dairy Co-op", style: customs.primaryTextStyle(size: 20, fontweight: FontWeight.bold),),
+                Text(
+                  "Maru Dairy Co-op",
+                  style: customs.primaryTextStyle(
+                      size: 20, fontweight: FontWeight.bold),
+                ),
               ],
             ),
           );
@@ -269,6 +277,7 @@ class memberDash extends StatefulWidget {
 class _memberDashState extends State<memberDash> {
   CustomThemes customs = CustomThemes();
   String drop_down = "7";
+  List<BarChartGroupData> barGroupData = [];
   List<DropdownMenuItem<String>> dayFilter = [
     const DropdownMenuItem(child: Text("7 Days"), value: "7"),
     const DropdownMenuItem(child: Text("14 Days"), value: "14"),
@@ -284,6 +293,159 @@ class _memberDashState extends State<memberDash> {
     'Fri',
     'Sat'
   ];
+
+  bool loading = false;
+
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    setState(() {
+      barGroupData = [
+        BarChartGroupData(x: 1, barRods: [
+          BarChartRodData(
+            toY: 0,
+            color: customs.primaryColor,
+          )
+        ], showingTooltipIndicators: [
+          0
+        ]),
+        BarChartGroupData(x: 2, barRods: [
+          BarChartRodData(
+            toY: 0,
+            color: customs.primaryColor,
+          )
+        ], showingTooltipIndicators: [
+          0
+        ]),
+        BarChartGroupData(x: 3, barRods: [
+          BarChartRodData(
+            toY: 0,
+            color: customs.primaryColor,
+          )
+        ], showingTooltipIndicators: [
+          0
+        ]),
+        BarChartGroupData(x: 4, barRods: [
+          BarChartRodData(
+            toY: 0,
+            color: customs.primaryColor,
+          )
+        ], showingTooltipIndicators: [
+          0
+        ]),
+        BarChartGroupData(x: 5, barRods: [
+          BarChartRodData(
+            toY: 0,
+            color: customs.primaryColor,
+          )
+        ], showingTooltipIndicators: [
+          0
+        ]),
+        BarChartGroupData(x: 6, barRods: [
+          BarChartRodData(
+            toY: 0,
+            color: customs.primaryColor,
+          )
+        ], showingTooltipIndicators: [
+          0
+        ]),
+        BarChartGroupData(x: 7, barRods: [
+          BarChartRodData(
+            toY: 0,
+            color: customs.primaryColor,
+          )
+        ], showingTooltipIndicators: [
+          0
+        ])];
+    });
+
+    // member dashboard
+    memberDashboard(drop_down);
+  }
+
+  String total_collection = "0";
+  String growth = "0%";
+  String trajectory = "constant";
+  String duration = "N/A";
+  String greetings = "Hello,";
+  var member_data = null;
+
+  // change to camel case
+  String toCamelCase(String text) {
+    // Step 1: Split the string by spaces or underscores
+    List<String> words = text.split(RegExp(r'[\s_]+'));
+
+    // Step 2: Capitalize the first letter of each word and lowercase the rest
+    List<String> capitalizedWords = words.map((word) {
+      return word[0].toUpperCase() + word.substring(1).toLowerCase();
+    }).toList();
+
+    // Step 3: Join the capitalized words with spaces
+    return capitalizedWords.join(' ');
+  }
+
+  double _parseAmount(dynamic amount) {
+    try {
+      if (amount is int) {
+        return amount.toDouble();
+      } else if (amount is double) {
+        return amount;
+      } else if (amount is String) {
+        return double.parse(amount);
+      } else {
+        throw FormatException("Amount is not a valid number.");
+      }
+    } catch (e) {
+      return 0.0; // Default value in case of an error
+    }
+  }
+
+
+
+  // get the member dashboard
+  Future<void> memberDashboard(String period) async {
+    setState(() {
+      loading = true;
+    });
+    //get the member dashboard
+    ApiConnection apiConnection = new ApiConnection();
+    var response = await apiConnection.getMemberDash(period+" days");
+    if (customs.isValidJson(response)) {
+      print(response);
+      var res = jsonDecode(response);
+      if (res['success']) {
+        member_data = res['member_details'];
+        // set the barchart data
+        List<String> days = [];
+        setState(() {
+          barGroupData = (res['collection_data'] as List<dynamic>).asMap().entries.map((entry) {
+            var item = entry.value;
+            days.add(item['label']);
+            return BarChartGroupData(x: entry.key, barRods: [
+              BarChartRodData(
+                toY: _parseAmount(item['amount']),
+                color: customs.primaryColor,
+              )
+            ], showingTooltipIndicators: [
+              0
+            ]);
+          }).toList();
+          daysOfWeek = days;
+          growth = res['percentage'].toString();
+          total_collection = res['total_collection'].toString();
+          duration = res['duration'].toString();
+          greetings = res['greetings'];
+          trajectory = res['collection_status'].toString();
+        });
+      } else {
+        member_data = null;
+      }
+    } else {
+      member_data = null;
+    }
+    setState(() {
+      loading = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -305,79 +467,84 @@ class _memberDashState extends State<memberDash> {
                 const SizedBox(
                   height: 10.0,
                 ),
-                Card(
-                  color: customs.whiteColor,
-                  margin:
-                      const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                  child: Row(
-                    children: <Widget>[
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 10, horizontal: 10),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text(
-                              "Goodmorning,",
-                              style: customs.primaryTextStyle(
-                                  size: width * 0.04,
-                                  fontweight: FontWeight.normal),
-                            ),
-                            SizedBox(
-                              height: height * 0.005,
-                            ),
-                            Text(
-                              "Hillary Ngige",
-                              style: customs.successTextStyle(
-                                  size: width * 0.05,
-                                  fontweight: FontWeight.bold),
-                            )
-                          ],
+                Skeletonizer(
+                  enabled: loading,
+                  child: Card(
+                    color: customs.whiteColor,
+                    margin:
+                        const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                    child: Row(
+                      children: <Widget>[
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 10, horizontal: 10),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Text(
+                                "$greetings",
+                                style: customs.primaryTextStyle(
+                                    size: width * 0.04,
+                                    fontweight: FontWeight.normal),
+                              ),
+                              SizedBox(
+                                height: height * 0.005,
+                              ),
+                              Text(
+                                toCamelCase(member_data != null ? member_data['fullname'] ?? "N/A" : "N/A"),
+                                style: customs.successTextStyle(
+                                    size: width * 0.05,
+                                    fontweight: FontWeight.bold),
+                              )
+                            ],
+                          ),
                         ),
-                      ),
-                      const Spacer(),
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 10, horizontal: 10),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            GestureDetector(
-                              child: CircleAvatar(
-                                radius: width * 0.08,
-                                backgroundColor: customs.primaryShade,
-                                child: ClipOval(
-                                  child: Image.asset(
-                                    "assets/images/hilla.jpg",
-                                    fit: BoxFit.cover,
-                                    width: double.infinity,
-                                    height: double.infinity,
+                        const Spacer(),
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 10, horizontal: 10),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              GestureDetector(
+                                child: CircleAvatar(
+                                  radius: width * 0.08,
+                                  backgroundColor: customs.primaryShade,
+                                  child: ClipOval(
+                                    child: Image.asset(
+                                      "assets/images/hilla.jpg",
+                                      fit: BoxFit.cover,
+                                      width: double.infinity,
+                                      height: double.infinity,
+                                    ),
                                   ),
                                 ),
+                                onTap: () {
+                                  Navigator.pushNamed(
+                                      context, "/member_view_profile");
+                                },
                               ),
-                              onTap: () {
-                                Navigator.pushNamed(
-                                    context, "/member_view_profile");
-                              },
-                            ),
-                            SizedBox(
-                              height: height * 0.01,
-                            ),
-                            Container(
-                              padding: const EdgeInsets.all(2),
-                              decoration: BoxDecoration(
-                                  color: customs.primaryShade,
-                                  borderRadius: BorderRadius.circular(5.0)),
-                              child: Text(
-                                "REG2022-002",
-                                style: customs.darkTextStyle(
-                                    size: 10, fontweight: FontWeight.bold),
+                              SizedBox(
+                                height: height * 0.01,
                               ),
-                            )
-                          ],
-                        ),
-                      )
-                    ],
+                              Skeleton.ignore(
+                                child: Container(
+                                  padding: const EdgeInsets.all(2),
+                                  decoration: BoxDecoration(
+                                      color: customs.primaryShade,
+                                      borderRadius: BorderRadius.circular(5.0)),
+                                  child: Text(
+                                    member_data != null ? "${member_data['membership'] ?? "N/A"}" : "N/A",
+                                    style: customs.darkTextStyle(
+                                        size: 10, fontweight: FontWeight.bold),
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
                   ),
                 ),
                 SizedBox(
@@ -451,6 +618,8 @@ class _memberDashState extends State<memberDash> {
                           onChange: (value) {
                             setState(() {
                               drop_down = value!;
+                              // member dashboard
+                              memberDashboard(drop_down);
                             });
                           },
                         ),
@@ -458,72 +627,73 @@ class _memberDashState extends State<memberDash> {
                     ],
                   ),
                 ),
-                Card(
-                  color: customs.whiteColor,
-                  margin:
-                      const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                  child: Row(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 20.0, horizontal: 10.0),
-                        child: CircleAvatar(
-                          backgroundColor:
-                              customs.successColor.withOpacity(0.2),
-                          radius: width * 0.06,
-                          child: Icon(
-                            Icons.water_drop_outlined,
-                            size: width * 0.1,
-                            color: customs.successColor,
-                          ),
-                        ),
-                      ),
-                      Column(
-                        children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "25.2 Ltrs",
-                                style: customs.darkTextStyle(
-                                    size: width * 0.05,
-                                    fontweight: FontWeight.bold),
-                              ),
-                              const SizedBox(
-                                height: 5,
-                              ),
-                              Text(
-                                "Kes 1,672.1 @ Kes 66.2 per Ltr",
-                                style:
-                                    customs.darkTextStyle(size: width * 0.03),
-                              )
-                            ],
-                          )
-                        ],
-                      ),
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Center(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                Icon(
-                                  Icons.arrow_drop_up,
-                                  color: customs.successColor,
-                                ),
-                                Text(
-                                  "5.66%",
-                                  style: customs.successTextStyle(
-                                      size: width * 0.03,
-                                      fontweight: FontWeight.bold),
-                                ),
-                              ],
+                Skeletonizer(
+                  enabled: loading,
+                  child: Card(
+                    color: customs.whiteColor,
+                    margin:
+                        const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                    child: Row(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 20.0, horizontal: 10.0),
+                          child: CircleAvatar(
+                            backgroundColor:
+                                customs.successColor.withOpacity(0.2),
+                            radius: width * 0.06,
+                            child: Icon(
+                              Icons.water_drop_outlined,
+                              size: width * 0.1,
+                              color: customs.successColor,
                             ),
                           ),
                         ),
-                      )
-                    ],
+                        Column(
+                          children: [
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "$total_collection Ltrs",
+                                  style: customs.darkTextStyle(
+                                      size: width * 0.05,
+                                      fontweight: FontWeight.bold),
+                                ),
+                                const SizedBox(
+                                  height: 5,
+                                ),
+                                Text(
+                                  "$duration",
+                                  style:
+                                      customs.darkTextStyle(size: width * 0.03),
+                                )
+                              ],
+                            )
+                          ],
+                        ),
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Center(
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  Icon(
+                                    trajectory == "constant" ? Icons.linear_scale : (trajectory == "increase" ? Icons.arrow_drop_up : Icons.arrow_drop_down),
+                                    color: trajectory == "constant" ? customs.darkColor : (trajectory == "increase" ? customs.successColor : customs.dangerColor),
+                                  ),
+                                  Text(
+                                    "$growth%",
+                                    style: trajectory != "constant" ? (trajectory == "increase" ? customs.successTextStyle(size: width * 0.03,fontweight: FontWeight.bold) : customs.dangerTextStyle(size: width * 0.03,fontweight: FontWeight.bold)) : customs.darkTextStyle(size: width * 0.03,fontweight: FontWeight.bold),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
                   ),
                 ),
                 SizedBox(
@@ -577,64 +747,7 @@ class _memberDashState extends State<memberDash> {
                                     left: BorderSide(
                                         color: customs.primaryColor, width: 1),
                                   )),
-                              barGroups: [
-                                BarChartGroupData(x: 1, barRods: [
-                                  BarChartRodData(
-                                    toY: 15,
-                                    color: customs.primaryColor,
-                                  )
-                                ], showingTooltipIndicators: [
-                                  0
-                                ]),
-                                BarChartGroupData(x: 2, barRods: [
-                                  BarChartRodData(
-                                    toY: 35,
-                                    color: customs.primaryColor,
-                                  )
-                                ], showingTooltipIndicators: [
-                                  0
-                                ]),
-                                BarChartGroupData(x: 3, barRods: [
-                                  BarChartRodData(
-                                    toY: 22,
-                                    color: customs.primaryColor,
-                                  )
-                                ], showingTooltipIndicators: [
-                                  0
-                                ]),
-                                BarChartGroupData(x: 4, barRods: [
-                                  BarChartRodData(
-                                    toY: 12,
-                                    color: customs.primaryColor,
-                                  )
-                                ], showingTooltipIndicators: [
-                                  0
-                                ]),
-                                BarChartGroupData(x: 5, barRods: [
-                                  BarChartRodData(
-                                    toY: 45,
-                                    color: customs.primaryColor,
-                                  )
-                                ], showingTooltipIndicators: [
-                                  0
-                                ]),
-                                BarChartGroupData(x: 6, barRods: [
-                                  BarChartRodData(
-                                    toY: 27,
-                                    color: customs.primaryColor,
-                                  )
-                                ], showingTooltipIndicators: [
-                                  0
-                                ]),
-                                BarChartGroupData(x: 7, barRods: [
-                                  BarChartRodData(
-                                    toY: 24,
-                                    color: customs.primaryColor,
-                                  )
-                                ], showingTooltipIndicators: [
-                                  0
-                                ])
-                              ],
+                              barGroups: barGroupData,
                               gridData: FlGridData(
                                 show: true,
                                 checkToShowHorizontalLine: (value) =>
@@ -671,15 +784,17 @@ class _memberDashState extends State<memberDash> {
                                                 size: 12))),
                                     sideTitles: SideTitles(
                                       showTitles: true,
-                                      reservedSize: 12,
+                                      reservedSize: 15,
                                       getTitlesWidget: (value, meta) {
-                                        return Text(
-                                          daysOfWeek[
-                                              int.parse(meta.formattedValue)],
-                                          textAlign: TextAlign.center,
-                                          style: customs.darkTextStyle(
-                                              size: 10,
-                                              fontweight: FontWeight.bold),
+                                        return Transform.rotate(
+                                          angle: -30 * (3.1415927 / 180),
+                                          child: Text(
+                                            "${daysOfWeek[int.parse(meta.formattedValue)]}",
+                                            textAlign: TextAlign.center,
+                                            style: customs.darkTextStyle(
+                                                size: 8,
+                                                fontweight: FontWeight.bold),
+                                          ),
                                         );
                                       },
                                     )),

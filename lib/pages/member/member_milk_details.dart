@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:skeletonizer/skeletonizer.dart';
+import 'package:maru/packages/api_connection.dart';
 import 'package:maru/packages/maru_theme.dart';
 
 class MemberMilkDetails extends StatefulWidget {
@@ -10,23 +13,81 @@ class MemberMilkDetails extends StatefulWidget {
 }
 
 class _MemberMilkDetailsState extends State<MemberMilkDetails> {
+  Map<String, dynamic>? args;
+  CustomThemes customs = CustomThemes();
+  var collection_details = null;
+  int collection_status = 0;
+  bool loading = false;
+  bool all_status = false;
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    //get the milk details
+    getMilkDetails();
+  }
+
+  Future<void> changeStatus(String status) async {
+    setState(() {
+      all_status = true;
+    });
+    ApiConnection apiConnection = ApiConnection();
+    args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+    String collection_id = args!['collection_id'].toString();
+    var response = await apiConnection.changeMilkStatus(status, collection_id);
+    if(customs.isValidJson(response)){
+      var res = jsonDecode(response);
+      if(res['success']){
+        customs.maruSnackBarSuccess(context: context, text: "Status changed successfully!");
+        getMilkDetails();
+      }else{
+        customs.maruSnackBarDanger(context: context, text: res['message']);
+      }
+    }else{
+      customs.maruSnackBarDanger(context: context, text: "An error has occured!");
+    }
+    setState(() {
+      all_status = false;
+    });
+  }
+
+  // get the milk details
+  Future<void> getMilkDetails() async {
+    setState(() {
+      loading = true;
+    });
+
+    // API CONNECTION
+    ApiConnection apiConnection = ApiConnection();
+    args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+    String collection_id = args!['collection_id'].toString();
+    var response = await apiConnection.getMilkDetails(collection_id);
+    if(customs.isValidJson(response)){
+      var res = jsonDecode(response);
+      if(res['success']){
+        setState(() {
+          collection_details = res['milk_details'];
+          collection_status = res['milk_details']['collection_status'];
+        });
+      }else{
+        setState(() {
+          collection_details = null;
+          collection_status = 0;
+        });
+      }
+    }else{
+      setState(() {
+        collection_details = null;
+        collection_status = 0;
+      });
+    }
+    setState(() {
+      loading = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    CustomThemes customs = CustomThemes();
-    const FlutterSecureStorage _storage = FlutterSecureStorage();
-
-    List<DropdownMenuItem<String>> regions = [
-      const DropdownMenuItem(child: Text("Select your region"), value: ""),
-      const DropdownMenuItem(child: Text("Njebi"), value: "Njebi"),
-      const DropdownMenuItem(child: Text("Munyu/Kiriti"), value: "Munyu/Kiriti"),
-    ];
-
-    List<DropdownMenuItem<String>> genderList = [
-      const DropdownMenuItem(child: Text("Select Gender"), value: ""),
-      const DropdownMenuItem(child: Text("Male"), value: "male"),
-      const DropdownMenuItem(child: Text("Female"), value: "female"),
-    ];
-
     return Scaffold(
       backgroundColor: customs.whiteColor,
       appBar: AppBar(
@@ -81,110 +142,100 @@ class _MemberMilkDetailsState extends State<MemberMilkDetails> {
                     ),
                   ),
                   SizedBox(height: height * 0.1,),
-                  Stack(
-                    children: [
-                      Center(child: Container( width:width*0.7, child: const Divider(), padding: const EdgeInsets.symmetric(vertical: 10),)),
-                      Positioned(
-                        top: 5,
-                        left: width * 0.365,
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 5),
-                          decoration: BoxDecoration(
-                            color: customs.whiteColor,
-                            borderRadius: BorderRadius.circular(5)
-                          ),
-                          child: Text("Mon, Jun 2024", style: customs.secondaryTextStyle(size: 14, fontweight: FontWeight.bold),),
+                  Skeletonizer(
+                    enabled: loading,
+                    child: Stack(
+                      children: [
+                        Center(child: Container( width:width*0.7, child: const Divider(), padding: const EdgeInsets.symmetric(vertical: 10),)),
+                        Positioned(
+                          top: 5,
+                          left: width * 0.305,
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 5),
+                            decoration: BoxDecoration(
+                              color: customs.whiteColor,
+                              borderRadius: BorderRadius.circular(5)
+                            ),
+                            child: Text(collection_details != null ? (collection_details['date'] ?? "N/A") : "N/A", style: customs.secondaryTextStyle(size: 14, fontweight: FontWeight.bold),),
+                          )
                         )
-                      )
-                    ],
+                      ],
+                    ),
                   ),
-                  Center(
-                    child: Text("11:54AM", style: customs.secondaryTextStyle(size: 20, fontweight: FontWeight.bold),),
+                  Skeletonizer(
+                    enabled: loading,
+                    child: Center(
+                      child: Text(collection_details != null ? (collection_details['time'] ?? "N/A") : "N/A", style: customs.secondaryTextStyle(size: 20, fontweight: FontWeight.bold),),
+                    ),
                   ),
                   const SizedBox(height: 30,),
-                  Container(
-                    height: 230,
-                    width: width * 0.9,
-                    decoration: BoxDecoration(
-                      color: customs.whiteColor,
-                      boxShadow: [
-                        BoxShadow(
-                          color: customs.secondaryShade_2,
-                          spreadRadius: 2,
-                          blurRadius: 10
-                        )
-                      ],
-                      borderRadius: BorderRadius.circular(10)
-                    ),
-                    padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                    child: Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            const Text(""),
-                            IconButton(
-                              onPressed: (){},
-                              icon: Icon(
-                                Icons.broken_image_outlined,
-                                color: customs.secondaryColor,
+                  Skeletonizer(
+                    enabled: loading,
+                    child: Container(
+                      height: 230,
+                      width: width * 0.9,
+                      decoration: BoxDecoration(
+                        color: customs.whiteColor,
+                        boxShadow: [
+                          BoxShadow(
+                            color: customs.secondaryShade_2,
+                            spreadRadius: 2,
+                            blurRadius: 10
+                          )
+                        ],
+                        borderRadius: BorderRadius.circular(10)
+                      ),
+                      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                      child: Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Text(""),
+                              IconButton(
+                                onPressed: (){},
+                                icon: Icon(
+                                  Icons.broken_image_outlined,
+                                  color: customs.secondaryColor,
+                                ),
+                                style: ButtonStyle(
+                                  backgroundColor: WidgetStateProperty.all(customs.secondaryShade_2),
+                                  elevation: WidgetStateProperty.all<double>(10),
+                                  shape: WidgetStateProperty.all<RoundedRectangleBorder>(
+                                    RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(5.0),
+                                    ),
+                                  )
+                                ),
+                              )
+                            ],
+                          ),
+                          Column(
+                            children: [
+                              Text("Collected", style: customs.secondaryTextStyle(size: 12, underline : true, fontweight: FontWeight.bold),),
+                              const SizedBox(height: 10,),
+                              Text((collection_details != null ? (collection_details['collection_amount']+" Litres" ?? "N/A") : "N/A"), style: customs.secondaryTextStyle(size: 25, fontweight: FontWeight.bold)),
+                              Container(
+                                padding: const EdgeInsets.all(2),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(5),
+                                  color: collection_status == 0 ? customs.secondaryColor : collection_status == 1 ? customs.successColor : customs.dangerColor,
+                                ),
+                                child: Text(collection_status == 0 ? "Not-Confirmed" : collection_status == 1 ? "Confirmed" : "Rejected", style: customs.whiteTextStyle(size: 12, fontweight: FontWeight.bold))
                               ),
-                              style: ButtonStyle(
-                                backgroundColor: WidgetStateProperty.all(customs.secondaryShade_2),
-                                elevation: WidgetStateProperty.all<double>(10),
-                                shape: WidgetStateProperty.all<RoundedRectangleBorder>(
-                                  RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(5.0),
-                                  ),
-                                )
+                              const SizedBox(height: 20,),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                children: [
+                                  Container(width: width *0.4, child: collection_status == 0 ? customs.maruButton(text: "Confirm", disabled:all_status, showLoader: all_status, onPressed: (){changeStatus("1");},fontSize: 15,type: Type.success, size: Sizes.sm, fontWeight: FontWeight.bold) : SizedBox(height: 0, width: 0,)),
+                                  Container(width: width *0.4, child: collection_status == 0 ? customs.marOutlineuButton(text: "Reject",disabled: all_status, showLoader: all_status, onPressed: (){changeStatus("2");},fontSize: 15,type: Type.danger, size: Sizes.sm, fontWeight: FontWeight.bold) : SizedBox(height: 0, width: 0,))
+                                ],
                               ),
-                            )
-                          ],
-                        ),
-                        Column(
-                          children: [
-                            Text("Collected", style: customs.secondaryTextStyle(size: 12, underline : true, fontweight: FontWeight.bold),),
-                            const SizedBox(height: 10,),
-                            Text("19.43 Litres", style: customs.secondaryTextStyle(size: 25, fontweight: FontWeight.bold)),
-                            Container(
-                              padding: const EdgeInsets.all(2),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(5),
-                                color: customs.successColor,
-                              ),
-                              child: Text("Confirmed", style: customs.whiteTextStyle(size: 12, fontweight: FontWeight.bold))
-                            ),
-                            // Container(
-                            //     padding: EdgeInsets.all(2),
-                            //     decoration: BoxDecoration(
-                            //       borderRadius: BorderRadius.circular(5),
-                            //       color: customs.dangerColor,
-                            //     ),
-                            //     child: Text("Rejected", style: customs.whiteTextStyle(size: 12, fontweight: FontWeight.bold))
-                            // ),
-                            // Container(
-                            //   margin: const EdgeInsets.fromLTRB(0, 20, 0, 0),
-                            //     decoration: BoxDecoration(
-                            //       borderRadius: BorderRadius.circular(5),
-                            //     ),
-                            //     child: const Image(
-                            //       image: AssetImage("assets/images/card.jpg"),
-                            //       height: 150,
-                            //       alignment: Alignment.center,
-                            //       semanticLabel: "Member`s Card",
-                            //     ),
-                            // ),
-                            const SizedBox(height: 20,),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                customs.maruButton(text: "Confirm", onPressed: (){},fontSize: 15,type: Type.success, size: Sizes.sm),
-                                customs.marOutlineuButton(text: "Reject", onPressed: (){},fontSize: 15,type: Type.danger, size: Sizes.sm)
-                              ],
-                            )
-                          ],
-                        )
-                      ],
+                              collection_status != 0 ? customs.marOutlineuButton(text: "Revoke", onPressed: (){changeStatus("0");},fontSize: 15,type: Type.secondary, showLoader: all_status, size: Sizes.sm, fontWeight: FontWeight.bold) : SizedBox(height: 0, width: 0,)
+                            ],
+                          )
+                        ],
+                      ),
                     ),
                   ),
                   const SizedBox(height: 20,),
