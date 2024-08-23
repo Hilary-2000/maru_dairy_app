@@ -1,6 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:maru/packages/api_connection.dart';
 import 'package:maru/packages/maru_theme.dart';
 
 class MemberProfile extends StatefulWidget {
@@ -11,8 +12,53 @@ class MemberProfile extends StatefulWidget {
 }
 
 class _MemberProfileState extends State<MemberProfile> {
+  // CUSTOM THEME
   CustomThemes customs = CustomThemes();
-  final FlutterSecureStorage _storage = const FlutterSecureStorage();
+  var member_data = null;
+  String collection_days = "0";
+  String litres_collected = "0";
+
+  // change to camel case
+  String toCamelCase(String text) {
+    // Step 1: Split the string by spaces or underscores
+    List<String> words = text.split(RegExp(r'[\s_]+'));
+
+    // Step 2: Capitalize the first letter of each word and lowercase the rest
+    List<String> capitalizedWords = words.map((word) {
+      return word[0].toUpperCase() + word.substring(1).toLowerCase();
+    }).toList();
+
+    // Step 3: Join the capitalized words with spaces
+    return capitalizedWords.join(' ');
+  }
+
+  void didChangeDependencies(){
+    // change dependencies
+    super.didChangeDependencies();
+
+    // get member details
+    getMemberDetails();
+  }
+
+
+  Future<void> getMemberDetails() async {
+    ApiConnection apiConnection = new ApiConnection();
+    var response = await apiConnection.getMemberDetails();
+    if(customs.isValidJson(response)){
+      var res = jsonDecode(response);
+      if(res['success']){
+        // set state
+        setState(() {
+          member_data = res['member_details'];
+          collection_days = res['collection_days'];
+          litres_collected = res['total_collection'];
+        });
+      }else{
+
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -123,13 +169,13 @@ class _MemberProfileState extends State<MemberProfile> {
                                               height: 45,
                                             ),
                                             Text(
-                                              "Hillary Ngige",
+                                              toCamelCase(member_data != null ? member_data['fullname'] ?? "N/A" : "N/A"),
                                               style: customs.darkTextStyle(
                                                   size: 20,
                                                   fontweight: FontWeight.bold),
                                             ),
                                             Text(
-                                              "REG2022-002",
+                                              member_data != null ? member_data['membership'] ?? "N/A" : "N/A",
                                               style: customs.secondaryTextStyle(
                                                   size: 12,
                                                   fontweight: FontWeight.normal),
@@ -144,7 +190,7 @@ class _MemberProfileState extends State<MemberProfile> {
                                                 Column(
                                                   children: [
                                                     Text(
-                                                      "213",
+                                                      "$collection_days",
                                                       style:
                                                           customs.darkTextStyle(
                                                               size: 15,
@@ -166,7 +212,7 @@ class _MemberProfileState extends State<MemberProfile> {
                                                 Column(
                                                   children: [
                                                     Text(
-                                                      "2,576",
+                                                      "$litres_collected",
                                                       style:
                                                           customs.darkTextStyle(
                                                               size: 15,
@@ -188,7 +234,7 @@ class _MemberProfileState extends State<MemberProfile> {
                                                 Column(
                                                   children: [
                                                     Text(
-                                                      "46",
+                                                      member_data != null ? member_data['animals'].toString() ?? "0" : "0",
                                                       style:
                                                           customs.darkTextStyle(
                                                               size: 15,
@@ -258,7 +304,7 @@ class _MemberProfileState extends State<MemberProfile> {
                                     size: 12, fontweight: FontWeight.bold),
                               ),
                               Text(
-                                "0743551250",
+                                member_data != null ? member_data['phone_number'] ?? "N/A" : "N/A",
                                 style: customs.secondaryTextStyle(size: 16),
                               ),
                               Divider(
@@ -279,7 +325,7 @@ class _MemberProfileState extends State<MemberProfile> {
                                     size: 12, fontweight: FontWeight.bold),
                               ),
                               Text(
-                                "hilaryme45@gmail.com",
+                                member_data != null ? member_data['email'] ?? "N/A" : "N/A",
                                 style: customs.secondaryTextStyle(size: 16),
                               ),
                               Divider(
@@ -300,7 +346,7 @@ class _MemberProfileState extends State<MemberProfile> {
                                     size: 12, fontweight: FontWeight.bold),
                               ),
                               Text(
-                                "Thika, Kiambu County",
+                                toCamelCase(member_data != null ? member_data['residence'] ?? "N/A" : "N/A"),
                                 style: customs.secondaryTextStyle(size: 16),
                               ),
                               Divider(
@@ -321,7 +367,7 @@ class _MemberProfileState extends State<MemberProfile> {
                                     size: 12, fontweight: FontWeight.bold),
                               ),
                               Text(
-                                "Njembi",
+                                toCamelCase(member_data != null ? member_data['region'] ?? "N/A" : "N/A"),
                                 style: customs.secondaryTextStyle(size: 16),
                               ),
                               Divider(
@@ -342,7 +388,7 @@ class _MemberProfileState extends State<MemberProfile> {
                                     size: 12, fontweight: FontWeight.bold),
                               ),
                               Text(
-                                "member",
+                                member_data != null ? member_data['username'] ?? "N/A" : "N/A",
                                 style: customs.secondaryTextStyle(size: 16),
                               ),
                               Divider(
@@ -363,7 +409,7 @@ class _MemberProfileState extends State<MemberProfile> {
                                     size: 12, fontweight: FontWeight.bold),
                               ),
                               Text(
-                                "37367344",
+                                member_data != null ? member_data['national_id'] ?? "N/A" : "N/A",
                                 style: customs.secondaryTextStyle(size: 16),
                               ),
                               Divider(
@@ -384,7 +430,7 @@ class _MemberProfileState extends State<MemberProfile> {
                                     size: 12, fontweight: FontWeight.bold),
                               ),
                               Text(
-                                "11223344",
+                                member_data != null ? member_data['membership'] ?? "N/A" : "N/A",
                                 style: customs.secondaryTextStyle(size: 16),
                               ),
                               Divider(
