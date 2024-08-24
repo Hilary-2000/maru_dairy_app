@@ -143,7 +143,7 @@ class _CaptureMilkDataState extends State<CaptureMilkData> {
   void didChangeDependencies() async{
     setState(() {
       loading = true;
-      bg_color = [customs.primaryColor, customs.secondaryColor, customs.warningColor, customs.darkColor, customs.successShade];
+      bg_color = [customs.primaryColor, customs.secondaryColor, customs.warningColor, customs.darkColor, customs.successColor];
       colors_shade = [customs.primaryShade, customs.secondaryShade, customs.warningShade, customs.darkShade, customs.successShade];
       textStyles = [
         customs.primaryTextStyle(

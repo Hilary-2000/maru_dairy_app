@@ -68,7 +68,6 @@ class _ConfirmedDeclinedCollectionState extends State<ConfirmedDeclinedCollectio
     });
     ApiConnection apiConnection = new ApiConnection();
     String? token = await _storage.read(key: 'token');
-    double width = MediaQuery.of(context).size.width;
     args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
 
     if(isValidJson(jsonEncode(args))){
@@ -449,7 +448,7 @@ class _ConfirmedDeclinedCollectionState extends State<ConfirmedDeclinedCollectio
               children: [
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 10),
-                  child: Text(collectionStatus == "1" ? "Confirmed Collections" : (collectionStatus == "0" ? "Declined Collection" : "Not-Confirmed Collection"), style: collectionStatus == "1" ? customs.successTextStyle(size: 20, fontweight: FontWeight.bold) : customs.secondaryTextStyle(size: 20, fontweight: FontWeight.bold),),
+                  child: Text(collectionStatus == "1" ? "Confirmed Collections" : (collectionStatus == "0" ? "Rejected/Pending Collection" : "Not-Confirmed Collection"), style: collectionStatus == "1" ? customs.successTextStyle(size: 20, fontweight: FontWeight.bold) : customs.secondaryTextStyle(size: 20, fontweight: FontWeight.bold),),
                 ),
                 Padding(
                   padding: EdgeInsets.symmetric(

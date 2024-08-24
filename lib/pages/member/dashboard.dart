@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -281,7 +280,7 @@ class _memberDashState extends State<memberDash> {
   List<DropdownMenuItem<String>> dayFilter = [
     const DropdownMenuItem(child: Text("7 Days"), value: "7"),
     const DropdownMenuItem(child: Text("14 Days"), value: "14"),
-    const DropdownMenuItem(child: Text("30 Days"), value: "30"),
+    const DropdownMenuItem(child: Text("1 month"), value: "30"),
   ];
   List<String> daysOfWeek = [
     '',
@@ -410,7 +409,6 @@ class _memberDashState extends State<memberDash> {
     ApiConnection apiConnection = new ApiConnection();
     var response = await apiConnection.getMemberDash(period+" days");
     if (customs.isValidJson(response)) {
-      print(response);
       var res = jsonDecode(response);
       if (res['success']) {
         member_data = res['member_details'];
@@ -484,7 +482,7 @@ class _memberDashState extends State<memberDash> {
                               Text(
                                 "$greetings",
                                 style: customs.primaryTextStyle(
-                                    size: width * 0.04,
+                                    size: width * 0.05,
                                     fontweight: FontWeight.normal),
                               ),
                               SizedBox(
@@ -493,7 +491,7 @@ class _memberDashState extends State<memberDash> {
                               Text(
                                 toCamelCase(member_data != null ? member_data['fullname'] ?? "N/A" : "N/A"),
                                 style: customs.successTextStyle(
-                                    size: width * 0.05,
+                                    size: width * 0.06,
                                     fontweight: FontWeight.bold),
                               )
                             ],
@@ -573,7 +571,7 @@ class _memberDashState extends State<memberDash> {
                             customs.maruButton(
                                 showArrow: true,
                                 iconSize: 15,
-                                fontSize: 13,
+                                fontSize: 16,
                                 size: Sizes.sm,
                                 text: "View Membership",
                                 onPressed: () {
@@ -583,7 +581,7 @@ class _memberDashState extends State<memberDash> {
                             customs.maruButton(
                                 showArrow: true,
                                 iconSize: 15,
-                                fontSize: 13,
+                                fontSize: 16,
                                 size: Sizes.sm,
                                 text: "Inquire",
                                 onPressed: () {
@@ -606,7 +604,7 @@ class _memberDashState extends State<memberDash> {
                     children: [
                       Text(
                         "Collection Stats",
-                        style: customs.darkTextStyle(size: 15, underline: true),
+                        style: customs.darkTextStyle(size: 18, underline: true, fontweight: FontWeight.bold),
                       ),
                       const Spacer(),
                       Container(
@@ -712,7 +710,7 @@ class _memberDashState extends State<memberDash> {
                       Text(
                         "MILK COLLECTION STATS",
                         style: customs.darkTextStyle(
-                            size: 15,
+                            size: 18,
                             underline: true,
                             fontweight: FontWeight.bold),
                       ),
@@ -737,7 +735,7 @@ class _memberDashState extends State<memberDash> {
                                   return BarTooltipItem(
                                     "${rod.toY.round()} Ltrs",
                                     customs.darkTextStyle(
-                                        size: 8, fontweight: FontWeight.bold),
+                                        size: 12, fontweight: FontWeight.bold),
                                   );
                                 },
                               )),
@@ -779,9 +777,9 @@ class _memberDashState extends State<memberDash> {
                                     )),
                                 bottomTitles: AxisTitles(
                                     axisNameWidget: Center(
-                                        child: Text("Days of the week",
+                                        child: Text("",
                                             style: customs.primaryTextStyle(
-                                                size: 12))),
+                                                size: 12, fontweight: FontWeight.bold))),
                                     sideTitles: SideTitles(
                                       showTitles: true,
                                       reservedSize: 15,
@@ -792,7 +790,7 @@ class _memberDashState extends State<memberDash> {
                                             "${daysOfWeek[int.parse(meta.formattedValue)]}",
                                             textAlign: TextAlign.center,
                                             style: customs.darkTextStyle(
-                                                size: 8,
+                                                size: 12,
                                                 fontweight: FontWeight.bold),
                                           ),
                                         );

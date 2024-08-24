@@ -65,6 +65,31 @@ class CustomThemes {
     }
   }
 
+
+  String nameAbbr(String name){
+    String abbr = "";
+    List<String> words = name.split(' ');
+    int length = words.length >=2 ? 2 : words.length;
+    for(int index = 0; index < length; index++){
+      abbr += words[index].substring(0,1);
+    }
+    return abbr;
+  }
+
+  // change to camel case
+  String toCamelCase(String text) {
+    // Step 1: Split the string by spaces or underscores
+    List<String> words = text.split(RegExp(r'[\s_]+'));
+
+    // Step 2: Capitalize the first letter of each word and lowercase the rest
+    List<String> capitalizedWords = words.map((word) {
+      return word[0].toUpperCase() + word.substring(1).toLowerCase();
+    }).toList();
+
+    // Step 3: Join the capitalized words with spaces
+    return capitalizedWords.join(' ');
+  }
+
   TextStyle secondaryTextStyle(
       {double size = 10, FontWeight fontweight = FontWeight.normal, bool underline = false}) {
     return TextStyle(

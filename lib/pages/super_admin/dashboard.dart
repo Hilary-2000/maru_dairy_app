@@ -285,7 +285,7 @@ class _SuperAdminDashState extends State<SuperAdminDash> {
   List<DropdownMenuItem<String>> dayFilter = [
     const DropdownMenuItem(child: Text("7 Days"), value: "7"),
     const DropdownMenuItem(child: Text("14 Days"), value: "14"),
-    const DropdownMenuItem(child: Text("30 Days"), value: "30"),
+    const DropdownMenuItem(child: Text("I month"), value: "30"),
   ];
   List<String> daysOfWeek = [
     '',

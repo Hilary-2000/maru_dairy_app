@@ -426,7 +426,7 @@ class _TechnicianDashboardState extends State<TechnicianDashboard> {
                               Text(
                                 "$greetings,",
                                 style: customs.primaryTextStyle(
-                                    size: width * 0.04,
+                                    size: width * 0.05,
                                     fontweight: FontWeight.normal),
                               ),
                               SizedBox(
@@ -437,7 +437,7 @@ class _TechnicianDashboardState extends State<TechnicianDashboard> {
                                 child: Text(
                                   "$full_name",
                                   style: customs.successTextStyle(
-                                      size: width * 0.04,
+                                      size: width * 0.06,
                                       fontweight: FontWeight.bold),
                                 ),
                               )
@@ -507,7 +507,7 @@ class _TechnicianDashboardState extends State<TechnicianDashboard> {
                             customs.maruButton(
                                 showArrow: true,
                                 iconSize: 15,
-                                fontSize: 13,
+                                fontSize: 16,
                                 size: Sizes.sm,
                                 text: "Collect Milk",
                                 onPressed: () {
@@ -517,7 +517,7 @@ class _TechnicianDashboardState extends State<TechnicianDashboard> {
                             customs.maruButton(
                                 showArrow: true,
                                 iconSize: 15,
-                                fontSize: 13,
+                                fontSize: 16,
                                 size: Sizes.sm,
                                 text: "Find Technician",
                                 onPressed: () {
@@ -541,7 +541,7 @@ class _TechnicianDashboardState extends State<TechnicianDashboard> {
                     children: [
                       Text(
                         "Collection Stats",
-                        style: customs.darkTextStyle(size: 15, underline: true),
+                        style: customs.darkTextStyle(size: 18, underline: true),
                       ),
                       const Spacer(),
                       Container(
@@ -654,7 +654,7 @@ class _TechnicianDashboardState extends State<TechnicianDashboard> {
                           Text(
                             "MILK COLLECTION STATS",
                             style: customs.darkTextStyle(
-                                size: 15,
+                                size: 18,
                                 underline: true,
                                 fontweight: FontWeight.bold),
                           ),
@@ -680,7 +680,7 @@ class _TechnicianDashboardState extends State<TechnicianDashboard> {
                                       return BarTooltipItem(
                                         "${rod.toY.round()} Ltrs",
                                         customs.darkTextStyle(
-                                            size: 8,
+                                            size: 12,
                                             fontweight: FontWeight.bold),
                                       );
                                     },
@@ -717,7 +717,7 @@ class _TechnicianDashboardState extends State<TechnicianDashboard> {
                                               meta.formattedValue,
                                               textAlign: TextAlign.center,
                                               style: customs.darkTextStyle(
-                                                  size: 10,
+                                                  size: 12,
                                                   fontweight: FontWeight.bold),
                                             );
                                           },
@@ -740,7 +740,7 @@ class _TechnicianDashboardState extends State<TechnicianDashboard> {
                                                 "${daysOfWeek[int.parse(meta.formattedValue)]}",
                                                 textAlign: TextAlign.center,
                                                 style: customs.darkTextStyle(
-                                                    size: 8,
+                                                    size: 12,
                                                     fontweight: FontWeight.bold),
                                               ),
                                             );
@@ -776,7 +776,7 @@ class _TechnicianDashboardState extends State<TechnicianDashboard> {
                     children: [
                       Text(
                         "Farmer Stats",
-                        style: customs.darkTextStyle(size: 15, underline: true),
+                        style: customs.darkTextStyle(size: 18, underline: true),
                       ),
                       const Spacer()
                     ],
@@ -874,7 +874,7 @@ class _TechnicianDashboardState extends State<TechnicianDashboard> {
                           Text(
                             "No. OF FARMERS",
                             style: customs.darkTextStyle(
-                                size: 15,
+                                size: 18,
                                 underline: true,
                                 fontweight: FontWeight.bold),
                           ),
@@ -900,7 +900,7 @@ class _TechnicianDashboardState extends State<TechnicianDashboard> {
                                       return BarTooltipItem(
                                         "${rod.toY.round()}",
                                         customs.darkTextStyle(
-                                            size: 8,
+                                            size: 12,
                                             fontweight: FontWeight.bold),
                                       );
                                     },
@@ -937,7 +937,7 @@ class _TechnicianDashboardState extends State<TechnicianDashboard> {
                                               meta.formattedValue,
                                               textAlign: TextAlign.center,
                                               style: customs.darkTextStyle(
-                                                  size: 10,
+                                                  size: 12,
                                                   fontweight: FontWeight.bold),
                                             );
                                           },
@@ -960,7 +960,7 @@ class _TechnicianDashboardState extends State<TechnicianDashboard> {
                                                 "${daysOfWeek[int.parse(meta.formattedValue)]}",
                                                 textAlign: TextAlign.center,
                                                 style: customs.darkTextStyle(
-                                                    size: 8,
+                                                    size: 12,
                                                     fontweight: FontWeight.bold),
                                               ),
                                             );

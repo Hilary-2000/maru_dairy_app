@@ -318,6 +318,7 @@ class _CollectMilkState extends State<CollectMilk> {
       });
     }
   }
+
   void findKeyWord(keyword){
     var newHistory = [];
     for(var item in members_list){

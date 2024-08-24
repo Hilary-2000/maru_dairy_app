@@ -229,6 +229,7 @@ class _MemberSettingsState extends State<MemberSettings> {
                             onPressed: () {
                               _storage.delete(key: "username");
                               _storage.delete(key: "password");
+                              _storage.delete(key: "token");
                               Navigator.pushReplacementNamed(
                                   context, "/landing_page");
                             },
