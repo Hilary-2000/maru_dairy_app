@@ -76,6 +76,7 @@ class _TechnicianHistoryState extends State<TechnicianHistory> {
     ApiConnection apiConnection = new ApiConnection();
     String? token = await _storage.read(key: 'token');
     var response = await apiConnection.collectHistory(token!, drop_down);
+    print(response);
     if(isValidJson(response)){
       var res = jsonDecode(response);
       if(res['success'] == true){
@@ -479,7 +480,7 @@ class _TechnicianHistoryState extends State<TechnicianHistory> {
                                           Text(
                                             "Confirmed",
                                             style: customs.secondaryTextStyle(
-                                                size: width * 0.035,
+                                                size: 12,
                                                 fontweight: FontWeight.bold),
                                           ),
                                           const SizedBox(
@@ -488,12 +489,12 @@ class _TechnicianHistoryState extends State<TechnicianHistory> {
                                           Text(
                                             "$confirmedCollection Collection(s)",
                                             style: customs.darkTextStyle(
-                                                size: width * 0.028),
+                                                size: 12),
                                           ),
                                           SizedBox(height: 8,),
                                           Row(
                                             children: [
-                                              Text("View", style: customs.primaryTextStyle(size: 10, underline: false),),
+                                              Text("View", style: customs.primaryTextStyle(size: 12, underline: false),),
                                               Icon(Icons.keyboard_double_arrow_right, color: customs.primaryColor, size: 16,)
                                             ],
                                           )
@@ -540,9 +541,9 @@ class _TechnicianHistoryState extends State<TechnicianHistory> {
                                         CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                            "Declined",
+                                            "Rejected/Pending",
                                             style: customs.secondaryTextStyle(
-                                                size: width * 0.035,
+                                                size: 12,
                                                 fontweight: FontWeight.bold),
                                           ),
                                           const SizedBox(
@@ -551,12 +552,12 @@ class _TechnicianHistoryState extends State<TechnicianHistory> {
                                           Text(
                                             "$notConfirmedCollection collection(s)",
                                             style: customs.darkTextStyle(
-                                                size: width * 0.028),
+                                                size: 12),
                                           ),
                                           SizedBox(height: 8,),
                                           Row(
                                             children: [
-                                              Text("View", style: customs.primaryTextStyle(size: 10, underline: false),),
+                                              Text("View", style: customs.primaryTextStyle(size: 12, underline: false),),
                                               Icon(Icons.keyboard_double_arrow_right, color: customs.primaryColor, size: 16,)
                                             ],
                                           )

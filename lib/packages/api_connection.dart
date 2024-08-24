@@ -18,9 +18,8 @@ class ApiConnection{
             'Content-Type': 'application/json',
           },
           body: body
-      ).timeout(Duration(seconds: 10));
-      client.close();
-      return response.body;
+      ).timeout(Duration(seconds: 60));
+      return response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body;
     }on TimeoutException {
       return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
     } catch(e){
@@ -42,9 +41,8 @@ class ApiConnection{
             'Content-Type': 'application/json',
           },
           body: body
-      ).timeout(Duration(seconds: 10));
-      client.close();
-      return response.body;
+      ).timeout(Duration(seconds: 60));
+      return response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body;
     }on TimeoutException {
       return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
     } catch(e){
@@ -66,9 +64,8 @@ class ApiConnection{
             'Content-Type': 'application/json',
           },
           body: body
-      ).timeout(Duration(seconds: 10));
-      client.close();
-      return response.body;
+      ).timeout(Duration(seconds: 60));
+      return response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body;
     }on TimeoutException {
       return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
     } catch(e){
@@ -90,9 +87,8 @@ class ApiConnection{
             'maru-authentication_code' : token
           },
           body: body
-      ).timeout(Duration(seconds: 10));
-      client.close();
-      return response.body;
+      ).timeout(Duration(seconds: 60));
+      return response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body;
     }on TimeoutException {
       return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
     } catch(e){
@@ -132,9 +128,8 @@ class ApiConnection{
             'Content-Type': 'application/json',
           },
           body: body
-      ).timeout(Duration(seconds: 10));
-      client.close();
-      return response.body;
+      ).timeout(Duration(seconds: 60));
+      return response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body;
     }on TimeoutException {
       return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
     } catch(e){
@@ -157,9 +152,8 @@ class ApiConnection{
             'maru-authentication_code' : token
           },
           body: body
-      ).timeout(Duration(seconds: 10));
-      client.close();
-      return response.body;
+      ).timeout(Duration(seconds: 60));
+      return response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body;
     }on TimeoutException {
       return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
     } catch(e){
@@ -182,9 +176,8 @@ class ApiConnection{
             'maru-authentication_code' : token
           },
           body: body
-      ).timeout(Duration(seconds: 10));
-      client.close();
-      return response.body;
+      ).timeout(Duration(seconds: 60));
+      return response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body;
     }on TimeoutException {
       return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
     } catch(e){
@@ -209,9 +202,8 @@ class ApiConnection{
             'maru-authentication_code' : token
           },
           body: body
-      ).timeout(Duration(seconds: 10));
-      client.close();
-      return response.body;
+      ).timeout(Duration(seconds: 60));
+      return response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body;
     }on TimeoutException {
       return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
     } catch(e){
@@ -234,9 +226,8 @@ class ApiConnection{
             'maru-authentication_code' : token
           },
           body: body
-      ).timeout(Duration(seconds: 10));
-      client.close();
-      return response.body;
+      ).timeout(Duration(seconds: 60));
+      return response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body;
     }on TimeoutException {
       return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
     } catch(e){
@@ -259,9 +250,8 @@ class ApiConnection{
             'maru-authentication_code' : token
           },
           body: body
-      ).timeout(Duration(seconds: 10));
-      client.close();
-      return response.body;
+      ).timeout(Duration(seconds: 60));
+      return response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body;
     }on TimeoutException {
       return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
     } catch(e){
@@ -287,9 +277,8 @@ class ApiConnection{
             'maru-authentication_code' : token
           },
           body: body
-      ).timeout(Duration(seconds: 10));
-      client.close();
-      return response.body;
+      ).timeout(Duration(seconds: 60));
+      return response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body;
     }on TimeoutException {
       return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
     } catch(e){
@@ -315,9 +304,8 @@ class ApiConnection{
             'maru-authentication_code' : token
           },
           body: body
-      ).timeout(Duration(seconds: 10));
-      client.close();
-      return response.body;
+      ).timeout(Duration(seconds: 60));
+      return response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body;
     }on TimeoutException {
       return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
     } catch(e){
@@ -340,9 +328,8 @@ class ApiConnection{
             'maru-authentication_code' : token
           },
           body: body
-      ).timeout(Duration(seconds: 10));
-      client.close();
-      return response.body;
+      ).timeout(Duration(seconds: 60));
+      return response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body;
     }on TimeoutException {
       return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
     } catch(e){
@@ -384,9 +371,8 @@ class ApiConnection{
             'maru-authentication_code' : token
           },
           body: body
-      ).timeout(Duration(seconds: 10));
-      client.close();
-      return response.body;
+      ).timeout(Duration(seconds: 60));
+      return response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body;
     }on TimeoutException {
       return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
     } catch(e){
@@ -416,9 +402,8 @@ class ApiConnection{
             'maru-authentication_code' : token
           },
           body: body
-      ).timeout(Duration(seconds: 10));
-      client.close();
-      return response.body;
+      ).timeout(Duration(seconds: 60));
+      return response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body;
     }on TimeoutException {
       return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
     } catch(e){
@@ -443,9 +428,8 @@ class ApiConnection{
             'maru-authentication_code' : token!
           },
           body: body
-      ).timeout(Duration(seconds: 10));
-      client.close();
-      return response.body;
+      ).timeout(Duration(seconds: 60));
+      return response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body;
     }on TimeoutException {
       return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
     } catch(e){
@@ -470,9 +454,8 @@ class ApiConnection{
             'maru-authentication_code' : token!
           },
           body: body
-      ).timeout(Duration(seconds: 10));
-      client.close();
-      return response.body;
+      ).timeout(Duration(seconds: 60));
+      return response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body;
     }on TimeoutException {
       return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
     } catch(e){
@@ -497,9 +480,8 @@ class ApiConnection{
             'maru-authentication_code' : token!
           },
           body: body
-      ).timeout(Duration(seconds: 10));
-      client.close();
-      return response.body;
+      ).timeout(Duration(seconds: 60));
+      return response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body;
     }on TimeoutException {
       return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
     } catch(e){
@@ -526,9 +508,8 @@ class ApiConnection{
             'maru-authentication_code' : token!
           },
           body: body
-      ).timeout(Duration(seconds: 10));
-      client.close();
-      return response.body;
+      ).timeout(Duration(seconds: 60));
+      return response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body;
     }on TimeoutException {
       return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
     } catch(e){
@@ -553,9 +534,8 @@ class ApiConnection{
             'maru-authentication_code' : token!
           },
           body: body
-      ).timeout(Duration(seconds: 10));
-      client.close();
-      return response.body;
+      ).timeout(Duration(seconds: 60));
+      return response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body;
     }on TimeoutException {
       return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
     } catch(e){
@@ -580,9 +560,34 @@ class ApiConnection{
             'maru-authentication_code' : token!
           },
           body: body
-      ).timeout(Duration(seconds: 10));
+      ).timeout(Duration(seconds: 60));
+      return response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body;
+    }on TimeoutException {
+      return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
+    } catch(e){
+      return "{\"success\":false, \"message\":\"$e\"}";
+    }finally{
       client.close();
-      return response.body;
+    }
+  }
+
+  // get member data
+  Future<String> adminDashboard(String period) async{
+    var client = rq.Client();
+    var url = Uri.http(apiLink,"/api/admin/dashboard/$period");
+    var body = jsonEncode({});
+    FlutterSecureStorage storage = new FlutterSecureStorage();
+    String? token = await storage.read(key: "token");
+    try{
+      var response = await client.post(
+          url,
+          headers: {
+            'Content-Type': 'application/json',
+            'maru-authentication_code' : token!
+          },
+          body: body
+      ).timeout(Duration(seconds: 60));
+      return response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body;
     }on TimeoutException {
       return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
     } catch(e){
