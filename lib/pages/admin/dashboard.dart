@@ -48,26 +48,29 @@ class _adminDashboardState extends State<adminDashboard> {
         elevation: 1,
         title: Builder(builder: (context) {
           double screenWidth = MediaQuery.of(context).size.width;
-          double calculatedWidth = screenWidth / 2 - 160;
-          calculatedWidth = calculatedWidth > 0 ? calculatedWidth : 0;
           return Container(
-            margin: EdgeInsets.fromLTRB(calculatedWidth, 0, 0, 0),
-            child: Row(
-              children: [
-                SizedBox(
-                  height: 45,
-                  child:
-                      Image(image: AssetImage("assets/images/maru-nobg.png")),
+            width: screenWidth,
+            child: Center(
+              child: Container(
+                width: 250,
+                child: Row(
+                  children: [
+                    SizedBox(
+                      height: 70,
+                      child:
+                          Image(image: AssetImage("assets/images/maru-nobg.png")),
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Text(
+                      "Maru Dairy Co-op",
+                      style: customs.primaryTextStyle(
+                          size: 20, fontweight: FontWeight.bold),
+                    ),
+                  ],
                 ),
-                SizedBox(
-                  width: 10,
-                ),
-                Text(
-                  "Maru Dairy Co-op",
-                  style: customs.primaryTextStyle(
-                      size: 20, fontweight: FontWeight.bold),
-                ),
-              ],
+              ),
             ),
           );
         }),
@@ -745,6 +748,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                     child: Row(
                       children: <Widget>[
                         Container(
+                          width: width*0.73,
                           padding: const EdgeInsets.symmetric(
                               vertical: 10, horizontal: 10),
                           child: Column(

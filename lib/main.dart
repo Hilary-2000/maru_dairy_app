@@ -4,6 +4,7 @@ import 'package:maru/pages/admin/admin_profile.dart';
 import 'package:maru/pages/admin/admin_qr_code_finder.dart';
 import 'package:maru/pages/admin/dashboard.dart';
 import 'package:maru/pages/admin/edit_milk_price.dart';
+import 'package:maru/pages/admin/edit_profile.dart';
 import 'package:maru/pages/admin/inquiry_inbox.dart';
 import 'package:maru/pages/admin/member_details.dart';
 import 'package:maru/pages/admin/member_details_edit.dart';
@@ -79,6 +80,7 @@ void main() {
       "/admin_member_history": (context) => const MemberHistory(),
       "/new_member": (context) => const NewMember(),
       "/admin_profile": (context) => const AdminProfile(),
+      "/admin_edit_profile": (context) => const AdminEditProfile(),
     },
   ));
 }

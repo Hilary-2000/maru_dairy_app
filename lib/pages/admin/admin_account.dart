@@ -94,7 +94,7 @@ class _AdminAccountState extends State<AdminAccount> {
                               title: Text("Edit Profile", style: customs.darkTextStyle(size: 14),),
                               subtitle: Text("Update your information", style: customs.secondaryTextStyle(size: 12),),
                               onTap: (){
-                                Navigator.pushNamed(context, "/member_edit_profile");
+                                Navigator.pushNamed(context, "/admin_edit_profile");
                               },
                               tileColor: customs.secondaryShade_2,
                             ),
