@@ -27,15 +27,6 @@ class _AdminAccountState extends State<AdminAccount> {
           width: width,
           decoration: BoxDecoration(
             color: customs.secondaryShade_2.withOpacity(0.2),
-            // gradient: LinearGradient(
-            //   colors: [
-            //     Color.fromRGBO(230, 245, 248, 1),
-            //     Color.fromRGBO(255, 255, 255, 1),
-            //     Color.fromRGBO(227, 228, 229, 1)
-            //   ],
-            //   begin: Alignment.topLeft,
-            //   end: Alignment.bottomRight,
-            // ),
           ),
           child: Column(
             children: [
@@ -85,7 +76,7 @@ class _AdminAccountState extends State<AdminAccount> {
                               subtitle: Text("View your information", style: customs.secondaryTextStyle(size: 12),),
                               splashColor: customs.dangerColor,
                               onTap: (){
-                                Navigator.pushNamed(context, "/member_view_profile");
+                                Navigator.pushNamed(context, "/admin_profile");
                               },
                               tileColor: customs.secondaryShade_2,
                             ),

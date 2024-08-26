@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:maru/pages/admin/admin_profile.dart';
 import 'package:maru/pages/admin/admin_qr_code_finder.dart';
 import 'package:maru/pages/admin/dashboard.dart';
 import 'package:maru/pages/admin/edit_milk_price.dart';
@@ -76,7 +77,8 @@ void main() {
       "/admin_edit_member_details": (context) => const MemberDetailsEdit(),
       "/decline_or_confirmed_collection": (context) => const ConfirmedDeclinedCollection(),
       "/admin_member_history": (context) => const MemberHistory(),
-      "/new_member": (context) => const NewMember()
+      "/new_member": (context) => const NewMember(),
+      "/admin_profile": (context) => const AdminProfile(),
     },
   ));
 }
