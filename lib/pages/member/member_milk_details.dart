@@ -149,14 +149,20 @@ class _MemberMilkDetailsState extends State<MemberMilkDetails> {
                         Center(child: Container( width:width*0.7, child: const Divider(), padding: const EdgeInsets.symmetric(vertical: 10),)),
                         Positioned(
                           top: 5,
-                          left: width * 0.305,
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 5),
-                            decoration: BoxDecoration(
-                              color: customs.whiteColor,
-                              borderRadius: BorderRadius.circular(5)
+                          left: 0,
+                          child: SizedBox(
+                            width: width,
+                            child: Center(
+                              child: Container(
+                                width: 150,
+                                padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 5),
+                                decoration: BoxDecoration(
+                                  color: customs.whiteColor,
+                                  borderRadius: BorderRadius.circular(3)
+                                ),
+                                child: Text(collection_details != null ? (collection_details['date'] ?? "N/A") : "N/A", style: customs.secondaryTextStyle(size: 14, fontweight: FontWeight.bold),),
+                              ),
                             ),
-                            child: Text(collection_details != null ? (collection_details['date'] ?? "N/A") : "N/A", style: customs.secondaryTextStyle(size: 14, fontweight: FontWeight.bold),),
                           )
                         )
                       ],
