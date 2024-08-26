@@ -64,28 +64,34 @@ class _signUpState extends State<signUp> {
       appBar: AppBar(
         backgroundColor: customs.whiteColor,
         elevation: 1,
-        title: Builder(
-          builder: (context) {
-            double screenWidth = MediaQuery.of(context).size.width;
-            double calculatedWidth = screenWidth/2 - 160;
-            calculatedWidth = calculatedWidth > 0 ? calculatedWidth : 0;
-            return Container(
-              margin: EdgeInsets.fromLTRB(calculatedWidth, 0, 0, 0),
-              child: Row(
-                children: [
-                  SizedBox(
-                    height: 60,
-                    child: Image(image: AssetImage("assets/images/maru-nobg.png")),
-                  ),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  Text("Maru Dairy Co-op", style: customs.primaryTextStyle(size: 20, fontweight: FontWeight.bold),),
-                ],
+        title: Builder(builder: (context) {
+          double screenWidth = MediaQuery.of(context).size.width;
+          return Container(
+            width: screenWidth,
+            child: Center(
+              child: Container(
+                width: 250,
+                child: Row(
+                  children: [
+                    SizedBox(
+                      height: 70,
+                      child:
+                      Image(image: AssetImage("assets/images/maru-nobg.png")),
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Text(
+                      "Maru Dairy Co-op",
+                      style: customs.primaryTextStyle(
+                          size: 20, fontweight: FontWeight.bold),
+                    ),
+                  ],
+                ),
               ),
-            );
-          }
-        ),
+            ),
+          );
+        }),
       ),
       body: SafeArea(child: LayoutBuilder(
         builder: (context, constraints) {

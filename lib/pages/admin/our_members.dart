@@ -26,7 +26,6 @@ class _OurMembersState extends State<OurMembers> {
     });
     ApiConnection apiConnection = new ApiConnection();
     var response = await apiConnection.adminMembers();
-    print(response);
     if(customs.isValidJson(response)){
       var res = jsonDecode(response);
       if(res['success']){

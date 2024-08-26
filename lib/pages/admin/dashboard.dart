@@ -58,7 +58,7 @@ class _adminDashboardState extends State<adminDashboard> {
                     SizedBox(
                       height: 70,
                       child:
-                          Image(image: AssetImage("assets/images/maru-nobg.png")),
+                      Image(image: AssetImage("assets/images/maru-nobg.png")),
                     ),
                     SizedBox(
                       width: 10,
