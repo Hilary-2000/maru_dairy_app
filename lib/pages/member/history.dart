@@ -17,8 +17,6 @@ class memberHistory extends StatefulWidget {
 
 class _memberHistoryState extends State<memberHistory> {
   CustomThemes customs = CustomThemes();
-
-
   void findKeyWord(keyword){
     var newHistory = [];
     for(var item in collected_history){
@@ -46,8 +44,6 @@ class _memberHistoryState extends State<memberHistory> {
     super.didChangeDependencies();
     // set the initials
     double width = MediaQuery.of(context).size.width;
-    getCollectionHistory();
-
     setState(() {
       collections = [
         GestureDetector(
@@ -151,6 +147,9 @@ class _memberHistoryState extends State<memberHistory> {
         Container(width: width * 0.5, child: Divider(color: customs.secondaryShade_2.withOpacity(0.2),),),
       ];
     });
+
+    // get collection
+    getCollectionHistory();
   }
 
   bool loading = false;

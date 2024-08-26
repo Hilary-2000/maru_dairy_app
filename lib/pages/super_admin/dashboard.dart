@@ -8,6 +8,7 @@ import 'package:maru/pages/admin/admin_inquiries.dart';
 import 'package:maru/pages/admin/dashboard.dart';
 import 'package:maru/pages/admin/our_members.dart';
 import 'package:maru/pages/super_admin/super_admin_accounts.dart';
+import 'package:maru/pages/technician/technician_history.dart';
 
 class superAdminDashboard extends StatefulWidget {
   const superAdminDashboard({super.key});
@@ -34,7 +35,7 @@ class _superAdminDashboardState extends State<superAdminDashboard> {
       // Maru members
       OurMembers(),
       // Collection History
-      AdminCollectionHistory(),
+      TechnicianHistory(),
       // admin inquiries
       AdminInquiries(),
       // Admin Account

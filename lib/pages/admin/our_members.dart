@@ -55,9 +55,9 @@ class _OurMembersState extends State<OurMembers> {
       return Column(
         children: [
           GestureDetector(
-          onTap: () {
-            Navigator.pushNamed(
-                context, "/admin_member_details", arguments: {"index" : index, "member_id": item['user_id']});
+          onTap: () async {
+            await Navigator.pushNamed(context, "/admin_member_details", arguments: {"index" : index, "member_id": item['user_id']});
+            getMembers();
           },
           child: Container(
             margin: EdgeInsets.zero,
@@ -88,7 +88,7 @@ class _OurMembersState extends State<OurMembers> {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(item['region'],
+                    Text(item['region'] ?? "",
                         style: customs.darkTextStyle(size: 12)),
                     Text(
                       item['phone_number'],

@@ -6,6 +6,8 @@ import 'package:maru/pages/admin/edit_milk_price.dart';
 import 'package:maru/pages/admin/inquiry_inbox.dart';
 import 'package:maru/pages/admin/member_details.dart';
 import 'package:maru/pages/admin/member_details_edit.dart';
+import 'package:maru/pages/admin/member_history.dart';
+import 'package:maru/pages/admin/new_member.dart';
 import 'package:maru/pages/admin/select_member_message.dart';
 import 'package:maru/pages/member/changeMemberPassword.dart';
 import 'package:maru/pages/member/confirmed_declined_collection.dart';
@@ -73,6 +75,8 @@ void main() {
       "/admin_member_details": (context) => const MemberDetails(),
       "/admin_edit_member_details": (context) => const MemberDetailsEdit(),
       "/decline_or_confirmed_collection": (context) => const ConfirmedDeclinedCollection(),
+      "/admin_member_history": (context) => const MemberHistory(),
+      "/new_member": (context) => const NewMember()
     },
   ));
 }

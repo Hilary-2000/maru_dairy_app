@@ -19,7 +19,6 @@ class adminDashboard extends StatefulWidget {
 }
 
 class _adminDashboardState extends State<adminDashboard> {
-
   int index = 0;
   CustomThemes customs = CustomThemes();
   void _updateIndex(int newIndex) {
@@ -274,12 +273,12 @@ class _adminDashboardState extends State<adminDashboard> {
               backgroundColor: customs.secondaryShade_2,
               child: IconButton(
                 icon: Icon(
-                  FontAwesomeIcons.personCirclePlus,
-                  size: 20,
+                  Icons.person_add_alt_outlined,
+                  size: 25,
                   color: customs.secondaryColor,
                 ),
                 onPressed: () {
-                  Navigator.pushNamed(context, "/member_edit_profile");
+                  Navigator.pushNamed(context, "/new_member");
                 },
               ),
             ))
@@ -293,12 +292,30 @@ class _adminDashboardState extends State<adminDashboard> {
                       size: 25,
                       color: customs.successColor,
                     ),
-                    onPressed: () {
-                      Navigator.pushNamed(context, "/select_member_to_send_message");
+                    onPressed: () async {
+                      await Navigator.pushNamed(
+                          context, "/select_member_to_send_message");
                     },
                   ),
                 ))
-              : null),
+              : (index == 1
+                  ? (CircleAvatar(
+                      radius: 25,
+                      backgroundColor: customs.successShade_2,
+                      child: IconButton(
+                        icon: Icon(
+                          Icons.person_add_alt_outlined,
+                          size: 25,
+                          color: customs.successColor,
+                        ),
+                        onPressed: () async {
+                          await Navigator.pushNamed(
+                              context, "/new_member"
+                          );
+                        },
+                      ),
+                    ))
+                  : null)),
     );
   }
 }
@@ -330,7 +347,6 @@ class _AdminDashboardState extends State<AdminDashboard> {
   String member_percentage = "0%";
   String collection_status = "constant";
   String collection_percentage = "0%";
-
 
   List<DropdownMenuItem<String>> dayFilter = [
     const DropdownMenuItem(child: Text("7 Days"), value: "7"),
@@ -367,9 +383,10 @@ class _AdminDashboardState extends State<AdminDashboard> {
     }
   }
 
-  void displayGraphCollection(){
+  void displayGraphCollection() {
     List<String> days = [];
-    List<BarChartGroupData> collects = (collection_stats as List<dynamic>).asMap().entries.map((entry) {
+    List<BarChartGroupData> collects =
+        (collection_stats as List<dynamic>).asMap().entries.map((entry) {
       var item = entry.value;
       days.add(item['label']);
       return BarChartGroupData(x: entry.key, barRods: [
@@ -387,9 +404,10 @@ class _AdminDashboardState extends State<AdminDashboard> {
     });
   }
 
-  void displayGraphNewMembers(){
+  void displayGraphNewMembers() {
     List<String> days = [];
-    List<BarChartGroupData> collects = (member_registered_stats as List<dynamic>).asMap().entries.map((entry) {
+    List<BarChartGroupData> collects =
+        (member_registered_stats as List<dynamic>).asMap().entries.map((entry) {
       var item = entry.value;
       days.add(item['label']);
       return BarChartGroupData(x: entry.key, barRods: [
@@ -407,9 +425,10 @@ class _AdminDashboardState extends State<AdminDashboard> {
     });
   }
 
-  void displayGraphPresentMembers(){
+  void displayGraphPresentMembers() {
     List<String> days = [];
-    List<BarChartGroupData> collects = (member_present_stats as List<dynamic>).asMap().entries.map((entry) {
+    List<BarChartGroupData> collects =
+        (member_present_stats as List<dynamic>).asMap().entries.map((entry) {
       var item = entry.value;
       days.add(item['label']);
       return BarChartGroupData(x: entry.key, barRods: [
@@ -427,7 +446,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
     });
   }
 
-  void didChangeDependencies(){
+  void didChangeDependencies() {
     super.didChangeDependencies();
     setState(() {
       collectionPlot = [
@@ -617,9 +636,9 @@ class _AdminDashboardState extends State<AdminDashboard> {
     ApiConnection apiConnection = new ApiConnection();
     var response = await apiConnection.adminDashboard(drop_down);
     print(response);
-    if(customs.isValidJson(response)){
+    if (customs.isValidJson(response)) {
       var res = jsonDecode(response);
-      if(res['success']){
+      if (res['success']) {
         setState(() {
           // members data
           member_data = res['member_data'];
@@ -642,7 +661,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
           displayGraphNewMembers();
           displayGraphPresentMembers();
         });
-      }else{
+      } else {
         setState(() {
           // members data
           member_data = null;
@@ -660,9 +679,10 @@ class _AdminDashboardState extends State<AdminDashboard> {
           displayGraphNewMembers();
           displayGraphPresentMembers();
         });
-        customs.maruSnackBarSuccess(context: context, text: "An error has occured!");
+        customs.maruSnackBarSuccess(
+            context: context, text: "An error has occured!");
       }
-    }else{
+    } else {
       setState(() {
         // members data
         member_data = null;
@@ -680,7 +700,8 @@ class _AdminDashboardState extends State<AdminDashboard> {
         displayGraphNewMembers();
         displayGraphPresentMembers();
       });
-      customs.maruSnackBarDanger(context: context, text: "Fatal error occured!");
+      customs.maruSnackBarDanger(
+          context: context, text: "Fatal error occured!");
     }
     setState(() {
       loading = false;
@@ -719,8 +740,8 @@ class _AdminDashboardState extends State<AdminDashboard> {
                   enabled: loading,
                   child: Card(
                     color: customs.whiteColor,
-                    margin:
-                        const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                    margin: const EdgeInsets.symmetric(
+                        vertical: 10, horizontal: 10),
                     child: Row(
                       children: <Widget>[
                         Container(
@@ -739,7 +760,9 @@ class _AdminDashboardState extends State<AdminDashboard> {
                                 height: height * 0.005,
                               ),
                               Text(
-                                member_data != null ? member_data['fullname'] : "N/A",
+                                member_data != null
+                                    ? member_data['fullname']
+                                    : "N/A",
                                 style: customs.successTextStyle(
                                     size: width * 0.06,
                                     fontweight: FontWeight.bold),
@@ -923,18 +946,30 @@ class _AdminDashboardState extends State<AdminDashboard> {
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
                                   Icon(
-                                    collection_status == "constant" ? Icons.linear_scale : collection_status == "increase" ? Icons.arrow_drop_up : Icons.arrow_drop_down,
-                                    color: collection_status == "constant" ? customs.darkColor : collection_status == "increase" ? customs.successColor : customs.dangerColor,
+                                    collection_status == "constant"
+                                        ? Icons.linear_scale
+                                        : collection_status == "increase"
+                                            ? Icons.arrow_drop_up
+                                            : Icons.arrow_drop_down,
+                                    color: collection_status == "constant"
+                                        ? customs.darkColor
+                                        : collection_status == "increase"
+                                            ? customs.successColor
+                                            : customs.dangerColor,
                                   ),
                                   Text(
                                     collection_percentage,
-                                    style: collection_status == "constant" ? customs.darkTextStyle(
-                                        size: width * 0.03,
-                                        fontweight: FontWeight.bold) : (collection_status == "increase" ? customs.successTextStyle(
-                                        size: width * 0.03,
-                                        fontweight: FontWeight.bold) : customs.dangerTextStyle(
-                                        size: width * 0.03,
-                                        fontweight: FontWeight.bold)),
+                                    style: collection_status == "constant"
+                                        ? customs.darkTextStyle(
+                                            size: width * 0.03,
+                                            fontweight: FontWeight.bold)
+                                        : (collection_status == "increase"
+                                            ? customs.successTextStyle(
+                                                size: width * 0.03,
+                                                fontweight: FontWeight.bold)
+                                            : customs.dangerTextStyle(
+                                                size: width * 0.03,
+                                                fontweight: FontWeight.bold)),
                                   ),
                                 ],
                               ),
@@ -953,8 +988,8 @@ class _AdminDashboardState extends State<AdminDashboard> {
                   child: Skeleton.leaf(
                     child: Container(
                       padding: const EdgeInsets.fromLTRB(10, 10, 0, 10),
-                      margin:
-                          const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                      margin: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 10),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10.0),
                         color: customs.whiteColor,
@@ -977,7 +1012,8 @@ class _AdminDashboardState extends State<AdminDashboard> {
                               BarChartData(
                                   barTouchData: BarTouchData(
                                       touchTooltipData: BarTouchTooltipData(
-                                    getTooltipColor: (group) => Colors.transparent,
+                                    getTooltipColor: (group) =>
+                                        Colors.transparent,
                                     tooltipPadding: EdgeInsets.zero,
                                     tooltipMargin: 2,
                                     getTooltipItem: (
@@ -989,7 +1025,8 @@ class _AdminDashboardState extends State<AdminDashboard> {
                                       return BarTooltipItem(
                                         "${rod.toY.round()} Ltrs",
                                         customs.darkTextStyle(
-                                            size: 8, fontweight: FontWeight.bold),
+                                            size: 8,
+                                            fontweight: FontWeight.bold),
                                       );
                                     },
                                   )),
@@ -997,7 +1034,8 @@ class _AdminDashboardState extends State<AdminDashboard> {
                                       show: true,
                                       border: Border(
                                         left: BorderSide(
-                                            color: customs.primaryColor, width: 1),
+                                            color: customs.primaryColor,
+                                            width: 1),
                                       )),
                                   barGroups: collectionPlot,
                                   gridData: FlGridData(
@@ -1039,8 +1077,8 @@ class _AdminDashboardState extends State<AdminDashboard> {
                                           reservedSize: 15,
                                           getTitlesWidget: (value, meta) {
                                             return Text(
-                                              daysOfWeek[
-                                                  int.parse(meta.formattedValue)],
+                                              daysOfWeek[int.parse(
+                                                  meta.formattedValue)],
                                               textAlign: TextAlign.center,
                                               style: customs.darkTextStyle(
                                                   size: 12,
@@ -1049,7 +1087,8 @@ class _AdminDashboardState extends State<AdminDashboard> {
                                           },
                                         )),
                                     rightTitles: AxisTitles(
-                                        sideTitles: SideTitles(showTitles: false)),
+                                        sideTitles:
+                                            SideTitles(showTitles: false)),
                                     topTitles: AxisTitles(
                                         sideTitles: SideTitles(
                                       showTitles: false,
@@ -1138,8 +1177,8 @@ class _AdminDashboardState extends State<AdminDashboard> {
                   enabled: loading,
                   child: Container(
                     padding: const EdgeInsets.fromLTRB(10, 10, 0, 10),
-                    margin:
-                        const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                    margin: const EdgeInsets.symmetric(
+                        horizontal: 10, vertical: 10),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10.0),
                       color: customs.whiteColor,
@@ -1162,7 +1201,8 @@ class _AdminDashboardState extends State<AdminDashboard> {
                             BarChartData(
                                 barTouchData: BarTouchData(
                                     touchTooltipData: BarTouchTooltipData(
-                                  getTooltipColor: (group) => Colors.transparent,
+                                  getTooltipColor: (group) =>
+                                      Colors.transparent,
                                   tooltipPadding: EdgeInsets.zero,
                                   tooltipMargin: 2,
                                   getTooltipItem: (
@@ -1182,7 +1222,8 @@ class _AdminDashboardState extends State<AdminDashboard> {
                                     show: true,
                                     border: Border(
                                       left: BorderSide(
-                                          color: customs.primaryColor, width: 1),
+                                          color: customs.primaryColor,
+                                          width: 1),
                                     )),
                                 barGroups: membersPresentPlot,
                                 gridData: FlGridData(
@@ -1234,7 +1275,8 @@ class _AdminDashboardState extends State<AdminDashboard> {
                                         },
                                       )),
                                   rightTitles: AxisTitles(
-                                      sideTitles: SideTitles(showTitles: false)),
+                                      sideTitles:
+                                          SideTitles(showTitles: false)),
                                   topTitles: AxisTitles(
                                       sideTitles: SideTitles(
                                     showTitles: false,
@@ -1319,18 +1361,30 @@ class _AdminDashboardState extends State<AdminDashboard> {
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
                                   Icon(
-                                    member_status == "constant" ? Icons.linear_scale : member_status == "increase" ? Icons.arrow_drop_up : Icons.arrow_drop_down,
-                                    color: member_status == "constant" ? customs.darkColor : member_status == "increase" ? customs.successColor : customs.dangerColor,
+                                    member_status == "constant"
+                                        ? Icons.linear_scale
+                                        : member_status == "increase"
+                                            ? Icons.arrow_drop_up
+                                            : Icons.arrow_drop_down,
+                                    color: member_status == "constant"
+                                        ? customs.darkColor
+                                        : member_status == "increase"
+                                            ? customs.successColor
+                                            : customs.dangerColor,
                                   ),
                                   Text(
                                     member_percentage,
-                                    style: member_status == "constant" ? customs.darkTextStyle(
-                                        size: width * 0.03,
-                                        fontweight: FontWeight.bold) : (member_status == "increase" ? customs.successTextStyle(
-                                        size: width * 0.03,
-                                        fontweight: FontWeight.bold) : customs.dangerTextStyle(
-                                        size: width * 0.03,
-                                        fontweight: FontWeight.bold)),
+                                    style: member_status == "constant"
+                                        ? customs.darkTextStyle(
+                                            size: width * 0.03,
+                                            fontweight: FontWeight.bold)
+                                        : (member_status == "increase"
+                                            ? customs.successTextStyle(
+                                                size: width * 0.03,
+                                                fontweight: FontWeight.bold)
+                                            : customs.dangerTextStyle(
+                                                size: width * 0.03,
+                                                fontweight: FontWeight.bold)),
                                   ),
                                 ],
                               ),
@@ -1349,8 +1403,8 @@ class _AdminDashboardState extends State<AdminDashboard> {
                   child: Skeleton.leaf(
                     child: Container(
                       padding: const EdgeInsets.fromLTRB(10, 10, 0, 10),
-                      margin:
-                          const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                      margin: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 10),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10.0),
                         color: customs.whiteColor,
@@ -1373,7 +1427,8 @@ class _AdminDashboardState extends State<AdminDashboard> {
                               BarChartData(
                                   barTouchData: BarTouchData(
                                       touchTooltipData: BarTouchTooltipData(
-                                    getTooltipColor: (group) => Colors.transparent,
+                                    getTooltipColor: (group) =>
+                                        Colors.transparent,
                                     tooltipPadding: EdgeInsets.zero,
                                     tooltipMargin: 2,
                                     getTooltipItem: (
@@ -1385,7 +1440,8 @@ class _AdminDashboardState extends State<AdminDashboard> {
                                       return BarTooltipItem(
                                         "${rod.toY.round()}",
                                         customs.darkTextStyle(
-                                            size: 8, fontweight: FontWeight.bold),
+                                            size: 8,
+                                            fontweight: FontWeight.bold),
                                       );
                                     },
                                   )),
@@ -1393,7 +1449,8 @@ class _AdminDashboardState extends State<AdminDashboard> {
                                       show: true,
                                       border: Border(
                                         left: BorderSide(
-                                            color: customs.primaryColor, width: 1),
+                                            color: customs.primaryColor,
+                                            width: 1),
                                       )),
                                   barGroups: newMembersPlot,
                                   gridData: FlGridData(
@@ -1435,8 +1492,8 @@ class _AdminDashboardState extends State<AdminDashboard> {
                                           reservedSize: 15,
                                           getTitlesWidget: (value, meta) {
                                             return Text(
-                                              daysOfWeek[
-                                                  int.parse(meta.formattedValue)],
+                                              daysOfWeek[int.parse(
+                                                  meta.formattedValue)],
                                               textAlign: TextAlign.center,
                                               style: customs.darkTextStyle(
                                                   size: 12,
@@ -1445,7 +1502,8 @@ class _AdminDashboardState extends State<AdminDashboard> {
                                           },
                                         )),
                                     rightTitles: AxisTitles(
-                                        sideTitles: SideTitles(showTitles: false)),
+                                        sideTitles:
+                                            SideTitles(showTitles: false)),
                                     topTitles: AxisTitles(
                                         sideTitles: SideTitles(
                                       showTitles: false,

@@ -310,9 +310,24 @@ class _MemberDetailsState extends State<MemberDetails> {
                             padding: EdgeInsets.symmetric(horizontal: 20),
                             child: Row(
                               children: [
-                                customs.maruIconButton(icons: Icons.history, text: "Collection History", onPressed: (){}, fontSize: 14),
+                                customs.maruIconButton(
+                                    icons: Icons.history,
+                                    text: "Collection History",
+                                    onPressed: (){
+                                      Navigator.pushNamed(context, "/admin_member_history", arguments: {"member_id": (memberData != null ? memberData['user_id'] ?? "-0" : "-0"), "member_data": memberData});
+
+                                    },
+                                    fontSize: 14
+                                ),
                                 SizedBox(width: 20,),
-                                customs.maruIconButton(icons: Icons.history, text: "Membership", onPressed: (){}, type: Type.secondary, fontSize: 14)
+                                customs.maruIconButton(
+                                    icons: Icons.history,
+                                    text: "Membership",
+                                    onPressed: (){
+                                      Navigator.pushNamed(context, "/member_membership", arguments: {"member_id": (memberData != null ? memberData['user_id'] ?? "-0" : "-0"), "member_data": memberData});
+                                    },
+                                    type: Type.secondary,
+                                    fontSize: 14)
                               ],
                             ),
                           ),
@@ -331,7 +346,8 @@ class _MemberDetailsState extends State<MemberDetails> {
                                 Text(
                                   "Phone Number:",
                                   style: customs.darkTextStyle(
-                                      size: 12, fontweight: FontWeight.bold),
+                                      size: 12, fontweight: FontWeight.bold
+                                  ),
                                 ),
                                 Text(
                                   memberData != null ? customs.toCamelCase(memberData['phone_number'] ?? "N/A") : "N/A",
