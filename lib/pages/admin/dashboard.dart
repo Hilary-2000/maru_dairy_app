@@ -765,7 +765,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                               ),
                               Text(
                                 member_data != null
-                                    ? member_data['fullname']
+                                    ? customs.toCamelCase(member_data['fullname'])
                                     : "N/A",
                                 style: customs.successTextStyle(
                                     size: width * 0.06,

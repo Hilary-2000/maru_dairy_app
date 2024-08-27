@@ -19,6 +19,7 @@ class _OurMembersState extends State<OurMembers> {
   var member_list = [];
   List<Color> colors_shade = [];
   List<TextStyle> textStyles = [];
+  TextEditingController searchMember = TextEditingController();
 
   Future<void> getMembers() async {
     setState(() {
@@ -118,6 +119,61 @@ class _OurMembersState extends State<OurMembers> {
         ],
       );
     }).toList();
+
+
+    if(collects.length == 0){
+      collects.add(
+          Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Container(
+                margin: EdgeInsets.only(top: 30),
+                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                width: width - 50,
+                height: width - 100,
+                decoration: BoxDecoration(
+                    color: customs.whiteColor,
+                    borderRadius: BorderRadius.circular(20),
+                    boxShadow: [
+                      BoxShadow(color: customs.secondaryShade_2, blurRadius: 1, blurStyle: BlurStyle.normal),
+                      BoxShadow(color: customs.secondaryShade_2, blurRadius: 1, blurStyle: BlurStyle.normal),
+                      BoxShadow(color: customs.secondaryShade_2, blurRadius: 1, blurStyle: BlurStyle.normal),
+                    ]
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text("No members found!", style: customs.primaryTextStyle(size: 20, fontweight: FontWeight.bold),),
+                    Spacer(),
+                    SizedBox(
+                      width: width,
+                      child: Image(
+                        image: AssetImage("assets/images/search.jpg"),
+                        height: width/3,
+                        width: width/3,
+                      ),
+                    ),
+                    Spacer(),
+                    Container(
+                      margin: EdgeInsets.fromLTRB(0, 0, 5, 0),
+                      child: CircleAvatar(
+                        backgroundColor: customs.primaryShade_2,
+                        child: IconButton(
+                          onPressed: () async {
+                            await Navigator.pushNamed(context, "/technician_collect_milk");
+                          },
+                          icon: Icon(Icons.person_add_alt_outlined, color: customs.primaryColor,),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          )
+      );
+    }
 
     setState(() {
       members = collects;
@@ -459,6 +515,7 @@ class _OurMembersState extends State<OurMembers> {
                           isChanged: (value) {
                             findKeyWord(value);
                           },
+                          editingController: searchMember,
                           hintText: "Start typing to search!"),
                     ),
                     IconButton(onPressed: (){
