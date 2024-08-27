@@ -329,6 +329,7 @@ class _TechnicianHistoryState extends State<TechnicianHistory> {
 
   void displayCollectionHistory(var list){
     double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
     List<Widget> history = (list as List<dynamic>).asMap().entries.map((entry) {
       var item = entry.value;
       var index = entry.key;
@@ -392,6 +393,61 @@ class _TechnicianHistoryState extends State<TechnicianHistory> {
         ],
       );
     }).toList();
+
+    if(history.length == 0){
+      history.add(
+        Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Container(
+              margin: EdgeInsets.only(top: 30),
+              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+              width: width - 50,
+              height: width - 100,
+              decoration: BoxDecoration(
+                color: customs.whiteColor,
+                borderRadius: BorderRadius.circular(20),
+                boxShadow: [
+                  BoxShadow(color: customs.secondaryShade_2, blurRadius: 1, blurStyle: BlurStyle.normal),
+                  BoxShadow(color: customs.secondaryShade_2, blurRadius: 1, blurStyle: BlurStyle.normal),
+                  BoxShadow(color: customs.secondaryShade_2, blurRadius: 1, blurStyle: BlurStyle.normal),
+                ]
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text("No Collections found!", style: customs.primaryTextStyle(size: 20, fontweight: FontWeight.bold),),
+                  Spacer(),
+                  SizedBox(
+                    width: width,
+                    child: Image(
+                      image: AssetImage("assets/images/search.jpg"),
+                      height: width/3,
+                      width: width/3,
+                    ),
+                  ),
+                  Spacer(),
+                  Container(
+                    margin: EdgeInsets.fromLTRB(0, 0, 5, 0),
+                    child: CircleAvatar(
+                      backgroundColor: customs.primaryShade_2,
+                      child: IconButton(
+                        onPressed: () async {
+                          await Navigator.pushNamed(context, "/technician_collect_milk");
+                          loadTechnicianHistory(context);
+                        },
+                        icon: Icon(Icons.add, color: customs.primaryColor,),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        )
+      );
+    }
 
     //set state
     setState(() {

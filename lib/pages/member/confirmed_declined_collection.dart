@@ -22,6 +22,7 @@ class _ConfirmedDeclinedCollectionState extends State<ConfirmedDeclinedCollectio
   String collectionStatus = "1";
   Map<String, dynamic>? args;
   var membersHistory = [];
+  TextEditingController searchMember = new TextEditingController();
   final FlutterSecureStorage _storage = const FlutterSecureStorage();
 
   void initState() {
@@ -63,6 +64,7 @@ class _ConfirmedDeclinedCollectionState extends State<ConfirmedDeclinedCollectio
   }
 
   Future<void> loadCollectionHistory(BuildContext context) async {
+    print("In");
     setState(() {
       loading = true;
     });
@@ -87,8 +89,8 @@ class _ConfirmedDeclinedCollectionState extends State<ConfirmedDeclinedCollectio
         if(res['success']){
           setState(() {
             membersHistory = res['collection_history'];
-            displayCollectionHistory(membersHistory);
           });
+          displayCollectionHistory(membersHistory);
         }else{
           setState(() {
             collectionHistory = [];
@@ -173,6 +175,56 @@ class _ConfirmedDeclinedCollectionState extends State<ConfirmedDeclinedCollectio
         ],
       );
     }).toList();
+
+
+    if(members.length == 0){
+      members.add(
+          Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Container(
+                margin: EdgeInsets.only(top: 30),
+                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                width: width - 50,
+                height: width - 100,
+                decoration: BoxDecoration(
+                    color: customs.whiteColor,
+                    borderRadius: BorderRadius.circular(20),
+                    boxShadow: [
+                      BoxShadow(color: customs.secondaryShade_2, blurRadius: 1, blurStyle: BlurStyle.normal),
+                      BoxShadow(color: customs.secondaryShade_2, blurRadius: 1, blurStyle: BlurStyle.normal),
+                      BoxShadow(color: customs.secondaryShade_2, blurRadius: 1, blurStyle: BlurStyle.normal),
+                    ]
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text("No collection found!", style: customs.primaryTextStyle(size: 20, fontweight: FontWeight.bold),),
+                    Spacer(),
+                    SizedBox(
+                      width: width,
+                      child: Image(
+                        image: AssetImage("assets/images/search.jpg"),
+                        height: width/3,
+                        width: width/3,
+                      ),
+                    ),
+                    Spacer(),
+                    searchMember.text.length > 0 ? Container(
+                        margin: EdgeInsets.fromLTRB(0, 0, 5, 0),
+                        child: Text(
+                          "Members with this \"${searchMember.text}\" keyword not found!",
+                          style: customs.primaryTextStyle(size: 14, fontweight: FontWeight.normal),
+                        )
+                    ) : SizedBox(height: 0, width: 0,),
+                  ],
+                ),
+              ),
+            ],
+          )
+      );
+    }
     setState(() {
       collectionHistory = members;
     });
@@ -489,6 +541,7 @@ class _ConfirmedDeclinedCollectionState extends State<ConfirmedDeclinedCollectio
                               isChanged: (value){
                                 findKeyWord(value);
                               },
+                              editingController: searchMember,
                               label: "Type to Search",
                               hintText: "Enter keyword")
                       )
