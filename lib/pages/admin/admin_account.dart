@@ -198,7 +198,7 @@ class _AdminAccountState extends State<AdminAccount> {
                         padding: const EdgeInsets.all(8.0),
                         child: Row(
                           children: [
-                            Text("General", style: customs.darkTextStyle(size: 12, fontweight: FontWeight.bold),),
+                            Text("Milk Prices", style: customs.darkTextStyle(size: 12, fontweight: FontWeight.bold),),
                           ],
                         ),
                       ),
@@ -224,7 +224,7 @@ class _AdminAccountState extends State<AdminAccount> {
                               title: Text("Milk Price Per Liter", style: customs.darkTextStyle(size: 14),),
                               subtitle: Text("Change price per Litre. @Kes 45", style: customs.secondaryTextStyle(size: 12),),
                               onTap: (){
-                                Navigator.pushNamed(context, "/change_milk_price");
+                                Navigator.pushNamed(context, "/milk_prices");
                               },
                             ),
                           ],

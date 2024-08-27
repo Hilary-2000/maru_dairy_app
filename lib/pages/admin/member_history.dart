@@ -159,6 +159,7 @@ class _MemberHistoryState extends State<MemberHistory> {
   var collected_history = [];
   String member_name = "N/A";
   String member_code = "N/A";
+  TextEditingController searchField = new TextEditingController();
 
   Future<void> getCollectionHistory() async {
     setState(() {
@@ -269,6 +270,56 @@ class _MemberHistoryState extends State<MemberHistory> {
         ],
       );
     }).toList();
+
+
+    if(history.length == 0){
+      history.add(
+          Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Container(
+                margin: EdgeInsets.only(top: 30),
+                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                width: width - 50,
+                height: width - 100,
+                decoration: BoxDecoration(
+                    color: customs.whiteColor,
+                    borderRadius: BorderRadius.circular(20),
+                    boxShadow: [
+                      BoxShadow(color: customs.secondaryShade_2, blurRadius: 1, blurStyle: BlurStyle.normal),
+                      BoxShadow(color: customs.secondaryShade_2, blurRadius: 1, blurStyle: BlurStyle.normal),
+                      BoxShadow(color: customs.secondaryShade_2, blurRadius: 1, blurStyle: BlurStyle.normal),
+                    ]
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text("No members found!", style: customs.primaryTextStyle(size: 20, fontweight: FontWeight.bold),),
+                    Spacer(),
+                    SizedBox(
+                      width: width,
+                      child: Image(
+                        image: AssetImage("assets/images/search.jpg"),
+                        height: width/3,
+                        width: width/3,
+                      ),
+                    ),
+                    Spacer(),
+                    searchField.text.length > 0 ? Container(
+                        margin: EdgeInsets.fromLTRB(0, 0, 5, 0),
+                        child: Text(
+                          "Members with this \"${searchField.text}\" keyword not found!",
+                          style: customs.primaryTextStyle(size: 14, fontweight: FontWeight.normal),
+                        )
+                    ) : SizedBox(height: 0, width: 0,)
+                  ],
+                ),
+              ),
+            ],
+          )
+      );
+    }
 
     setState(() {
       collections = history;
@@ -489,6 +540,7 @@ class _MemberHistoryState extends State<MemberHistory> {
                           findKeyWord(value);
                         },
                         hintText: "Search",
+                        editingController: searchField
                         // label: "Search"
                       ),
                     ),

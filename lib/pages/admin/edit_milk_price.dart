@@ -1,6 +1,13 @@
+import 'dart:convert';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:maru/packages/api_connection.dart';
 import 'package:maru/packages/maru_theme.dart';
 import 'package:numberpicker/numberpicker.dart';
+import 'package:bottom_picker/bottom_picker.dart';
+import 'package:bottom_picker/resources/arrays.dart';
+import 'package:intl/intl.dart';
 
 class EditMilkPrice extends StatefulWidget {
   const EditMilkPrice({super.key});
@@ -13,6 +20,40 @@ class _EditMilkPriceState extends State<EditMilkPrice> {
   // customs
   CustomThemes customs = CustomThemes();
   double _currentDoubleValue = 45.0;
+  double current_price = 45.0;
+  String date = "Mon, 25th Aug 2024";
+  DateTime date_time = DateTime.now();
+  bool save_n_publish = false;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    //date format
+    date = DateFormat('EEE, d MMM yyyy').format(date_time);
+    getCurrentMilkPrice();
+  }
+
+  Future<void> getCurrentMilkPrice() async {
+    ApiConnection apiConnection = ApiConnection();
+    var response = await apiConnection.getCurrentMilkPrice();
+    if(customs.isValidJson(response)){
+      var res = jsonDecode(response);
+      if(res['success']){
+        setState(() {
+          _currentDoubleValue = res['current_price'];
+          current_price = res['current_price'];
+        });
+      }else{
+        setState(() {
+          _currentDoubleValue = 0;
+        });
+      }
+    }else{
+      setState(() {
+        _currentDoubleValue = 0;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,8 +73,8 @@ class _EditMilkPriceState extends State<EditMilkPrice> {
                   children: [
                     SizedBox(
                       height: 70,
-                      child:
-                      Image(image: AssetImage("assets/images/maru-nobg.png")),
+                      child: Image(
+                          image: AssetImage("assets/images/maru-nobg.png")),
                     ),
                     SizedBox(
                       width: 10,
@@ -74,11 +115,70 @@ class _EditMilkPriceState extends State<EditMilkPrice> {
                           child: Row(
                             children: [
                               Text(
-                                "Change Milk Price",
+                                "Add Milk Price",
                                 style: customs.darkTextStyle(
                                     size: 20, fontweight: FontWeight.bold),
                               ),
                             ],
+                          ),
+                        ),
+                        Container(
+                          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                          width: width,
+                          child: RichText(
+                              text: TextSpan(
+                                  text: "Current Milk Prices:",
+                                  style: customs.secondaryTextStyle(
+                                      size: 14, fontweight: FontWeight.bold),
+                                  children: [
+                                    TextSpan(
+                                        text:
+                                        " Kes $current_price per Litre",
+                                        style: customs.secondaryTextStyle(size: 14)
+                                    )
+                                  ]
+                              )
+                          ),
+                        ),
+                        Container(
+                          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                          width: width,
+                          child: RichText(
+                          text: TextSpan(
+                            text: "Milk Price per Litre:",
+                            style: customs.secondaryTextStyle(
+                                size: 14, fontweight: FontWeight.bold),
+                            children: [
+                              TextSpan(
+                                  text:
+                                  " Kes $_currentDoubleValue per Litre",
+                                  style: customs.primaryTextStyle(size: 14)
+                                )
+                              ]
+                            )
+                          ),
+                        ),
+                        Container(
+                          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                          width: width,
+                          child: RichText(
+                            text: TextSpan(
+                              text: "Effect Date:",
+                              style: customs.secondaryTextStyle(
+                                  size: 14, fontweight: FontWeight.bold),
+                              children: [
+                                TextSpan(
+                                    text:
+                                    " $date",
+                                    style: customs.primaryTextStyle(size: 14))
+                              ]
+                            )
+                          ),
+                        ),
+                        Container(
+                          width: width/2,
+                          child: Divider(
+                            color: customs.secondaryShade_2,
                           ),
                         ),
                         Container(
@@ -87,17 +187,12 @@ class _EditMilkPriceState extends State<EditMilkPrice> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               RichText(
-                                  text: TextSpan(
-                                      text: "Current Milk Price",
-                                      style: customs.secondaryTextStyle(
-                                          size: 14,
-                                          fontweight: FontWeight.bold),
-                                      children: [
-                                    TextSpan(
-                                        text: ": @ Kes 45 per Litre",
-                                        style: customs.secondaryTextStyle(
-                                            size: 14))
-                                  ]
+                                text: TextSpan(
+                                  text: "Scroll to set price",
+                                  style: customs.secondaryTextStyle(
+                                    size: 14,
+                                    fontweight: FontWeight.bold
+                                  ),
                                 )
                               ),
                             ],
@@ -115,10 +210,15 @@ class _EditMilkPriceState extends State<EditMilkPrice> {
                           minValue: 0,
                           maxValue: 1000,
                           decimalPlaces: 2,
-                          textStyle: customs.secondaryTextStyle(size: 20,),
-                          selectedTextStyle: customs.secondaryTextStyle(size: 30,),
+                          textStyle: customs.secondaryTextStyle(
+                            size: 20,
+                          ),
+                          selectedTextStyle: customs.secondaryTextStyle(
+                            size: 30,
+                          ),
                           haptics: true,
-                          onChanged: (value) => setState(() => _currentDoubleValue = value),
+                          onChanged: (value) =>
+                              setState(() => _currentDoubleValue = value),
                         ),
                         SizedBox(
                             width: width * 0.5,
@@ -127,33 +227,119 @@ class _EditMilkPriceState extends State<EditMilkPrice> {
                               height: 30,
                             )
                         ),
-                        RichText(
-                          textAlign: TextAlign.center,
-                            text: TextSpan(
-                                text: "New Milk Price Per Litre",
-                                style: customs.secondaryTextStyle(
-                                    size: 14,
-                                    fontweight: FontWeight.bold),
-                                children: [
-                                  TextSpan(
-                                      text: ": \nKes $_currentDoubleValue per Litre",
-                                      style: customs.primaryTextStyle(
-                                          size: 30
-                                      )
-                                  )
-                                ]
-                            )
-                        ),
                         Container(
                             padding: EdgeInsets.all(8.0),
-                            width: width,
-                            child: customs.maruIconButton(
-                                icons: Icons.save,
-                                text: "Save Milk Price",
-                                onPressed: () {},
+                            width: width/2,
+                            child: customs.marOutlineuButton(
+                                text: "Click to Set Date",
+                                onPressed: () {
+                                  BottomPicker.date(
+                                    pickerTitle: Text(
+                                      'Set the effect date',
+                                      style: customs.secondaryTextStyle(
+                                        fontweight: FontWeight.bold,
+                                        size: 15,
+                                      ),
+                                    ),
+                                    dateOrder: DatePickerDateOrder.dmy,
+                                    initialDateTime: DateTime.now(),
+                                    maxDateTime:
+                                        DateTime.now().add(Duration(days: 100)),
+                                    minDateTime: DateTime(1980),
+                                    pickerTextStyle: customs.secondaryTextStyle(
+                                        size: 13, fontweight: FontWeight.bold),
+                                    onChange: (index) {
+                                      print(index);
+                                    },
+                                    onSubmit: (index) {
+                                      print(index);
+                                      setState(() {
+                                        date_time = index;
+                                        date = DateFormat('EEE, d MMM yyyy').format(index);
+                                      });
+                                    },
+                                    bottomPickerTheme: BottomPickerTheme.blue,
+                                  ).show(context);
+                                },
                                 fontSize: 14
                             )
                         ),
+                        SizedBox(height: 20,),
+                        Container(
+                          padding: EdgeInsets.symmetric(horizontal: 10),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Container(
+                                width: width/2.5,
+                                child: customs.marOutlineuButton(
+                                  text: "Save",
+                                  disabled: save_n_publish,
+                                  showLoader: save_n_publish,
+                                  onPressed: () async {
+                                    setState(() {
+                                      save_n_publish = true;
+                                    });
+                                    ApiConnection apiConnection = ApiConnection();
+                                    var datapass = {
+                                      "amount": _currentDoubleValue,
+                                      "effect_date": date = DateFormat('yyyyMMdd').format(date_time),
+                                      "status" : "0"
+                                    };
+                                    var res = await apiConnection.addMilkPrices(datapass);
+                                    if(customs.isValidJson(res)){
+                                      var response = jsonDecode(res);
+                                      if(response['success']){
+                                        customs.maruSnackBarSuccess(context: context, text: response['message']);
+                                        Navigator.pop(context);
+                                      }else{
+                                        customs.maruSnackBarDanger(context: context, text: response['message']);
+                                      }
+                                    }
+                                    setState(() {
+                                      save_n_publish = false;
+                                    });
+                                  },
+                                  type: Type.success
+                                ),
+                              ),
+                              Spacer(),
+                              Container(
+                                width: width/2.5,
+                                child: customs.maruButton(
+                                  text: "Save & Publish",
+                                  disabled: save_n_publish,
+                                  showLoader: save_n_publish,
+                                  onPressed: () async {
+                                    setState(() {
+                                      save_n_publish = true;
+                                    });
+                                    ApiConnection apiConnection = ApiConnection();
+                                    var datapass = {
+                                      "amount": _currentDoubleValue,
+                                      "effect_date": date = DateFormat('yyyyMMdd').format(date_time),
+                                      "status" : "1"
+                                    };
+                                    var res = await apiConnection.addMilkPrices(datapass);
+                                    if(customs.isValidJson(res)){
+                                      var response = jsonDecode(res);
+                                      if(response['success']){
+                                        customs.maruSnackBarSuccess(context: context, text: response['message']);
+                                        Navigator.pop(context);
+                                      }else{
+                                        customs.maruSnackBarDanger(context: context, text: response['message']);
+                                      }
+                                    }
+                                    setState(() {
+                                      save_n_publish = false;
+                                    });
+                                  },
+                                  type: Type.success
+                                ),
+                              )
+                            ],
+                          ),
+                        )
                       ],
                     ),
                   ),
