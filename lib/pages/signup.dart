@@ -294,147 +294,50 @@ class _signUpState extends State<signUp> {
                               editingController: _username,
                               hintText: "Type your username"),
                         ),
-
-                        // PASSWORD
                         Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 0, 15, 0),
-                          child: SizedBox(
-                            width: width,
-                            child: Row(
-                              children: [
-                                Expanded(
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 5, horizontal: 15.0),
-                                    child: customs.maruTextFormField(
-                                        label: "Password",
-                                        editingController: _passwordController,
-                                        textType: TextInputType.text,
-                                        hideText: hidePassword!,
-                                        isChanged: (text) {
-                                          print("Value :  $text");
-                                        },
-                                        validator: (value) {
-                                          if (value == null || value.isEmpty) {
-                                            return "Enter Password!";
-                                          }
-                                          return null;
-                                        },
-                                        hintText: "Type your password"),
-                                  ),
-                                ),
-                                TextButton(
-                                  iconAlignment: IconAlignment.end,
-                                  onPressed: () {
-                                    setState(() {
-                                      hidePassword =
-                                          hidePassword == true ? false : true;
-                                    });
-                                  },
-                                  style: ButtonStyle(
-                                    foregroundColor:
-                                        WidgetStateProperty.all<Color>(
-                                            customs.darkColor),
-                                    backgroundColor:
-                                        WidgetStateProperty.all<Color>(
-                                            const Color.fromRGBO(0, 0, 0, 0)),
-                                    padding:
-                                        WidgetStateProperty.all<EdgeInsets>(
-                                            const EdgeInsets.symmetric(
-                                                vertical: 17, horizontal: 1)),
-                                    textStyle:
-                                        WidgetStateProperty.all<TextStyle>(
-                                      customs.primaryTextStyle(
-                                          size: 10,
-                                          fontweight: FontWeight.normal),
-                                    ),
-                                    shape: WidgetStateProperty.all<
-                                        RoundedRectangleBorder>(
-                                      RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(10.0),
-                                      ),
-                                    ),
-                                  ),
-                                  child: Row(
-                                    children: [
-                                      Icon( (hidePassword! ? FontAwesomeIcons.eye : FontAwesomeIcons.eyeSlash), size: 15,)
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
+                          padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 15.0),
+                          child: customs.maruPassword(
+                              passwordStatus: (){
+                                setState(() {
+                                  hidePassword = !hidePassword!;
+                                });
+                              },
+                              hintText: "Type your password",
+                              hidePassword: hidePassword,
+                              editingController: _passwordController,
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return "Enter Password!";
+                                }
+                                return null;
+                              },
+                              isChanged: (text) {
+                                print("Value :  $text");
+                              }
                           ),
                         ),
 
                         // RE-ENTER PASSWORD
                         Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 0, 15, 0),
-                          child: SizedBox(
-                            width: width,
-                            child: Row(
-                              children: [
-                                Expanded(
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 5, horizontal: 15.0),
-                                    child: customs.maruTextFormField(
-                                        label: "Re-enter Password",
-                                        editingController: _passwordController_2,
-                                        textType: TextInputType.text,
-                                        hideText: hidePassword_2!,
-                                        isChanged: (text) {
-                                          print("Value :  $text");
-                                        },
-                                        validator: (value) {
-                                          if (value == null || value.isEmpty) {
-                                            return "Re-enter Password!";
-                                          }
-                                          return null;
-                                        },
-                                        hintText: "Type your password"),
-                                  ),
-                                ),
-                                TextButton(
-                                  iconAlignment: IconAlignment.end,
-                                  onPressed: () {
-                                    setState(() {
-                                      hidePassword_2 = hidePassword_2 == true ? false : true;
-                                    });
-                                  },
-                                  style: ButtonStyle(
-                                    foregroundColor:
-                                    WidgetStateProperty.all<Color>(
-                                        customs.darkColor),
-                                    backgroundColor:
-                                    WidgetStateProperty.all<Color>(
-                                        const Color.fromRGBO(0, 0, 0, 0)),
-                                    padding:
-                                    WidgetStateProperty.all<EdgeInsets>(
-                                        const EdgeInsets.symmetric(
-                                            vertical: 17, horizontal: 1)),
-                                    textStyle:
-                                    WidgetStateProperty.all<TextStyle>(
-                                      customs.primaryTextStyle(
-                                          size: 10,
-                                          fontweight: FontWeight.normal),
-                                    ),
-                                    shape: WidgetStateProperty.all<
-                                        RoundedRectangleBorder>(
-                                      RoundedRectangleBorder(
-                                        borderRadius:
-                                        BorderRadius.circular(10.0),
-                                      ),
-                                    ),
-                                  ),
-                                  child: Row(
-                                    children: [
-                                      Icon( (hidePassword_2! ? FontAwesomeIcons.eye : FontAwesomeIcons.eyeSlash), size: 15,)
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
+                          padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 15.0),
+                          child: customs.maruPassword(
+                              passwordStatus: (){
+                                setState(() {
+                                  hidePassword_2 = !hidePassword_2!;
+                                });
+                              },
+                              hintText: "Re-enter your password",
+                              hidePassword: hidePassword_2,
+                              editingController: _passwordController_2,
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return "Enter Password!";
+                                }
+                                return null;
+                              },
+                              isChanged: (text) {
+                                print("Value :  $text");
+                              }
                           ),
                         ),
 
