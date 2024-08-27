@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:maru/packages/api_connection.dart';
 import 'package:maru/packages/maru_theme.dart';
 import 'package:skeletonizer/skeletonizer.dart';
-import 'package:intl/intl.dart';
 
 class MilkPrices extends StatefulWidget {
   const MilkPrices({super.key});
@@ -277,47 +276,53 @@ class _MilkPricesState extends State<MilkPrices> {
     List<Widget> history = (list as List<dynamic>).asMap().entries.map((entry) {
       var item = entry.value;
       return
-        Container(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 2),
-                width: width / 5,
-                height: 50,
-                decoration: BoxDecoration(
-                    border: borders
+        GestureDetector(
+          onTap: () async {
+            await Navigator.pushNamed(context, "/update_milk_prices", arguments: {"price_id": item['price_id']});
+            getMilkPrices();
+          },
+          child: Container(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 2),
+                  width: width / 5,
+                  height: 50,
+                  decoration: BoxDecoration(
+                      border: borders
+                  ),
+                  child: Center(child: Text("${item['amount']}", style: customs.secondaryTextStyle(size: 14,),)),
                 ),
-                child: Center(child: Text("${item['amount']}", style: customs.secondaryTextStyle(size: 14,),)),
-              ),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 2),
-                width: width / 3.5,
-                height: 50,
-                decoration: BoxDecoration(
-                    border: borders_2
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 2),
+                  width: width / 3.5,
+                  height: 50,
+                  decoration: BoxDecoration(
+                      border: borders_2
+                  ),
+                  child: Center(child: Text("${item['effect_date']}", style: customs.secondaryTextStyle(size: 14,),)),
                 ),
-                child: Center(child: Text("${item['effect_date']}", style: customs.secondaryTextStyle(size: 14,),)),
-              ),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 2),
-                width: width / 3.5,
-                height: 50,
-                decoration: BoxDecoration(
-                    border: borders_2
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 2),
+                  width: width / 3.5,
+                  height: 50,
+                  decoration: BoxDecoration(
+                      border: borders_2
+                  ),
+                  child: Center(child: Text("${item['end_date']}", style: customs.secondaryTextStyle(size: 14,),)),
                 ),
-                child: Center(child: Text("${item['end_date']}", style: customs.secondaryTextStyle(size: 14,),)),
-              ),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 2),
-                width: width / 5,
-                height: 50,
-                decoration: BoxDecoration(
-                    border: borders_3
-                ),
-                child: Center(child: CircleAvatar(backgroundColor: Colors.transparent, child: Icon(Icons.edit, size: 15, color: customs.secondaryColor,))),
-              )
-            ],
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 2),
+                  width: width / 5,
+                  height: 50,
+                  decoration: BoxDecoration(
+                      border: borders_3
+                  ),
+                  child: Center(child: CircleAvatar(backgroundColor: Colors.transparent, child: Icon(Icons.edit, size: 15, color: customs.secondaryColor,))),
+                )
+              ],
+            ),
           ),
         );
     }).toList();
