@@ -156,6 +156,7 @@ class _memberHistoryState extends State<memberHistory> {
   String accumulated_litres = "N/A";
   List<Widget> collections = [];
   var collected_history = [];
+  TextEditingController searchMember = TextEditingController();
 
   Future<void> getCollectionHistory() async {
     setState(() {
@@ -250,6 +251,55 @@ class _memberHistoryState extends State<memberHistory> {
       ],
     );
     }).toList();
+
+    if(history.length == 0){
+      history.add(
+          Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Container(
+                margin: EdgeInsets.only(top: 30),
+                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                width: width - 50,
+                height: width - 100,
+                decoration: BoxDecoration(
+                    color: customs.whiteColor,
+                    borderRadius: BorderRadius.circular(20),
+                    boxShadow: [
+                      BoxShadow(color: customs.secondaryShade_2, blurRadius: 1, blurStyle: BlurStyle.normal),
+                      BoxShadow(color: customs.secondaryShade_2, blurRadius: 1, blurStyle: BlurStyle.normal),
+                      BoxShadow(color: customs.secondaryShade_2, blurRadius: 1, blurStyle: BlurStyle.normal),
+                    ]
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text("No Collections found!", style: customs.primaryTextStyle(size: 20, fontweight: FontWeight.bold),),
+                    Spacer(),
+                    SizedBox(
+                      width: width,
+                      child: Image(
+                        image: AssetImage("assets/images/search.jpg"),
+                        height: width/3,
+                        width: width/3,
+                      ),
+                    ),
+                    Spacer(),
+                    searchMember.text.length > 0 ? Container(
+                        margin: EdgeInsets.fromLTRB(0, 0, 5, 0),
+                        child: Text(
+                          "Members with this \"${searchMember.text}\" keyword not found!",
+                          style: customs.primaryTextStyle(size: 14, fontweight: FontWeight.normal),
+                        )
+                    ) : SizedBox(height: 0, width: 0,),
+                  ],
+                ),
+              ),
+            ],
+          )
+      );
+    }
 
     setState(() {
       collections = history;
@@ -436,6 +486,7 @@ class _memberHistoryState extends State<memberHistory> {
                       isChanged: (value) {
                         findKeyWord(value);
                       },
+                      editingController: searchMember,
                       hintText: "Search",
                       // label: "Search"
                     ),
