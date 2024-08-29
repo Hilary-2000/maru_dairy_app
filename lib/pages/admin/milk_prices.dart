@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:maru/packages/api_connection.dart';
 import 'package:maru/packages/maru_theme.dart';
 import 'package:skeletonizer/skeletonizer.dart';
@@ -22,8 +23,40 @@ class _MilkPricesState extends State<MilkPrices> {
   String current_price = "Kes 0";
   bool loading = false;
   var table_data = [];
-  List<Widget> table_rows = [];
+  var display_data = [];
+  bool _initialized = false;
+  List<String> items = List<String>.generate(100, (index) => "Item $index");
 
+  void findKeyWord(keyword){
+    var newHistory = [];
+    for(var item in table_data){
+      int present = 0;
+      if(item['amount'].toString().toLowerCase().contains(keyword.toString().toLowerCase())){
+        present++;
+      }
+      if(item['effect_date'].toString().toLowerCase().contains(keyword.toString().toLowerCase())){
+        present++;
+      }
+      if(item['end_date'].toString().toLowerCase().contains(keyword.toString().toLowerCase())){
+        present++;
+      }
+      if(item['status'].toString().toLowerCase().contains(keyword.toString().toLowerCase())){
+        present++;
+      }
+
+      // present
+      if(present > 0){
+        newHistory.add(item);
+      }
+    }
+
+    // set state
+    setState(() {
+      display_data = newHistory;
+    });
+
+    // display
+  }
 
   @override
   void didChangeDependencies() {
@@ -33,11 +66,11 @@ class _MilkPricesState extends State<MilkPrices> {
     // setState
     setState(() {
       borders = Border(
-                    left: BorderSide(color: customs.secondaryShade_2, width: 1),
-                    top: BorderSide(color: customs.secondaryShade_2, width: 1),
-                    bottom: BorderSide(color: customs.secondaryShade_2, width: 1),
-                    // right: BorderSide(color: customs.secondaryShade_2, width: 1)
-                );
+                  left: BorderSide(color: customs.secondaryShade_2, width: 1),
+                  top: BorderSide(color: customs.secondaryShade_2, width: 1),
+                  bottom: BorderSide(color: customs.secondaryShade_2, width: 1),
+                  // right: BorderSide(color: customs.secondaryShade_2, width: 1)
+              );
       borders_2 = Border(
         // left: BorderSide(color: customs.secondaryShade_2, width: 1),
         top: BorderSide(color: customs.secondaryShade_2, width: 1),
@@ -56,186 +89,18 @@ class _MilkPricesState extends State<MilkPrices> {
         bottom: BorderSide(color: customs.secondaryShade_2, width: 1),
         right: BorderSide(color: customs.secondaryShade_2, width: 1)
       );
+      display_data = [];
 
-      // table row
-      table_rows = [
-        Container(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 2),
-                width: width / 5,
-                height: 50,
-                decoration: BoxDecoration(
-                    border: borders
-                ),
-                child: Center(child: Text("45.52", style: customs.secondaryTextStyle(size: 14,),)),
-              ),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 2),
-                width: width / 3.5,
-                height: 50,
-                decoration: BoxDecoration(
-                    border: borders_2
-                ),
-                child: Center(child: Text("12th Aug 24", style: customs.secondaryTextStyle(size: 14,),)),
-              ),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 2),
-                width: width / 3.5,
-                height: 50,
-                decoration: BoxDecoration(
-                    border: borders_2
-                ),
-                child: Center(child: Text("25th Aug 24", style: customs.secondaryTextStyle(size: 14,),)),
-              ),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 2),
-                width: width / 5,
-                height: 50,
-                decoration: BoxDecoration(
-                    border: borders_3
-                ),
-                child: Center(child: CircleAvatar(backgroundColor: Colors.transparent, child: Icon(Icons.edit, size: 15, color: customs.secondaryColor,))),
-              )
-            ],
-          ),
-        ),
-        Container(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 2),
-                width: width / 5,
-                height: 50,
-                decoration: BoxDecoration(
-                    border: borders
-                ),
-                child: Center(child: Text("45.52", style: customs.secondaryTextStyle(size: 14,),)),
-              ),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 2),
-                width: width / 3.5,
-                height: 50,
-                decoration: BoxDecoration(
-                    border: borders_2
-                ),
-                child: Center(child: Text("12th Aug 24", style: customs.secondaryTextStyle(size: 14,),)),
-              ),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 2),
-                width: width / 3.5,
-                height: 50,
-                decoration: BoxDecoration(
-                    border: borders_2
-                ),
-                child: Center(child: Text("25th Aug 24", style: customs.secondaryTextStyle(size: 14,),)),
-              ),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 2),
-                width: width / 5,
-                height: 50,
-                decoration: BoxDecoration(
-                    border: borders_3
-                ),
-                child: Center(child: CircleAvatar(backgroundColor: Colors.transparent, child: Icon(Icons.edit, size: 15, color: customs.secondaryColor,))),
-              )
-            ],
-          ),
-        ),
-        Container(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 2),
-                width: width / 5,
-                height: 50,
-                decoration: BoxDecoration(
-                    border: borders
-                ),
-                child: Center(child: Text("45.52", style: customs.secondaryTextStyle(size: 14,),)),
-              ),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 2),
-                width: width / 3.5,
-                height: 50,
-                decoration: BoxDecoration(
-                    border: borders_2
-                ),
-                child: Center(child: Text("12th Aug 24", style: customs.secondaryTextStyle(size: 14,),)),
-              ),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 2),
-                width: width / 3.5,
-                height: 50,
-                decoration: BoxDecoration(
-                    border: borders_2
-                ),
-                child: Center(child: Text("25th Aug 24", style: customs.secondaryTextStyle(size: 14,),)),
-              ),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 2),
-                width: width / 5,
-                height: 50,
-                decoration: BoxDecoration(
-                    border: borders_3
-                ),
-                child: Center(child: CircleAvatar(backgroundColor: Colors.transparent, child: Icon(Icons.edit, size: 15, color: customs.secondaryColor,))),
-              )
-            ],
-          ),
-        ),
-        Container(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 2),
-                width: width / 5,
-                height: 50,
-                decoration: BoxDecoration(
-                    border: borders
-                ),
-                child: Center(child: Text("45.52", style: customs.secondaryTextStyle(size: 14,),)),
-              ),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 2),
-                width: width / 3.5,
-                height: 50,
-                decoration: BoxDecoration(
-                    border: borders_2
-                ),
-                child: Center(child: Text("12th Aug 24", style: customs.secondaryTextStyle(size: 14,),)),
-              ),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 2),
-                width: width / 3.5,
-                height: 50,
-                decoration: BoxDecoration(
-                    border: borders_2
-                ),
-                child: Center(child: Text("25th Aug 24", style: customs.secondaryTextStyle(size: 14,),)),
-              ),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 2),
-                width: width / 5,
-                height: 50,
-                decoration: BoxDecoration(
-                    border: borders_3
-                ),
-                child: Center(child: CircleAvatar(backgroundColor: Colors.transparent, child: Icon(Icons.edit, size: 15, color: customs.secondaryColor,))),
-              )
-            ],
-          ),
-        )
-      ];
     });
 
-    //get the milk prices
-    getMilkPrices();
+    if(!_initialized){
+      //get the milk prices
+      getMilkPrices();
+
+      setState(() {
+        _initialized = !_initialized;
+      });
+    }
   }
 
   Future<void> getMilkPrices() async {
@@ -251,140 +116,23 @@ class _MilkPricesState extends State<MilkPrices> {
         setState(() {
           setState(() {
             table_data = res['milk_prices'];
+            display_data = res['milk_prices'];
             current_price = "Kes ${res['current_price']}";
           });
-          displayTable(table_data);
         });
       }else{
         setState(() {
           setState(() {
             table_data = [];
+            display_data = [];
             current_price = "Kes 0";
           });
-          displayTable(table_data);
         });
         customs.maruSnackBarDanger(context: context, text: "An error has occured!");
       }
     }
     setState(() {
       loading = false;
-    });
-  }
-
-  void displayTable(var list){
-    double width = MediaQuery.of(context).size.width;
-    List<Widget> history = (list as List<dynamic>).asMap().entries.map((entry) {
-      var item = entry.value;
-      return
-        GestureDetector(
-          onTap: () async {
-            await Navigator.pushNamed(context, "/update_milk_prices", arguments: {"price_id": item['price_id']});
-            getMilkPrices();
-          },
-          child: Container(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  padding: EdgeInsets.symmetric(horizontal: 2),
-                  width: width / 5,
-                  height: 50,
-                  decoration: BoxDecoration(
-                      border: borders
-                  ),
-                  child: Center(child: Text("${item['amount']}", style: customs.secondaryTextStyle(size: 14,),)),
-                ),
-                Container(
-                  padding: EdgeInsets.symmetric(horizontal: 2),
-                  width: width / 3.5,
-                  height: 50,
-                  decoration: BoxDecoration(
-                      border: borders_2
-                  ),
-                  child: Center(child: Text("${item['effect_date']}", style: customs.secondaryTextStyle(size: 14,),)),
-                ),
-                Container(
-                  padding: EdgeInsets.symmetric(horizontal: 2),
-                  width: width / 3.5,
-                  height: 50,
-                  decoration: BoxDecoration(
-                      border: borders_2
-                  ),
-                  child: Center(child: Text("${item['end_date']}", style: customs.secondaryTextStyle(size: 14,),)),
-                ),
-                Container(
-                  padding: EdgeInsets.symmetric(horizontal: 2),
-                  width: width / 5,
-                  height: 50,
-                  decoration: BoxDecoration(
-                      border: borders_3
-                  ),
-                  child: Center(child: CircleAvatar(backgroundColor: Colors.transparent, child: Icon(Icons.edit, size: 15, color: customs.secondaryColor,))),
-                )
-              ],
-            ),
-          ),
-        );
-    }).toList();
-
-    if(history.length == 0){
-      history.add(
-          Container(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Container(
-                  margin: EdgeInsets.only(top: 30),
-                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                  width: width - 50,
-                  height: width - 100,
-                  decoration: BoxDecoration(
-                      color: customs.whiteColor,
-                      borderRadius: BorderRadius.circular(20),
-                      boxShadow: [
-                        BoxShadow(color: customs.secondaryShade_2, blurRadius: 1, blurStyle: BlurStyle.normal),
-                        BoxShadow(color: customs.secondaryShade_2, blurRadius: 1, blurStyle: BlurStyle.normal),
-                        BoxShadow(color: customs.secondaryShade_2, blurRadius: 1, blurStyle: BlurStyle.normal),
-                      ]
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text("No milk prices found!", style: customs.primaryTextStyle(size: 20, fontweight: FontWeight.bold),),
-                      Spacer(),
-                      SizedBox(
-                        width: width,
-                        child: Image(
-                          image: AssetImage("assets/images/search.jpg"),
-                          height: width/3,
-                          width: width/3,
-                        ),
-                      ),
-                      Spacer(),
-                      Container(
-                        margin: EdgeInsets.fromLTRB(0, 0, 5, 0),
-                        child: CircleAvatar(
-                          backgroundColor: customs.primaryShade_2,
-                          child: IconButton(
-                            onPressed: () async {
-                              await Navigator.pushNamed(context, "/change_milk_price");
-                              getMilkPrices();
-                            },
-                            icon: Icon(Icons.add_circle_rounded, color: customs.primaryColor,),
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          )
-      );
-    }
-    setState(() {
-      table_rows = history;
     });
   }
 
@@ -468,69 +216,139 @@ class _MilkPricesState extends State<MilkPrices> {
                         width: width / 1.5,
                         height: 50,
                         child: Center(
-                          child: customs.maruSearchTextField(
-                            isChanged: (value){},
+                          child: display_data.length > 0 ? customs.maruSearchTextField(
+                            isChanged: (value){
+                              findKeyWord(value);
+                            },
                             editingController: searchField,
                             hintText: "Type to search!",
-                          ),
+                          ) : SizedBox(),
                         ),
                       )
                     ],
                   ),
                   SizedBox(height: 10,),
+                  SizedBox(
+                    width: width/1.5,
+                    child: Divider(),
+                  ),
+                  SizedBox(height: 10,),
                   Container(
-                    child: Row(
+                    height: height - 190,
+                    width: width,
+                    padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+                    child: !loading ? (display_data.length > 0 ? ListView.builder(
+                      itemCount: display_data.length,
+                      itemBuilder: (context, index) {
+                        var item = display_data[index];
+                        return ListTile(
+                          leading: Icon(Icons.label, size: 20, color: item['status'] == 1 ? customs.successColor : customs.secondaryColor,),
+                          title: Row(
+                            children: [
+                              Text("Kes ${item['amount']}", style: customs.secondaryTextStyle(size: 17, fontweight: FontWeight.bold),),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              item['current'] ? Container(
+                                padding: EdgeInsets.symmetric(horizontal: 3, vertical: 1),
+                                decoration: BoxDecoration(
+                                  color: customs.successColor,
+                                  borderRadius: BorderRadius.circular(2)
+                                ),
+                                child: Text("Current", style: customs.whiteTextStyle(size: 10, fontweight: FontWeight.bold),),
+                              ) : SizedBox(height: 0, width: 0,)
+                            ],
+                          ),
+                          subtitle: Text(item['status'] == 1 ? '${item['effect_date']} to ${item['end_date']}' : "Not-published", style: customs.secondaryTextStyle(size: 14),),
+                          isThreeLine: false,
+                          trailing: Icon(Icons.arrow_forward_ios_rounded, size: 15,),
+                          onTap: () async {
+                            // Handle the tap event
+                            await Navigator.pushNamed(context, "/update_milk_prices", arguments: {"price_id": item['price_id']});
+                            getMilkPrices();
+                          },
+                        );
+                      },
+                    ) :
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        GestureDetector(
+                          child: Container(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Container(
+                                  margin: EdgeInsets.only(top: 30),
+                                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                                  width: width - 50,
+                                  height: width - 100,
+                                  decoration: BoxDecoration(
+                                      color: customs.whiteColor,
+                                      borderRadius: BorderRadius.circular(20),
+                                      boxShadow: [
+                                        BoxShadow(color: customs.secondaryShade_2, blurRadius: 1, blurStyle: BlurStyle.normal),
+                                        BoxShadow(color: customs.secondaryShade_2, blurRadius: 1, blurStyle: BlurStyle.normal),
+                                        BoxShadow(color: customs.secondaryShade_2, blurRadius: 1, blurStyle: BlurStyle.normal),
+                                      ]
+                                  ),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text("No milk prices found!", style: customs.primaryTextStyle(size: 20, fontweight: FontWeight.bold),),
+                                      Spacer(),
+                                      SizedBox(
+                                        width: width,
+                                        child: Image(
+                                          image: AssetImage("assets/images/search.jpg"),
+                                          height: width/3,
+                                          width: width/3,
+                                        ),
+                                      ),
+                                      Spacer(),
+                                      Container(
+                                        margin: EdgeInsets.fromLTRB(0, 0, 5, 0),
+                                        child: CircleAvatar(
+                                          backgroundColor: customs.primaryShade_2,
+                                          radius: 30,
+                                          child: IconButton(
+                                            onPressed: () async {
+                                              await Navigator.pushNamed(context, "/change_milk_price");
+                                              getMilkPrices();
+                                            },
+                                            icon: Icon(Icons.add_circle_rounded, size: 40, color: customs.primaryColor,),
+                                          ),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    )) : Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Container(
-                          padding: EdgeInsets.symmetric(horizontal: 2),
-                          width: width / 5,
-                          height: 50,
-                          decoration: BoxDecoration(
-                              border: borders
-                          ),
-                          child: Center(child: Text("Price (Kes)", style: customs.secondaryTextStyle(size: 14, fontweight: FontWeight.bold),)),
-                        ),
-                        Container(
-                          padding: EdgeInsets.symmetric(horizontal: 2),
-                          width: width / 3.5,
-                          height: 50,
-                          decoration: BoxDecoration(
-                              border: borders_2
-                          ),
-                          child: Center(child: Text("Effective Date", style: customs.secondaryTextStyle(size: 14, fontweight: FontWeight.bold),)),
-                        ),
-                        Container(
-                          padding: EdgeInsets.symmetric(horizontal: 2),
-                          width: width / 3.5,
-                          height: 50,
-                          decoration: BoxDecoration(
-                              border: borders_2
-                          ),
-                          child: Center(child: Text("End Date", style: customs.secondaryTextStyle(size: 14, fontweight: FontWeight.bold),)),
-                        ),
-                        Container(
-                          padding: EdgeInsets.symmetric(horizontal: 2),
-                          width: width / 5,
-                          height: 50,
-                          decoration: BoxDecoration(
-                              border: borders_3
-                          ),
-                          child: Center(child: Text("Action", style: customs.secondaryTextStyle(size: 14, fontweight: FontWeight.bold),)),
+                        SpinKitCircle(
+                          color: customs.primaryColor,
+                          size: 50.0,
                         )
                       ],
                     ),
                   ),
-                  Container(
-                    height: height - 190,
-                    width: width,
-                    child: SingleChildScrollView(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: table_rows,
-                      ),
-                    ),
-                  )
+                  // Container(
+                  //   height: height - 190,
+                  //   width: width,
+                  //   child: SingleChildScrollView(
+                  //     child: Column(
+                  //       crossAxisAlignment: CrossAxisAlignment.center,
+                  //       children: table_rows,
+                  //     ),
+                  //   ),
+                  // ),
                 ],
               ),
             ),

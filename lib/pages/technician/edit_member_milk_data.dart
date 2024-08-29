@@ -468,9 +468,7 @@ class _EditMemberMilkDataState extends State<EditMemberMilkData> {
                           onSelected: (String result) {
                             // Handle the selection here
                             print(result);
-                            if(result == "edit_history"){
-                              
-                            }else if(result == "delete"){
+                            if(result == "delete"){
 
                             }
                           },
@@ -490,13 +488,13 @@ class _EditMemberMilkDataState extends State<EditMemberMilkData> {
                                   children: [
                                     Icon(
                                       FontAwesomeIcons.trash,
-                                      size: 12,
+                                      size: 15,
                                       color: customs.dangerColor,
                                     ),
                                     Text(
                                       ' Delete',
                                       style: customs.dangerTextStyle(
-                                        size: 10,
+                                        size: 14,
                                         fontweight: FontWeight.bold
                                       ),
                                     ),

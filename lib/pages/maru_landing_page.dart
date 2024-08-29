@@ -85,7 +85,7 @@ class _MaruState extends State<Maru> {
         Navigator.pushReplacementNamed(context, "/landing_page");
         customs.maruSnackBarDanger(
             context: context,
-            text: "Fatal error occured!"
+            text: response.toString()
         );
       }
     }else{

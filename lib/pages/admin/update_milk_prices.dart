@@ -29,13 +29,21 @@ class _UpdateMilkPricesState extends State<UpdateMilkPrices> {
   String collection_id = "-0";
   var price_data = null;
   bool loading = false;
+  bool _initialized = false;
+  DateTime minimum_date = DateTime.now();
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     //date format
     date = DateFormat('EEE, d MMM yyyy').format(date_time);
-    getCurrentMilkDetails();
+
+    if(!_initialized){
+      getCurrentMilkDetails();
+      setState(() {
+        _initialized = !_initialized;
+      });
+    }
   }
 
   Future<void> getCurrentMilkDetails() async {
@@ -56,9 +64,10 @@ class _UpdateMilkPricesState extends State<UpdateMilkPrices> {
         setState(() {
           price_data = res['milk_price_details'];
           _currentDoubleValue = double.parse(res['milk_price_details']['amount']);
-          current_price = res['current_price'];
+          current_price = double.parse(res['current_price'].toString());
           date_time = DateTime.parse(res['milk_price_details']['effect_date']);
           date = DateFormat('EEE, d MMM yyyy').format(date_time);
+          minimum_date = DateTime.parse(res['minimum_date']);
         });
       }else{
         setState(() {
@@ -273,13 +282,13 @@ class _UpdateMilkPricesState extends State<UpdateMilkPrices> {
                                     ),
                                     dateOrder: DatePickerDateOrder.dmy,
                                     initialDateTime: date_time,
-                                    maxDateTime:
-                                    DateTime.now().add(Duration(days: 100)),
-                                    minDateTime: DateTime(1980),
+                                    maxDateTime: DateTime.now().add(Duration(days: 100)),
+                                    minDateTime: minimum_date,
                                     pickerTextStyle: customs.secondaryTextStyle(size: 13, fontweight: FontWeight.bold),
                                     onSubmit: (index) {
                                       setState(() {
-                                        date_time = DateTime.parse(index);
+                                        print(index);
+                                        date_time = index;
                                         date = DateFormat('EEE, d MMM yyyy').format(date_time);
                                       });
                                     },
@@ -309,7 +318,7 @@ class _UpdateMilkPricesState extends State<UpdateMilkPrices> {
                                       ApiConnection apiConnection = ApiConnection();
                                       var datapass = {
                                         "amount": _currentDoubleValue,
-                                        "effect_date": date = DateFormat('yyyyMMdd').format(date_time),
+                                        "effect_date": DateFormat('yyyyMMdd').format(date_time),
                                         "status" : "0",
                                         "price_id":collection_id
                                       };
@@ -340,7 +349,7 @@ class _UpdateMilkPricesState extends State<UpdateMilkPrices> {
                                       ApiConnection apiConnection = ApiConnection();
                                       var datapass = {
                                         "amount": _currentDoubleValue,
-                                        "effect_date": date = DateFormat('yyyyMMdd').format(date_time),
+                                        "effect_date":DateFormat('yyyyMMdd').format(date_time),
                                         "status" : "0",
                                         "price_id":collection_id
                                       };
@@ -375,7 +384,7 @@ class _UpdateMilkPricesState extends State<UpdateMilkPrices> {
                                       ApiConnection apiConnection = ApiConnection();
                                       var datapass = {
                                         "amount": _currentDoubleValue,
-                                        "effect_date": date = DateFormat('yyyyMMdd').format(date_time),
+                                        "effect_date":DateFormat('yyyyMMdd').format(date_time),
                                         "status" : "1",
                                         "price_id":collection_id
                                       };

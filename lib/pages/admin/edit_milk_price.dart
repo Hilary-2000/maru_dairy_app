@@ -24,6 +24,7 @@ class _EditMilkPriceState extends State<EditMilkPrice> {
   String date = "Mon, 25th Aug 2024";
   DateTime date_time = DateTime.now();
   bool save_n_publish = false;
+  DateTime min_date = DateTime.now().add(Duration(days: 1000));
 
   @override
   void didChangeDependencies() {
@@ -40,8 +41,11 @@ class _EditMilkPriceState extends State<EditMilkPrice> {
       var res = jsonDecode(response);
       if(res['success']){
         setState(() {
-          _currentDoubleValue = res['current_price'];
-          current_price = res['current_price'];
+          _currentDoubleValue = double.parse(res['current_price'].toString());
+          current_price = double.parse(res['current_price'].toString());
+          min_date = DateTime.parse(res['last_date']);
+          date_time = min_date;
+          date = DateFormat('EEE, d MMM yyyy').format(date_time);
         });
       }else{
         setState(() {
@@ -242,10 +246,10 @@ class _EditMilkPriceState extends State<EditMilkPrice> {
                                       ),
                                     ),
                                     dateOrder: DatePickerDateOrder.dmy,
-                                    initialDateTime: DateTime.now(),
+                                    initialDateTime: min_date,
                                     maxDateTime:
                                         DateTime.now().add(Duration(days: 100)),
-                                    minDateTime: DateTime(1980),
+                                    minDateTime: min_date,
                                     pickerTextStyle: customs.secondaryTextStyle(
                                         size: 13, fontweight: FontWeight.bold),
                                     onChange: (index) {
