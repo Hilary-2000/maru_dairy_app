@@ -154,6 +154,7 @@ class _memberHistoryState extends State<memberHistory> {
 
   bool loading = false;
   String accumulated_litres = "N/A";
+  String litres_collected = "Kes 0";
   List<Widget> collections = [];
   var collected_history = [];
   TextEditingController searchMember = TextEditingController();
@@ -172,6 +173,7 @@ class _memberHistoryState extends State<memberHistory> {
         setState(() {
           collected_history = res['collection_history'];
           accumulated_litres = res['count'];
+          litres_collected = "Kes ${res['total_amount']}";
         });
       }else{
         displayHistory([]);
@@ -389,7 +391,7 @@ class _memberHistoryState extends State<memberHistory> {
                                           height: 5.0,
                                         ),
                                         Text(
-                                          "Kes 0",
+                                          "$litres_collected",
                                           style: customs.darkTextStyle(
                                               size: width * 0.028),
                                         ),

@@ -241,32 +241,46 @@ class _MilkPricesState extends State<MilkPrices> {
                       itemCount: display_data.length,
                       itemBuilder: (context, index) {
                         var item = display_data[index];
-                        return ListTile(
-                          leading: Icon(Icons.label, size: 20, color: item['status'] == 1 ? customs.successColor : customs.secondaryColor,),
-                          title: Row(
-                            children: [
-                              Text("Kes ${item['amount']}", style: customs.secondaryTextStyle(size: 17, fontweight: FontWeight.bold),),
-                              SizedBox(
-                                width: 10,
-                              ),
-                              item['current'] ? Container(
-                                padding: EdgeInsets.symmetric(horizontal: 3, vertical: 1),
-                                decoration: BoxDecoration(
-                                  color: customs.successColor,
-                                  borderRadius: BorderRadius.circular(2)
-                                ),
-                                child: Text("Current", style: customs.whiteTextStyle(size: 10, fontweight: FontWeight.bold),),
-                              ) : SizedBox(height: 0, width: 0,)
-                            ],
+                        return Container(
+                          margin: EdgeInsets.symmetric(vertical: 5),
+                          decoration: BoxDecoration(
+                            color: customs.whiteColor,
+                            borderRadius: BorderRadius.circular(10),
+                            boxShadow: [
+                              BoxShadow(color: customs.secondaryShade_2, blurRadius: 2, spreadRadius: 1),
+                              BoxShadow(color: customs.secondaryShade_2, blurRadius: 2, spreadRadius: 1),
+                              BoxShadow(color: customs.secondaryShade_2, blurRadius: 2, spreadRadius: 1),
+                              BoxShadow(color: customs.secondaryShade_2, blurRadius: 2, spreadRadius: 1),
+                              BoxShadow(color: customs.secondaryShade_2, blurRadius: 2, spreadRadius: 1),
+                            ]
                           ),
-                          subtitle: Text(item['status'] == 1 ? '${item['effect_date']} to ${item['end_date']}' : "Not-published", style: customs.secondaryTextStyle(size: 14),),
-                          isThreeLine: false,
-                          trailing: Icon(Icons.arrow_forward_ios_rounded, size: 15,),
-                          onTap: () async {
-                            // Handle the tap event
-                            await Navigator.pushNamed(context, "/update_milk_prices", arguments: {"price_id": item['price_id']});
-                            getMilkPrices();
-                          },
+                          child: ListTile(
+                            leading: Icon(Icons.label, size: 20, color: item['status'] == 1 ? customs.successColor : customs.secondaryColor,),
+                            title: Row(
+                              children: [
+                                Text("Kes ${item['amount']}", style: customs.secondaryTextStyle(size: 17, fontweight: FontWeight.bold),),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                item['current'] ? Container(
+                                  padding: EdgeInsets.symmetric(horizontal: 3, vertical: 1),
+                                  decoration: BoxDecoration(
+                                    color: customs.successColor,
+                                    borderRadius: BorderRadius.circular(2)
+                                  ),
+                                  child: Text("Current", style: customs.whiteTextStyle(size: 10, fontweight: FontWeight.bold),),
+                                ) : SizedBox(height: 0, width: 0,)
+                              ],
+                            ),
+                            subtitle: Text(item['status'] == 1 ? '${item['effect_date']} to ${item['end_date']}' : "Not-published", style: customs.secondaryTextStyle(size: 14),),
+                            isThreeLine: false,
+                            trailing: Icon(Icons.arrow_forward_ios_rounded, size: 15,),
+                            onTap: () async {
+                              // Handle the tap event
+                              await Navigator.pushNamed(context, "/update_milk_prices", arguments: {"price_id": item['price_id']});
+                              getMilkPrices();
+                            },
+                          ),
                         );
                       },
                     ) :
@@ -361,7 +375,7 @@ class _MilkPricesState extends State<MilkPrices> {
         child: IconButton(
           icon: Icon(
             Icons.add_circle_rounded,
-            size: 35,
+            size: 30,
             color: customs.secondaryColor,
           ),
           onPressed: () async {

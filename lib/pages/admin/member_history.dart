@@ -157,6 +157,7 @@ class _MemberHistoryState extends State<MemberHistory> {
   String accumulated_litres = "N/A";
   List<Widget> collections = [];
   var collected_history = [];
+  String total_price = "Kes 0";
   String member_name = "N/A";
   String member_code = "N/A";
   TextEditingController searchField = new TextEditingController();
@@ -185,17 +186,24 @@ class _MemberHistoryState extends State<MemberHistory> {
           setState(() {
             collected_history = res['collection_history'];
             accumulated_litres = res['count'];
+            total_price = "Kes ${res['total_price']}";
           });
         }else{
           displayHistory([]);
         }
       }else{
         customs.maruSnackBarDanger(context: context, text: "An error has occured!");
+        setState(() {
+          total_price = "Kes 0";
+        });
       }
       setState(() {
         loading = false;
       });
     }else{
+      setState(() {
+        total_price = "Kes 0";
+      });
       customs.maruSnackBarDanger(context: context, text: "An error has occured!");
     }
   }
@@ -328,6 +336,7 @@ class _MemberHistoryState extends State<MemberHistory> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: customs.whiteColor,
       appBar: AppBar(
         backgroundColor: customs.whiteColor,
         elevation: 1,
@@ -377,7 +386,7 @@ class _MemberHistoryState extends State<MemberHistory> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  padding: EdgeInsets.fromLTRB(10, 5, 10, 0),
                   child: Text("History : \"$member_name\"", style: customs.darkTextStyle(size: 18, fontweight: FontWeight.bold),),
                 ),
                 Card(
@@ -442,9 +451,10 @@ class _MemberHistoryState extends State<MemberHistory> {
                                             height: 5.0,
                                           ),
                                           Text(
-                                            "Kes 0",
+                                            "$total_price",
                                             style: customs.darkTextStyle(
-                                                size: width * 0.028),
+                                                size: width * 0.028
+                                            ),
                                           ),
                                         ],
                                       )
@@ -550,7 +560,7 @@ class _MemberHistoryState extends State<MemberHistory> {
                   enabled: loading,
                   child: Container(
                     margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                    height: height - 285,
+                    height: height - 287,
                     decoration: BoxDecoration(
                       color: customs.whiteColor,
                       borderRadius: BorderRadius.circular(10),
