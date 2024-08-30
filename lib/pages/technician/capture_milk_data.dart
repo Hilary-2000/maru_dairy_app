@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:maru/packages/api_connection.dart';
 import 'package:maru/packages/maru_theme.dart';
-import 'package:intl/intl.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class CaptureMilkData extends StatefulWidget {
@@ -18,8 +17,8 @@ class _CaptureMilkDataState extends State<CaptureMilkData> {
   CustomThemes customs = CustomThemes();
   final FlutterSecureStorage _storage = const FlutterSecureStorage();
   final _formKey = GlobalKey<FormState>();
-  DateTime? _selectedDate;
-  DateTime? _selectedTime;
+  // DateTime? _selectedDate;
+  // DateTime? _selectedTime;
   ApiConnection apiConnection = new ApiConnection();
   List<Color> colors_shade = [];
   List<Color> bg_color = [];
@@ -71,8 +70,8 @@ class _CaptureMilkDataState extends State<CaptureMilkData> {
     }
   }
 
-  TextEditingController _dateController = TextEditingController();
-  TextEditingController _timeController = TextEditingController();
+  // TextEditingController _dateController = TextEditingController();
+  // TextEditingController _timeController = TextEditingController();
   TextEditingController amountCollected = TextEditingController();
   bool saveLoader = false;
 
