@@ -51,6 +51,7 @@ class _EditMemberMilkDataState extends State<EditMemberMilkData> {
   String collection_id = "";
   String memberName = "N/A";
   String collection_amount = "N/A";
+  String collection_price = "0";
   String date = "N/A";
   String memberShipNumber = "N/A";
   String time = "N/A";
@@ -389,6 +390,7 @@ class _EditMemberMilkDataState extends State<EditMemberMilkData> {
             time = res['collection'] != null ? res['collection']['time'].toString() : "N/A";
             _amountInLitres.text = res['collection']['collection_amount'].toString();
             accepted = res['collection']['collection_status'] == 1;
+            collection_price = res['collection']['price'] ?? "0";
           });
         }
       }
@@ -513,7 +515,7 @@ class _EditMemberMilkDataState extends State<EditMemberMilkData> {
                       Container(
                         margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
                         width: width,
-                        height: 400,
+                        height: 437,
                         child: Column(
                           children: [
                             Container(
@@ -564,7 +566,7 @@ class _EditMemberMilkDataState extends State<EditMemberMilkData> {
                                     height: 5,
                                   ),
                                   Container(
-                                    height: 197,
+                                    height: 235,
                                     color: customs.whiteColor,
                                     child: DefaultTabController(
                                       length: 2, // Number of tabs
@@ -590,81 +592,104 @@ class _EditMemberMilkDataState extends State<EditMemberMilkData> {
                                               children: <Widget>[
                                                 Container(
                                                   padding: EdgeInsets.all(10),
-                                                  child: Column(
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                                    mainAxisAlignment:
-                                                    MainAxisAlignment.spaceAround,
-                                                    children: [
-                                                      // its the widest container
-                                                      Container(),
-                                                      Column(
-                                                        crossAxisAlignment:
-                                                        CrossAxisAlignment.start,
-                                                        children: [
-                                                          Text(
-                                                            "Collection Date : ",
-                                                            style: customs.secondaryTextStyle(
-                                                                size: 12,
-                                                                fontweight: FontWeight.bold),
-                                                          ),
-                                                          Text(
-                                                            "$date @ $time",
-                                                            style: customs.secondaryTextStyle(
-                                                                size: 12,
-                                                                fontweight: FontWeight.normal),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                      const SizedBox(
-                                                        height: 10,
-                                                      ),
-                                                      Column(
-                                                        crossAxisAlignment:
-                                                        CrossAxisAlignment.start,
-                                                        children: [
-                                                          Text(
-                                                            "Collection Amount",
-                                                            style: customs.secondaryTextStyle(
-                                                                size: 12,
-                                                                fontweight: FontWeight.bold),
-                                                          ),
-                                                          Text(
-                                                            "$collection_amount",
-                                                            style: customs.secondaryTextStyle(
-                                                                size: 12,
-                                                                fontweight: FontWeight.normal),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                      const SizedBox(
-                                                        height: 10,
-                                                      ),
-                                                      Column(
-                                                        crossAxisAlignment:
-                                                        CrossAxisAlignment.start,
-                                                        children: [
-                                                          Text(
-                                                            "Status",
-                                                            style: customs.secondaryTextStyle(
-                                                                size: 12,
-                                                                fontweight: FontWeight.bold),
-                                                          ),
-                                                          Container(
-                                                            padding: EdgeInsets.all(2),
-                                                            decoration: BoxDecoration(
-                                                                borderRadius: BorderRadius.circular(2),
-                                                                color: accepted ? customs.successColor : customs.secondaryColor
-                                                            ),
-                                                            child: Text(
-                                                              accepted ? "Accepted" : "Not-Accepted",
-                                                              style: customs.whiteTextStyle(
-                                                                  size: 10,
+                                                  child: SingleChildScrollView(
+                                                    child: Column(
+                                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                                      mainAxisAlignment:
+                                                      MainAxisAlignment.spaceAround,
+                                                      children: [
+                                                        // its the widest container
+                                                        Container(),
+                                                        Column(
+                                                          crossAxisAlignment:
+                                                          CrossAxisAlignment.start,
+                                                          children: [
+                                                            Text(
+                                                              "Collection Date : ",
+                                                              style: customs.secondaryTextStyle(
+                                                                  size: 12,
                                                                   fontweight: FontWeight.bold),
                                                             ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ],
+                                                            Text(
+                                                              "$date @ $time",
+                                                              style: customs.secondaryTextStyle(
+                                                                  size: 12,
+                                                                  fontweight: FontWeight.normal),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                        const SizedBox(
+                                                          height: 10,
+                                                        ),
+                                                        Column(
+                                                          crossAxisAlignment:
+                                                          CrossAxisAlignment.start,
+                                                          children: [
+                                                            Text(
+                                                              "Collection Amount",
+                                                              style: customs.secondaryTextStyle(
+                                                                  size: 12,
+                                                                  fontweight: FontWeight.bold),
+                                                            ),
+                                                            Text(
+                                                              "$collection_amount",
+                                                              style: customs.secondaryTextStyle(
+                                                                  size: 12,
+                                                                  fontweight: FontWeight.normal),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                        const SizedBox(
+                                                          height: 10,
+                                                        ),
+                                                        Column(
+                                                          crossAxisAlignment:
+                                                          CrossAxisAlignment.start,
+                                                          children: [
+                                                            Text(
+                                                              "Price",
+                                                              style: customs.secondaryTextStyle(
+                                                                  size: 12,
+                                                                  fontweight: FontWeight.bold),
+                                                            ),
+                                                            Text(
+                                                              "Kes $collection_price",
+                                                              style: customs.secondaryTextStyle(
+                                                                  size: 12,
+                                                                  fontweight: FontWeight.normal),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                        const SizedBox(
+                                                          height: 10,
+                                                        ),
+                                                        Column(
+                                                          crossAxisAlignment:
+                                                          CrossAxisAlignment.start,
+                                                          children: [
+                                                            Text(
+                                                              "Status",
+                                                              style: customs.secondaryTextStyle(
+                                                                  size: 12,
+                                                                  fontweight: FontWeight.bold),
+                                                            ),
+                                                            Container(
+                                                              padding: EdgeInsets.all(2),
+                                                              decoration: BoxDecoration(
+                                                                  borderRadius: BorderRadius.circular(2),
+                                                                  color: accepted ? customs.successColor : customs.secondaryColor
+                                                              ),
+                                                              child: Text(
+                                                                accepted ? "Accepted" : "Not-Accepted",
+                                                                style: customs.whiteTextStyle(
+                                                                    size: 10,
+                                                                    fontweight: FontWeight.bold),
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ],
+                                                    ),
                                                   ),
                                                 ),
                                                 Container(

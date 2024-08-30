@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:maru/packages/api_connection.dart';
 import 'package:maru/packages/maru_theme.dart';
 
 class AdminAccount extends StatefulWidget {
@@ -14,6 +17,42 @@ class _AdminAccountState extends State<AdminAccount> {
   CustomThemes customs = CustomThemes();
   final FlutterSecureStorage _storage = const FlutterSecureStorage();
   bool _isLightMode = true;
+  bool _isInitialized = false;
+  String price = "Kes 0";
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    if(!_isInitialized){
+      initializeAccount();
+      setState(() {
+        _isInitialized = true;
+      });
+    }
+  }
+
+  Future<void> initializeAccount() async {
+    ApiConnection apiConnection = new ApiConnection();
+    var response = await apiConnection.getMilkPrice();
+    if(customs.isValidJson(response)){
+      var res = jsonDecode(response);
+      print(res);
+      if(res['success']){
+        setState(() {
+          price = "Kes ${res['price']}";
+        });
+      }else{
+        setState(() {
+          price = "Kes 0";
+        });
+      }
+    }else{
+      setState(() {
+        price = "Kes 0";
+      });
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return SafeArea(child: LayoutBuilder(
@@ -222,7 +261,7 @@ class _AdminAccountState extends State<AdminAccount> {
                                 ),
                               ),
                               title: Text("Milk Price Per Liter", style: customs.darkTextStyle(size: 14),),
-                              subtitle: Text("Change price per Litre. @Kes 45", style: customs.secondaryTextStyle(size: 12),),
+                              subtitle: Text("Change price per Litre. @ $price", style: customs.secondaryTextStyle(size: 12),),
                               onTap: (){
                                 Navigator.pushNamed(context, "/milk_prices");
                               },

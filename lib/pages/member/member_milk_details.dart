@@ -19,6 +19,8 @@ class _MemberMilkDetailsState extends State<MemberMilkDetails> {
   int collection_status = 0;
   bool loading = false;
   bool all_status = false;
+  String milk_price = "0";
+  String ppl = "0";
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -68,6 +70,8 @@ class _MemberMilkDetailsState extends State<MemberMilkDetails> {
         setState(() {
           collection_details = res['milk_details'];
           collection_status = res['milk_details']['collection_status'];
+          milk_price = res['milk_details']['price'];
+          ppl = res['milk_details']['ppl'];
         });
       }else{
         setState(() {
@@ -162,7 +166,7 @@ class _MemberMilkDetailsState extends State<MemberMilkDetails> {
                             width: width,
                             child: Center(
                               child: Container(
-                                width: 150,
+                                width: 160,
                                 padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 5),
                                 decoration: BoxDecoration(
                                   color: customs.whiteColor,
@@ -202,27 +206,30 @@ class _MemberMilkDetailsState extends State<MemberMilkDetails> {
                       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                       child: Column(
                         children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              const Text(""),
-                              IconButton(
-                                onPressed: (){},
-                                icon: Icon(
-                                  Icons.broken_image_outlined,
-                                  color: customs.secondaryColor,
-                                ),
-                                style: ButtonStyle(
-                                  backgroundColor: WidgetStateProperty.all(customs.secondaryShade_2),
-                                  elevation: WidgetStateProperty.all<double>(10),
-                                  shape: WidgetStateProperty.all<RoundedRectangleBorder>(
-                                    RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(5.0),
-                                    ),
-                                  )
-                                ),
-                              )
-                            ],
+                          Container(
+                            padding: EdgeInsets.symmetric(horizontal: 10),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                RichText(text: TextSpan(text: "Price: ", style: customs.secondaryTextStyle(size: 12, fontweight: FontWeight.bold), children: [TextSpan(text: "Kes $milk_price\n", style: customs.secondaryTextStyle(size: 12)), TextSpan(text: "PPL  : ", style: customs.secondaryTextStyle(size: 12, fontweight: FontWeight.bold)), TextSpan(text: "Kes $ppl", style: customs.secondaryTextStyle(size: 12))])),
+                                IconButton(
+                                  onPressed: (){},
+                                  icon: Icon(
+                                    Icons.broken_image_outlined,
+                                    color: customs.secondaryColor,
+                                  ),
+                                  style: ButtonStyle(
+                                    backgroundColor: WidgetStateProperty.all(customs.secondaryShade_2),
+                                    elevation: WidgetStateProperty.all<double>(10),
+                                    shape: WidgetStateProperty.all<RoundedRectangleBorder>(
+                                      RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(5.0),
+                                      ),
+                                    )
+                                  ),
+                                )
+                              ],
+                            ),
                           ),
                           Column(
                             children: [
