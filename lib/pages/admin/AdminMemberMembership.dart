@@ -12,7 +12,6 @@ class Adminmembermembership extends StatefulWidget {
 
 class _AdminmembermembershipState extends State<Adminmembermembership> {
   CustomThemes customs = CustomThemes();
-  final FlutterSecureStorage _storage = const FlutterSecureStorage();
   @override
   Widget build(BuildContext context) {
     return Scaffold(

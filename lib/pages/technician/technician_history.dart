@@ -21,6 +21,7 @@ class _TechnicianHistoryState extends State<TechnicianHistory> {
   List<TextStyle> textStyles = [];
   int confirmedCollection = 0;
   int notConfirmedCollection = 0;
+  bool _init = false;
   List<DropdownMenuItem<String>> dayFilter = [
     const DropdownMenuItem(child: Text("7 Days"), value: "7 days"),
     const DropdownMenuItem(child: Text("14 Days"), value: "14 days"),
@@ -30,7 +31,6 @@ class _TechnicianHistoryState extends State<TechnicianHistory> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    loadTechnicianHistory(context);
   }
 
   List<Widget> collectionHistory = [];
@@ -107,188 +107,198 @@ class _TechnicianHistoryState extends State<TechnicianHistory> {
 
   void didChangeDependencies(){
     super.didChangeDependencies();
-    // set the technicians history
-    double width = MediaQuery.of(context).size.width;
-    setState((){
-      collectionHistory = [
-        GestureDetector(
-          onTap : (){
 
-          },
-          child: Container(
-            margin: EdgeInsets.zero,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5),
-              color: customs.secondaryShade_2.withOpacity(0.2),
-            ),
-            child: Material(
-              color: Colors.transparent,
-              child: ListTile(
-                dense: true,
-                leading: CircleAvatar(
-                  backgroundColor: customs.primaryShade,
-                  child: Skeleton.ignore(child: Text("PM", style: customs.primaryTextStyle(size: 18, fontweight: FontWeight.bold),)),
-                ),
-                title: Text(
-                  "Patrick Mugoh",
-                  style: customs.darkTextStyle(size: 14),
-                ),
-                subtitle: Text(
-                  "20.4 Litres",
-                  style: customs.secondaryTextStyle(size: 12),
-                ),
-                trailing: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text("10:03AM",
-                        style: customs.darkTextStyle(size: 10)),
-                    Text(
-                      "15th July 2024",
-                      style: customs.secondaryTextStyle(
-                          size: 10, fontweight: FontWeight.normal),
-                    ),
-                    SizedBox(height: 5,),
-                    Container(
-                      width: 10,
-                      height: 10,
-                      decoration: BoxDecoration(
-                          color: customs.successColor,
-                          borderRadius: BorderRadius.circular(5)
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ),
-        Container(width: width * 0.5, child: Divider(color: customs.secondaryShade_2.withOpacity(0.2),),),
-        GestureDetector(
-          onTap : (){
+    if(!_init){
+      // set the technicians history
+      double width = MediaQuery.of(context).size.width;
+      setState((){
+        collectionHistory = [
+          GestureDetector(
+            onTap : (){
 
-          },
-          child: Container(
-            margin: EdgeInsets.zero,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5),
-              color: customs.secondaryShade_2.withOpacity(0.2),
-            ),
-            child: Material(
-              color: Colors.transparent,
-              child: ListTile(
-                dense: true,
-                leading: CircleAvatar(
-                  backgroundColor: customs.successShade_2,
-                  child: Skeleton.ignore(child: Text("OM", style: customs.successTextStyle(size: 18, fontweight: FontWeight.bold),)),
-                ),
-                title: Text(
-                  "Owen Malingu",
-                  style: customs.darkTextStyle(size: 14),
-                ),
-                subtitle: Text(
-                  "20.4 Litres",
-                  style: customs.secondaryTextStyle(size: 12),
-                ),
-                trailing: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text("09:56AM",
-                        style: customs.darkTextStyle(size: 10)),
-                    Text(
-                      "15th July 2024",
-                      style: customs.secondaryTextStyle(
-                          size: 10, fontweight: FontWeight.normal),
-                    ),
-                    SizedBox(height: 5,),
-                    Container(
-                      width: 10,
-                      height: 10,
-                      decoration: BoxDecoration(
-                          color: customs.successColor,
-                          borderRadius: BorderRadius.circular(5)
+            },
+            child: Container(
+              margin: EdgeInsets.zero,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(5),
+                color: customs.secondaryShade_2.withOpacity(0.2),
+              ),
+              child: Material(
+                color: Colors.transparent,
+                child: ListTile(
+                  dense: true,
+                  leading: CircleAvatar(
+                    backgroundColor: customs.primaryShade,
+                    child: Skeleton.ignore(child: Text("PM", style: customs.primaryTextStyle(size: 18, fontweight: FontWeight.bold),)),
+                  ),
+                  title: Text(
+                    "Patrick Mugoh",
+                    style: customs.darkTextStyle(size: 14),
+                  ),
+                  subtitle: Text(
+                    "20.4 Litres",
+                    style: customs.secondaryTextStyle(size: 12),
+                  ),
+                  trailing: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text("10:03AM",
+                          style: customs.darkTextStyle(size: 10)),
+                      Text(
+                        "15th July 2024",
+                        style: customs.secondaryTextStyle(
+                            size: 10, fontweight: FontWeight.normal),
                       ),
-                    )
-                  ],
+                      SizedBox(height: 5,),
+                      Container(
+                        width: 10,
+                        height: 10,
+                        decoration: BoxDecoration(
+                            color: customs.successColor,
+                            borderRadius: BorderRadius.circular(5)
+                        ),
+                      )
+                    ],
+                  ),
                 ),
               ),
             ),
           ),
-        ),
-        Container(width: width * 0.5, child: Divider(color: customs.secondaryShade_2.withOpacity(0.2),),),
-        GestureDetector(
-          onTap : (){
-          },
-          child: Container(
-            margin: EdgeInsets.zero,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5),
-              color: customs.secondaryShade_2.withOpacity(0.2),
-            ),
-            child: Material(
-              color: Colors.transparent,
-              child: ListTile(
-                dense: true,
-                leading: CircleAvatar(
-                  backgroundColor: customs.secondaryShade_2,
-                  child: Skeleton.ignore(child: Text("EB", style: customs.secondaryTextStyle(size: 18, fontweight: FontWeight.bold),)),
-                ),
-                title: Text(
-                  "Esmond Bwire",
-                  style: customs.darkTextStyle(size: 14),
-                ),
-                subtitle: Text(
-                  "16.4 Litres",
-                  style: customs.secondaryTextStyle(size: 12),
-                ),
-                trailing: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text("09:53AM",
-                        style: customs.darkTextStyle(size: 10)),
-                    Text(
-                      "15th July 2024",
-                      style: customs.secondaryTextStyle(
-                          size: 10, fontweight: FontWeight.normal),
-                    ),
-                    SizedBox(height: 5,),
-                    Container(
-                      width: 10,
-                      height: 10,
-                      decoration: BoxDecoration(
-                          color: customs.dangerColor,
-                          borderRadius: BorderRadius.circular(5)
+          Container(width: width * 0.5, child: Divider(color: customs.secondaryShade_2.withOpacity(0.2),),),
+          GestureDetector(
+            onTap : (){
+
+            },
+            child: Container(
+              margin: EdgeInsets.zero,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(5),
+                color: customs.secondaryShade_2.withOpacity(0.2),
+              ),
+              child: Material(
+                color: Colors.transparent,
+                child: ListTile(
+                  dense: true,
+                  leading: CircleAvatar(
+                    backgroundColor: customs.successShade_2,
+                    child: Skeleton.ignore(child: Text("OM", style: customs.successTextStyle(size: 18, fontweight: FontWeight.bold),)),
+                  ),
+                  title: Text(
+                    "Owen Malingu",
+                    style: customs.darkTextStyle(size: 14),
+                  ),
+                  subtitle: Text(
+                    "20.4 Litres",
+                    style: customs.secondaryTextStyle(size: 12),
+                  ),
+                  trailing: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text("09:56AM",
+                          style: customs.darkTextStyle(size: 10)),
+                      Text(
+                        "15th July 2024",
+                        style: customs.secondaryTextStyle(
+                            size: 10, fontweight: FontWeight.normal),
                       ),
-                    )
-                  ],
+                      SizedBox(height: 5,),
+                      Container(
+                        width: 10,
+                        height: 10,
+                        decoration: BoxDecoration(
+                            color: customs.successColor,
+                            borderRadius: BorderRadius.circular(5)
+                        ),
+                      )
+                    ],
+                  ),
                 ),
               ),
             ),
           ),
-        ),
-        Container(width: width * 0.5, child: Divider(color: customs.secondaryShade_2.withOpacity(0.2),),),
-      ];
-      colors_shade = [customs.primaryShade, customs.secondaryShade, customs.warningShade, customs.darkShade, customs.successShade];
-      textStyles = [
-        customs.primaryTextStyle(
-            size: 18, fontweight: FontWeight.bold
-        ),
-        customs.secondaryTextStyle(
-            size: 18, fontweight: FontWeight.bold
-        ),
-        customs.warningTextStyle(
-            size: 18, fontweight: FontWeight.bold
-        ),
-        customs.darkTextStyle(
-            size: 18, fontweight: FontWeight.bold
-        ),
-        customs.secondaryTextStyle(
-            size: 18, fontweight: FontWeight.bold
-        ),
-      ];
-    });
+          Container(width: width * 0.5, child: Divider(color: customs.secondaryShade_2.withOpacity(0.2),),),
+          GestureDetector(
+            onTap : (){
+            },
+            child: Container(
+              margin: EdgeInsets.zero,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(5),
+                color: customs.secondaryShade_2.withOpacity(0.2),
+              ),
+              child: Material(
+                color: Colors.transparent,
+                child: ListTile(
+                  dense: true,
+                  leading: CircleAvatar(
+                    backgroundColor: customs.secondaryShade_2,
+                    child: Skeleton.ignore(child: Text("EB", style: customs.secondaryTextStyle(size: 18, fontweight: FontWeight.bold),)),
+                  ),
+                  title: Text(
+                    "Esmond Bwire",
+                    style: customs.darkTextStyle(size: 14),
+                  ),
+                  subtitle: Text(
+                    "16.4 Litres",
+                    style: customs.secondaryTextStyle(size: 12),
+                  ),
+                  trailing: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text("09:53AM",
+                          style: customs.darkTextStyle(size: 10)),
+                      Text(
+                        "15th July 2024",
+                        style: customs.secondaryTextStyle(
+                            size: 10, fontweight: FontWeight.normal),
+                      ),
+                      SizedBox(height: 5,),
+                      Container(
+                        width: 10,
+                        height: 10,
+                        decoration: BoxDecoration(
+                            color: customs.dangerColor,
+                            borderRadius: BorderRadius.circular(5)
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+          Container(width: width * 0.5, child: Divider(color: customs.secondaryShade_2.withOpacity(0.2),),),
+        ];
+        colors_shade = [customs.primaryShade, customs.secondaryShade, customs.warningShade, customs.darkShade, customs.successShade];
+        textStyles = [
+          customs.primaryTextStyle(
+              size: 18, fontweight: FontWeight.bold
+          ),
+          customs.secondaryTextStyle(
+              size: 18, fontweight: FontWeight.bold
+          ),
+          customs.warningTextStyle(
+              size: 18, fontweight: FontWeight.bold
+          ),
+          customs.darkTextStyle(
+              size: 18, fontweight: FontWeight.bold
+          ),
+          customs.secondaryTextStyle(
+              size: 18, fontweight: FontWeight.bold
+          ),
+        ];
+      });
+
+      // load technician history
+      loadTechnicianHistory(context);
+
+      setState(() {
+        _init = true;
+      });
+    }
   }
 
   void findKeyWord(keyword){
@@ -329,7 +339,6 @@ class _TechnicianHistoryState extends State<TechnicianHistory> {
 
   void displayCollectionHistory(var list){
     double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height;
     List<Widget> history = (list as List<dynamic>).asMap().entries.map((entry) {
       var item = entry.value;
       var index = entry.key;

@@ -15,6 +15,7 @@ class _AdminProfileState extends State<AdminProfile> {
   // CUSTOM THEME
   CustomThemes customs = CustomThemes();
   var admin_data = null;
+  bool _init = false;
 
   // change to camel case
   String toCamelCase(String text) {
@@ -34,8 +35,15 @@ class _AdminProfileState extends State<AdminProfile> {
     // change dependencies
     super.didChangeDependencies();
 
-    // get member details
-    getAdminDetails();
+    if(!_init){
+      // get member details
+      getAdminDetails();
+
+      // set state
+      setState(() {
+        _init = true;
+      });
+    }
   }
 
 

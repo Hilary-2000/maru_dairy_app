@@ -44,116 +44,120 @@ class _MemberHistoryState extends State<MemberHistory> {
     // set the initials
     double width = MediaQuery.of(context).size.width;
 
-    setState(() {
-      collections = [
-        GestureDetector(
-          onTap : (){
-          },
-          child: Container(
-            margin: EdgeInsets.zero,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5),
-              color: customs.secondaryShade_2.withOpacity(0.2),
-            ),
-            child: Material(
-              color: Colors.transparent,
-              child: ListTile(
-                dense: true,
-                leading: Container(
-                  child: const Icon(
-                    Icons.water_drop_outlined,
-                    size: 25,
+    if(!_init){
+      setState(() {
+        collections = [
+          GestureDetector(
+            onTap : (){
+            },
+            child: Container(
+              margin: EdgeInsets.zero,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(5),
+                color: customs.secondaryShade_2.withOpacity(0.2),
+              ),
+              child: Material(
+                color: Colors.transparent,
+                child: ListTile(
+                  dense: true,
+                  leading: Container(
+                    child: const Icon(
+                      Icons.water_drop_outlined,
+                      size: 25,
+                    ),
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(100),
+                        color: customs.primaryShade_2),
                   ),
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(100),
-                      color: customs.primaryShade_2),
-                ),
-                title: Text(
-                  "Collected",
-                  style: customs.primaryTextStyle(size: 12),
-                ),
-                subtitle: Text(
-                  "25 Litres",
-                  style: customs.darkTextStyle(size: 15),
-                ),
-                trailing: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text("12:03AM",
-                        style: customs.secondaryTextStyle(size: 10)),
-                    Text(
-                      "15th July 2024",
-                      style: customs.secondaryTextStyle(
-                          size: 10, fontweight: FontWeight.normal),
-                    )
-                  ],
+                  title: Text(
+                    "Collected",
+                    style: customs.primaryTextStyle(size: 12),
+                  ),
+                  subtitle: Text(
+                    "25 Litres",
+                    style: customs.darkTextStyle(size: 15),
+                  ),
+                  trailing: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text("12:03AM",
+                          style: customs.secondaryTextStyle(size: 10)),
+                      Text(
+                        "15th July 2024",
+                        style: customs.secondaryTextStyle(
+                            size: 10, fontweight: FontWeight.normal),
+                      )
+                    ],
+                  ),
                 ),
               ),
             ),
           ),
-        ),
-        Container(width: width * 0.5, child: Divider(color: customs.secondaryShade_2.withOpacity(0.2),),),
-        GestureDetector(
-          onTap : (){
-            Navigator.pushNamed(context, "/member_milk_details");
-          },
-          child: Container(
-            margin: EdgeInsets.zero,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5),
-              color: customs.secondaryShade_2.withOpacity(0.2),
-            ),
-            child: Material(
-              color: Colors.transparent,
-              child: ListTile(
-                dense: true,
-                leading: Container(
-                  child: const Icon(
-                    Icons.water_drop_outlined,
-                    size: 25,
+          Container(width: width * 0.5, child: Divider(color: customs.secondaryShade_2.withOpacity(0.2),),),
+          GestureDetector(
+            onTap : (){
+              Navigator.pushNamed(context, "/member_milk_details");
+            },
+            child: Container(
+              margin: EdgeInsets.zero,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(5),
+                color: customs.secondaryShade_2.withOpacity(0.2),
+              ),
+              child: Material(
+                color: Colors.transparent,
+                child: ListTile(
+                  dense: true,
+                  leading: Container(
+                    child: const Icon(
+                      Icons.water_drop_outlined,
+                      size: 25,
+                    ),
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(100),
+                        color: customs.primaryShade_2),
                   ),
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(100),
-                      color: customs.primaryShade_2),
-                ),
-                title: Text(
-                  "Collected",
-                  style: customs.primaryTextStyle(size: 12),
-                ),
-                subtitle: Text(
-                  "25 Litres",
-                  style: customs.darkTextStyle(size: 15),
-                ),
-                trailing: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text("12:03AM",
-                        style: customs.secondaryTextStyle(size: 10)),
-                    Text(
-                      "15th July 2024",
-                      style: customs.secondaryTextStyle(
-                          size: 10, fontweight: FontWeight.normal),
-                    )
-                  ],
+                  title: Text(
+                    "Collected",
+                    style: customs.primaryTextStyle(size: 12),
+                  ),
+                  subtitle: Text(
+                    "25 Litres",
+                    style: customs.darkTextStyle(size: 15),
+                  ),
+                  trailing: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text("12:03AM",
+                          style: customs.secondaryTextStyle(size: 10)),
+                      Text(
+                        "15th July 2024",
+                        style: customs.secondaryTextStyle(
+                            size: 10, fontweight: FontWeight.normal),
+                      )
+                    ],
+                  ),
                 ),
               ),
             ),
           ),
-        ),
-        Container(width: width * 0.5, child: Divider(color: customs.secondaryShade_2.withOpacity(0.2),),),
-      ];
-    });
-
-
-    // collection history
-    getCollectionHistory();
+          Container(width: width * 0.5, child: Divider(color: customs.secondaryShade_2.withOpacity(0.2),),),
+        ];
+      });
+      // collection history
+      getCollectionHistory();
+      setState(() {
+        _init = true;
+      });
+    }
   }
 
   bool loading = false;
+  bool _init = false;
   String accumulated_litres = "N/A";
   List<Widget> collections = [];
   var collected_history = [];

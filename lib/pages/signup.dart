@@ -1,9 +1,7 @@
-import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:maru/packages/api_connection.dart';
 import 'package:maru/packages/maru_theme.dart';
 
@@ -53,8 +51,6 @@ class _signUpState extends State<signUp> {
   final TextEditingController _phonenumber = TextEditingController();
   final TextEditingController _email = TextEditingController();
   final TextEditingController _national_id = TextEditingController();
-  final TextEditingController _gender = TextEditingController();
-  final TextEditingController _region = TextEditingController();
   final TextEditingController _username = TextEditingController();
 
   @override

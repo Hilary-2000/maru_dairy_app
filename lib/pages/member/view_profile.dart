@@ -17,6 +17,7 @@ class _MemberProfileState extends State<MemberProfile> {
   var member_data = null;
   String collection_days = "0";
   String litres_collected = "0";
+  bool _init = false;
 
   // change to camel case
   String toCamelCase(String text) {
@@ -36,8 +37,13 @@ class _MemberProfileState extends State<MemberProfile> {
     // change dependencies
     super.didChangeDependencies();
 
-    // get member details
-    getMemberDetails();
+    if(!_init){
+      // get member details
+      getMemberDetails();
+      setState(() {
+        _init = true;
+      });
+    }
   }
 
 
@@ -242,7 +248,7 @@ class _MemberProfileState extends State<MemberProfile> {
                                                 Column(
                                                   children: [
                                                     Text(
-                                                      member_data != null ? member_data['animals'].toString() ?? "0" : "0",
+                                                      member_data != null ? (member_data['animals'] ?? 0 ).toString() : "0",
                                                       style:
                                                           customs.darkTextStyle(
                                                               size: 15,

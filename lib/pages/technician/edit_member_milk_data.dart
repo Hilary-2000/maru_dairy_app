@@ -26,26 +26,25 @@ class _EditMemberMilkDataState extends State<EditMemberMilkData> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    getCollectionDetails();
   }
 
   TextEditingController _dateController = TextEditingController();
   TextEditingController _timeController = TextEditingController();
   TextEditingController _amountInLitres = TextEditingController();
 
-  Future<void> _selectDate(BuildContext context) async {
-    final DateTime? pickedDate = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime.now(),
-      lastDate: DateTime(2101),
-    );
-    if (pickedDate != null && pickedDate != _selectedDate)
-      setState(() {
-        _selectedDate = pickedDate;
-        _dateController.text = DateFormat("MMMM d, yyyy").format(_selectedDate!).toString();
-      });
-  }
+  // Future<void> _selectDate(BuildContext context) async {
+  //   final DateTime? pickedDate = await showDatePicker(
+  //     context: context,
+  //     initialDate: DateTime.now(),
+  //     firstDate: DateTime.now(),
+  //     lastDate: DateTime(2101),
+  //   );
+  //   if (pickedDate != null && pickedDate != _selectedDate)
+  //     setState(() {
+  //       _selectedDate = pickedDate;
+  //       _dateController.text = DateFormat("MMMM d, yyyy").format(_selectedDate!).toString();
+  //     });
+  // }
 
   // member data
   String collection_id = "";
@@ -59,6 +58,7 @@ class _EditMemberMilkDataState extends State<EditMemberMilkData> {
   bool saveLoader = false;
   int index = 0;
   bool accepted = false;
+  bool _init = false;
   List<Widget> milkEditHistory = [];
 
   List<Color> colors_shade = [];
@@ -66,27 +66,27 @@ class _EditMemberMilkDataState extends State<EditMemberMilkData> {
   List<TextStyle> textStylesTitle = [];
   List<Color> fullcolor = [];
 
-  Future<void> _selectTime(BuildContext context) async {
-    final TimeOfDay? pickedTime = await showTimePicker(
-      context: context,
-      initialTime: _selectedTime != null
-          ? TimeOfDay.fromDateTime(_selectedTime!)
-          : TimeOfDay.now(),
-    );
-    if (pickedTime != null) {
-      setState(() {
-        _selectedTime = DateTime(
-          _selectedTime?.year ?? DateTime.now().year,
-          _selectedTime?.month ?? DateTime.now().month,
-          _selectedTime?.day ?? DateTime.now().day,
-          pickedTime.hour,
-          pickedTime.minute,
-        );
-
-        _timeController.text = DateFormat("h:mm a").format(_selectedTime!).toString();
-      });
-    }
-  }
+  // Future<void> _selectTime(BuildContext context) async {
+  //   final TimeOfDay? pickedTime = await showTimePicker(
+  //     context: context,
+  //     initialTime: _selectedTime != null
+  //         ? TimeOfDay.fromDateTime(_selectedTime!)
+  //         : TimeOfDay.now(),
+  //   );
+  //   if (pickedTime != null) {
+  //     setState(() {
+  //       _selectedTime = DateTime(
+  //         _selectedTime?.year ?? DateTime.now().year,
+  //         _selectedTime?.month ?? DateTime.now().month,
+  //         _selectedTime?.day ?? DateTime.now().day,
+  //         pickedTime.hour,
+  //         pickedTime.minute,
+  //       );
+  //
+  //       _timeController.text = DateFormat("h:mm a").format(_selectedTime!).toString();
+  //     });
+  //   }
+  // }
 
   bool isValidJson(String jsonString) {
     try {
@@ -126,192 +126,195 @@ class _EditMemberMilkDataState extends State<EditMemberMilkData> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    double width = MediaQuery.of(context).size.width;
-    setState(() {
-      colors_shade = [
-        customs.primaryShade,
-        customs.secondaryShade,
-        customs.warningShade,
-        customs.darkShade,
-        customs.successShade
-      ];
-      fullcolor = [
-        customs.primaryColor,
-        customs.secondaryColor,
-        customs.warningColor,
-        customs.darkColor,
-        customs.successColor
-      ];
-      textStylesTitle = [
-        customs.primaryTextStyle(
-            size: 30, fontweight: FontWeight.bold
-        ),
-        customs.secondaryTextStyle(
-            size: 30, fontweight: FontWeight.bold
-        ),
-        customs.warningTextStyle(
-            size: 30, fontweight: FontWeight.bold
-        ),
-        customs.darkTextStyle(
-            size: 30, fontweight: FontWeight.bold
-        ),
-        customs.secondaryTextStyle(
-            size: 30, fontweight: FontWeight.bold
-        ),
-      ];
-      textStyles = [
-        customs.primaryTextStyle(
-            size: 18, fontweight: FontWeight.bold
-        ),
-        customs.secondaryTextStyle(
-            size: 18, fontweight: FontWeight.bold
-        ),
-        customs.warningTextStyle(
-            size: 18, fontweight: FontWeight.bold
-        ),
-        customs.darkTextStyle(
-            size: 18, fontweight: FontWeight.bold
-        ),
-        customs.secondaryTextStyle(
-            size: 18, fontweight: FontWeight.bold
-        ),
-      ];
-      milkEditHistory = [
-        GestureDetector(
-          onTap : (){
+    if(!_init){
+      double width = MediaQuery.of(context).size.width;
+      setState(() {
+        _init = true;
+        colors_shade = [
+          customs.primaryShade,
+          customs.secondaryShade,
+          customs.warningShade,
+          customs.darkShade,
+          customs.successShade
+        ];
+        fullcolor = [
+          customs.primaryColor,
+          customs.secondaryColor,
+          customs.warningColor,
+          customs.darkColor,
+          customs.successColor
+        ];
+        textStylesTitle = [
+          customs.primaryTextStyle(
+              size: 30, fontweight: FontWeight.bold
+          ),
+          customs.secondaryTextStyle(
+              size: 30, fontweight: FontWeight.bold
+          ),
+          customs.warningTextStyle(
+              size: 30, fontweight: FontWeight.bold
+          ),
+          customs.darkTextStyle(
+              size: 30, fontweight: FontWeight.bold
+          ),
+          customs.secondaryTextStyle(
+              size: 30, fontweight: FontWeight.bold
+          ),
+        ];
+        textStyles = [
+          customs.primaryTextStyle(
+              size: 18, fontweight: FontWeight.bold
+          ),
+          customs.secondaryTextStyle(
+              size: 18, fontweight: FontWeight.bold
+          ),
+          customs.warningTextStyle(
+              size: 18, fontweight: FontWeight.bold
+          ),
+          customs.darkTextStyle(
+              size: 18, fontweight: FontWeight.bold
+          ),
+          customs.secondaryTextStyle(
+              size: 18, fontweight: FontWeight.bold
+          ),
+        ];
+        milkEditHistory = [
+          GestureDetector(
+            onTap : (){
 
-          },
-          child: Container(
-            margin: EdgeInsets.zero,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5),
-              color: customs.secondaryShade_2.withOpacity(0.2),
-            ),
-            child: Material(
-              color: Colors.transparent,
-              child: ListTile(
-                dense: true,
-                leading: CircleAvatar(
-                  backgroundColor: customs.primaryShade,
-                  child: Skeleton.ignore(child: Text("PM", style: customs.primaryTextStyle(size: 18, fontweight: FontWeight.bold),)),
-                ),
-                title: Text(
-                  "Patrick Mugoh",
-                  style: customs.darkTextStyle(size: 14),
-                ),
-                subtitle: Text(
-                  "20.4 Litres",
-                  style: customs.secondaryTextStyle(size: 12),
-                ),
-                trailing: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text("10:03AM",
-                        style: customs.darkTextStyle(size: 10)),
-                    Text(
-                      "15th July 2024",
-                      style: customs.secondaryTextStyle(
-                          size: 10, fontweight: FontWeight.normal),
-                    ),
-                    Text("edit", style: customs.secondaryTextStyle(size: 10, fontweight: FontWeight.bold))
-                  ],
+            },
+            child: Container(
+              margin: EdgeInsets.zero,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(5),
+                color: customs.secondaryShade_2.withOpacity(0.2),
+              ),
+              child: Material(
+                color: Colors.transparent,
+                child: ListTile(
+                  dense: true,
+                  leading: CircleAvatar(
+                    backgroundColor: customs.primaryShade,
+                    child: Skeleton.ignore(child: Text("PM", style: customs.primaryTextStyle(size: 18, fontweight: FontWeight.bold),)),
+                  ),
+                  title: Text(
+                    "Patrick Mugoh",
+                    style: customs.darkTextStyle(size: 14),
+                  ),
+                  subtitle: Text(
+                    "20.4 Litres",
+                    style: customs.secondaryTextStyle(size: 12),
+                  ),
+                  trailing: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text("10:03AM",
+                          style: customs.darkTextStyle(size: 10)),
+                      Text(
+                        "15th July 2024",
+                        style: customs.secondaryTextStyle(
+                            size: 10, fontweight: FontWeight.normal),
+                      ),
+                      Text("edit", style: customs.secondaryTextStyle(size: 10, fontweight: FontWeight.bold))
+                    ],
+                  ),
                 ),
               ),
             ),
           ),
-        ),
-        Container(width: width * 0.5, child: Divider(color: customs.secondaryShade_2.withOpacity(0.2),),),
-        GestureDetector(
-          onTap : (){
-          },
-          child: Container(
-            margin: EdgeInsets.zero,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5),
-              color: customs.secondaryShade_2.withOpacity(0.2),
-            ),
-            child: Material(
-              color: Colors.transparent,
-              child: ListTile(
-                dense: true,
-                leading: CircleAvatar(
-                  backgroundColor: customs.successShade_2,
-                  child: Skeleton.ignore(child: Text("OM", style: customs.successTextStyle(size: 18, fontweight: FontWeight.bold),)),
-                ),
-                title: Text(
-                  "Owen Malingu",
-                  style: customs.darkTextStyle(size: 14),
-                ),
-                subtitle: Text(
-                  "20.4 Litres",
-                  style: customs.secondaryTextStyle(size: 12),
-                ),
-                trailing: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text("09:56AM",
-                        style: customs.darkTextStyle(size: 10)),
-                    Text(
-                      "15th July 2024",
-                      style: customs.secondaryTextStyle(
-                          size: 10, fontweight: FontWeight.normal),
-                    ),
-                    Text("edit", style: customs.secondaryTextStyle(size: 10, fontweight: FontWeight.bold))
-                  ],
+          Container(width: width * 0.5, child: Divider(color: customs.secondaryShade_2.withOpacity(0.2),),),
+          GestureDetector(
+            onTap : (){
+            },
+            child: Container(
+              margin: EdgeInsets.zero,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(5),
+                color: customs.secondaryShade_2.withOpacity(0.2),
+              ),
+              child: Material(
+                color: Colors.transparent,
+                child: ListTile(
+                  dense: true,
+                  leading: CircleAvatar(
+                    backgroundColor: customs.successShade_2,
+                    child: Skeleton.ignore(child: Text("OM", style: customs.successTextStyle(size: 18, fontweight: FontWeight.bold),)),
+                  ),
+                  title: Text(
+                    "Owen Malingu",
+                    style: customs.darkTextStyle(size: 14),
+                  ),
+                  subtitle: Text(
+                    "20.4 Litres",
+                    style: customs.secondaryTextStyle(size: 12),
+                  ),
+                  trailing: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text("09:56AM",
+                          style: customs.darkTextStyle(size: 10)),
+                      Text(
+                        "15th July 2024",
+                        style: customs.secondaryTextStyle(
+                            size: 10, fontweight: FontWeight.normal),
+                      ),
+                      Text("edit", style: customs.secondaryTextStyle(size: 10, fontweight: FontWeight.bold))
+                    ],
+                  ),
                 ),
               ),
             ),
           ),
-        ),
-        Container(width: width * 0.5, child: Divider(color: customs.secondaryShade_2.withOpacity(0.2),),),
-        GestureDetector(
-          onTap : (){
-          },
-          child: Container(
-            margin: EdgeInsets.zero,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5),
-              color: customs.secondaryShade_2.withOpacity(0.2),
-            ),
-            child: Material(
-              color: Colors.transparent,
-              child: ListTile(
-                dense: true,
-                leading: CircleAvatar(
-                  backgroundColor: customs.secondaryShade_2,
-                  child: Skeleton.ignore(child: Text("EB", style: customs.secondaryTextStyle(size: 18, fontweight: FontWeight.bold),)),
-                ),
-                title: Text(
-                  "Esmond Bwire",
-                  style: customs.darkTextStyle(size: 14),
-                ),
-                subtitle: Text(
-                  "16.4 Litres",
-                  style: customs.secondaryTextStyle(size: 12),
-                ),
-                trailing: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text("09:53AM",
-                        style: customs.darkTextStyle(size: 10)),
-                    Text(
-                      "15th July 2024",
-                      style: customs.secondaryTextStyle(
-                          size: 10, fontweight: FontWeight.normal),
-                    ),
-                    Text("initial", style: customs.successTextStyle(size: 10, fontweight: FontWeight.bold))
-                  ],
+          Container(width: width * 0.5, child: Divider(color: customs.secondaryShade_2.withOpacity(0.2),),),
+          GestureDetector(
+            onTap : (){
+            },
+            child: Container(
+              margin: EdgeInsets.zero,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(5),
+                color: customs.secondaryShade_2.withOpacity(0.2),
+              ),
+              child: Material(
+                color: Colors.transparent,
+                child: ListTile(
+                  dense: true,
+                  leading: CircleAvatar(
+                    backgroundColor: customs.secondaryShade_2,
+                    child: Skeleton.ignore(child: Text("EB", style: customs.secondaryTextStyle(size: 18, fontweight: FontWeight.bold),)),
+                  ),
+                  title: Text(
+                    "Esmond Bwire",
+                    style: customs.darkTextStyle(size: 14),
+                  ),
+                  subtitle: Text(
+                    "16.4 Litres",
+                    style: customs.secondaryTextStyle(size: 12),
+                  ),
+                  trailing: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text("09:53AM",
+                          style: customs.darkTextStyle(size: 10)),
+                      Text(
+                        "15th July 2024",
+                        style: customs.secondaryTextStyle(
+                            size: 10, fontweight: FontWeight.normal),
+                      ),
+                      Text("initial", style: customs.successTextStyle(size: 10, fontweight: FontWeight.bold))
+                    ],
+                  ),
                 ),
               ),
             ),
           ),
-        ),
-        Container(width: width * 0.5, child: Divider(color: customs.secondaryShade_2.withOpacity(0.2),),),];
-    });
-
+          Container(width: width * 0.5, child: Divider(color: customs.secondaryShade_2.withOpacity(0.2),),),];
+      });
+      getCollectionDetails();
+    }
   }
 
   Future<void> getCollectionDetails() async {

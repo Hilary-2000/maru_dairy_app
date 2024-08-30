@@ -73,7 +73,6 @@ class _memberDashboardState extends State<memberDashboard> {
       ),
       body: member_windows[index],
       bottomNavigationBar: Builder(builder: (context) {
-        double height = MediaQuery.of(context).size.height;
         double width = MediaQuery.of(context).size.width;
         return Container(
           decoration: BoxDecoration(
@@ -297,71 +296,75 @@ class _memberDashState extends State<memberDash> {
   ];
 
   bool loading = false;
+  bool _init = false;
 
   void didChangeDependencies() {
     super.didChangeDependencies();
-    setState(() {
-      barGroupData = [
-        BarChartGroupData(x: 1, barRods: [
-          BarChartRodData(
-            toY: 0,
-            color: customs.primaryColor,
-          )
-        ], showingTooltipIndicators: [
-          0
-        ]),
-        BarChartGroupData(x: 2, barRods: [
-          BarChartRodData(
-            toY: 0,
-            color: customs.primaryColor,
-          )
-        ], showingTooltipIndicators: [
-          0
-        ]),
-        BarChartGroupData(x: 3, barRods: [
-          BarChartRodData(
-            toY: 0,
-            color: customs.primaryColor,
-          )
-        ], showingTooltipIndicators: [
-          0
-        ]),
-        BarChartGroupData(x: 4, barRods: [
-          BarChartRodData(
-            toY: 0,
-            color: customs.primaryColor,
-          )
-        ], showingTooltipIndicators: [
-          0
-        ]),
-        BarChartGroupData(x: 5, barRods: [
-          BarChartRodData(
-            toY: 0,
-            color: customs.primaryColor,
-          )
-        ], showingTooltipIndicators: [
-          0
-        ]),
-        BarChartGroupData(x: 6, barRods: [
-          BarChartRodData(
-            toY: 0,
-            color: customs.primaryColor,
-          )
-        ], showingTooltipIndicators: [
-          0
-        ]),
-        BarChartGroupData(x: 7, barRods: [
-          BarChartRodData(
-            toY: 0,
-            color: customs.primaryColor,
-          )
-        ], showingTooltipIndicators: [
-          0
-        ])];
-    });
 
-    // member dashboard
-    memberDashboard(drop_down);
+    if(!_init){
+      setState(() {
+        _init = true;
+        barGroupData = [
+          BarChartGroupData(x: 1, barRods: [
+            BarChartRodData(
+              toY: 0,
+              color: customs.primaryColor,
+            )
+          ], showingTooltipIndicators: [
+            0
+          ]),
+          BarChartGroupData(x: 2, barRods: [
+            BarChartRodData(
+              toY: 0,
+              color: customs.primaryColor,
+            )
+          ], showingTooltipIndicators: [
+            0
+          ]),
+          BarChartGroupData(x: 3, barRods: [
+            BarChartRodData(
+              toY: 0,
+              color: customs.primaryColor,
+            )
+          ], showingTooltipIndicators: [
+            0
+          ]),
+          BarChartGroupData(x: 4, barRods: [
+            BarChartRodData(
+              toY: 0,
+              color: customs.primaryColor,
+            )
+          ], showingTooltipIndicators: [
+            0
+          ]),
+          BarChartGroupData(x: 5, barRods: [
+            BarChartRodData(
+              toY: 0,
+              color: customs.primaryColor,
+            )
+          ], showingTooltipIndicators: [
+            0
+          ]),
+          BarChartGroupData(x: 6, barRods: [
+            BarChartRodData(
+              toY: 0,
+              color: customs.primaryColor,
+            )
+          ], showingTooltipIndicators: [
+            0
+          ]),
+          BarChartGroupData(x: 7, barRods: [
+            BarChartRodData(
+              toY: 0,
+              color: customs.primaryColor,
+            )
+          ], showingTooltipIndicators: [
+            0
+          ])];
+      });
+      // member dashboard
+      memberDashboard(drop_down);
+    }
   }
 
   String total_collection = "0";

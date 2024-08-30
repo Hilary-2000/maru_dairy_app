@@ -61,39 +61,39 @@ class _MilkPricesState extends State<MilkPrices> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    double width = MediaQuery.of(context).size.width;
 
-    // setState
-    setState(() {
-      borders = Border(
-                  left: BorderSide(color: customs.secondaryShade_2, width: 1),
-                  top: BorderSide(color: customs.secondaryShade_2, width: 1),
-                  bottom: BorderSide(color: customs.secondaryShade_2, width: 1),
-                  // right: BorderSide(color: customs.secondaryShade_2, width: 1)
-              );
-      borders_2 = Border(
-        // left: BorderSide(color: customs.secondaryShade_2, width: 1),
-        top: BorderSide(color: customs.secondaryShade_2, width: 1),
-        bottom: BorderSide(color: customs.secondaryShade_2, width: 1),
-        // right: BorderSide(color: customs.secondaryShade_2, width: 1)
-      );
-      borders_3 = Border(
-        // left: BorderSide(color: customs.secondaryShade_2, width: 1),
-        top: BorderSide(color: customs.secondaryShade_2, width: 1),
-        bottom: BorderSide(color: customs.secondaryShade_2, width: 1),
-        right: BorderSide(color: customs.secondaryShade_2, width: 1)
-      );
-      borders_4 = Border(
-        left: BorderSide(color: customs.secondaryShade_2, width: 1),
-        top: BorderSide(color: customs.secondaryShade_2, width: 1),
-        bottom: BorderSide(color: customs.secondaryShade_2, width: 1),
-        right: BorderSide(color: customs.secondaryShade_2, width: 1)
-      );
-      display_data = [];
-
-    });
 
     if(!_initialized){
+      // setState
+      setState(() {
+        borders = Border(
+          left: BorderSide(color: customs.secondaryShade_2, width: 1),
+          top: BorderSide(color: customs.secondaryShade_2, width: 1),
+          bottom: BorderSide(color: customs.secondaryShade_2, width: 1),
+          // right: BorderSide(color: customs.secondaryShade_2, width: 1)
+        );
+        borders_2 = Border(
+          // left: BorderSide(color: customs.secondaryShade_2, width: 1),
+          top: BorderSide(color: customs.secondaryShade_2, width: 1),
+          bottom: BorderSide(color: customs.secondaryShade_2, width: 1),
+          // right: BorderSide(color: customs.secondaryShade_2, width: 1)
+        );
+        borders_3 = Border(
+          // left: BorderSide(color: customs.secondaryShade_2, width: 1),
+            top: BorderSide(color: customs.secondaryShade_2, width: 1),
+            bottom: BorderSide(color: customs.secondaryShade_2, width: 1),
+            right: BorderSide(color: customs.secondaryShade_2, width: 1)
+        );
+        borders_4 = Border(
+            left: BorderSide(color: customs.secondaryShade_2, width: 1),
+            top: BorderSide(color: customs.secondaryShade_2, width: 1),
+            bottom: BorderSide(color: customs.secondaryShade_2, width: 1),
+            right: BorderSide(color: customs.secondaryShade_2, width: 1)
+        );
+        display_data = [];
+
+      });
+
       //get the milk prices
       getMilkPrices();
 

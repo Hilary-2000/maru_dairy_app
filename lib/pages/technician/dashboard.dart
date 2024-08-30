@@ -68,7 +68,6 @@ class _technicianDashboardState extends State<technicianDashboard> {
       ),
       body: technician_windows[index],
       bottomNavigationBar: Builder(builder: (context) {
-        double height = MediaQuery.of(context).size.height;
         double width = MediaQuery.of(context).size.width;
         return Container(
           decoration: BoxDecoration(
@@ -242,8 +241,7 @@ class _TechnicianDashboardState extends State<TechnicianDashboard> {
   // technician data
   String full_name = "Invalid User";
   String greetings = "Hello";
-  String profile_photo =
-      "https://lsims.ladybirdsmis.com/sims/images/sch_profiles/testimonytbl1/kibwezi.jpg";
+  String profile_photo = "https://lsims.ladybirdsmis.com/sims/images/sch_profiles/testimonytbl1/kibwezi.jpg";
 
   void initState() {
     // TODO: implement initState

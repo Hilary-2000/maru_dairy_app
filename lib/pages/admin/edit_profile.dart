@@ -24,6 +24,7 @@ class _AdminEditProfileState extends State<AdminEditProfile> {
   String genderDV = "";
   bool loading = false;
   bool save_member = false;
+  bool _init = false;
   final _formKey = GlobalKey<FormState>();
 
   // change to camel case
@@ -43,8 +44,14 @@ class _AdminEditProfileState extends State<AdminEditProfile> {
   void didChangeDependencies(){
     super.didChangeDependencies();
 
-    // get member details
-    getAdminDetails();
+    if(!_init){
+      // get member details
+      getAdminDetails();
+
+      setState(() {
+        _init = true;
+      });
+    }
   }
 
   // get the member details

@@ -24,42 +24,43 @@ class _CaptureMilkDataState extends State<CaptureMilkData> {
   List<Color> colors_shade = [];
   List<Color> bg_color = [];
   List<TextStyle> textStyles = [];
+  bool _init = false;
 
-  Future<void> _selectDate(BuildContext context) async {
-    final DateTime? pickedDate = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime.now(),
-      lastDate: DateTime(2101),
-    );
-    if (pickedDate != null && pickedDate != _selectedDate)
-      setState(() {
-        _selectedDate = pickedDate;
-        _dateController.text = DateFormat("MMMM d, yyyy").format(_selectedDate!).toString();
-      });
-  }
-
-  Future<void> _selectTime(BuildContext context) async {
-    final TimeOfDay? pickedTime = await showTimePicker(
-      context: context,
-      initialTime: _selectedTime != null
-          ? TimeOfDay.fromDateTime(_selectedTime!)
-          : TimeOfDay.now(),
-    );
-    if (pickedTime != null) {
-      setState(() {
-        _selectedTime = DateTime(
-          _selectedTime?.year ?? DateTime.now().year,
-          _selectedTime?.month ?? DateTime.now().month,
-          _selectedTime?.day ?? DateTime.now().day,
-          pickedTime.hour,
-          pickedTime.minute,
-        );
-
-        _timeController.text = DateFormat("h:mm a").format(_selectedTime!).toString();
-      });
-    }
-  }
+  // Future<void> _selectDate(BuildContext context) async {
+  //   final DateTime? pickedDate = await showDatePicker(
+  //     context: context,
+  //     initialDate: DateTime.now(),
+  //     firstDate: DateTime.now(),
+  //     lastDate: DateTime(2101),
+  //   );
+  //   if (pickedDate != null && pickedDate != _selectedDate)
+  //     setState(() {
+  //       _selectedDate = pickedDate;
+  //       _dateController.text = DateFormat("MMMM d, yyyy").format(_selectedDate!).toString();
+  //     });
+  // }
+  //
+  // Future<void> _selectTime(BuildContext context) async {
+  //   final TimeOfDay? pickedTime = await showTimePicker(
+  //     context: context,
+  //     initialTime: _selectedTime != null
+  //         ? TimeOfDay.fromDateTime(_selectedTime!)
+  //         : TimeOfDay.now(),
+  //   );
+  //   if (pickedTime != null) {
+  //     setState(() {
+  //       _selectedTime = DateTime(
+  //         _selectedTime?.year ?? DateTime.now().year,
+  //         _selectedTime?.month ?? DateTime.now().month,
+  //         _selectedTime?.day ?? DateTime.now().day,
+  //         pickedTime.hour,
+  //         pickedTime.minute,
+  //       );
+  //
+  //       _timeController.text = DateFormat("h:mm a").format(_selectedTime!).toString();
+  //     });
+  //   }
+  // }
 
   bool isValidJson(String jsonString) {
     try {
@@ -141,30 +142,35 @@ class _CaptureMilkDataState extends State<CaptureMilkData> {
 
   @override
   void didChangeDependencies() async{
-    setState(() {
-      loading = true;
-      bg_color = [customs.primaryColor, customs.secondaryColor, customs.warningColor, customs.darkColor, customs.successColor];
-      colors_shade = [customs.primaryShade, customs.secondaryShade, customs.warningShade, customs.darkShade, customs.successShade];
-      textStyles = [
-        customs.primaryTextStyle(
-            size: 30, fontweight: FontWeight.bold
-        ),
-        customs.secondaryTextStyle(
-            size: 30, fontweight: FontWeight.bold
-        ),
-        customs.warningTextStyle(
-            size: 30, fontweight: FontWeight.bold
-        ),
-        customs.darkTextStyle(
-            size: 30, fontweight: FontWeight.bold
-        ),
-        customs.secondaryTextStyle(
-            size: 30, fontweight: FontWeight.bold
-        ),
-      ];
-    });
     super.didChangeDependencies();
-    await memberData();
+    if(!_init){
+      setState(() {
+        loading = true;
+        bg_color = [customs.primaryColor, customs.secondaryColor, customs.warningColor, customs.darkColor, customs.successColor];
+        colors_shade = [customs.primaryShade, customs.secondaryShade, customs.warningShade, customs.darkShade, customs.successShade];
+        textStyles = [
+          customs.primaryTextStyle(
+              size: 30, fontweight: FontWeight.bold
+          ),
+          customs.secondaryTextStyle(
+              size: 30, fontweight: FontWeight.bold
+          ),
+          customs.warningTextStyle(
+              size: 30, fontweight: FontWeight.bold
+          ),
+          customs.darkTextStyle(
+              size: 30, fontweight: FontWeight.bold
+          ),
+          customs.secondaryTextStyle(
+              size: 30, fontweight: FontWeight.bold
+          ),
+        ];
+      });
+      await memberData();
+      setState(() {
+        _init = true;
+      });
+    }
   }
 
   @override

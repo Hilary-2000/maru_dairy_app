@@ -16,6 +16,7 @@ class CollectMilk extends StatefulWidget {
 class _CollectMilkState extends State<CollectMilk> {
   CustomThemes customs = CustomThemes();
   bool loadMembers = false;
+  bool _init = false;
   TextEditingController searchMember = TextEditingController();
   List<Color> colors_shade = [];
   List<TextStyle> textStyles = [];
@@ -28,231 +29,233 @@ class _CollectMilkState extends State<CollectMilk> {
 
   @override
   void didChangeDependencies(){
-    setState(() {
-      colors_shade = [customs.primaryShade, customs.secondaryShade, customs.warningShade, customs.darkShade, customs.successShade];
-      textStyles = [
-        customs.primaryTextStyle(
-            size: 18, fontweight: FontWeight.bold
-        ),
-        customs.secondaryTextStyle(
-            size: 18, fontweight: FontWeight.bold
-        ),
-        customs.warningTextStyle(
-            size: 18, fontweight: FontWeight.bold
-        ),
-        customs.darkTextStyle(
-            size: 18, fontweight: FontWeight.bold
-        ),
-        customs.secondaryTextStyle(
-            size: 18, fontweight: FontWeight.bold
-        ),
-      ];
-    });
     super.didChangeDependencies();
     double width = MediaQuery.of(context).size.width;
-    // initialize the members
-    setState(() {
-      memberList = [
-        Column(
-          children: [
-            GestureDetector(
-              onTap: () {
-              },
-              child: Container(
-                margin: EdgeInsets.zero,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(5),
-                  color: customs.secondaryShade_2.withOpacity(0.2),
-                ),
-                child: Material(
-                  color: Colors.transparent,
-                  child: ListTile(
-                    dense: true,
-                    leading: CircleAvatar(
-                      backgroundColor: customs.warningShade,
-                      child: Text(
-                        "PM",
-                        style: customs.primaryTextStyle(
-                            size: 18, fontweight: FontWeight.bold),
-                      ),
-                    ),
-                    title: Text(
-                      "N/A",
-                      style: customs.darkTextStyle(size: 14),
-                    ),
-                    subtitle: Text(
-                      "N/A",
-                      style: customs.secondaryTextStyle(size: 12),
-                    ),
-                    trailing: Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text("N/A",
-                            style: customs.darkTextStyle(size: 12)),
-                        Text(
-                          "N/A",
-                          style: customs.secondaryTextStyle(
-                              size: 12,
-                              fontweight: FontWeight.normal),
-                        ),
-                        Container(
-                          width: 10,
-                          height: 10,
-                          decoration: BoxDecoration(
-                              color: customs.secondaryShade,
-                              borderRadius:BorderRadius.circular(5)
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            Container(
-              width: width * 0.5,
-              child: Divider(
-                color: customs.secondaryShade_2.withOpacity(0.2),
-              ),
-            )
-          ],
-        ),
-        Column(
-          children: [
-            GestureDetector(
-              onTap: () {
-              },
-              child: Container(
-                margin: EdgeInsets.zero,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(5),
-                  color: customs.secondaryShade_2.withOpacity(0.2),
-                ),
-                child: Material(
-                  color: Colors.transparent,
-                  child: ListTile(
-                    dense: true,
-                    leading: CircleAvatar(
-                      backgroundColor: customs.primaryShade,
-                      child: Text(
-                        "PM",
-                        style: customs.primaryTextStyle(
-                            size: 18, fontweight: FontWeight.bold),
-                      ),
-                    ),
-                    title: Text(
-                      "N/A",
-                      style: customs.darkTextStyle(size: 14),
-                    ),
-                    subtitle: Text(
-                      "N/A",
-                      style: customs.secondaryTextStyle(size: 12),
-                    ),
-                    trailing: Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text("N/A",
-                            style: customs.darkTextStyle(size: 12)),
-                        Text(
-                          "N/A",
-                          style: customs.secondaryTextStyle(
-                              size: 12,
-                              fontweight: FontWeight.normal),
-                        ),
-                        Container(
-                          width: 10,
-                          height: 10,
-                          decoration: BoxDecoration(
-                              color: customs.secondaryShade,
-                              borderRadius:BorderRadius.circular(5)
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            Container(
-              width: width * 0.5,
-              child: Divider(
-                color: customs.secondaryShade_2.withOpacity(0.2),
-              ),
-            )
-          ],
-        ),
-        Column(
-          children: [
-            GestureDetector(
-              onTap: () {
-              },
-              child: Container(
-                margin: EdgeInsets.zero,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(5),
-                  color: customs.secondaryShade_2.withOpacity(0.2),
-                ),
-                child: Material(
-                  color: Colors.transparent,
-                  child: ListTile(
-                    dense: true,
-                    leading: CircleAvatar(
-                      backgroundColor: customs.dangerShade,
-                      child: Text(
-                        "PM",
-                        style: customs.primaryTextStyle(
-                            size: 18, fontweight: FontWeight.bold),
-                      ),
-                    ),
-                    title: Text(
-                      "N/A",
-                      style: customs.darkTextStyle(size: 14),
-                    ),
-                    subtitle: Text(
-                      "N/A",
-                      style: customs.secondaryTextStyle(size: 12),
-                    ),
-                    trailing: Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text("N/A",
-                            style: customs.darkTextStyle(size: 12)),
-                        Text(
-                          "N/A",
-                          style: customs.secondaryTextStyle(
-                              size: 12,
-                              fontweight: FontWeight.normal),
-                        ),
-                        Container(
-                          width: 10,
-                          height: 10,
-                          decoration: BoxDecoration(
-                              color: customs.secondaryShade,
-                              borderRadius:BorderRadius.circular(5)
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            Container(
-              width: width * 0.5,
-              child: Divider(
-                color: customs.secondaryShade_2.withOpacity(0.2),
-              ),
-            )
-          ],
-        ),
-      ];
-    });
 
-    // GET MEMBERS
-    getMembers(context);
+    if(!_init){
+      // initialize the members
+      setState(() {
+        colors_shade = [customs.primaryShade, customs.secondaryShade, customs.warningShade, customs.darkShade, customs.successShade];
+        textStyles = [
+          customs.primaryTextStyle(
+              size: 18, fontweight: FontWeight.bold
+          ),
+          customs.secondaryTextStyle(
+              size: 18, fontweight: FontWeight.bold
+          ),
+          customs.warningTextStyle(
+              size: 18, fontweight: FontWeight.bold
+          ),
+          customs.darkTextStyle(
+              size: 18, fontweight: FontWeight.bold
+          ),
+          customs.secondaryTextStyle(
+              size: 18, fontweight: FontWeight.bold
+          ),
+        ];
+        memberList = [
+          Column(
+            children: [
+              GestureDetector(
+                onTap: () {
+                },
+                child: Container(
+                  margin: EdgeInsets.zero,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5),
+                    color: customs.secondaryShade_2.withOpacity(0.2),
+                  ),
+                  child: Material(
+                    color: Colors.transparent,
+                    child: ListTile(
+                      dense: true,
+                      leading: CircleAvatar(
+                        backgroundColor: customs.warningShade,
+                        child: Text(
+                          "PM",
+                          style: customs.primaryTextStyle(
+                              size: 18, fontweight: FontWeight.bold),
+                        ),
+                      ),
+                      title: Text(
+                        "N/A",
+                        style: customs.darkTextStyle(size: 14),
+                      ),
+                      subtitle: Text(
+                        "N/A",
+                        style: customs.secondaryTextStyle(size: 12),
+                      ),
+                      trailing: Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text("N/A",
+                              style: customs.darkTextStyle(size: 12)),
+                          Text(
+                            "N/A",
+                            style: customs.secondaryTextStyle(
+                                size: 12,
+                                fontweight: FontWeight.normal),
+                          ),
+                          Container(
+                            width: 10,
+                            height: 10,
+                            decoration: BoxDecoration(
+                                color: customs.secondaryShade,
+                                borderRadius:BorderRadius.circular(5)
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              Container(
+                width: width * 0.5,
+                child: Divider(
+                  color: customs.secondaryShade_2.withOpacity(0.2),
+                ),
+              )
+            ],
+          ),
+          Column(
+            children: [
+              GestureDetector(
+                onTap: () {
+                },
+                child: Container(
+                  margin: EdgeInsets.zero,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5),
+                    color: customs.secondaryShade_2.withOpacity(0.2),
+                  ),
+                  child: Material(
+                    color: Colors.transparent,
+                    child: ListTile(
+                      dense: true,
+                      leading: CircleAvatar(
+                        backgroundColor: customs.primaryShade,
+                        child: Text(
+                          "PM",
+                          style: customs.primaryTextStyle(
+                              size: 18, fontweight: FontWeight.bold),
+                        ),
+                      ),
+                      title: Text(
+                        "N/A",
+                        style: customs.darkTextStyle(size: 14),
+                      ),
+                      subtitle: Text(
+                        "N/A",
+                        style: customs.secondaryTextStyle(size: 12),
+                      ),
+                      trailing: Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text("N/A",
+                              style: customs.darkTextStyle(size: 12)),
+                          Text(
+                            "N/A",
+                            style: customs.secondaryTextStyle(
+                                size: 12,
+                                fontweight: FontWeight.normal),
+                          ),
+                          Container(
+                            width: 10,
+                            height: 10,
+                            decoration: BoxDecoration(
+                                color: customs.secondaryShade,
+                                borderRadius:BorderRadius.circular(5)
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              Container(
+                width: width * 0.5,
+                child: Divider(
+                  color: customs.secondaryShade_2.withOpacity(0.2),
+                ),
+              )
+            ],
+          ),
+          Column(
+            children: [
+              GestureDetector(
+                onTap: () {
+                },
+                child: Container(
+                  margin: EdgeInsets.zero,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5),
+                    color: customs.secondaryShade_2.withOpacity(0.2),
+                  ),
+                  child: Material(
+                    color: Colors.transparent,
+                    child: ListTile(
+                      dense: true,
+                      leading: CircleAvatar(
+                        backgroundColor: customs.dangerShade,
+                        child: Text(
+                          "PM",
+                          style: customs.primaryTextStyle(
+                              size: 18, fontweight: FontWeight.bold),
+                        ),
+                      ),
+                      title: Text(
+                        "N/A",
+                        style: customs.darkTextStyle(size: 14),
+                      ),
+                      subtitle: Text(
+                        "N/A",
+                        style: customs.secondaryTextStyle(size: 12),
+                      ),
+                      trailing: Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text("N/A",
+                              style: customs.darkTextStyle(size: 12)),
+                          Text(
+                            "N/A",
+                            style: customs.secondaryTextStyle(
+                                size: 12,
+                                fontweight: FontWeight.normal),
+                          ),
+                          Container(
+                            width: 10,
+                            height: 10,
+                            decoration: BoxDecoration(
+                                color: customs.secondaryShade,
+                                borderRadius:BorderRadius.circular(5)
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              Container(
+                width: width * 0.5,
+                child: Divider(
+                  color: customs.secondaryShade_2.withOpacity(0.2),
+                ),
+              )
+            ],
+          ),
+        ];
+        _init = true;
+      });
+
+      // GET MEMBERS
+      getMembers(context);
+    }
   }
 
   String nameAbbr(String name){
@@ -302,7 +305,6 @@ class _CollectMilkState extends State<CollectMilk> {
     // print(response);
     if(isValidJson(response)){
       var data = jsonDecode(response);
-      double width = MediaQuery.of(context).size.width;
       // GET THE MEMBER DATA
       displayCollectionHistory(data['data']);
       setState(() {

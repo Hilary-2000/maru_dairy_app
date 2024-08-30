@@ -35,13 +35,13 @@ class _UpdateMilkPricesState extends State<UpdateMilkPrices> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    //date format
-    date = DateFormat('EEE, d MMM yyyy').format(date_time);
 
     if(!_initialized){
+      //date format
+      date = DateFormat('EEE, d MMM yyyy').format(date_time);
       getCurrentMilkDetails();
       setState(() {
-        _initialized = !_initialized;
+        _initialized = true;
       });
     }
   }

@@ -16,6 +16,7 @@ class _OurMembersState extends State<OurMembers> {
   CustomThemes customs = CustomThemes();
   List<Widget> members = [];
   bool loading = false;
+  bool _init = false;
   var member_list = [];
   List<Color> colors_shade = [];
   List<TextStyle> textStyles = [];
@@ -183,280 +184,286 @@ class _OurMembersState extends State<OurMembers> {
   void didChangeDependencies(){
     super.didChangeDependencies();
 
-    // double width
-    double width = MediaQuery.of(context).size.width;
-    setState(() {
-      members = [
-        GestureDetector(
-          onTap: () {
-            Navigator.pushNamed(
-                context, "/admin_member_details");
-          },
-          child: Container(
-            margin: EdgeInsets.zero,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5),
-              color: customs.secondaryShade_2.withOpacity(0.2),
-            ),
-            child: Material(
-              color: Colors.transparent,
-              child: ListTile(
-                dense: true,
-                leading: CircleAvatar(
-                  backgroundColor: customs.primaryShade,
-                  child: Text(
-                    "PM",
-                    style: customs.primaryTextStyle(
-                        size: 18, fontweight: FontWeight.bold),
-                  ),
-                ),
-                title: Text(
-                  "Patrick Mugoh",
-                  style: customs.darkTextStyle(size: 14),
-                ),
-                subtitle: Text(
-                  "REG2024-003",
-                  style: customs.secondaryTextStyle(size: 12),
-                ),
-                trailing: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text("Njebi",
-                        style: customs.darkTextStyle(size: 12)),
-                    Text(
-                      "0713620727",
-                      style: customs.secondaryTextStyle(
-                          size: 12,
-                          fontweight: FontWeight.normal),
+    if(!_init){
+      // double width
+      double width = MediaQuery.of(context).size.width;
+      setState(() {
+        members = [
+          GestureDetector(
+            onTap: () {
+              Navigator.pushNamed(
+                  context, "/admin_member_details");
+            },
+            child: Container(
+              margin: EdgeInsets.zero,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(5),
+                color: customs.secondaryShade_2.withOpacity(0.2),
+              ),
+              child: Material(
+                color: Colors.transparent,
+                child: ListTile(
+                  dense: true,
+                  leading: CircleAvatar(
+                    backgroundColor: customs.primaryShade,
+                    child: Text(
+                      "PM",
+                      style: customs.primaryTextStyle(
+                          size: 18, fontweight: FontWeight.bold),
                     ),
-                    Container(
-                      width: 10,
-                      height: 10,
-                      decoration: BoxDecoration(
-                          color: customs.secondaryShade,
-                          borderRadius:BorderRadius.circular(5)
+                  ),
+                  title: Text(
+                    "Patrick Mugoh",
+                    style: customs.darkTextStyle(size: 14),
+                  ),
+                  subtitle: Text(
+                    "REG2024-003",
+                    style: customs.secondaryTextStyle(size: 12),
+                  ),
+                  trailing: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text("Njebi",
+                          style: customs.darkTextStyle(size: 12)),
+                      Text(
+                        "0713620727",
+                        style: customs.secondaryTextStyle(
+                            size: 12,
+                            fontweight: FontWeight.normal),
                       ),
-                    )
-                  ],
+                      Container(
+                        width: 10,
+                        height: 10,
+                        decoration: BoxDecoration(
+                            color: customs.secondaryShade,
+                            borderRadius:BorderRadius.circular(5)
+                        ),
+                      )
+                    ],
+                  ),
                 ),
               ),
             ),
           ),
-        ),
-        Container(
-          width: width * 0.5,
-          child: Divider(
-            color: customs.secondaryShade_2.withOpacity(0.2),
-          ),
-        ),
-        GestureDetector(
-          onTap: () {
-            Navigator.pushNamed(
-                context, "/admin_member_details");
-          },
-          child: Container(
-            margin: EdgeInsets.zero,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5),
+          Container(
+            width: width * 0.5,
+            child: Divider(
               color: customs.secondaryShade_2.withOpacity(0.2),
             ),
-            child: Material(
-              color: Colors.transparent,
-              child: ListTile(
-                dense: true,
-                leading: CircleAvatar(
-                  backgroundColor: customs.successShade_2,
-                  child: Text(
-                    "JM",
-                    style: customs.successTextStyle(
-                        size: 18, fontweight: FontWeight.bold),
-                  ),
-                ),
-                title: Text(
-                  "Jackline Murume",
-                  style: customs.darkTextStyle(size: 14),
-                ),
-                subtitle: Text(
-                  "REG2024-004",
-                  style: customs.secondaryTextStyle(size: 12),
-                ),
-                trailing: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text("Munyu/Kiriti",
-                        style: customs.darkTextStyle(size: 12)),
-                    Text(
-                      "0713622727",
-                      style: customs.secondaryTextStyle(
-                          size: 12,
-                          fontweight: FontWeight.normal),
+          ),
+          GestureDetector(
+            onTap: () {
+              Navigator.pushNamed(
+                  context, "/admin_member_details");
+            },
+            child: Container(
+              margin: EdgeInsets.zero,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(5),
+                color: customs.secondaryShade_2.withOpacity(0.2),
+              ),
+              child: Material(
+                color: Colors.transparent,
+                child: ListTile(
+                  dense: true,
+                  leading: CircleAvatar(
+                    backgroundColor: customs.successShade_2,
+                    child: Text(
+                      "JM",
+                      style: customs.successTextStyle(
+                          size: 18, fontweight: FontWeight.bold),
                     ),
-                    Container(
-                      width: 10,
-                      height: 10,
-                      decoration: BoxDecoration(
-                          color: customs.successColor,
-                          borderRadius:BorderRadius.circular(5)
+                  ),
+                  title: Text(
+                    "Jackline Murume",
+                    style: customs.darkTextStyle(size: 14),
+                  ),
+                  subtitle: Text(
+                    "REG2024-004",
+                    style: customs.secondaryTextStyle(size: 12),
+                  ),
+                  trailing: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text("Munyu/Kiriti",
+                          style: customs.darkTextStyle(size: 12)),
+                      Text(
+                        "0713622727",
+                        style: customs.secondaryTextStyle(
+                            size: 12,
+                            fontweight: FontWeight.normal),
                       ),
-                    )
-                  ],
+                      Container(
+                        width: 10,
+                        height: 10,
+                        decoration: BoxDecoration(
+                            color: customs.successColor,
+                            borderRadius:BorderRadius.circular(5)
+                        ),
+                      )
+                    ],
+                  ),
                 ),
               ),
             ),
           ),
-        ),
-        Container(
-          width: width * 0.5,
-          child: Divider(
-            color: customs.secondaryShade_2.withOpacity(0.2),
-          ),
-        ),
-        GestureDetector(
-          onTap: () {
-            Navigator.pushNamed(
-                context, "/admin_member_details");
-          },
-          child: Container(
-            margin: EdgeInsets.zero,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5),
+          Container(
+            width: width * 0.5,
+            child: Divider(
               color: customs.secondaryShade_2.withOpacity(0.2),
             ),
-            child: Material(
-              color: Colors.transparent,
-              child: ListTile(
-                dense: true,
-                leading: CircleAvatar(
-                  backgroundColor: customs.warningShade_2,
-                  child: Text(
-                    "GM",
-                    style: customs.warningTextStyle(
-                        size: 18, fontweight: FontWeight.bold),
-                  ),
-                ),
-                title: Text(
-                  "Gloria Muwanguzi",
-                  style: customs.darkTextStyle(size: 14),
-                ),
-                subtitle: Text(
-                  "REG2024-006",
-                  style: customs.secondaryTextStyle(size: 12),
-                ),
-                trailing: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text("Njebi",
-                        style: customs.darkTextStyle(size: 12)),
-                    Text(
-                      "0713620727",
-                      style: customs.secondaryTextStyle(
-                          size: 12,
-                          fontweight: FontWeight.normal),
+          ),
+          GestureDetector(
+            onTap: () {
+              Navigator.pushNamed(
+                  context, "/admin_member_details");
+            },
+            child: Container(
+              margin: EdgeInsets.zero,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(5),
+                color: customs.secondaryShade_2.withOpacity(0.2),
+              ),
+              child: Material(
+                color: Colors.transparent,
+                child: ListTile(
+                  dense: true,
+                  leading: CircleAvatar(
+                    backgroundColor: customs.warningShade_2,
+                    child: Text(
+                      "GM",
+                      style: customs.warningTextStyle(
+                          size: 18, fontweight: FontWeight.bold),
                     ),
-                    Container(
-                      width: 10,
-                      height: 10,
-                      decoration: BoxDecoration(
-                          color: customs.secondaryShade,
-                          borderRadius:BorderRadius.circular(5)
+                  ),
+                  title: Text(
+                    "Gloria Muwanguzi",
+                    style: customs.darkTextStyle(size: 14),
+                  ),
+                  subtitle: Text(
+                    "REG2024-006",
+                    style: customs.secondaryTextStyle(size: 12),
+                  ),
+                  trailing: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text("Njebi",
+                          style: customs.darkTextStyle(size: 12)),
+                      Text(
+                        "0713620727",
+                        style: customs.secondaryTextStyle(
+                            size: 12,
+                            fontweight: FontWeight.normal),
                       ),
-                    )
-                  ],
+                      Container(
+                        width: 10,
+                        height: 10,
+                        decoration: BoxDecoration(
+                            color: customs.secondaryShade,
+                            borderRadius:BorderRadius.circular(5)
+                        ),
+                      )
+                    ],
+                  ),
                 ),
               ),
             ),
           ),
-        ),
-        Container(
-          width: width * 0.5,
-          child: Divider(
-            color: customs.secondaryShade_2.withOpacity(0.2),
-          ),
-        ),
-        GestureDetector(
-          onTap: () {
-            Navigator.pushNamed(
-                context, "/admin_member_details");
-          },
-          child: Container(
-            margin: EdgeInsets.zero,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5),
+          Container(
+            width: width * 0.5,
+            child: Divider(
               color: customs.secondaryShade_2.withOpacity(0.2),
             ),
-            child: Material(
-              color: Colors.transparent,
-              child: ListTile(
-                dense: true,
-                leading: CircleAvatar(
-                  backgroundColor: customs.secondaryShade_2,
-                  child: Text(
-                    "PQ",
-                    style: customs.secondaryTextStyle(
-                        size: 18, fontweight: FontWeight.bold),
-                  ),
-                ),
-                title: Text(
-                  "Patrick Quacco",
-                  style: customs.darkTextStyle(size: 14),
-                ),
-                subtitle: Text(
-                  "REG2024-003",
-                  style: customs.secondaryTextStyle(size: 12),
-                ),
-                trailing: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text("Kiriti",
-                        style: customs.darkTextStyle(size: 12)),
-                    Text(
-                      "0713620727",
+          ),
+          GestureDetector(
+            onTap: () {
+              Navigator.pushNamed(
+                  context, "/admin_member_details");
+            },
+            child: Container(
+              margin: EdgeInsets.zero,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(5),
+                color: customs.secondaryShade_2.withOpacity(0.2),
+              ),
+              child: Material(
+                color: Colors.transparent,
+                child: ListTile(
+                  dense: true,
+                  leading: CircleAvatar(
+                    backgroundColor: customs.secondaryShade_2,
+                    child: Text(
+                      "PQ",
                       style: customs.secondaryTextStyle(
-                          size: 12,
-                          fontweight: FontWeight.normal),
+                          size: 18, fontweight: FontWeight.bold),
                     ),
-                    Container(
-                      width: 10,
-                      height: 10,
-                      decoration: BoxDecoration(
-                          color: customs.successColor,
-                          borderRadius:BorderRadius.circular(5)
+                  ),
+                  title: Text(
+                    "Patrick Quacco",
+                    style: customs.darkTextStyle(size: 14),
+                  ),
+                  subtitle: Text(
+                    "REG2024-003",
+                    style: customs.secondaryTextStyle(size: 12),
+                  ),
+                  trailing: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text("Kiriti",
+                          style: customs.darkTextStyle(size: 12)),
+                      Text(
+                        "0713620727",
+                        style: customs.secondaryTextStyle(
+                            size: 12,
+                            fontweight: FontWeight.normal),
                       ),
-                    )
-                  ],
+                      Container(
+                        width: 10,
+                        height: 10,
+                        decoration: BoxDecoration(
+                            color: customs.successColor,
+                            borderRadius:BorderRadius.circular(5)
+                        ),
+                      )
+                    ],
+                  ),
                 ),
               ),
             ),
           ),
-        ),
-      ];
+        ];
 
-      colors_shade = [customs.primaryShade, customs.secondaryShade, customs.warningShade, customs.darkShade, customs.successShade];
-      textStyles = [
-        customs.primaryTextStyle(
-            size: 18, fontweight: FontWeight.bold
-        ),
-        customs.secondaryTextStyle(
-            size: 18, fontweight: FontWeight.bold
-        ),
-        customs.warningTextStyle(
-            size: 18, fontweight: FontWeight.bold
-        ),
-        customs.darkTextStyle(
-            size: 18, fontweight: FontWeight.bold
-        ),
-        customs.secondaryTextStyle(
-            size: 18, fontweight: FontWeight.bold
-        ),
-      ];
-    });
+        colors_shade = [customs.primaryShade, customs.secondaryShade, customs.warningShade, customs.darkShade, customs.successShade];
+        textStyles = [
+          customs.primaryTextStyle(
+              size: 18, fontweight: FontWeight.bold
+          ),
+          customs.secondaryTextStyle(
+              size: 18, fontweight: FontWeight.bold
+          ),
+          customs.warningTextStyle(
+              size: 18, fontweight: FontWeight.bold
+          ),
+          customs.darkTextStyle(
+              size: 18, fontweight: FontWeight.bold
+          ),
+          customs.secondaryTextStyle(
+              size: 18, fontweight: FontWeight.bold
+          ),
+        ];
+      });
 
-    //get the members
-    getMembers();
+      //get the members
+      getMembers();
+
+      setState(() {
+        _init = true;
+      });
+    }
   }
 
   void findKeyWord(keyword){
@@ -504,6 +511,11 @@ class _OurMembersState extends State<OurMembers> {
           child: Column(
             children: [
               Container(
+                width: width,
+                margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                child: Text("Our Members", style: customs.secondaryTextStyle(size: 20, fontweight: FontWeight.bold, underline: true),),
+              ),
+              Container(
                 margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -537,7 +549,7 @@ class _OurMembersState extends State<OurMembers> {
                 child: Container(
                   width: width * 0.95,
                   padding: const EdgeInsets.all(8),
-                  height: height - 90,
+                  height: height - 125,
                   decoration: BoxDecoration(
                       color: customs.whiteColor,
                       borderRadius: BorderRadius.circular(15)),

@@ -21,6 +21,7 @@ class _MemberDetailsState extends State<MemberDetails> {
   String collection_days = "0";
   String collected_amount = "0";
   bool loading = false;
+  bool _init = false;
 
   Future<void> getMemberData() async {
     setState(() {
@@ -68,12 +69,16 @@ class _MemberDetailsState extends State<MemberDetails> {
 
   void didChangeDependencies(){
     super.didChangeDependencies();
-    setState(() {
-      bg_color = [customs.primaryColor, customs.secondaryColor, customs.warningColor, customs.darkColor, customs.successColor];
-    });
 
-    //GET MEMBER DATA
-    getMemberData();
+    if(!_init){
+      setState(() {
+        _init = true;
+        bg_color = [customs.primaryColor, customs.secondaryColor, customs.warningColor, customs.darkColor, customs.successColor];
+      });
+
+      //GET MEMBER DATA
+      getMemberData();
+    }
   }
 
 

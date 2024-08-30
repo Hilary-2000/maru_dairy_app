@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:maru/packages/maru_theme.dart';
 
 class ReadMemberNotification extends StatefulWidget {
@@ -10,10 +9,10 @@ class ReadMemberNotification extends StatefulWidget {
 }
 
 class _ReadMemberNotificationState extends State<ReadMemberNotification> {
+  CustomThemes customs = CustomThemes();
+
   @override
   Widget build(BuildContext context) {
-    CustomThemes customs = CustomThemes();
-    const FlutterSecureStorage _storage = FlutterSecureStorage();
 
     return Scaffold(
       backgroundColor: customs.whiteColor,

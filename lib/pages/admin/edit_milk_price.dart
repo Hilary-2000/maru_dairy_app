@@ -24,14 +24,21 @@ class _EditMilkPriceState extends State<EditMilkPrice> {
   String date = "Mon, 25th Aug 2024";
   DateTime date_time = DateTime.now();
   bool save_n_publish = false;
+  bool _init = false;
   DateTime min_date = DateTime.now().add(Duration(days: 1000));
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    //date format
-    date = DateFormat('EEE, d MMM yyyy').format(date_time);
-    getCurrentMilkPrice();
+
+    if(!_init){
+      //date format
+      date = DateFormat('EEE, d MMM yyyy').format(date_time);
+      getCurrentMilkPrice();
+
+      // initialize
+      _init = true;
+    }
   }
 
   Future<void> getCurrentMilkPrice() async {

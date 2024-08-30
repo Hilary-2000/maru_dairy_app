@@ -11,22 +11,22 @@ class InquiryInbox extends StatefulWidget {
 }
 
 class _InquiryInboxState extends State<InquiryInbox> {
+  CustomThemes customs = CustomThemes();
+
+  List<DropdownMenuItem<String>> regions = [
+    const DropdownMenuItem(child: Text("Select your region"), value: ""),
+    const DropdownMenuItem(child: Text("Njebi"), value: "Njebi"),
+    const DropdownMenuItem(child: Text("Munyu/Kiriti"), value: "Munyu/Kiriti"),
+  ];
+
+  List<DropdownMenuItem<String>> genderList = [
+    const DropdownMenuItem(child: Text("Select Gender"), value: ""),
+    const DropdownMenuItem(child: Text("Male"), value: "male"),
+    const DropdownMenuItem(child: Text("Female"), value: "female"),
+  ];
+
   @override
   Widget build(BuildContext context) {
-    CustomThemes customs = CustomThemes();
-    const FlutterSecureStorage _storage = FlutterSecureStorage();
-
-    List<DropdownMenuItem<String>> regions = [
-      const DropdownMenuItem(child: Text("Select your region"), value: ""),
-      const DropdownMenuItem(child: Text("Njebi"), value: "Njebi"),
-      const DropdownMenuItem(child: Text("Munyu/Kiriti"), value: "Munyu/Kiriti"),
-    ];
-
-    List<DropdownMenuItem<String>> genderList = [
-      const DropdownMenuItem(child: Text("Select Gender"), value: ""),
-      const DropdownMenuItem(child: Text("Male"), value: "male"),
-      const DropdownMenuItem(child: Text("Female"), value: "female"),
-    ];
 
     return Scaffold(
       backgroundColor: customs.whiteColor,

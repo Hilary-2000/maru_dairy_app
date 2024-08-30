@@ -21,12 +21,19 @@ class _MemberMilkDetailsState extends State<MemberMilkDetails> {
   bool all_status = false;
   String milk_price = "0";
   String ppl = "0";
+  bool _init = false;
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    //get the milk details
-    getMilkDetails();
+    if(!_init){
+      //get the milk details
+      getMilkDetails();
+
+      setState(() {
+        _init = true;
+      });
+    }
   }
 
   Future<void> changeStatus(String status) async {

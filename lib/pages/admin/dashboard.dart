@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:maru/packages/api_connection.dart';
 import 'package:maru/packages/maru_theme.dart';
 import 'package:maru/pages/admin/admin_account.dart';
@@ -77,7 +76,6 @@ class _adminDashboardState extends State<adminDashboard> {
       ),
       body: admin_dashboard[index],
       bottomNavigationBar: Builder(builder: (context) {
-        double height = MediaQuery.of(context).size.height;
         double width = MediaQuery.of(context).size.width;
         return Container(
           decoration: BoxDecoration(
@@ -334,6 +332,7 @@ class AdminDashboard extends StatefulWidget {
 class _AdminDashboardState extends State<AdminDashboard> {
   CustomThemes customs = CustomThemes();
   bool loading = false;
+  bool _init = false;
   int index = 0;
   String drop_down = "7";
   String greetings = "Hello";
@@ -451,185 +450,188 @@ class _AdminDashboardState extends State<AdminDashboard> {
 
   void didChangeDependencies() {
     super.didChangeDependencies();
-    setState(() {
-      collectionPlot = [
-        BarChartGroupData(x: 1, barRods: [
-          BarChartRodData(
-            toY: 150,
-            color: customs.primaryColor,
-          )
-        ], showingTooltipIndicators: [
-          0
-        ]),
-        BarChartGroupData(x: 2, barRods: [
-          BarChartRodData(
-            toY: 350,
-            color: customs.primaryColor,
-          )
-        ], showingTooltipIndicators: [
-          0
-        ]),
-        BarChartGroupData(x: 3, barRods: [
-          BarChartRodData(
-            toY: 202,
-            color: customs.primaryColor,
-          )
-        ], showingTooltipIndicators: [
-          0
-        ]),
-        BarChartGroupData(x: 4, barRods: [
-          BarChartRodData(
-            toY: 124,
-            color: customs.primaryColor,
-          )
-        ], showingTooltipIndicators: [
-          0
-        ]),
-        BarChartGroupData(x: 5, barRods: [
-          BarChartRodData(
-            toY: 454,
-            color: customs.primaryColor,
-          )
-        ], showingTooltipIndicators: [
-          0
-        ]),
-        BarChartGroupData(x: 6, barRods: [
-          BarChartRodData(
-            toY: 279,
-            color: customs.primaryColor,
-          )
-        ], showingTooltipIndicators: [
-          0
-        ]),
-        BarChartGroupData(x: 7, barRods: [
-          BarChartRodData(
-            toY: 248,
-            color: customs.primaryColor,
-          )
-        ], showingTooltipIndicators: [
-          0
-        ])
-      ];
-      membersPresentPlot = [
-        BarChartGroupData(x: 1, barRods: [
-          BarChartRodData(
-            toY: 15,
-            color: customs.primaryColor,
-          )
-        ], showingTooltipIndicators: [
-          0
-        ]),
-        BarChartGroupData(x: 2, barRods: [
-          BarChartRodData(
-            toY: 20,
-            color: customs.primaryColor,
-          )
-        ], showingTooltipIndicators: [
-          0
-        ]),
-        BarChartGroupData(x: 3, barRods: [
-          BarChartRodData(
-            toY: 25,
-            color: customs.primaryColor,
-          )
-        ], showingTooltipIndicators: [
-          0
-        ]),
-        BarChartGroupData(x: 4, barRods: [
-          BarChartRodData(
-            toY: 25,
-            color: customs.primaryColor,
-          )
-        ], showingTooltipIndicators: [
-          0
-        ]),
-        BarChartGroupData(x: 5, barRods: [
-          BarChartRodData(
-            toY: 26,
-            color: customs.primaryColor,
-          )
-        ], showingTooltipIndicators: [
-          0
-        ]),
-        BarChartGroupData(x: 6, barRods: [
-          BarChartRodData(
-            toY: 24,
-            color: customs.primaryColor,
-          )
-        ], showingTooltipIndicators: [
-          0
-        ]),
-        BarChartGroupData(x: 7, barRods: [
-          BarChartRodData(
-            toY: 31,
-            color: customs.primaryColor,
-          )
-        ], showingTooltipIndicators: [
-          0
-        ])
-      ];
-      newMembersPlot = [
-        BarChartGroupData(x: 1, barRods: [
-          BarChartRodData(
-            toY: 5,
-            color: customs.primaryColor,
-          )
-        ], showingTooltipIndicators: [
-          0
-        ]),
-        BarChartGroupData(x: 2, barRods: [
-          BarChartRodData(
-            toY: 7,
-            color: customs.primaryColor,
-          )
-        ], showingTooltipIndicators: [
-          0
-        ]),
-        BarChartGroupData(x: 3, barRods: [
-          BarChartRodData(
-            toY: 3,
-            color: customs.primaryColor,
-          )
-        ], showingTooltipIndicators: [
-          0
-        ]),
-        BarChartGroupData(x: 4, barRods: [
-          BarChartRodData(
-            toY: 8,
-            color: customs.primaryColor,
-          )
-        ], showingTooltipIndicators: [
-          0
-        ]),
-        BarChartGroupData(x: 5, barRods: [
-          BarChartRodData(
-            toY: 1,
-            color: customs.primaryColor,
-          )
-        ], showingTooltipIndicators: [
-          0
-        ]),
-        BarChartGroupData(x: 6, barRods: [
-          BarChartRodData(
-            toY: 3,
-            color: customs.primaryColor,
-          )
-        ], showingTooltipIndicators: [
-          0
-        ]),
-        BarChartGroupData(x: 7, barRods: [
-          BarChartRodData(
-            toY: 12,
-            color: customs.primaryColor,
-          )
-        ], showingTooltipIndicators: [
-          0
-        ])
-      ];
-    });
 
     // get the admin dashboard
-    getAdminDash();
+    if(_init){
+      setState(() {
+        collectionPlot = [
+          BarChartGroupData(x: 1, barRods: [
+            BarChartRodData(
+              toY: 150,
+              color: customs.primaryColor,
+            )
+          ], showingTooltipIndicators: [
+            0
+          ]),
+          BarChartGroupData(x: 2, barRods: [
+            BarChartRodData(
+              toY: 350,
+              color: customs.primaryColor,
+            )
+          ], showingTooltipIndicators: [
+            0
+          ]),
+          BarChartGroupData(x: 3, barRods: [
+            BarChartRodData(
+              toY: 202,
+              color: customs.primaryColor,
+            )
+          ], showingTooltipIndicators: [
+            0
+          ]),
+          BarChartGroupData(x: 4, barRods: [
+            BarChartRodData(
+              toY: 124,
+              color: customs.primaryColor,
+            )
+          ], showingTooltipIndicators: [
+            0
+          ]),
+          BarChartGroupData(x: 5, barRods: [
+            BarChartRodData(
+              toY: 454,
+              color: customs.primaryColor,
+            )
+          ], showingTooltipIndicators: [
+            0
+          ]),
+          BarChartGroupData(x: 6, barRods: [
+            BarChartRodData(
+              toY: 279,
+              color: customs.primaryColor,
+            )
+          ], showingTooltipIndicators: [
+            0
+          ]),
+          BarChartGroupData(x: 7, barRods: [
+            BarChartRodData(
+              toY: 248,
+              color: customs.primaryColor,
+            )
+          ], showingTooltipIndicators: [
+            0
+          ])
+        ];
+        membersPresentPlot = [
+          BarChartGroupData(x: 1, barRods: [
+            BarChartRodData(
+              toY: 15,
+              color: customs.primaryColor,
+            )
+          ], showingTooltipIndicators: [
+            0
+          ]),
+          BarChartGroupData(x: 2, barRods: [
+            BarChartRodData(
+              toY: 20,
+              color: customs.primaryColor,
+            )
+          ], showingTooltipIndicators: [
+            0
+          ]),
+          BarChartGroupData(x: 3, barRods: [
+            BarChartRodData(
+              toY: 25,
+              color: customs.primaryColor,
+            )
+          ], showingTooltipIndicators: [
+            0
+          ]),
+          BarChartGroupData(x: 4, barRods: [
+            BarChartRodData(
+              toY: 25,
+              color: customs.primaryColor,
+            )
+          ], showingTooltipIndicators: [
+            0
+          ]),
+          BarChartGroupData(x: 5, barRods: [
+            BarChartRodData(
+              toY: 26,
+              color: customs.primaryColor,
+            )
+          ], showingTooltipIndicators: [
+            0
+          ]),
+          BarChartGroupData(x: 6, barRods: [
+            BarChartRodData(
+              toY: 24,
+              color: customs.primaryColor,
+            )
+          ], showingTooltipIndicators: [
+            0
+          ]),
+          BarChartGroupData(x: 7, barRods: [
+            BarChartRodData(
+              toY: 31,
+              color: customs.primaryColor,
+            )
+          ], showingTooltipIndicators: [
+            0
+          ])
+        ];
+        newMembersPlot = [
+          BarChartGroupData(x: 1, barRods: [
+            BarChartRodData(
+              toY: 5,
+              color: customs.primaryColor,
+            )
+          ], showingTooltipIndicators: [
+            0
+          ]),
+          BarChartGroupData(x: 2, barRods: [
+            BarChartRodData(
+              toY: 7,
+              color: customs.primaryColor,
+            )
+          ], showingTooltipIndicators: [
+            0
+          ]),
+          BarChartGroupData(x: 3, barRods: [
+            BarChartRodData(
+              toY: 3,
+              color: customs.primaryColor,
+            )
+          ], showingTooltipIndicators: [
+            0
+          ]),
+          BarChartGroupData(x: 4, barRods: [
+            BarChartRodData(
+              toY: 8,
+              color: customs.primaryColor,
+            )
+          ], showingTooltipIndicators: [
+            0
+          ]),
+          BarChartGroupData(x: 5, barRods: [
+            BarChartRodData(
+              toY: 1,
+              color: customs.primaryColor,
+            )
+          ], showingTooltipIndicators: [
+            0
+          ]),
+          BarChartGroupData(x: 6, barRods: [
+            BarChartRodData(
+              toY: 3,
+              color: customs.primaryColor,
+            )
+          ], showingTooltipIndicators: [
+            0
+          ]),
+          BarChartGroupData(x: 7, barRods: [
+            BarChartRodData(
+              toY: 12,
+              color: customs.primaryColor,
+            )
+          ], showingTooltipIndicators: [
+            0
+          ])
+        ];
+      });
+      getAdminDash();
+      _init = true;
+    }
   }
 
   Future<void> getAdminDash() async {

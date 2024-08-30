@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:maru/packages/api_connection.dart';
 import 'package:maru/packages/maru_theme.dart';
@@ -35,6 +34,7 @@ class _MemberDetailsEditState extends State<MemberDetailsEdit> {
   TextEditingController locationController = TextEditingController();
 
   var regionDV = "";
+  bool _init = false;
   List<DropdownMenuItem<String>> regions = [
     const DropdownMenuItem(child: Text("Select your region"), value: ""),
     const DropdownMenuItem(child: Text("Njebi"), value: "Njebi"),
@@ -61,8 +61,14 @@ class _MemberDetailsEditState extends State<MemberDetailsEdit> {
       ];
     });
 
-    //GET MEMBER DATA
-    getMemberData();
+    if(!_init){
+      setState(() {
+        _init = true;
+      });
+
+      //GET MEMBER DATA
+      getMemberData();
+    }
   }
 
   Future<void> getMemberData() async {
