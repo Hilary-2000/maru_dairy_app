@@ -6,14 +6,15 @@ import 'package:maru/packages/api_connection.dart';
 import 'package:maru/packages/maru_theme.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
-class MemberMembership extends StatefulWidget {
-  const MemberMembership({super.key});
+String tags = "edit_earning";
+
+class Membership extends StatefulWidget {
+  const Membership({super.key});
 
   @override
-  State<MemberMembership> createState() => _MemberMembershipState();
+  State<Membership> createState() => _MembershipState();
 }
-
-class _MemberMembershipState extends State<MemberMembership> {
+class _MembershipState extends State<Membership> {
   CustomThemes customs = CustomThemes();
   Map<String, dynamic>? args;
   var member_details = null;
@@ -195,13 +196,13 @@ class _MemberMembershipState extends State<MemberMembership> {
                         margin: EdgeInsets.symmetric(horizontal: 10),
                         width: width,
                         decoration: BoxDecoration(
-                            color: customs.whiteColor,
-                            borderRadius: BorderRadius.circular(10),
-                            boxShadow: [
-                              BoxShadow(color: customs.secondaryShade_2, spreadRadius: 2),
-                              BoxShadow(color: customs.secondaryShade_2, ),
-                              BoxShadow(color: customs.secondaryShade_2, )
-                            ]
+                          color: customs.whiteColor,
+                          borderRadius: BorderRadius.circular(10),
+                          boxShadow: [
+                            BoxShadow(color: customs.secondaryShade_2, spreadRadius: 2),
+                            BoxShadow(color: customs.secondaryShade_2, ),
+                            BoxShadow(color: customs.secondaryShade_2, )
+                          ]
                         ),
                         child: Row(
                           children: [
@@ -217,12 +218,28 @@ class _MemberMembershipState extends State<MemberMembership> {
                                     width: width / 2.4,
                                     child: RichText(
                                       text:TextSpan(
-                                          text: "Member Since: \n",
-                                          style: customs.secondaryTextStyle(size: 12, fontweight: FontWeight.bold),
-                                          children: [TextSpan(
-                                            text: "${member_details != null ? member_details['date_joined'] ?? "N/A" : "N/A"}",
+                                        text: "Member Since: \n",
+                                        style: customs.secondaryTextStyle(size: 12, fontweight: FontWeight.bold),
+                                        children: [TextSpan(
+                                          text: "${member_details != null ? member_details['date_joined'] ?? "N/A" : "N/A"}",
+                                          style: customs.secondaryTextStyle(size: 12),
+                                        )]
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(height: 10,),
+                                  Container(
+                                    width: width / 2.4,
+                                    child: RichText(
+                                      text:TextSpan(
+                                        text: "This Month Pay (${curr_month}): \n",
+                                        style: customs.secondaryTextStyle(size: 12, fontweight: FontWeight.bold),
+                                        children: [
+                                          TextSpan(
+                                            text: "Kes ${current_month_pay}",
                                             style: customs.secondaryTextStyle(size: 12),
-                                          )]
+                                          )
+                                        ]
                                       ),
                                     ),
                                   ),
@@ -231,30 +248,14 @@ class _MemberMembershipState extends State<MemberMembership> {
                                     width: width / 2.4,
                                     child: RichText(
                                       text:TextSpan(
-                                          text: "This Month Pay (${curr_month}): \n",
-                                          style: customs.secondaryTextStyle(size: 12, fontweight: FontWeight.bold),
-                                          children: [
-                                            TextSpan(
-                                              text: "Kes ${current_month_pay}",
-                                              style: customs.secondaryTextStyle(size: 12),
-                                            )
-                                          ]
-                                      ),
-                                    ),
-                                  ),
-                                  SizedBox(height: 10,),
-                                  Container(
-                                    width: width / 2.4,
-                                    child: RichText(
-                                      text:TextSpan(
-                                          text: "Last Month Pay ($last_month): \n",
-                                          style: customs.secondaryTextStyle(size: 12, fontweight: FontWeight.bold),
-                                          children: [
-                                            TextSpan(
-                                              text: "Kes $last_month_pay",
-                                              style: customs.secondaryTextStyle(size: 12),
-                                            )
-                                          ]
+                                        text: "Last Month Pay ($last_month): \n",
+                                        style: customs.secondaryTextStyle(size: 12, fontweight: FontWeight.bold),
+                                        children: [
+                                          TextSpan(
+                                            text: "Kes $last_month_pay",
+                                            style: customs.secondaryTextStyle(size: 12),
+                                          )
+                                        ]
                                       ),
                                     ),
                                   )
@@ -265,11 +266,11 @@ class _MemberMembershipState extends State<MemberMembership> {
                               height: 150,
                               width: width/15,
                               child: VerticalDivider(
-                                color: customs.secondaryShade_2, // Color of the divider
-                                thickness: 2, // Thickness of the line
-                                width: 20, // Total width occupied by the divider
-                                indent: 20, // Empty space at the top of the divider
-                                endIndent: 20,
+                                  color: customs.secondaryShade_2, // Color of the divider
+                                  thickness: 2, // Thickness of the line
+                                  width: 20, // Total width occupied by the divider
+                                  indent: 20, // Empty space at the top of the divider
+                                  endIndent: 20,
                               ),
                             ),
                             Container(
@@ -312,14 +313,14 @@ class _MemberMembershipState extends State<MemberMembership> {
                                     width: width / 2.4,
                                     child: RichText(
                                       text:TextSpan(
-                                          text: "Annual Subscription: \n",
-                                          style: customs.secondaryTextStyle(size: 12, fontweight: FontWeight.bold),
-                                          children: [
-                                            TextSpan(
-                                              text: "Kes ${annual_subscription_balance}",
-                                              style: customs.secondaryTextStyle(size: 12),
-                                            )
-                                          ]
+                                        text: "Annual Subscription: \n",
+                                        style: customs.secondaryTextStyle(size: 12, fontweight: FontWeight.bold),
+                                        children: [
+                                          TextSpan(
+                                            text: "Kes ${annual_subscription_balance}",
+                                            style: customs.secondaryTextStyle(size: 12),
+                                          )
+                                        ]
                                       ),
                                     ),
                                   )
@@ -335,8 +336,8 @@ class _MemberMembershipState extends State<MemberMembership> {
                       child: Text(
                         "Payments & Deductions",
                         style: customs.secondaryTextStyle(
-                            size: 14,
-                            fontweight: FontWeight.bold
+                          size: 14,
+                          fontweight: FontWeight.bold
                         ),
                       ),
                     ),
@@ -354,9 +355,9 @@ class _MemberMembershipState extends State<MemberMembership> {
                                 unselectedLabelColor: customs.secondaryColor,
                                 indicatorColor: customs.primaryColor,
                                 labelStyle: customs.secondaryTextStyle(
-                                    size: 12,
-                                    fontweight: FontWeight.normal,
-                                    underline: false
+                                  size: 12,
+                                  fontweight: FontWeight.normal,
+                                  underline: false
                                 ),
                                 tabs: [
                                   Tab(child: Text("Annual Subscription", style: customs.secondaryTextStyle(size: 12, fontweight: FontWeight.bold),),),
@@ -369,70 +370,70 @@ class _MemberMembershipState extends State<MemberMembership> {
                                     Container(
                                       padding: EdgeInsets.all(10),
                                       child: annual_sub_n_payment.length > 0 ? ListView.builder(
-                                          itemCount: annual_sub_n_payment.length,
-                                          itemBuilder: (context, index){
-                                            return Column(
-                                              children: [
-                                                Container(
-                                                  padding: EdgeInsets.symmetric(horizontal: 10),
-                                                  width: width,
-                                                  child: Text("${annual_sub_n_payment[index]['year']}", style: customs.secondaryTextStyle(size: 12),),
-                                                ),
-                                                Container(
-                                                  height: double.parse(((annual_sub_n_payment[index]['subscription'].length) * 65).toString()),
-                                                  child: ListView.builder(
-                                                      itemCount: annual_sub_n_payment[index]['subscription'].length,
-                                                      itemBuilder: (contexts, indexes){
-                                                        var items = annual_sub_n_payment[index]['subscription'][indexes];
-                                                        return Container(
-                                                          margin: EdgeInsets.symmetric(vertical: 3, horizontal: 5),
-                                                          padding: EdgeInsets.symmetric(vertical: 5),
-                                                          decoration: BoxDecoration(
-                                                              color: customs.secondaryShade_2.withOpacity(0.2),
-                                                              borderRadius: BorderRadius.circular(10)
-                                                          ),
-                                                          child: ListTile(
-                                                            leading: CircleAvatar(
-                                                              radius: 30,
-                                                              backgroundColor: customs.primaryShade_2,
-                                                              child: Icon(
-                                                                FontAwesomeIcons.dollarSign,
-                                                                size: 20,
-                                                                color: customs.primaryColor,
-                                                              ),
-                                                            ),
-                                                            dense: true,
-                                                            style: ListTileStyle.drawer,
-                                                            title: RichText(
-                                                                text: TextSpan(
-                                                                    text: "",
-                                                                    style: customs.secondaryTextStyle(size: 10, fontweight: FontWeight.bold),
-                                                                    children: [
-                                                                      TextSpan(
-                                                                          text: "Kes ${items['deduction_type'] == "increase" ? "+" : "-"}${items['deduction_amount']}",
-                                                                          style: customs.secondaryTextStyle(size: 14, fontweight: FontWeight.bold)
-                                                                      )
-                                                                    ]
-                                                                )
-                                                            ),
-                                                            trailing: Column(
-                                                              mainAxisAlignment: MainAxisAlignment.center,
-                                                              crossAxisAlignment: CrossAxisAlignment.end,
+                                        itemCount: annual_sub_n_payment.length,
+                                        itemBuilder: (context, index){
+                                          return Column(
+                                            children: [
+                                              Container(
+                                                padding: EdgeInsets.symmetric(horizontal: 10),
+                                                width: width,
+                                                child: Text("${annual_sub_n_payment[index]['year']}", style: customs.secondaryTextStyle(size: 12),),
+                                              ),
+                                              Container(
+                                                height: double.parse(((annual_sub_n_payment[index]['subscription'].length) * 65).toString()),
+                                                child: ListView.builder(
+                                                    itemCount: annual_sub_n_payment[index]['subscription'].length,
+                                                    itemBuilder: (contexts, indexes){
+                                                      var items = annual_sub_n_payment[index]['subscription'][indexes];
+                                                    return Container(
+                                                    margin: EdgeInsets.symmetric(vertical: 3, horizontal: 5),
+                                                    padding: EdgeInsets.symmetric(vertical: 5),
+                                                    decoration: BoxDecoration(
+                                                        color: customs.secondaryShade_2.withOpacity(0.2),
+                                                        borderRadius: BorderRadius.circular(10)
+                                                    ),
+                                                    child: ListTile(
+                                                      leading: CircleAvatar(
+                                                        radius: 30,
+                                                        backgroundColor: customs.primaryShade_2,
+                                                        child: Icon(
+                                                          FontAwesomeIcons.dollarSign,
+                                                          size: 20,
+                                                          color: customs.primaryColor,
+                                                        ),
+                                                      ),
+                                                      dense: true,
+                                                      style: ListTileStyle.drawer,
+                                                      title: RichText(
+                                                          text: TextSpan(
+                                                              text: "",
+                                                              style: customs.secondaryTextStyle(size: 10, fontweight: FontWeight.bold),
                                                               children: [
-                                                                Text("${items['clear_date']}", style: customs.secondaryTextStyle(size: 10, fontweight: FontWeight.bold),),
-                                                                Text("Bal: Kes ${items['balance']}", style: customs.secondaryTextStyle(size: 12, fontweight: FontWeight.bold),),
-                                                              ],
-                                                            ),
-                                                            onTap: (){
-                                                              print(items);
-                                                            },
-                                                          ),
-                                                        );
-                                                      }),
-                                                ),
-                                              ],
-                                            );
-                                          }
+                                                                TextSpan(
+                                                                    text: "Kes ${items['deduction_type'] == "increase" ? "+" : "-"}${items['deduction_amount']}",
+                                                                    style: customs.secondaryTextStyle(size: 14, fontweight: FontWeight.bold)
+                                                                )
+                                                              ]
+                                                          )
+                                                      ),
+                                                      trailing: Column(
+                                                        mainAxisAlignment: MainAxisAlignment.center,
+                                                        crossAxisAlignment: CrossAxisAlignment.end,
+                                                        children: [
+                                                          Text("${items['clear_date']}", style: customs.secondaryTextStyle(size: 10, fontweight: FontWeight.bold),),
+                                                          Text("Bal: Kes ${items['balance']}", style: customs.secondaryTextStyle(size: 12, fontweight: FontWeight.bold),),
+                                                        ],
+                                                      ),
+                                                      onTap: (){
+                                                        print(items);
+                                                      },
+                                                    ),
+                                                  );
+                                                }),
+                                              ),
+                                            ],
+                                          );
+                                        }
                                       ) : Column(
                                         mainAxisAlignment: MainAxisAlignment.start,
                                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -471,198 +472,198 @@ class _MemberMembershipState extends State<MemberMembership> {
                                       ),
                                     ),
                                     Container(
-                                        padding: EdgeInsets.all(10),
-                                        color: customs.whiteColor,
-                                        child: monthly_payments.length > 0 ? ListView.builder(
-                                            itemCount: monthly_payments.length,
-                                            itemBuilder: (context, index){
-                                              var item = monthly_payments[index];
-                                              return item['confirmed'] ?
-                                              Hero(
-                                                tag: "reject-${item['month_paid_for']}",
-                                                child: GestureDetector(
-                                                  child: Container(
-                                                    width: width,
-                                                    height: 92,
-                                                    child: Column(
-                                                      children: [
-                                                        Container(
-                                                          padding: EdgeInsets.symmetric(horizontal: 10),
-                                                          width: width,
-                                                          child: Text("${item['month_paid_for']}", style: customs.secondaryTextStyle(size: 12),),
+                                      padding: EdgeInsets.all(10),
+                                      color: customs.whiteColor,
+                                      child: monthly_payments.length > 0 ? ListView.builder(
+                                        itemCount: monthly_payments.length,
+                                        itemBuilder: (context, index){
+                                            var item = monthly_payments[index];
+                                            return item['confirmed'] ?
+                                            Hero(
+                                              tag: "reject-${item['month_paid_for']}",
+                                              child: GestureDetector(
+                                                child: Container(
+                                                  width: width,
+                                                  height: 92,
+                                                  child: Column(
+                                                    children: [
+                                                      Container(
+                                                        padding: EdgeInsets.symmetric(horizontal: 10),
+                                                        width: width,
+                                                        child: Text("${item['month_paid_for']}", style: customs.secondaryTextStyle(size: 12),),
+                                                      ),
+                                                      Container(
+                                                        margin: EdgeInsets.symmetric(vertical: 3, horizontal: 5),
+                                                        decoration: BoxDecoration(
+                                                            color: customs.secondaryShade_2.withOpacity(0.2),
+                                                            borderRadius: BorderRadius.circular(10)
                                                         ),
-                                                        Container(
-                                                          margin: EdgeInsets.symmetric(vertical: 3, horizontal: 5),
-                                                          decoration: BoxDecoration(
-                                                              color: customs.secondaryShade_2.withOpacity(0.2),
-                                                              borderRadius: BorderRadius.circular(10)
-                                                          ),
-                                                          child: Material(
-                                                            color: Colors.transparent,
-                                                            child: ListTile(
-                                                              leading: CircleAvatar(
-                                                                radius: 30,
-                                                                backgroundColor: item['confirmed'] ? customs.successShade_2 : customs.secondaryShade_2,
-                                                                child: Icon(
-                                                                  FontAwesomeIcons.dollarSign,
-                                                                  size: 20,
-                                                                  color: item['confirmed'] ? customs.successColor : customs.secondaryColor,
-                                                                ),
-                                                              ),
-                                                              contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
-                                                              dense: true,
-                                                              style: ListTileStyle.drawer,
-                                                              title: RichText(
-                                                                  text: TextSpan(
-                                                                      text: "Kes ${item['payment_amount']}",
-                                                                      style: customs.secondaryTextStyle(size: 14, fontweight: FontWeight.bold)
-                                                                  )
-                                                              ),
-                                                              trailing: Column(
-                                                                mainAxisAlignment: MainAxisAlignment.center,
-                                                                crossAxisAlignment: CrossAxisAlignment.end,
-                                                                children: [
-                                                                  Text("${item['publish_date']}", style: customs.secondaryTextStyle(size: 10, fontweight: FontWeight.bold),),
-                                                                  Text("X-Cost: Kes ${item['transaction_cost']}", style: customs.secondaryTextStyle(size: 12, fontweight: FontWeight.bold),),
-                                                                  item['confirmed'] ? Container(
-                                                                    padding: EdgeInsets.symmetric(vertical: 2, horizontal: 4),
-                                                                    child: Text("confirmed", style: customs.successTextStyle(size: 8.6, fontweight: FontWeight.bold),),
-                                                                  ) : SizedBox()
-                                                                ],
+                                                        child: Material(
+                                                          color: Colors.transparent,
+                                                          child: ListTile(
+                                                            leading: CircleAvatar(
+                                                              radius: 30,
+                                                              backgroundColor: item['confirmed'] ? customs.successShade_2 : customs.secondaryShade_2,
+                                                              child: Icon(
+                                                                FontAwesomeIcons.dollarSign,
+                                                                size: 20,
+                                                                color: item['confirmed'] ? customs.successColor : customs.secondaryColor,
                                                               ),
                                                             ),
+                                                            contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+                                                            dense: true,
+                                                            style: ListTileStyle.drawer,
+                                                            title: RichText(
+                                                                text: TextSpan(
+                                                                    text: "Kes ${item['payment_amount']}",
+                                                                    style: customs.secondaryTextStyle(size: 14, fontweight: FontWeight.bold)
+                                                                )
+                                                            ),
+                                                            trailing: Column(
+                                                              mainAxisAlignment: MainAxisAlignment.center,
+                                                              crossAxisAlignment: CrossAxisAlignment.end,
+                                                              children: [
+                                                                Text("${item['publish_date']}", style: customs.secondaryTextStyle(size: 10, fontweight: FontWeight.bold),),
+                                                                Text("X-Cost: Kes ${item['transaction_cost']}", style: customs.secondaryTextStyle(size: 12, fontweight: FontWeight.bold),),
+                                                                item['confirmed'] ? Container(
+                                                                  padding: EdgeInsets.symmetric(vertical: 2, horizontal: 4),
+                                                                  child: Text("confirmed", style: customs.successTextStyle(size: 8.6, fontweight: FontWeight.bold),),
+                                                                ) : SizedBox()
+                                                              ],
+                                                            ),
                                                           ),
-                                                        )
-                                                      ],
-                                                    ),
+                                                        ),
+                                                      )
+                                                    ],
                                                   ),
-                                                  onTap: () async {
-                                                    //confirm payment by saving it to the database
-                                                    var result = await Navigator.of(context).push(HeroDialogRoute(builder: (context) {
-                                                      return  _editEarnings(earning_data: item, member_data: member_details,);
-                                                    }));
-                                                    if(result != null){
-                                                      if(result['success']){
-                                                        // get membership details
-                                                        getMembershipDetails();
-                                                        customs.maruSnackBarSuccess(context: context, text: result['message']);
-                                                      }else{
-                                                        customs.maruSnackBarDanger(context: context, text: result['message']);
-                                                      }
+                                                ),
+                                                onTap: () async {
+                                                  //confirm payment by saving it to the database
+                                                  var result = await Navigator.of(context).push(HeroDialogRoute(builder: (context) {
+                                                    return  _editEarnings(earning_data: item, member_data: member_details,);
+                                                  }));
+                                                  if(result != null){
+                                                    if(result['success']){
+                                                      // get membership details
+                                                      getMembershipDetails();
+                                                      customs.maruSnackBarSuccess(context: context, text: result['message']);
+                                                    }else{
+                                                      customs.maruSnackBarDanger(context: context, text: result['message']);
                                                     }
-                                                  },
-                                                ),
-                                              )
-                                                  :
-                                              Hero(
-                                                tag: "accept-${item['month_paid_for']}",
-                                                child: Column(
-                                                  children: [
-                                                    Container(
-                                                      padding: EdgeInsets.symmetric(horizontal: 10),
-                                                      width: width,
-                                                      child: Text("${item['month_paid_for']}", style: customs.secondaryTextStyle(size: 12),),
-                                                    ),
-                                                    Container(
-                                                      margin: EdgeInsets.symmetric(vertical: 3, horizontal: 5),
-                                                      decoration: BoxDecoration(
-                                                          color: customs.secondaryShade_2.withOpacity(0.2),
-                                                          borderRadius: BorderRadius.circular(10)
-                                                      ),
-                                                      child: Material(
-                                                        color: Colors.transparent,
-                                                        child: ListTile(
-                                                          leading: CircleAvatar(
-                                                            radius: 30,
-                                                            backgroundColor: item['confirmed'] ? customs.successShade_2 : customs.secondaryShade_2,
-                                                            child: Icon(
-                                                              FontAwesomeIcons.dollarSign,
-                                                              size: 20,
-                                                              color: item['confirmed'] ? customs.successColor : customs.secondaryColor,
-                                                            ),
-                                                          ),
-                                                          contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
-                                                          dense: true,
-                                                          style: ListTileStyle.drawer,
-                                                          title: RichText(
-                                                              text: TextSpan(
-                                                                  text: "Kes ${item['payment_amount']}",
-                                                                  style: customs.secondaryTextStyle(size: 14, fontweight: FontWeight.bold)
-                                                              )
-                                                          ),
-                                                          trailing: Column(
-                                                            mainAxisAlignment: MainAxisAlignment.center,
-                                                            crossAxisAlignment: CrossAxisAlignment.end,
-                                                            children: [
-                                                              Text("${item['publish_date']}", style: customs.secondaryTextStyle(size: 10, fontweight: FontWeight.bold),),
-                                                              Text("X-Cost: Kes ${item['transaction_cost']}", style: customs.secondaryTextStyle(size: 12, fontweight: FontWeight.bold),),
-                                                              item['confirmed'] ? Container(
-                                                                padding: EdgeInsets.symmetric(vertical: 2, horizontal: 4),
-                                                                child: Text("confirmed", style: customs.successTextStyle(size: 8.6, fontweight: FontWeight.bold),),
-                                                              ) : SizedBox()
-                                                            ],
-                                                          ),
-                                                          onTap: () async {
-                                                            print("Reject");
-                                                            //confirm payment by saving it to the database
-                                                            var result = await Navigator.of(context).push(HeroDialogRoute(builder: (context) {
-                                                              return  rejectEarnings(earning_data: item, member_data: member_details,);
-                                                            }));
-
-                                                            if(result != null){
-                                                              if(result['success']){
-                                                                // get membership details
-                                                                getMembershipDetails();
-                                                                customs.maruSnackBarSuccess(context: context, text: result['message']);
-                                                              }else{
-                                                                customs.maruSnackBarDanger(context: context, text: result['message']);
-                                                              }
-                                                            }
-                                                          },
-                                                        ),
-                                                      ),
-                                                    )
-                                                  ],
-                                                ),
-                                              );
-                                            }
-                                        ) :
-                                        Column(
-                                          mainAxisAlignment: MainAxisAlignment.start,
-                                          crossAxisAlignment: CrossAxisAlignment.center,
-                                          children: [
-                                            Container(
-                                              margin: EdgeInsets.only(top: 30),
-                                              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                                              width: width - 50,
-                                              height: 200,
-                                              decoration: BoxDecoration(
-                                                  color: customs.whiteColor,
-                                                  borderRadius: BorderRadius.circular(20),
-                                                  boxShadow: [
-                                                    BoxShadow(color: customs.secondaryShade_2, blurRadius: 1, blurStyle: BlurStyle.normal),
-                                                    BoxShadow(color: customs.secondaryShade_2, blurRadius: 1, blurStyle: BlurStyle.normal),
-                                                    BoxShadow(color: customs.secondaryShade_2, blurRadius: 1, blurStyle: BlurStyle.normal),
-                                                  ]
+                                                  }
+                                                },
                                               ),
+                                            )
+                                                :
+                                            Hero(
+                                              tag: "accept-${item['month_paid_for']}",
                                               child: Column(
-                                                mainAxisAlignment: MainAxisAlignment.center,
                                                 children: [
-                                                  Text("No Earnings found!", style: customs.primaryTextStyle(size: 20, fontweight: FontWeight.bold),),
-                                                  Spacer(),
-                                                  SizedBox(
+                                                  Container(
+                                                    padding: EdgeInsets.symmetric(horizontal: 10),
                                                     width: width,
-                                                    child: Image(
-                                                      image: AssetImage("assets/images/search.jpg"),
-                                                      height: width/4,
-                                                      width: width/4,
-                                                    ),
+                                                    child: Text("${item['month_paid_for']}", style: customs.secondaryTextStyle(size: 12),),
                                                   ),
+                                                  Container(
+                                                    margin: EdgeInsets.symmetric(vertical: 3, horizontal: 5),
+                                                    decoration: BoxDecoration(
+                                                        color: customs.secondaryShade_2.withOpacity(0.2),
+                                                        borderRadius: BorderRadius.circular(10)
+                                                    ),
+                                                    child: Material(
+                                                      color: Colors.transparent,
+                                                      child: ListTile(
+                                                        leading: CircleAvatar(
+                                                          radius: 30,
+                                                          backgroundColor: item['confirmed'] ? customs.successShade_2 : customs.secondaryShade_2,
+                                                          child: Icon(
+                                                            FontAwesomeIcons.dollarSign,
+                                                            size: 20,
+                                                            color: item['confirmed'] ? customs.successColor : customs.secondaryColor,
+                                                          ),
+                                                        ),
+                                                        contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+                                                        dense: true,
+                                                        style: ListTileStyle.drawer,
+                                                        title: RichText(
+                                                            text: TextSpan(
+                                                                text: "Kes ${item['payment_amount']}",
+                                                                style: customs.secondaryTextStyle(size: 14, fontweight: FontWeight.bold)
+                                                            )
+                                                        ),
+                                                        trailing: Column(
+                                                          mainAxisAlignment: MainAxisAlignment.center,
+                                                          crossAxisAlignment: CrossAxisAlignment.end,
+                                                          children: [
+                                                            Text("${item['publish_date']}", style: customs.secondaryTextStyle(size: 10, fontweight: FontWeight.bold),),
+                                                            Text("X-Cost: Kes ${item['transaction_cost']}", style: customs.secondaryTextStyle(size: 12, fontweight: FontWeight.bold),),
+                                                            item['confirmed'] ? Container(
+                                                              padding: EdgeInsets.symmetric(vertical: 2, horizontal: 4),
+                                                              child: Text("confirmed", style: customs.successTextStyle(size: 8.6, fontweight: FontWeight.bold),),
+                                                            ) : SizedBox()
+                                                          ],
+                                                        ),
+                                                        onTap: () async {
+                                                          print("Reject");
+                                                          //confirm payment by saving it to the database
+                                                          var result = await Navigator.of(context).push(HeroDialogRoute(builder: (context) {
+                                                            return  rejectEarnings(earning_data: item, member_data: member_details,);
+                                                          }));
+
+                                                          if(result != null){
+                                                            if(result['success']){
+                                                              // get membership details
+                                                              getMembershipDetails();
+                                                              customs.maruSnackBarSuccess(context: context, text: result['message']);
+                                                            }else{
+                                                              customs.maruSnackBarDanger(context: context, text: result['message']);
+                                                            }
+                                                          }
+                                                        },
+                                                      ),
+                                                    ),
+                                                  )
                                                 ],
                                               ),
+                                            );
+                                          }
+                                      ) :
+                                      Column(
+                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        crossAxisAlignment: CrossAxisAlignment.center,
+                                        children: [
+                                          Container(
+                                            margin: EdgeInsets.only(top: 30),
+                                            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                                            width: width - 50,
+                                            height: 200,
+                                            decoration: BoxDecoration(
+                                                color: customs.whiteColor,
+                                                borderRadius: BorderRadius.circular(20),
+                                                boxShadow: [
+                                                  BoxShadow(color: customs.secondaryShade_2, blurRadius: 1, blurStyle: BlurStyle.normal),
+                                                  BoxShadow(color: customs.secondaryShade_2, blurRadius: 1, blurStyle: BlurStyle.normal),
+                                                  BoxShadow(color: customs.secondaryShade_2, blurRadius: 1, blurStyle: BlurStyle.normal),
+                                                ]
                                             ),
-                                          ],
-                                        )
+                                            child: Column(
+                                              mainAxisAlignment: MainAxisAlignment.center,
+                                              children: [
+                                                Text("No Earnings found!", style: customs.primaryTextStyle(size: 20, fontweight: FontWeight.bold),),
+                                                Spacer(),
+                                                SizedBox(
+                                                  width: width,
+                                                  child: Image(
+                                                    image: AssetImage("assets/images/search.jpg"),
+                                                    height: width/4,
+                                                    width: width/4,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      )
                                     ),
                                   ],
                                 ),
@@ -682,7 +683,6 @@ class _MemberMembershipState extends State<MemberMembership> {
     );
   }
 }
-
 
 class rejectEarnings extends StatefulWidget {
   var earning_data = null;
@@ -777,11 +777,11 @@ class _rejectEarningsState extends State<rejectEarnings> {
                         width: width,
                         child: RichText(
                             text: TextSpan(
-                                text: "Full Payment : ",
-                                style: customThemes.primaryTextStyle(size: 15, fontweight: FontWeight.bold),
-                                children: [TextSpan(
-                                  text: "Kes ${widget.earning_data['payment_amount']}",
-                                )]
+                              text: "Full Payment : ",
+                              style: customThemes.primaryTextStyle(size: 15, fontweight: FontWeight.bold),
+                              children: [TextSpan(
+                                text: "Kes ${widget.earning_data['payment_amount']}",
+                              )]
                             )
                         ),
                       ),
@@ -884,8 +884,8 @@ class _rejectEarningsState extends State<rejectEarnings> {
                             ),
                           ),
                           Container(
-                              width: width/2,
-                              child: Divider()
+                            width: width/2,
+                            child: Divider()
                           )
                         ],
                       ):SizedBox(height: 0, width: 0,),
@@ -907,13 +907,13 @@ class _rejectEarningsState extends State<rejectEarnings> {
                       addDeductions ? Container(
                         padding: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
                         decoration: BoxDecoration(
-                            border: Border(
-                                top: BorderSide(color: customThemes.secondaryColor, width: 1),
-                                bottom: BorderSide(color: customThemes.secondaryColor, width: 1),
-                                left: BorderSide(color: customThemes.secondaryColor, width: 1),
-                                right: BorderSide(color: customThemes.secondaryColor, width: 1)
-                            ),
-                            borderRadius: BorderRadius.circular(12)
+                          border: Border(
+                            top: BorderSide(color: customThemes.secondaryColor, width: 1),
+                            bottom: BorderSide(color: customThemes.secondaryColor, width: 1),
+                            left: BorderSide(color: customThemes.secondaryColor, width: 1),
+                            right: BorderSide(color: customThemes.secondaryColor, width: 1)
+                          ),
+                          borderRadius: BorderRadius.circular(12)
                         ),
                         child: Form(
                           key: _formKey,
@@ -964,37 +964,37 @@ class _rejectEarningsState extends State<rejectEarnings> {
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
                                     customThemes.maruIconButton(
-                                        icons: Icons.add,
-                                        text: "Add",
-                                        fontSize: 12,
-                                        iconSize: 20,
-                                        onPressed: (){
-                                          if (_formKey.currentState!.validate()){
-                                            var elem = {
-                                              "deduction_type": paymentType,
-                                              "deduction_amount": howMuch.text
-                                            };
-                                            setState(() {
-                                              deductions.add(elem);
-                                              paymentType = "";
-                                              howMuch.text = "0";
-                                              addDeductions = false;
-                                            });
-                                          }
-                                        },
-                                        type: Type.success
-                                    ),
-                                    customThemes.marOutlineuButton(
-                                        text: "Cancel",
-                                        fontSize: 12,
-                                        onPressed: (){
+                                      icons: Icons.add,
+                                      text: "Add",
+                                      fontSize: 12,
+                                      iconSize: 20,
+                                      onPressed: (){
+                                        if (_formKey.currentState!.validate()){
+                                          var elem = {
+                                            "deduction_type": paymentType,
+                                            "deduction_amount": howMuch.text
+                                          };
                                           setState(() {
+                                            deductions.add(elem);
                                             paymentType = "";
                                             howMuch.text = "0";
                                             addDeductions = false;
                                           });
-                                        },
-                                        type: Type.danger
+                                        }
+                                      },
+                                      type: Type.success
+                                    ),
+                                    customThemes.marOutlineuButton(
+                                      text: "Cancel",
+                                      fontSize: 12,
+                                      onPressed: (){
+                                        setState(() {
+                                          paymentType = "";
+                                          howMuch.text = "0";
+                                          addDeductions = false;
+                                        });
+                                      },
+                                      type: Type.danger
                                     ),
                                   ],
                                 ),
@@ -1221,15 +1221,15 @@ class _editEarningsState extends State<_editEarnings> {
                             itemBuilder: (context, index){
                               var item = payment_data != null ? payment_data['deductions'][index] ?? {"deduction_type" : "null", "deduction_amount" : "0"} : {"deduction_type" : "null", "deduction_amount" : "0"};
                               return Container(
-                                margin: EdgeInsets.symmetric(vertical: 5),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text("${deduction_type(item['deduction_type'].toString())}", style: customThemes.secondaryTextStyle(size: 12),),
-                                    Text("Kes -${item['deduction_amount']}", style: customThemes.secondaryTextStyle(size: 12, fontweight: FontWeight.bold),),
-                                  ],
-                                ),
-                              );
+                                  margin: EdgeInsets.symmetric(vertical: 5),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text("${deduction_type(item['deduction_type'].toString())}", style: customThemes.secondaryTextStyle(size: 12),),
+                                      Text("Kes -${item['deduction_amount']}", style: customThemes.secondaryTextStyle(size: 12, fontweight: FontWeight.bold),),
+                                    ],
+                                  ),
+                                );
                             }
                           ),
                         ) : SizedBox(height: 0,),
@@ -1250,14 +1250,52 @@ class _editEarningsState extends State<_editEarnings> {
                           child: customThemes.maruIconButton(icons: Icons.download, iconSize: 20, text: "Download Receipt", onPressed: (){}),
                         ),
                         Container(
-                          child: customThemes.marOutlineuButton(
-                              text: "Close",
-                              showLoader: saveLoader,
-                              disabled: saveLoader,
-                              onPressed: (){
-                                Navigator.pop(context, {"success" : false, "message" : "Closed!"});
-                              },
-                              type: Type.secondary
+                          margin: EdgeInsets.symmetric(vertical: 15),
+                          padding: EdgeInsets.symmetric(horizontal: 10),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Container(
+                                width: width/3,
+                                child: customThemes.marOutlineuButton(
+                                    text: "Nullify",
+                                    showLoader: saveLoader,
+                                    disabled: saveLoader,
+                                    onPressed: () async {
+                                      setState((){
+                                        saveLoader = true;
+                                      });
+                                      ApiConnection apiConn = ApiConnection();
+                                      print(widget.earning_data);
+                                      var response = await apiConn.declineMemberPayment(widget.earning_data['id'].toString());
+                                      if(customThemes.isValidJson(response)){
+                                        var res = jsonDecode(response);
+                                        if(res['success']){
+                                          Navigator.pop(context, res);
+                                        }else{
+                                          Navigator.pop(context, res);
+                                        }
+                                      }
+                                      setState((){
+                                        saveLoader = false;
+                                      });
+                                    },
+                                    type: Type.danger
+                                ),
+                              ),
+                              Container(
+                                width: width/3,
+                                child: customThemes.marOutlineuButton(
+                                    text: "Close",
+                                    showLoader: saveLoader,
+                                    disabled: saveLoader,
+                                    onPressed: (){
+                                      Navigator.pop(context, {"success" : false, "message" : "Closed!"});
+                                    },
+                                    type: Type.secondary
+                                ),
+                              )
+                            ],
                           ),
                         )
                       ],

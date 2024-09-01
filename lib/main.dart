@@ -9,6 +9,7 @@ import 'package:maru/pages/admin/inquiry_inbox.dart';
 import 'package:maru/pages/admin/member_details.dart';
 import 'package:maru/pages/admin/member_details_edit.dart';
 import 'package:maru/pages/admin/member_history.dart';
+import 'package:maru/pages/admin/membership.dart';
 import 'package:maru/pages/admin/milk_prices.dart';
 import 'package:maru/pages/admin/new_member.dart';
 import 'package:maru/pages/admin/select_member_message.dart';
@@ -20,6 +21,8 @@ import 'package:maru/pages/member/inbox.dart';
 import 'package:maru/pages/member/member_milk_details.dart';
 import 'package:maru/pages/member/membership.dart';
 import 'package:maru/pages/member/view_profile.dart';
+import 'package:maru/pages/super_admin/Technicians.dart';
+import 'package:maru/pages/super_admin/edit_technician.dart';
 import 'package:maru/pages/technician/edit_member_milk_data.dart';
 import 'package:maru/pages/technician/technician_profile.dart';
 import 'package:maru/pages/technician/technician_qr_scanner.dart';
@@ -36,6 +39,7 @@ import 'package:maru/pages/member/history.dart';
 import 'package:maru/pages/member/read_notification.dart';
 import 'package:maru/pages/member/member_qrcode.dart';
 import 'package:maru/pages/super_admin/dashboard.dart';
+import 'package:maru/pages/super_admin/technician_details.dart';
 import 'package:maru/pages/signup.dart';
 
 void main() {
@@ -85,6 +89,10 @@ void main() {
       "/admin_edit_profile": (context) => const AdminEditProfile(),
       "/milk_prices": (context) => const MilkPrices(),
       "/update_milk_prices": (context) => const UpdateMilkPrices(),
+      "/admin_member_membership": (context) => const Membership(),
+      "/manage_technicians": (context) => const Technicians(),
+      "/technician_details": (context) => const TechnicianDetails(),
+      "/edit_technician": (context) => const EditTechnician()
     },
   ));
 }

@@ -452,7 +452,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
     super.didChangeDependencies();
 
     // get the admin dashboard
-    if(_init){
+    if(!_init){
       setState(() {
         collectionPlot = [
           BarChartGroupData(x: 1, barRods: [

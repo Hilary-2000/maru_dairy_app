@@ -468,46 +468,61 @@ class _EditMemberMilkDataState extends State<EditMemberMilkData> {
                           style: customs.darkTextStyle(
                               size: 15, fontweight: FontWeight.bold),
                         ),
-                        PopupMenuButton<String>(
-                          icon: Icon(FontAwesomeIcons.ellipsisVertical, size: 20,),
-                          onSelected: (String result) {
-                            // Handle the selection here
-                            print(result);
-                            if(result == "delete"){
-
-                            }
-                          },
-                          color: customs.whiteColor,
-                          itemBuilder: (BuildContext context) =>
-                          <PopupMenuEntry<String>>[
-                            PopupMenuItem<String>(
-                              value: 'delete',
-                              height: 15,
-                              padding: EdgeInsets.symmetric(horizontal: 5),
-                              child: Container(
-                                padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                                margin: EdgeInsets.zero,
-                                child: Row(
-                                  mainAxisAlignment:
-                                  MainAxisAlignment.start,
-                                  children: [
-                                    Icon(
-                                      FontAwesomeIcons.trash,
-                                      size: 15,
-                                      color: customs.dangerColor,
-                                    ),
-                                    Text(
-                                      ' Delete',
-                                      style: customs.dangerTextStyle(
-                                        size: 14,
-                                        fontweight: FontWeight.bold
+                        Hero(
+                          tag: _heroAddTodo,
+                          child: PopupMenuButton<String>(
+                            icon: Icon(FontAwesomeIcons.ellipsisVertical, size: 20,),
+                            onSelected: (String result) async {
+                              // Handle the selection here
+                              print(result);
+                              if(result == "delete"){
+                                var result = await Navigator.of(context).push(HeroDialogRoute(builder: (context) {
+                                  return  _AddTodoPopupCard(collection_id: collection_id,);
+                                }));
+                                if(result != null){
+                                  if(result['success']){
+                                    customs.maruSnackBarSuccess(context: context, text: result['message']);
+                                    Navigator.pop(context);
+                                  }else{
+                                    customs.maruSnackBarDanger(context: context, text: result['message']);
+                                  }
+                                }else{
+                                  customs.maruSnackBarDanger(context: context, text: "Cancelled!");
+                                }
+                              }
+                            },
+                            color: customs.whiteColor,
+                            itemBuilder: (BuildContext context) =>
+                            <PopupMenuEntry<String>>[
+                              PopupMenuItem<String>(
+                                value: 'delete',
+                                height: 15,
+                                padding: EdgeInsets.symmetric(horizontal: 5),
+                                child: Container(
+                                  padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                                  margin: EdgeInsets.zero,
+                                  child: Row(
+                                    mainAxisAlignment:
+                                    MainAxisAlignment.start,
+                                    children: [
+                                      Icon(
+                                        FontAwesomeIcons.trash,
+                                        size: 15,
+                                        color: customs.dangerColor,
                                       ),
-                                    ),
-                                  ],
+                                      Text(
+                                        ' Delete',
+                                        style: customs.dangerTextStyle(
+                                          size: 14,
+                                          fontweight: FontWeight.bold
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ],
                     ),
@@ -833,4 +848,141 @@ class _EditMemberMilkDataState extends State<EditMemberMilkData> {
       )),
     );
   }
+}
+
+String _heroAddTodo = "ask_delete";
+
+class _AddTodoPopupCard extends StatefulWidget {
+  /// {@macro add_todo_popup_card}
+  String collection_id = "0";
+  _AddTodoPopupCard({Key? key, required this.collection_id}) : super(key: key);
+
+  @override
+  State<_AddTodoPopupCard> createState() => _AddTodoPopupCardState();
+}
+
+class _AddTodoPopupCardState extends State<_AddTodoPopupCard> {
+  CustomThemes customThemes = new CustomThemes();
+
+  bool saveLoader = false;
+
+  @override
+  Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(32.0),
+        child: Hero(
+          tag: _heroAddTodo,
+          // createRectTween: (begin, end) {
+          //   return CustomRectTween(begin: begin, end: end);
+          // },
+          child: Material(
+            color: customThemes.whiteColor,
+            elevation: 2,
+            shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text("Are you sure you want to delete this transaction?", style: customThemes.darkTextStyle(size: 17, fontweight: FontWeight.bold),),
+                      Container(
+                        padding: EdgeInsets.symmetric(horizontal: 10),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Container(
+                              width: width/3,
+                              child: customThemes.marOutlineuButton(
+                                text: "Delete",
+                                showLoader: saveLoader,
+                                disabled: saveLoader,
+                                onPressed: () async {
+                                  setState((){
+                                    saveLoader = true;
+                                  });
+                                  ApiConnection apiConn = ApiConnection();
+                                  var response = await apiConn.deleteMilkData(widget.collection_id);
+                                  if(customThemes.isValidJson(response)){
+                                    var res = jsonDecode(response);
+                                    if(res['success']){
+                                      Navigator.pop(context, res);
+                                    }else{
+                                      Navigator.pop(context, res);
+                                    }
+                                  }
+                                },
+                                type: Type.danger
+                              ),
+                            ),
+                            Container(
+                              width: width/3,
+                              child: customThemes.maruButton(
+                                text: "Cancel",
+                                showLoader: saveLoader,
+                                disabled: saveLoader,
+                                onPressed: (){
+                                  Navigator.pop(context, {"success" : false, "message" : "Cancelled!"});
+                                },
+                                type: Type.secondary
+                              ),
+                            )
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+class HeroDialogRoute<T> extends PageRoute<T> {
+  /// {@macro hero_dialog_route}
+  HeroDialogRoute({
+    required WidgetBuilder builder,
+    RouteSettings? settings,
+    bool fullscreenDialog = false,
+  })  : _builder = builder,
+        super(settings: settings, fullscreenDialog: fullscreenDialog);
+
+  final WidgetBuilder _builder;
+
+  @override
+  bool get opaque => false;
+
+  @override
+  bool get barrierDismissible => true;
+
+  @override
+  Duration get transitionDuration => const Duration(milliseconds: 300);
+
+  @override
+  bool get maintainState => true;
+
+  @override
+  Color get barrierColor => Colors.black54;
+
+  @override
+  Widget buildTransitions(BuildContext context, Animation<double> animation,
+      Animation<double> secondaryAnimation, Widget child) {
+    return child;
+  }
+
+  @override
+  Widget buildPage(BuildContext context, Animation<double> animation,
+      Animation<double> secondaryAnimation) {
+    return _builder(context);
+  }
+
+  @override
+  String get barrierLabel => 'Popup dialog open';
 }

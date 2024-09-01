@@ -515,10 +515,10 @@ class _MemberDetailsEditState extends State<MemberDetailsEdit> {
                                     items: genderList,
                                     validator: (value) {
                                     if(value == null || value.isEmpty){
-                                      return "Select member gender";
+                                        return "Select member gender";
+                                      }
+                                      return null;
                                     }
-                                    return null;
-                            }
                                   ),
                                   Divider(
                                     color: customs.secondaryShade_2,

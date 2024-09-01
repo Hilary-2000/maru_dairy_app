@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:maru/packages/api_connection.dart';
 import 'package:maru/packages/maru_theme.dart';
 
 class SuperAdminAccounts extends StatefulWidget {
@@ -14,6 +17,42 @@ class _SuperAdminAccountsState extends State<SuperAdminAccounts> {
   CustomThemes customs = CustomThemes();
   final FlutterSecureStorage _storage = const FlutterSecureStorage();
   bool _isLightMode = true;
+  bool _isInitialized = false;
+  String price = "Kes 0";
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    if(!_isInitialized){
+      initializeAccount();
+      setState(() {
+        _isInitialized = true;
+      });
+    }
+  }
+
+  Future<void> initializeAccount() async {
+    ApiConnection apiConnection = new ApiConnection();
+    var response = await apiConnection.getMilkPrice();
+    if(customs.isValidJson(response)){
+      var res = jsonDecode(response);
+      print(res);
+      if(res['success']){
+        setState(() {
+          price = "Kes ${res['price']}";
+        });
+      }else{
+        setState(() {
+          price = "Kes 0";
+        });
+      }
+    }else{
+      setState(() {
+        price = "Kes 0";
+      });
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return SafeArea(child: LayoutBuilder(
@@ -27,15 +66,6 @@ class _SuperAdminAccountsState extends State<SuperAdminAccounts> {
           width: width,
           decoration: BoxDecoration(
             color: customs.secondaryShade_2.withOpacity(0.2),
-            // gradient: LinearGradient(
-            //   colors: [
-            //     Color.fromRGBO(230, 245, 248, 1),
-            //     Color.fromRGBO(255, 255, 255, 1),
-            //     Color.fromRGBO(227, 228, 229, 1)
-            //   ],
-            //   begin: Alignment.topLeft,
-            //   end: Alignment.bottomRight,
-            // ),
           ),
           child: Column(
             children: [
@@ -196,7 +226,7 @@ class _SuperAdminAccountsState extends State<SuperAdminAccounts> {
                               title: Text("Technicians", style: customs.darkTextStyle(size: 14),),
                               subtitle: Text("Manage technicians and their permissions.", style: customs.secondaryTextStyle(size: 12),),
                               onTap: (){
-                                print("Tapped");
+                                Navigator.pushNamed(context, "/manage_technicians");
                               },
                             ),
                             Container(width: width * 0.8, child: Divider(color: customs.secondaryShade_2,)),
@@ -265,7 +295,7 @@ class _SuperAdminAccountsState extends State<SuperAdminAccounts> {
                                 ),
                               ),
                               title: Text("Milk Price Per Liter", style: customs.darkTextStyle(size: 14),),
-                              subtitle: Text("Change price per Litre. @Kes 45", style: customs.secondaryTextStyle(size: 12),),
+                              subtitle: Text("Change price per Litre. @$price", style: customs.secondaryTextStyle(size: 12),),
                               onTap: (){
                                 Navigator.pushNamed(context, "/change_milk_price");
                               },

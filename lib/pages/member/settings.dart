@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:maru/packages/api_connection.dart';
 import 'package:maru/packages/maru_theme.dart';
 
 class MemberSettings extends StatefulWidget {
@@ -14,6 +17,50 @@ class _MemberSettingsState extends State<MemberSettings> {
   CustomThemes customs = CustomThemes();
   final FlutterSecureStorage _storage = const FlutterSecureStorage();
   bool _isLightMode = true;
+
+  String total_collection = "0";
+  String growth = "0%";
+  String trajectory = "constant";
+  String duration = "N/A";
+  String greetings = "Hello,";
+  bool loading = false;
+  var member_data = null;
+  bool _init = false;
+
+  // did change dependencies
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    if(!_init){
+      setState(() {
+        _init = true;
+      });
+      // member dashboard
+      memberDashboard("7 days");
+    }
+  }
+  // get the member dashboard
+  Future<void> memberDashboard(String period) async {
+    setState(() {
+      loading = true;
+    });
+    //get the member dashboard
+    ApiConnection apiConnection = new ApiConnection();
+    var response = await apiConnection.getMemberDetails();
+    if (customs.isValidJson(response)) {
+      var res = jsonDecode(response);
+      if (res['success']) {
+        member_data = res['member_details'];
+      } else {
+        member_data = null;
+      }
+    } else {
+      member_data = null;
+    }
+    setState(() {
+      loading = false;
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return SafeArea(child: LayoutBuilder(
@@ -130,7 +177,8 @@ class _MemberSettingsState extends State<MemberSettings> {
                               title: Text("View Membership", style: customs.darkTextStyle(size: 14),),
                               subtitle: Text("View your membership status", style: customs.secondaryTextStyle(size: 12),),
                               onTap: (){
-                                Navigator.pushNamed(context, "/member_membership");
+                                Navigator.pushNamed(context, "/member_membership",
+                                arguments: {"member_id" : member_data['user_id']});
                               },
                               tileColor: customs.secondaryShade_2,
                             ),

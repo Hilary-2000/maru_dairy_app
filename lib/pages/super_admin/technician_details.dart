@@ -6,25 +6,24 @@ import 'package:maru/packages/api_connection.dart';
 import 'package:maru/packages/maru_theme.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
-class MemberDetails extends StatefulWidget {
-  const MemberDetails({super.key});
+class TechnicianDetails extends StatefulWidget {
+  const TechnicianDetails({super.key});
 
   @override
-  State<MemberDetails> createState() => _MemberDetailsState();
+  State<TechnicianDetails> createState() => _TechnicianDetailsState();
 }
 
-class _MemberDetailsState extends State<MemberDetails> {
+class _TechnicianDetailsState extends State<TechnicianDetails> {
   CustomThemes customs = CustomThemes();
   Map<String, dynamic>? args;
   List<Color> bg_color = [];
   int index = 0;
-  var memberData = null;
-  String collection_days = "0";
-  String collected_amount = "0";
+  var technicianData = null;
+  String collection = "0 Litres Collected";
   bool loading = false;
   bool _init = false;
 
-  Future<void> getMemberData() async {
+  Future<void> getTechnicianData() async {
     setState(() {
       loading = true;
     });
@@ -37,28 +36,34 @@ class _MemberDetailsState extends State<MemberDetails> {
         index = arguments['index'];
       });
       ApiConnection apiConnection = new ApiConnection();
-      var response = await apiConnection.adminMemberDetails(arguments['member_id'].toString());
+      var response = await apiConnection.technicianDetails(arguments['technician_id'].toString());
       if(customs.isValidJson(response)){
         var res = jsonDecode(response);
         if(res['success']){
           setState(() {
-            memberData = res['member_details'];
-            collection_days = res['collection_days'];
-            collected_amount = res['total_collection'];
+            technicianData = res['technician_data'];
+            collection = "${res['total_collection']} Litres Collected";
           });
         }else{
           setState(() {
-            memberData = null;
-            collection_days = "0";
-            collected_amount = "0";
+            technicianData = null;
+            collection = "0 Litres Collected";
           });
 
           customs.maruSnackBarDanger(context: context, text: res['message']);
         }
       }else{
+        setState(() {
+          technicianData = null;
+          collection = "0 Litres Collected";
+        });
         customs.maruSnackBarDanger(context: context, text: "An error occured!");
       }
     }else{
+      setState(() {
+        technicianData = null;
+        collection = "0 Litres Collected";
+      });
       Navigator.pop(context);
     }
 
@@ -78,7 +83,7 @@ class _MemberDetailsState extends State<MemberDetails> {
       });
 
       //GET MEMBER DATA
-      getMemberData();
+      getTechnicianData();
     }
   }
 
@@ -151,11 +156,11 @@ class _MemberDetailsState extends State<MemberDetails> {
                       child: Column(
                         children: [
                           Container(
-                            padding: EdgeInsets.symmetric(horizontal: 10),
-                            child: Row(
+                              padding: EdgeInsets.symmetric(horizontal: 10),
+                              child: Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text("View Member Details", style: customs.secondaryTextStyle(size: 15, fontweight: FontWeight.bold),),
+                                  Text("View Technician Details", style: customs.secondaryTextStyle(size: 15, fontweight: FontWeight.bold),),
                                   Hero(
                                     tag: _heroAddTodo,
                                     child: PopupMenuButton<String>(
@@ -165,7 +170,7 @@ class _MemberDetailsState extends State<MemberDetails> {
                                         print(result);
                                         if(result == "delete"){
                                           var result = await Navigator.of(context).push(HeroDialogRoute(builder: (context) {
-                                            return  _AddTodoPopupCard(member_data: memberData,);
+                                            return  _AddTodoPopupCard(technician_data: technicianData,);
                                           }));
                                           if(result != null){
                                             if(result['success']){
@@ -213,7 +218,7 @@ class _MemberDetailsState extends State<MemberDetails> {
                                     ),
                                   ),
                                 ]
-                            )
+                              )
                           ),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
@@ -262,91 +267,27 @@ class _MemberDetailsState extends State<MemberDetails> {
                                                 height: 45,
                                               ),
                                               Text(
-                                                memberData != null ? customs.toCamelCase(memberData['fullname'] ?? "N/A") : "N/A",
+                                                technicianData != null ? customs.toCamelCase(technicianData['fullname'] ?? "N/A") : "N/A",
                                                 style: customs.darkTextStyle(
                                                     size: 20,
                                                     fontweight: FontWeight.bold),
                                               ),
                                               Text(
-                                                memberData != null ? memberData['membership'] ?? "N/A" : "N/A",
+                                                collection,
                                                 style: customs.secondaryTextStyle(
                                                     size: 12,
                                                     fontweight: FontWeight.normal),
                                               ),
-                                              const SizedBox(
-                                                height: 5,
+                                              SizedBox(
+                                                height: 10,
                                               ),
-                                              Row(
-                                                mainAxisAlignment:
-                                                MainAxisAlignment.spaceEvenly,
-                                                children: [
-                                                  Column(
-                                                    children: [
-                                                      Text(
-                                                        collection_days,
-                                                        style:
-                                                        customs.darkTextStyle(
-                                                            size: 15,
-                                                            fontweight:
-                                                            FontWeight
-                                                                .bold),
-                                                      ),
-                                                      Text(
-                                                        "Collection Days",
-                                                        style: customs
-                                                            .secondaryTextStyle(
-                                                            size: 10,
-                                                            fontweight:
-                                                            FontWeight
-                                                                .normal),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                  Column(
-                                                    children: [
-                                                      Text(
-                                                        collected_amount,
-                                                        style:
-                                                        customs.darkTextStyle(
-                                                            size: 15,
-                                                            fontweight:
-                                                            FontWeight
-                                                                .bold),
-                                                      ),
-                                                      Text(
-                                                        "Litres Collected",
-                                                        style: customs
-                                                            .secondaryTextStyle(
-                                                            size: 10,
-                                                            fontweight:
-                                                            FontWeight
-                                                                .normal),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                  Column(
-                                                    children: [
-                                                      Text(
-                                                        (memberData != null ? customs.toCamelCase((memberData['animals'] ?? "0").toString()) : "0"),
-                                                        style:
-                                                        customs.darkTextStyle(
-                                                            size: 15,
-                                                            fontweight:
-                                                            FontWeight
-                                                                .bold),
-                                                      ),
-                                                      Text(
-                                                        "Animal",
-                                                        style: customs
-                                                            .secondaryTextStyle(
-                                                            size: 10,
-                                                            fontweight:
-                                                            FontWeight
-                                                                .normal),
-                                                      ),
-                                                    ],
-                                                  )
-                                                ],
+                                              Container(
+                                                padding: EdgeInsets.symmetric(vertical: 2, horizontal: 4),
+                                                decoration: BoxDecoration(
+                                                  color: (technicianData  != null ? customs.toCamelCase(technicianData['fullname'] ?? "0") : "0") == 1 ? customs.successColor : customs.dangerColor,
+                                                  borderRadius: BorderRadius.circular(2)
+                                                ),
+                                                child: Text( (technicianData  != null ? customs.toCamelCase(technicianData['fullname'] ?? "0") : "0") == 1 ?  "Active" : "In-active", style:customs.whiteTextStyle(size: 10, fontweight: FontWeight.bold)),
                                               )
                                             ],
                                           ),
@@ -361,15 +302,16 @@ class _MemberDetailsState extends State<MemberDetails> {
                                     right: 0,
                                     child: Center(
                                       child: CircleAvatar(
-                                          radius: width * 0.1,
-                                          child: ClipOval(
-                                            child: Image.asset(
-                                              "assets/images/hilla.jpg",
-                                              fit: BoxFit.cover,
-                                              width: double.infinity,
-                                              height: double.infinity,
-                                            ),
-                                          )),
+                                        radius: width * 0.1,
+                                        child: ClipOval(
+                                          child: Image.asset(
+                                            "assets/images/hilla.jpg",
+                                            fit: BoxFit.cover,
+                                            width: double.infinity,
+                                            height: double.infinity,
+                                          ),
+                                        )
+                                      ),
                                     ),
                                   ),
                                 ]),
@@ -378,37 +320,6 @@ class _MemberDetailsState extends State<MemberDetails> {
                           ),
                           SizedBox(
                             height: 20,
-                          ),
-                          Container(
-                            width: width * 0.7,
-                            child: Divider(
-                              color: customs.secondaryShade_2,
-                            ),
-                          ),
-                          Container(
-                            padding: EdgeInsets.symmetric(horizontal: 20),
-                            child: Row(
-                              children: [
-                                customs.maruIconButton(
-                                    icons: Icons.history,
-                                    text: "Collection History",
-                                    onPressed: (){
-                                      Navigator.pushNamed(context, "/admin_member_history", arguments: {"member_id": (memberData != null ? memberData['user_id'] ?? "-0" : "-0"), "member_data": memberData});
-
-                                    },
-                                    fontSize: 14
-                                ),
-                                SizedBox(width: 20,),
-                                customs.maruIconButton(
-                                    icons: Icons.history,
-                                    text: "Membership",
-                                    onPressed: (){
-                                      Navigator.pushNamed(context, "/admin_member_membership", arguments: {"member_id": (memberData != null ? memberData['user_id'] ?? "-0" : "-0"), "member_data": memberData});
-                                    },
-                                    type: Type.secondary,
-                                    fontSize: 14)
-                              ],
-                            ),
                           ),
                           Container(
                             width: width * 0.7,
@@ -429,7 +340,7 @@ class _MemberDetailsState extends State<MemberDetails> {
                                   ),
                                 ),
                                 Text(
-                                  memberData != null ? customs.toCamelCase(memberData['phone_number'] ?? "N/A") : "N/A",
+                                  technicianData != null ? technicianData['phone_number'] ?? "N/A" : "N/A",
                                   style: customs.secondaryTextStyle(size: 16),
                                 ),
                                 Divider(
@@ -450,7 +361,7 @@ class _MemberDetailsState extends State<MemberDetails> {
                                       size: 12, fontweight: FontWeight.bold),
                                 ),
                                 Text(
-                                  memberData != null ? customs.toCamelCase(memberData['email'] ?? "N/A") : "N/A",
+                                  technicianData != null ? customs.toCamelCase(technicianData['email'] ?? "N/A") : "N/A",
                                   style: customs.secondaryTextStyle(size: 16),
                                 ),
                                 Divider(
@@ -471,7 +382,7 @@ class _MemberDetailsState extends State<MemberDetails> {
                                       size: 12, fontweight: FontWeight.bold),
                                 ),
                                 Text(
-                                  memberData != null ? customs.toCamelCase(memberData['residence'] ?? "N/A") : "N/A",
+                                  technicianData != null ? customs.toCamelCase(technicianData['residence'] ?? "N/A") : "N/A",
                                   style: customs.secondaryTextStyle(size: 16),
                                 ),
                                 Divider(
@@ -492,7 +403,7 @@ class _MemberDetailsState extends State<MemberDetails> {
                                       size: 12, fontweight: FontWeight.bold),
                                 ),
                                 Text(
-                                  memberData != null ? customs.toCamelCase(memberData['region'] ?? "N/A") : "N/A",
+                                  technicianData != null ? customs.toCamelCase(technicianData['region'] ?? "N/A") : "N/A",
                                   style: customs.secondaryTextStyle(size: 16),
                                 ),
                                 Divider(
@@ -513,7 +424,7 @@ class _MemberDetailsState extends State<MemberDetails> {
                                       size: 12, fontweight: FontWeight.bold),
                                 ),
                                 Text(
-                                  memberData != null ? customs.toCamelCase(memberData['username'] ?? "N/A") : "N/A",
+                                  technicianData != null ? customs.toCamelCase(technicianData['username'] ?? "N/A") : "N/A",
                                   style: customs.secondaryTextStyle(size: 16),
                                 ),
                                 Divider(
@@ -534,28 +445,7 @@ class _MemberDetailsState extends State<MemberDetails> {
                                       size: 12, fontweight: FontWeight.bold),
                                 ),
                                 Text(
-                                  memberData != null ? customs.toCamelCase(memberData['national_id'] ?? "N/A") : "N/A",
-                                  style: customs.secondaryTextStyle(size: 16),
-                                ),
-                                Divider(
-                                  color: customs.secondaryShade_2,
-                                )
-                              ],
-                            ),
-                          ),
-                          Container(
-                            width: width * 0.9,
-                            margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "Membership Number:",
-                                  style: customs.darkTextStyle(
-                                      size: 12, fontweight: FontWeight.bold),
-                                ),
-                                Text(
-                                  memberData != null ? customs.toCamelCase(memberData['membership'] ?? "N/A") : "N/A",
+                                  technicianData != null ? customs.toCamelCase(technicianData['national_id'] ?? "N/A") : "N/A",
                                   style: customs.secondaryTextStyle(size: 16),
                                 ),
                                 Divider(
@@ -578,8 +468,9 @@ class _MemberDetailsState extends State<MemberDetails> {
         backgroundColor: customs.primaryShade_2,
         child: IconButton(
           icon: Icon(Icons.edit, color: customs.primaryColor,),
-          onPressed: () {
-            Navigator.pushNamed(context, "/admin_edit_member_details", arguments: {"index": index, "member_id": (memberData != null ? (memberData['user_id'] ?? "0") : "0")});
+          onPressed: () async {
+            await Navigator.pushNamed(context, "/edit_technician", arguments: {"index": index, "technician_id": (technicianData != null ? (technicianData['user_id'] ?? "0") : "0")});
+            getTechnicianData();
           },
         ),
       ),
@@ -587,12 +478,13 @@ class _MemberDetailsState extends State<MemberDetails> {
   }
 }
 
+
 String _heroAddTodo = "ask_delete";
 
 class _AddTodoPopupCard extends StatefulWidget {
   /// {@macro add_todo_popup_card}
-  var member_data = null;
-  _AddTodoPopupCard({Key? key, required this.member_data}) : super(key: key);
+  var technician_data = null;
+  _AddTodoPopupCard({Key? key, required this.technician_data}) : super(key: key);
 
   @override
   State<_AddTodoPopupCard> createState() => _AddTodoPopupCardState();
@@ -630,7 +522,7 @@ class _AddTodoPopupCardState extends State<_AddTodoPopupCard> {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Text("Are you sure you want to delete \"${customThemes.toCamelCase(widget.member_data['fullname'])}\" membership number: \"${widget.member_data['membership']}\"?", style: customThemes.darkTextStyle(size: 15, fontweight: FontWeight.bold),),
+                      Text("Are you sure you want to delete \"${customThemes.toCamelCase(widget.technician_data['fullname'])}\" ?", style: customThemes.darkTextStyle(size: 15, fontweight: FontWeight.bold),),
                       SizedBox(height: 10,),
                       Container(width: width, child: Text("All their data will be deleted permanently!", style: customThemes.secondaryTextStyle(size: 12, ),)),
                       Container(
@@ -649,7 +541,7 @@ class _AddTodoPopupCardState extends State<_AddTodoPopupCard> {
                                       saveLoader = true;
                                     });
                                     ApiConnection apiConn = ApiConnection();
-                                    var response = await apiConn.deleteMember(widget.member_data['user_id'].toString());
+                                    var response = await apiConn.deleteTechnician(widget.technician_data['user_id'].toString());
                                     if(customThemes.isValidJson(response)){
                                       var res = jsonDecode(response);
                                       if(res['success']){

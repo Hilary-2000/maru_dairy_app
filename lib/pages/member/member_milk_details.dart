@@ -179,7 +179,7 @@ class _MemberMilkDetailsState extends State<MemberMilkDetails> {
                                   color: customs.whiteColor,
                                   borderRadius: BorderRadius.circular(3)
                                 ),
-                                child: Text(collection_details != null ? (collection_details['date'] ?? "N/A") : "N/A", style: customs.secondaryTextStyle(size: 14, fontweight: FontWeight.bold),),
+                                child: Center(child: Text(collection_details != null ? (collection_details['date'] ?? "N/A") : "N/A", style: customs.secondaryTextStyle(size: 14, fontweight: FontWeight.bold),)),
                               ),
                             ),
                           )

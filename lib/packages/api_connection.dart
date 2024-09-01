@@ -3,6 +3,7 @@ import "dart:convert";
 
 import "package:flutter_secure_storage/flutter_secure_storage.dart";
 import "package:http/http.dart" as rq;
+import "package:maru/pages/admin/membership.dart";
 class ApiConnection{
   String apiLink = "192.168.88.236:8000";
 
@@ -910,6 +911,290 @@ class ApiConnection{
   Future<String> getMilkPrice() async{
     var client = rq.Client();
     var url = Uri.http(apiLink,"/api/admin/milk_price/get");
+    var body = jsonEncode({});
+    FlutterSecureStorage storage = new FlutterSecureStorage();
+    String? token = await storage.read(key: "token");
+    try{
+      var response = await client.post(
+          url,
+          headers: {
+            'Content-Type': 'application/json',
+            'maru-authentication_code' : token!
+          },
+          body: body
+      ).timeout(Duration(seconds: 60));
+      return response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body;
+    }on TimeoutException {
+      return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
+    } catch(e){
+      return "{\"success\":false, \"message\":\"$e\"}";
+    }finally{
+      client.close();
+    }
+  }
+
+  Future<String> deleteMilkData(String collection_id) async{
+    var client = rq.Client();
+    var url = Uri.http(apiLink,"/api/admin/milk_collection/delete/$collection_id");
+    var body = jsonEncode({});
+    FlutterSecureStorage storage = new FlutterSecureStorage();
+    String? token = await storage.read(key: "token");
+    try{
+      var response = await client.post(
+          url,
+          headers: {
+            'Content-Type': 'application/json',
+            'maru-authentication_code' : token!
+          },
+          body: body
+      ).timeout(Duration(seconds: 60));
+      return response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body;
+    }on TimeoutException {
+      return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
+    } catch(e){
+      return "{\"success\":false, \"message\":\"$e\"}";
+    }finally{
+      client.close();
+    }
+  }
+
+  Future<String> deleteMember(String member_id) async{
+    var client = rq.Client();
+    var url = Uri.http(apiLink,"/api/admin/member/delete/$member_id");
+    var body = jsonEncode({});
+    FlutterSecureStorage storage = new FlutterSecureStorage();
+    String? token = await storage.read(key: "token");
+    try{
+      var response = await client.post(
+          url,
+          headers: {
+            'Content-Type': 'application/json',
+            'maru-authentication_code' : token!
+          },
+          body: body
+      ).timeout(Duration(seconds: 60));
+      return response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body;
+    }on TimeoutException {
+      return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
+    } catch(e){
+      return "{\"success\":false, \"message\":\"$e\"}";
+    }finally{
+      client.close();
+    }
+  }
+
+  Future<String> getMemberMembership(String member_id) async{
+    var client = rq.Client();
+    var url = Uri.http(apiLink,"/api/admin/member/membership/$member_id");
+    var body = jsonEncode({});
+    FlutterSecureStorage storage = new FlutterSecureStorage();
+    String? token = await storage.read(key: "token");
+    try{
+      var response = await client.post(
+          url,
+          headers: {
+            'Content-Type': 'application/json',
+            'maru-authentication_code' : token!
+          },
+          body: body
+      ).timeout(Duration(seconds: 60));
+      return response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body;
+    }on TimeoutException {
+      return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
+    } catch(e){
+      return "{\"success\":false, \"message\":\"$e\"}";
+    }finally{
+      client.close();
+    }
+  }
+
+  Future<String> acceptMemberPayment(var datapass) async{
+    var client = rq.Client();
+    var url = Uri.http(apiLink,"/api/admin/member/accept-earning");
+    var body = jsonEncode(datapass);
+    FlutterSecureStorage storage = new FlutterSecureStorage();
+    String? token = await storage.read(key: "token");
+    try{
+      var response = await client.post(
+          url,
+          headers: {
+            'Content-Type': 'application/json',
+            'maru-authentication_code' : token!
+          },
+          body: body
+      ).timeout(Duration(seconds: 60));
+      return response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body;
+    }on TimeoutException {
+      return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
+    } catch(e){
+      return "{\"success\":false, \"message\":\"$e\"}";
+    }finally{
+      client.close();
+    }
+  }
+
+  //
+  Future<String> declineMemberPayment(String payment_id) async{
+    var client = rq.Client();
+    var url = Uri.http(apiLink,"/api/admin/member/deletePayment/$payment_id");
+    var body = jsonEncode({});
+    FlutterSecureStorage storage = new FlutterSecureStorage();
+    String? token = await storage.read(key: "token");
+    try{
+      var response = await client.post(
+          url,
+          headers: {
+            'Content-Type': 'application/json',
+            'maru-authentication_code' : token!
+          },
+          body: body
+      ).timeout(Duration(seconds: 60));
+      return response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body;
+    }on TimeoutException {
+      return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
+    } catch(e){
+      return "{\"success\":false, \"message\":\"$e\"}";
+    }finally{
+      client.close();
+    }
+  }
+
+
+  // make payment
+  Future<String> paySubscription(var datapass) async{
+    var client = rq.Client();
+    var url = Uri.http(apiLink,"/api/admin/member/pay_subscription");
+    var body = jsonEncode(datapass);
+    FlutterSecureStorage storage = new FlutterSecureStorage();
+    String? token = await storage.read(key: "token");
+    try{
+      var response = await client.post(
+          url,
+          headers: {
+            'Content-Type': 'application/json',
+            'maru-authentication_code' : token!
+          },
+          body: body
+      ).timeout(Duration(seconds: 60));
+      return response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body;
+    }on TimeoutException {
+      return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
+    } catch(e){
+      return "{\"success\":false, \"message\":\"$e\"}";
+    }finally{
+      client.close();
+    }
+  }
+
+
+  // make payment
+  Future<String> paymentData(String payment_id) async{
+    var client = rq.Client();
+    var url = Uri.http(apiLink,"/api/admin/payments/details/$payment_id");
+    var body = jsonEncode({});
+    FlutterSecureStorage storage = new FlutterSecureStorage();
+    String? token = await storage.read(key: "token");
+    try{
+      var response = await client.post(
+          url,
+          headers: {
+            'Content-Type': 'application/json',
+            'maru-authentication_code' : token!
+          },
+          body: body
+      ).timeout(Duration(seconds: 60));
+      return response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body;
+    }on TimeoutException {
+      return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
+    } catch(e){
+      return "{\"success\":false, \"message\":\"$e\"}";
+    }finally{
+      client.close();
+    }
+  }
+
+  // make technicians
+  Future<String> displayTechnicians() async{
+    var client = rq.Client();
+    var url = Uri.http(apiLink,"/api/admin/technicians");
+    var body = jsonEncode({});
+    FlutterSecureStorage storage = new FlutterSecureStorage();
+    String? token = await storage.read(key: "token");
+    try{
+      var response = await client.post(
+          url,
+          headers: {
+            'Content-Type': 'application/json',
+            'maru-authentication_code' : token!
+          },
+          body: body
+      ).timeout(Duration(seconds: 60));
+      return response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body;
+    }on TimeoutException {
+      return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
+    } catch(e){
+      return "{\"success\":false, \"message\":\"$e\"}";
+    }finally{
+      client.close();
+    }
+  }
+
+  // get member data
+  Future<String> technicianDetails(String technicianId) async{
+    var client = rq.Client();
+    var url = Uri.http(apiLink,"/api/admin/technician/details/$technicianId");
+    var body = jsonEncode({});
+    FlutterSecureStorage storage = new FlutterSecureStorage();
+    String? token = await storage.read(key: "token");
+    try{
+      var response = await client.post(
+          url,
+          headers: {
+            'Content-Type': 'application/json',
+            'maru-authentication_code' : token!
+          },
+          body: body
+      ).timeout(Duration(seconds: 60));
+      return response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body;
+    }on TimeoutException {
+      return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
+    } catch(e){
+      return "{\"success\":false, \"message\":\"$e\"}";
+    }finally{
+      client.close();
+    }
+  }
+
+
+  // get member data
+  Future<String> updateTechnicianDetails(var datapass) async{
+    var client = rq.Client();
+    var url = Uri.http(apiLink,"/api/admin/technician/update");
+    var body = jsonEncode(datapass);
+    FlutterSecureStorage storage = new FlutterSecureStorage();
+    String? token = await storage.read(key: "token");
+    try{
+      var response = await client.post(
+          url,
+          headers: {
+            'Content-Type': 'application/json',
+            'maru-authentication_code' : token!
+          },
+          body: body
+      ).timeout(Duration(seconds: 60));
+      return response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body;
+    }on TimeoutException {
+      return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
+    } catch(e){
+      return "{\"success\":false, \"message\":\"$e\"}";
+    }finally{
+      client.close();
+    }
+  }
+
+  Future<String> deleteTechnician(String technician_id) async{
+    var client = rq.Client();
+    var url = Uri.http(apiLink,"/api/admin/technician/delete/$technician_id");
     var body = jsonEncode({});
     FlutterSecureStorage storage = new FlutterSecureStorage();
     String? token = await storage.read(key: "token");

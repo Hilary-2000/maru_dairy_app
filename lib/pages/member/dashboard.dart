@@ -582,7 +582,9 @@ class _memberDashState extends State<memberDash> {
                                 text: "View Membership",
                                 onPressed: () {
                                   Navigator.pushNamed(
-                                      context, "/member_membership");
+                                    context, "/member_membership",
+                                    arguments: {"member_id" : member_data['user_id']
+                                    });
                                 }),
                             customs.maruButton(
                                 showArrow: true,
