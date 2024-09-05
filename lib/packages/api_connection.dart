@@ -757,7 +757,7 @@ class ApiConnection{
   // get member data
   Future<String> updateAdminProfile(var datapass) async{
     var client = rq.Client();
-    var url = Uri.http(apiLink,"/api/admin/member/update_profile");
+    var url = Uri.http(apiLink,"/api/admin/update_profile");
     var body = jsonEncode(datapass);
     FlutterSecureStorage storage = new FlutterSecureStorage();
     String? token = await storage.read(key: "token");

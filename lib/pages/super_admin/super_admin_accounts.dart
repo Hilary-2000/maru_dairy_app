@@ -115,7 +115,7 @@ class _SuperAdminAccountsState extends State<SuperAdminAccounts> {
                               subtitle: Text("View your information", style: customs.secondaryTextStyle(size: 12),),
                               splashColor: customs.dangerColor,
                               onTap: (){
-                                Navigator.pushNamed(context, "/member_view_profile");
+                                Navigator.pushNamed(context, "/admin_profile");
                               },
                               tileColor: customs.secondaryShade_2,
                             ),
@@ -133,7 +133,7 @@ class _SuperAdminAccountsState extends State<SuperAdminAccounts> {
                               title: Text("Edit Profile", style: customs.darkTextStyle(size: 14),),
                               subtitle: Text("Update your information", style: customs.secondaryTextStyle(size: 12),),
                               onTap: (){
-                                Navigator.pushNamed(context, "/member_edit_profile");
+                                Navigator.pushNamed(context, "/admin_edit_profile");
                               },
                               tileColor: customs.secondaryShade_2,
                             ),
@@ -297,7 +297,7 @@ class _SuperAdminAccountsState extends State<SuperAdminAccounts> {
                               title: Text("Milk Price Per Liter", style: customs.darkTextStyle(size: 14),),
                               subtitle: Text("Change price per Litre. @$price", style: customs.secondaryTextStyle(size: 12),),
                               onTap: (){
-                                Navigator.pushNamed(context, "/change_milk_price");
+                                Navigator.pushNamed(context, "/milk_prices");
                               },
                             ),
                           ],

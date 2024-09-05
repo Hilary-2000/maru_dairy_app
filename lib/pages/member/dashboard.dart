@@ -24,6 +24,7 @@ class _memberDashboardState extends State<memberDashboard> {
   }
 
   var index = 0;
+  int notification_count = 0;
   List<Widget> member_windows = [
     // THE MEMBER DASHBOARD AFTER LOGIN
     const memberDash(),
@@ -174,17 +175,22 @@ class _memberDashboardState extends State<memberDashboard> {
                         Positioned(
                             left: 10,
                             top: -6,
-                            child: Container(
-                              padding: EdgeInsets.all(2),
+                            child: notification_count > 0 ? Container(
+                              width: 20,
+                              height: 20,
+                              padding: EdgeInsets.all(1),
                               decoration: BoxDecoration(
                                   color: Colors.red,
-                                  borderRadius: BorderRadius.circular(10)),
-                              child: Text(
-                                "0",
-                                style: customs.whiteTextStyle(
-                                    size: 10, fontweight: FontWeight.bold),
+                                  borderRadius: BorderRadius.circular(5)),
+                              child: Center(
+                                child: Text(
+                                  "$notification_count",
+                                  style: customs.whiteTextStyle(
+                                      size: 10, fontweight: FontWeight.bold),
+                                ),
                               ),
-                            ))
+                            ): SizedBox(height: 0)
+                        )
                       ]),
                       Text(
                         "Notification",
@@ -249,7 +255,7 @@ class _memberDashboardState extends State<memberDashboard> {
               ),
             ))
           : (index == 2
-              ? (CircleAvatar(
+              ? (false ? CircleAvatar(
                   radius: 25,
                   backgroundColor: customs.primaryShade_2,
                   child: IconButton(
@@ -262,7 +268,7 @@ class _memberDashboardState extends State<memberDashboard> {
                       Navigator.pushNamed(context, "/member_inbox");
                     },
                   ),
-                ))
+                ) : SizedBox())
               : null),
     );
   }

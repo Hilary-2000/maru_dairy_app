@@ -25,7 +25,7 @@ class _notificationWindowState extends State<notificationWindow> {
           decoration: BoxDecoration(
             color: customs.secondaryShade_2.withOpacity(0.2),
           ),
-          child: Column(
+          child: false ? Column(
             children: [
               Container(
                 padding:
@@ -467,6 +467,31 @@ class _notificationWindowState extends State<notificationWindow> {
                     ],
                   ),
                 ),
+              )
+            ],
+          ) : Column(
+            children: [
+              Container(
+                padding:
+                const EdgeInsets.symmetric(vertical: 8.0, horizontal: 12.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "Notifications",
+                      style: customs.darkTextStyle(
+                          size: 20, fontweight: FontWeight.bold),
+                    ),
+                    Text(
+                      "Mark all as reads",
+                      style: customs.primaryTextStyle(
+                          size: 12, fontweight: FontWeight.bold),
+                    )
+                  ],
+                ),
+              ),
+              Container(
+                child: Text("No notifications present!", style: customs.secondaryTextStyle(size: 14, fontweight: FontWeight.normal),),
               )
             ],
           ),

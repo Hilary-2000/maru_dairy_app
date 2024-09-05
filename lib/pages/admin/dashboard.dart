@@ -19,6 +19,7 @@ class adminDashboard extends StatefulWidget {
 
 class _adminDashboardState extends State<adminDashboard> {
   int index = 0;
+  int notification_count = 0;
   CustomThemes customs = CustomThemes();
   void _updateIndex(int newIndex) {
     setState(() {
@@ -208,17 +209,22 @@ class _adminDashboardState extends State<adminDashboard> {
                         Positioned(
                             left: 10,
                             top: -6,
-                            child: Container(
-                              padding: EdgeInsets.all(2),
+                            child: notification_count > 0 ? Container(
+                              width: 20,
+                              height: 20,
+                              padding: EdgeInsets.all(1),
                               decoration: BoxDecoration(
                                   color: Colors.red,
-                                  borderRadius: BorderRadius.circular(10)),
-                              child: Text(
-                                "0",
-                                style: customs.whiteTextStyle(
-                                    size: 10, fontweight: FontWeight.bold),
+                                  borderRadius: BorderRadius.circular(5)),
+                              child: Center(
+                                child: Text(
+                                  "$notification_count",
+                                  style: customs.whiteTextStyle(
+                                      size: 10, fontweight: FontWeight.bold),
+                                ),
                               ),
-                            ))
+                            ): SizedBox(height: 0)
+                        )
                       ]),
                       Text(
                         "Inquiries",
@@ -284,7 +290,7 @@ class _adminDashboardState extends State<adminDashboard> {
               ),
             ))
           : (index == 3
-              ? (CircleAvatar(
+              ? (false ? CircleAvatar(
                   radius: 25,
                   backgroundColor: customs.successShade_2,
                   child: IconButton(
@@ -298,7 +304,7 @@ class _adminDashboardState extends State<adminDashboard> {
                           context, "/select_member_to_send_message");
                     },
                   ),
-                ))
+                ) : SizedBox())
               : (index == 1
                   ? (CircleAvatar(
                       radius: 25,

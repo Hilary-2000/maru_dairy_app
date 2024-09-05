@@ -20,6 +20,7 @@ class _AdminEditProfileState extends State<AdminEditProfile> {
   TextEditingController email = TextEditingController();
   TextEditingController location = TextEditingController();
   TextEditingController FullName = TextEditingController();
+  TextEditingController admin_username = TextEditingController();
   String regionDV = "";
   String genderDV = "";
   bool loading = false;
@@ -76,6 +77,7 @@ class _AdminEditProfileState extends State<AdminEditProfile> {
           genderDV = admin_data != null ? (admin_data['gender'] ?? "") : "";
           regionDV = admin_data != null ? (admin_data['region'] ?? "") : "";
           FullName.text = admin_data != null ? (admin_data['fullname'] ?? "") : "";
+          admin_username.text = admin_data != null ? admin_data['username'] ?? "" : "";
         });
       }else{
         // Navigator.pop(context);
@@ -455,6 +457,36 @@ class _AdminEditProfileState extends State<AdminEditProfile> {
                               ),
                             ),
                             Container(
+                              width: width * 0.9,
+                              margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "Username:",
+                                    style: customs.darkTextStyle(
+                                        size: 12, fontweight: FontWeight.bold),
+                                  ),
+                                  customs.maruTextFormField(
+                                      editingController: admin_username,
+                                      isChanged: (value){},
+                                      textType: TextInputType.text,
+                                      floatingBehaviour: FloatingLabelBehavior.always,
+                                      hintText: "Thika, Kiambu County",
+                                      validator: (value) {
+                                        if (value == null || value.isEmpty) {
+                                          return "Enter Residence!";
+                                        }
+                                        return null;
+                                      }
+                                  ),
+                                  Divider(
+                                    color: customs.secondaryShade_2,
+                                  )
+                                ],
+                              ),
+                            ),
+                            Container(
                                 width: width * 0.9,
                                 margin: const EdgeInsets.fromLTRB(0, 10, 0, 20),
                                 child: customs.maruButton(
@@ -472,10 +504,12 @@ class _AdminEditProfileState extends State<AdminEditProfile> {
                                           "phone_number": phoneNumber.text,
                                           "email": email.text,
                                           "residence": location.text,
-                                          "region": regionDV
+                                          "region": regionDV,
+                                          "username": admin_username.text
                                         };
                                         ApiConnection apiConnection = new ApiConnection();
                                         var response = await apiConnection.updateAdminProfile(body);
+                                        print(response);
                                         if(customs.isValidJson(response)){
                                           var res = jsonDecode(response);
                                           if(res['success']){

@@ -25,6 +25,7 @@ class _superAdminDashboardState extends State<superAdminDashboard> {
       index = newIndex;
     });
   }
+  int notification_count = 0;
 
 
   @override
@@ -207,19 +208,24 @@ class _superAdminDashboardState extends State<superAdminDashboard> {
                           ),
                         ),
                         Positioned(
-                            left: 10,
-                            top: -6,
-                            child: Container(
-                              padding: EdgeInsets.all(2),
+                            left: 12,
+                            top: -12,
+                            child: notification_count > 0 ? Container(
+                              width: 20,
+                              height: 20,
+                              padding: EdgeInsets.all(1),
                               decoration: BoxDecoration(
                                   color: Colors.red,
-                                  borderRadius: BorderRadius.circular(10)),
-                              child: Text(
-                                "0",
-                                style: customs.whiteTextStyle(
-                                    size: 10, fontweight: FontWeight.bold),
+                                  borderRadius: BorderRadius.circular(5)),
+                              child: Center(
+                                child: Text(
+                                  "$notification_count",
+                                  style: customs.whiteTextStyle(
+                                      size: 10, fontweight: FontWeight.bold),
+                                ),
                               ),
-                            ))
+                            ): SizedBox(height: 0)
+                        )
                       ]),
                       Text(
                         "Inquiries",
@@ -269,6 +275,55 @@ class _superAdminDashboardState extends State<superAdminDashboard> {
           ),
         );
       }),
+      floatingActionButton: index == 0
+          ? (CircleAvatar(
+        radius: 25,
+        backgroundColor: customs.secondaryShade_2,
+        child: IconButton(
+          icon: Icon(
+            Icons.person_add_alt_outlined,
+            size: 25,
+            color: customs.secondaryColor,
+          ),
+          onPressed: () {
+            Navigator.pushNamed(context, "/new_member");
+          },
+        ),
+      ))
+          : (index == 3
+          ? (false ? CircleAvatar(
+        radius: 25,
+        backgroundColor: customs.successShade_2,
+        child: IconButton(
+          icon: Icon(
+            Icons.chat_bubble_outline,
+            size: 25,
+            color: customs.successColor,
+          ),
+          onPressed: () async {
+            await Navigator.pushNamed(
+                context, "/select_member_to_send_message");
+          },
+        ),
+      ): SizedBox())
+          : (index == 1
+          ? (CircleAvatar(
+        radius: 25,
+        backgroundColor: customs.successShade_2,
+        child: IconButton(
+          icon: Icon(
+            Icons.person_add_alt_outlined,
+            size: 25,
+            color: customs.successColor,
+          ),
+          onPressed: () async {
+            await Navigator.pushNamed(
+                context, "/new_member"
+            );
+          },
+        ),
+      ))
+          : null)),
     );
   }
 }

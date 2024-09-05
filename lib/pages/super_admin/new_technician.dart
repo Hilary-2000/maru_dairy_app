@@ -20,6 +20,9 @@ class _NewTechnicianState extends State<NewTechnician> {
   bool save_loader = false;
   Map<String, dynamic>? args;
   var technicianData = null;
+  bool hidePassword = true;
+  TextEditingController _passwordController = new TextEditingController();
+  TextEditingController usernameController = new TextEditingController();
   int index = 0;
   final _formKey = GlobalKey<FormState>();
 
@@ -357,6 +360,72 @@ class _NewTechnicianState extends State<NewTechnician> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
+                                      "Username:",
+                                      style: customs.darkTextStyle(
+                                          size: 12, fontweight: FontWeight.bold),
+                                    ),
+                                    customs.maruTextFormField(
+                                        isChanged: (value) {},
+                                        textType: TextInputType.text,
+                                        floatingBehaviour:
+                                        FloatingLabelBehavior.always,
+                                        hintText: "e,g: username",
+                                        editingController: usernameController,
+                                        validator: (value) {
+                                          if(value == null || value.isEmpty){
+                                            return "Define the technician username!";
+                                          }
+                                          return null;
+                                        }),
+                                    Divider(
+                                      color: customs.secondaryShade_2,
+                                    )
+                                  ],
+                                ),
+                              ),
+                              Container(
+                                width: width * 0.9,
+                                margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "Password:",
+                                      style: customs.darkTextStyle(
+                                          size: 12, fontweight: FontWeight.bold),
+                                    ),
+                                    customs.maruPassword(
+                                        passwordStatus: (){
+                                          setState(() {
+                                            hidePassword = !hidePassword!;
+                                          });
+                                        },
+                                        hintText: "e.g ******",
+                                        hidePassword: hidePassword,
+                                        editingController: _passwordController,
+                                        validator: (value) {
+                                          if (value == null || value.isEmpty) {
+                                            return "Enter Password!";
+                                          }
+                                          return null;
+                                        },
+                                        isChanged: (text) {
+                                          print("Value :  $text");
+                                        }
+                                    ),
+                                    Divider(
+                                      color: customs.secondaryShade_2,
+                                    )
+                                  ],
+                                ),
+                              ),
+                              Container(
+                                width: width * 0.9,
+                                margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
                                       "Status:",
                                       style: customs.darkTextStyle(
                                           size: 12, fontweight: FontWeight.bold
@@ -404,7 +473,9 @@ class _NewTechnicianState extends State<NewTechnician> {
                                             "region": regionDV,
                                             "national_id": idController.text,
                                             "gender": genderDV,
-                                            "status": status
+                                            "status": status,
+                                            "username":usernameController.text,
+                                            "password":_passwordController.text
                                           };
 
                                           // update technician details
@@ -422,6 +493,8 @@ class _NewTechnicianState extends State<NewTechnician> {
                                                 idController.text = "";
                                                 genderDV = "";
                                                 status = "";
+                                                usernameController.text = "";
+                                                _passwordController.text = "";
                                               });
                                             }else{
                                               customs.maruSnackBarDanger(context: context, text: res['message']);

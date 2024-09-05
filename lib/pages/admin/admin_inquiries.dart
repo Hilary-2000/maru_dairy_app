@@ -11,6 +11,7 @@ class AdminInquiries extends StatefulWidget {
 
 class _AdminInquiriesState extends State<AdminInquiries> {
   CustomThemes customs = CustomThemes();
+  bool hide = true;
   final FlutterSecureStorage _storage = const FlutterSecureStorage();
   @override
   Widget build(BuildContext context) {
@@ -24,7 +25,7 @@ class _AdminInquiriesState extends State<AdminInquiries> {
           height: height,
           width: width,
           color: customs.secondaryShade_2.withOpacity(0.2),
-          child: Column(
+          child: !hide ? Column(
             children: [
               Container(
                 margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
@@ -264,6 +265,33 @@ class _AdminInquiriesState extends State<AdminInquiries> {
                     ],
                   ),
                 ),
+              )
+            ],
+          ) : Column(
+            children: [
+              Container(
+                margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Container(
+                      width: width * 0.7,
+                      child: Text("Inquiries", style: customs.darkTextStyle(size: 20, fontweight: FontWeight.bold),),
+                    ),
+                    CircleAvatar(backgroundColor: customs.secondaryShade_2, child: IconButton(onPressed: (){}, icon: Icon(Icons.search), color: customs.secondaryColor,)),
+                  ],
+                ),
+              ),
+              Container(
+                width: width * 0.5,
+                margin: const EdgeInsets.symmetric(vertical: 5),
+                child: Divider(
+                  color: customs.secondaryShade_2,
+                ),
+              ),
+              Container(
+                child: Text("No inquiries present at the moment", style: customs.secondaryTextStyle(size: 14, fontweight: FontWeight.normal),),
               )
             ],
           ),

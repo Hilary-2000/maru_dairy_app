@@ -41,7 +41,7 @@ class _InquiryInboxState extends State<InquiryInbox> {
             decoration: BoxDecoration(
               color: customs.secondaryShade_2.withOpacity(0.2),
             ),
-            child: Column(
+            child:Column(
               children: [
                 GestureDetector(
                   onTap: () {
@@ -354,7 +354,7 @@ class _InquiryInboxState extends State<InquiryInbox> {
                   ),
                 )
               ],
-            ),
+            )
           );
         },
       )),
