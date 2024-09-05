@@ -23,6 +23,7 @@ import 'package:maru/pages/member/membership.dart';
 import 'package:maru/pages/member/view_profile.dart';
 import 'package:maru/pages/super_admin/Technicians.dart';
 import 'package:maru/pages/super_admin/edit_technician.dart';
+import 'package:maru/pages/super_admin/new_technician.dart';
 import 'package:maru/pages/technician/edit_member_milk_data.dart';
 import 'package:maru/pages/technician/technician_profile.dart';
 import 'package:maru/pages/technician/technician_qr_scanner.dart';
@@ -92,7 +93,8 @@ void main() {
       "/admin_member_membership": (context) => const Membership(),
       "/manage_technicians": (context) => const Technicians(),
       "/technician_details": (context) => const TechnicianDetails(),
-      "/edit_technician": (context) => const EditTechnician()
+      "/edit_technician": (context) => const EditTechnician(),
+      "/new_technician": (context)=> const NewTechnician()
     },
   ));
 }

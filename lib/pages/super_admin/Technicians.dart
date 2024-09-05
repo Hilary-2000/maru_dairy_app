@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:maru/packages/api_connection.dart';
 import 'package:maru/packages/maru_theme.dart';
 import 'package:skeletonizer/skeletonizer.dart';
@@ -23,7 +24,7 @@ class _TechniciansState extends State<Technicians> {
   List<TextStyle> textStyles = [];
   TextEditingController searchTechnician = TextEditingController();
 
-  Future<void> getMembers() async {
+  Future<void> getTechnician() async {
     setState(() {
       loading = true;
     });
@@ -75,7 +76,7 @@ class _TechniciansState extends State<Technicians> {
       });
 
       //get the technician
-      getMembers();
+      getTechnician();
 
       setState(() {
         _init = true;
@@ -168,12 +169,16 @@ class _TechniciansState extends State<Technicians> {
                   margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
                   width: width,
                   child: Material(
-                    child: customs.maruSearchTextField(
-                        isChanged: (value) {
-                          findKeyWord(value);
-                        },
-                        editingController: searchTechnician,
-                        hintText: "Start typing to search!"),
+                    child: Container(
+                      color: customs.whiteColor,
+                      padding: EdgeInsets.symmetric(horizontal: 10),
+                      child: customs.maruSearchTextField(
+                          isChanged: (value) {
+                            findKeyWord(value);
+                          },
+                          editingController: searchTechnician,
+                          hintText: "Start typing to search!"),
+                    ),
                   ),
                 ),
                 Container(
@@ -210,9 +215,10 @@ class _TechniciansState extends State<Technicians> {
                             return Column(
                               children: [
                                 GestureDetector(
-                                  onTap: () {
-                                    Navigator.pushNamed(
+                                  onTap: () async {
+                                    await Navigator.pushNamed(
                                         context, "/technician_details", arguments: {"index" : index , "technician_id": item['user_id']});
+                                    getTechnician();
                                   },
                                   child: Container(
                                     margin: EdgeInsets.zero,
@@ -303,6 +309,7 @@ class _TechniciansState extends State<Technicians> {
                                       child: IconButton(
                                         onPressed: () async {
                                           await Navigator.pushNamed(context, "/add_technician");
+                                          getTechnician();
                                         },
                                         icon: Icon(Icons.person_add_alt_outlined, color: customs.primaryColor,),
                                       ),
@@ -322,6 +329,17 @@ class _TechniciansState extends State<Technicians> {
           );
         },
       )),
+      floatingActionButton: CircleAvatar(
+        backgroundColor: customs.secondaryShade_2,
+        radius: 25,
+        child: IconButton(
+          onPressed: () async {
+            await Navigator.pushNamed(context, "/new_technician");
+            getTechnician();
+          },
+          icon: Icon(Icons.add_circle_rounded, size: 30, color: customs.secondaryColor,),
+        ),
+      ),
     );
   }
 }

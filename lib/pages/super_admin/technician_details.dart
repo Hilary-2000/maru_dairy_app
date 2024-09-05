@@ -284,10 +284,10 @@ class _TechnicianDetailsState extends State<TechnicianDetails> {
                                               Container(
                                                 padding: EdgeInsets.symmetric(vertical: 2, horizontal: 4),
                                                 decoration: BoxDecoration(
-                                                  color: (technicianData  != null ? customs.toCamelCase(technicianData['fullname'] ?? "0") : "0") == 1 ? customs.successColor : customs.dangerColor,
+                                                  color: (technicianData  != null ? customs.toCamelCase((technicianData['status'] ?? "0").toString()) : "0") == "1" ? customs.successColor : customs.dangerColor,
                                                   borderRadius: BorderRadius.circular(2)
                                                 ),
-                                                child: Text( (technicianData  != null ? customs.toCamelCase(technicianData['fullname'] ?? "0") : "0") == 1 ?  "Active" : "In-active", style:customs.whiteTextStyle(size: 10, fontweight: FontWeight.bold)),
+                                                child: Text( (technicianData  != null ? customs.toCamelCase((technicianData['status'] ?? "0").toString()) : "0") == "1" ?  "Active" : "In-active", style:customs.whiteTextStyle(size: 10, fontweight: FontWeight.bold)),
                                               )
                                             ],
                                           ),
@@ -361,7 +361,7 @@ class _TechnicianDetailsState extends State<TechnicianDetails> {
                                       size: 12, fontweight: FontWeight.bold),
                                 ),
                                 Text(
-                                  technicianData != null ? customs.toCamelCase(technicianData['email'] ?? "N/A") : "N/A",
+                                  technicianData != null ? technicianData['email'] ?? "N/A" : "N/A",
                                   style: customs.secondaryTextStyle(size: 16),
                                 ),
                                 Divider(
