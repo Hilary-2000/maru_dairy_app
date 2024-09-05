@@ -243,7 +243,7 @@ class _SuperAdminAccountsState extends State<SuperAdminAccounts> {
                               title: Text("Admin", style: customs.darkTextStyle(size: 14),),
                               subtitle: Text("Manage Administrators and their permissions.", style: customs.secondaryTextStyle(size: 12),),
                               onTap: (){
-                                print("Tapped");
+                                Navigator.pushNamed(context, "/administrators");
                               },
                             ),
                             Container(width: width * 0.8, child: Divider(color: customs.secondaryShade_2,)),
