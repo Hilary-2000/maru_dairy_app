@@ -180,7 +180,7 @@ class _memberDashboardState extends State<memberDashboard> {
                                   color: Colors.red,
                                   borderRadius: BorderRadius.circular(10)),
                               child: Text(
-                                "10",
+                                "0",
                                 style: customs.whiteTextStyle(
                                     size: 10, fontweight: FontWeight.bold),
                               ),

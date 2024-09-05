@@ -25,9 +25,13 @@ import 'package:maru/pages/super_admin/Technicians.dart';
 import 'package:maru/pages/super_admin/administrator_details.dart';
 import 'package:maru/pages/super_admin/administrator_list.dart';
 import 'package:maru/pages/super_admin/edit_administrator.dart';
+import 'package:maru/pages/super_admin/edit_super_admin_details.dart';
 import 'package:maru/pages/super_admin/edit_technician.dart';
 import 'package:maru/pages/super_admin/new_administrator.dart';
+import 'package:maru/pages/super_admin/new_super_administrator.dart';
 import 'package:maru/pages/super_admin/new_technician.dart';
+import 'package:maru/pages/super_admin/super_admin_details.dart';
+import 'package:maru/pages/super_admin/super_admin_list.dart';
 import 'package:maru/pages/technician/edit_member_milk_data.dart';
 import 'package:maru/pages/technician/technician_profile.dart';
 import 'package:maru/pages/technician/technician_qr_scanner.dart';
@@ -102,7 +106,11 @@ void main() {
       "/administrators": (context) => const AdministratorList(),
       "/admin_details" : (context) => const AdministratorDetails(),
       "/edit_administrator" : (context) => const EditAdministrator(),
-      "/new_administrator" : (context) => const NewAdministrator()
+      "/new_administrator" : (context) => const NewAdministrator(),
+      "/super_admin_list" : (context) => const SuperAdminList(),
+      "/super_admin_details": (context) => const SuperAdminDetails(),
+      "/edit_super_admin_details" : (context) => const EditSuperAdminDetails(),
+      "/new_super_admin" : (context) => const NewSuperAdministrator()
     },
   ));
 }

@@ -308,7 +308,7 @@ class _TechniciansState extends State<Technicians> {
                                       backgroundColor: customs.primaryShade_2,
                                       child: IconButton(
                                         onPressed: () async {
-                                          await Navigator.pushNamed(context, "/add_technician");
+                                          await Navigator.pushNamed(context, "/new_technician");
                                           getTechnician();
                                         },
                                         icon: Icon(Icons.person_add_alt_outlined, color: customs.primaryColor,),

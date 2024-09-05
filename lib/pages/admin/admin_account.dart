@@ -226,7 +226,7 @@ class _AdminAccountState extends State<AdminAccount> {
                               title: Text("Technicians", style: customs.darkTextStyle(size: 14),),
                               subtitle: Text("Manage technicians and their permissions.", style: customs.secondaryTextStyle(size: 12),),
                               onTap: (){
-                                print("Tapped");
+                                Navigator.pushNamed(context, "/manage_technicians");
                               },
                             ),
                           ],

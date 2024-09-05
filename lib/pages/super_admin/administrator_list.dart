@@ -28,7 +28,7 @@ class _AdministratorListState extends State<AdministratorList> {
       loading = true;
     });
     ApiConnection apiConnection = new ApiConnection();
-    var response = await apiConnection.displayAdminisrators();
+    var response = await apiConnection.displayAdministrators();
     if(customs.isValidJson(response)){
       var res = jsonDecode(response);
       if(res['success']){
@@ -308,7 +308,7 @@ class _AdministratorListState extends State<AdministratorList> {
                                       backgroundColor: customs.primaryShade_2,
                                       child: IconButton(
                                         onPressed: () async {
-                                          await Navigator.pushNamed(context, "/add_technician");
+                                          await Navigator.pushNamed(context, "/new_administrator");
                                           getAdministrators();
                                         },
                                         icon: Icon(Icons.person_add_alt_outlined, color: customs.primaryColor,),

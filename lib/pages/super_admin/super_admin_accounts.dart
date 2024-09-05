@@ -259,8 +259,8 @@ class _SuperAdminAccountsState extends State<SuperAdminAccounts> {
                               ),
                               title: Text("Super Admins", style: customs.darkTextStyle(size: 14),),
                               subtitle: Text("Manage your fellow Super Administrators and their permissions.", style: customs.secondaryTextStyle(size: 12),),
-                              onTap: (){
-                                print("Tapped");
+                              onTap: () async {
+                                await Navigator.pushNamed(context, "/super_admin_list");
                               },
                             ),
                           ],
