@@ -1,10 +1,14 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:maru/packages/api_connection.dart';
 import 'package:maru/packages/maru_theme.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:skeletonizer/skeletonizer.dart';
+import 'package:open_file/open_file.dart';
+import 'package:http/http.dart' as http;
 
 class MemberMembership extends StatefulWidget {
   const MemberMembership({super.key});
@@ -825,8 +829,65 @@ class _editEarningsState extends State<_editEarnings> {
   bool init = false;
   var payment_data = null;
   bool loading = false;
+  String pdfUrl = "";
+  bool downloading = false;
+  bool downloaded = false;
+  String? localFilePath;
 
 
+
+  void openPDF() {
+    if (localFilePath != null) {
+      OpenFile.open(localFilePath!);
+    } else {
+      customThemes.maruSnackBarDanger(context: context, text: "No file available to open!");
+    }
+  }
+
+  Future<void> downloadPDF() async {
+    setState(() {
+      downloading = true;
+    });
+    try {
+      final response = await http.get(Uri.parse(pdfUrl));
+      if (response.statusCode == 200) {
+        final directory = await getExternalStorageDirectory();
+        final downloadDir = Directory('${directory!.path}/Download/MaruDairy');
+
+        // Create the directory if it doesn't exist
+        if (!await downloadDir.exists()) {
+          await downloadDir.create(recursive: true);
+        }
+
+        // file path
+        final filePath = '${downloadDir.path}/${widget.earning_data['month_paid_for']}-receipt.pdf';
+
+        final file = File(filePath);
+        await file.writeAsBytes(response.bodyBytes);
+
+        // set file path
+        setState(() {
+          localFilePath = filePath;
+          downloaded = true;
+        });
+
+        // Check if the file exists
+        if (await file.exists()) {
+          customThemes.maruSnackBarSuccess(context: context, text: "Receipt downloaded successfully!");
+          print("File saved at: $filePath"); // Print the file path to the console
+        } else {
+          customThemes.maruSnackBarSuccess(context: context, text: "Failed to save the receipt!");
+        }
+      } else {
+        customThemes.maruSnackBarDanger(context: context, text: "Couldn't download the receipt!");
+      }
+    } catch (e) {
+      customThemes.maruSnackBarDanger(context: context, text: "An error occurred: $e");
+    }
+    setState(() {
+      downloading = false;
+    });
+  }
 
   String deduction_type(String deduction_type){
     if(deduction_type == "subscription"){
@@ -867,15 +928,18 @@ class _editEarningsState extends State<_editEarnings> {
       if(res['success']){
         setState(() {
           payment_data = res['payment'];
+          pdfUrl = "http://192.168.88.236:8000/api/admin/payment/receipt/${res['payment']['payment_id']}";
         });
       }else{
         setState(() {
           payment_data = null;
+          pdfUrl = "";
         });
       }
     }else{
       setState(() {
         payment_data = null;
+        pdfUrl = "";
       });
     }
     setState(() {
@@ -977,8 +1041,23 @@ class _editEarningsState extends State<_editEarnings> {
                           ),
                         ),
                         Container(
-                          child: customThemes.maruIconButton(icons: Icons.download, iconSize: 20, text: "Download Receipt", onPressed: (){}),
+                          child: customThemes.maruIconButton(
+                            icons: Icons.download,
+                            iconSize: 20,
+                            text: downloading ? "Downloading..." : "Download Receipt",
+                            onPressed: downloadPDF
+                          ),
                         ),
+                        downloaded ?
+                        Container(
+                          child: customThemes.maruIconButton(
+                              icons: Icons.remove_red_eye_outlined,
+                              iconSize: 20,
+                              text: "View Receipt",
+                              type: Type.secondary,
+                              onPressed: openPDF
+                          ),
+                        ) : SizedBox(),
                         Container(
                           child: customThemes.marOutlineuButton(
                               text: "Close",

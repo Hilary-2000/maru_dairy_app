@@ -307,7 +307,7 @@ class _MemberHistoryState extends State<MemberHistory> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text("No members found!", style: customs.primaryTextStyle(size: 20, fontweight: FontWeight.bold),),
+                    Text("No collections found!", style: customs.primaryTextStyle(size: 20, fontweight: FontWeight.bold),),
                     Spacer(),
                     SizedBox(
                       width: width,

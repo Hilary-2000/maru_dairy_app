@@ -58,7 +58,9 @@ class _adminDashboardState extends State<adminDashboard> {
                     SizedBox(
                       height: 70,
                       child:
-                      Image(image: AssetImage("assets/images/maru-nobg.png")),
+                      Image(
+                          image: AssetImage("assets/images/maru-nobg.png")
+                      ),
                     ),
                     SizedBox(
                       width: 10,
@@ -178,7 +180,8 @@ class _adminDashboardState extends State<adminDashboard> {
                             ? customs.primaryTextStyle(
                                 size: 12, fontweight: FontWeight.bold)
                             : customs.secondaryTextStyle(
-                                size: 12, fontweight: FontWeight.bold),
+                                size: 12, fontweight: FontWeight.bold
+                        ),
                       )
                     ],
                   ),
@@ -322,7 +325,9 @@ class _adminDashboardState extends State<adminDashboard> {
                         },
                       ),
                     ))
-                  : null)),
+                  : null
+      )
+      ),
     );
   }
 }
