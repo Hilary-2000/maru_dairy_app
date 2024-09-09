@@ -26,6 +26,7 @@ class _SuperAdminDetailsState extends State<SuperAdminDetails> {
     setState(() {
       loading = true;
     });
+
     // get the arguments
     args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
 

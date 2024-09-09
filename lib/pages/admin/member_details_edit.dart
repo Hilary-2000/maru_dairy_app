@@ -569,18 +569,19 @@ class _MemberDetailsEditState extends State<MemberDetailsEdit> {
                                         size: 12, fontweight: FontWeight.bold),
                                   ),
                                   customs.maruTextFormField(
-                                      isChanged: (value) {},
-                                      textType: TextInputType.text,
-                                      floatingBehaviour:
-                                          FloatingLabelBehavior.always,
-                                      hintText: "Thika, Kiambu County",
-                                      editingController: locationController,
-                                      validator: (value) {
-                                        if(value == null || value.isEmpty){
-                                          return "Enter member location";
-                                        }
-                                        return null;
-                                      }),
+                                    isChanged: (value) {},
+                                    textType: TextInputType.text,
+                                    floatingBehaviour:
+                                        FloatingLabelBehavior.always,
+                                    hintText: "Thika, Kiambu County",
+                                    editingController: locationController,
+                                    validator: (value) {
+                                      if(value == null || value.isEmpty){
+                                        return "Enter member location";
+                                      }
+                                      return null;
+                                    }
+                                  ),
                                   Divider(
                                     color: customs.secondaryShade_2,
                                   )

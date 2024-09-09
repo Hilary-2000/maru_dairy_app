@@ -6,6 +6,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:maru/packages/api_connection.dart';
 import 'package:maru/packages/maru_theme.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:open_file/open_file.dart';
 import 'package:http/http.dart' as http;
@@ -1113,7 +1114,7 @@ class _editEarningsState extends State<_editEarnings> {
     }
   }
 
-  Future<void> downloadPDF() async {
+  Future<void> downloadPDF1() async {
     setState(() {
       downloading = true;
     });
@@ -1184,6 +1185,77 @@ class _editEarningsState extends State<_editEarnings> {
         init = true;
       });
     }
+  }
+
+  Future<bool> _requestPermission() async {
+    // Check the status of the permission
+    var status = await Permission.manageExternalStorage.status;
+
+    if (status.isDenied || status.isRestricted || status.isPermanentlyDenied) {
+      // If permission is denied, request it
+      if (await Permission.manageExternalStorage.request().isGranted) {
+        print("Permission granted.");
+        return true;
+      } else {
+        print("Permission denied.");
+        return false;
+      }
+    }
+    // If already granted, return true
+    return true;
+  }
+
+  Future<void> downloadPDF() async {
+    setState(() {
+      downloading = true;
+    });
+
+    // Request storage permissions
+    if (await _requestPermission()) {
+      try {
+        final response = await http.get(Uri.parse(pdfUrl));
+        if (response.statusCode == 200) {
+          // Get the directory for the external storage
+          final directory = Directory('/storage/emulated/0/Download/MaruDairy');
+
+          // Create the directory if it doesn't exist
+          if (!await directory.exists()) {
+            await directory.create(recursive: true);
+          }
+
+          // Set the file path
+          final filePath = '${directory.path}/member-receipt.pdf';
+
+          // Write the file
+          final file = File(filePath);
+          await file.writeAsBytes(response.bodyBytes);
+
+          // Set the file path and update UI
+          setState(() {
+            localFilePath = filePath;
+            downloaded = true;
+          });
+
+          // Check if the file exists and show a success message
+          if (await file.exists()) {
+            customThemes.maruSnackBarSuccess(context: context, text: "Receipt downloaded successfully!");
+            print("File saved at: $filePath");
+          } else {
+            customThemes.maruSnackBarDanger(context: context, text: "Failed to save the receipt!");
+          }
+        } else {
+          customThemes.maruSnackBarDanger(context: context, text: "Couldn't download the receipt!");
+        }
+      } catch (e) {
+        customThemes.maruSnackBarDanger(context: context, text: "An error occurred: $e");
+      }
+    } else {
+      customThemes.maruSnackBarDanger(context: context, text: "Storage permission is required to download the receipt.");
+    }
+
+    setState(() {
+      downloading = false;
+    });
   }
 
   Future<void> getEarningDetails() async {

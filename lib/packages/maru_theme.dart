@@ -10,6 +10,7 @@ enum Type { primary, secondary, warning, danger, info, dark, white, success }
 enum Sizes { lg, md, sm, xm }
 
 class CustomThemes {
+  String apiURLDomain = "http://192.168.88.236:8000";
   // colors
   Color primaryColor = const Color.fromRGBO(1, 176, 241, 1);
   Color secondaryColor = const Color.fromRGBO(90, 98, 104, 1);
@@ -769,9 +770,11 @@ class CustomThemes {
       TextInputType textType = TextInputType.text,
       bool hideText = false,
       String label = "",
+      bool enabled = true,
       FloatingLabelBehavior floatingBehaviour = FloatingLabelBehavior.auto,
       String? Function(String?)? validator}) {
     return TextFormField(
+      enabled: enabled,
       validator: validator,
       keyboardType: textType,
       obscureText: hideText,
@@ -785,6 +788,8 @@ class CustomThemes {
         hintStyle: secondaryTextStyle(
           size: 15,
         ),
+        filled: true,
+        fillColor: enabled ? whiteColor : secondaryShade_2,
         isDense: true,
         floatingLabelBehavior: floatingBehaviour,
         focusedErrorBorder: OutlineInputBorder(

@@ -216,7 +216,7 @@ class _MemberSettingsState extends State<MemberSettings> {
                               title: Text("Generate Reports", style: customs.darkTextStyle(size: 14),),
                               subtitle: Text("Download your milk collection statement", style: customs.secondaryTextStyle(size: 12),),
                               onTap: (){
-                                print("Tapped");
+                                Navigator.pushNamed(context, "/member_reports");
                               },
                             ),
                           ],

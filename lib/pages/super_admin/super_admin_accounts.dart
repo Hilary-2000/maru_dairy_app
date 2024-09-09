@@ -189,7 +189,7 @@ class _SuperAdminAccountsState extends State<SuperAdminAccounts> {
                               title: Text("Generate Reports", style: customs.darkTextStyle(size: 14),),
                               subtitle: Text("Get comprehensive reports on the system.", style: customs.secondaryTextStyle(size: 12),),
                               onTap: (){
-                                print("Tapped");
+                                Navigator.pushNamed(context, "/generate_admin_report");
                               },
                             ),
                           ],

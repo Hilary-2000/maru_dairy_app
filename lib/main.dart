@@ -5,6 +5,7 @@ import 'package:maru/pages/admin/admin_qr_code_finder.dart';
 import 'package:maru/pages/admin/dashboard.dart';
 import 'package:maru/pages/admin/edit_milk_price.dart';
 import 'package:maru/pages/admin/edit_profile.dart';
+import 'package:maru/pages/admin/generate_reports.dart';
 import 'package:maru/pages/admin/inquiry_inbox.dart';
 import 'package:maru/pages/admin/member_details.dart';
 import 'package:maru/pages/admin/member_details_edit.dart';
@@ -19,6 +20,7 @@ import 'package:maru/pages/member/confirmed_declined_collection.dart';
 import 'package:maru/pages/member/edit_profile.dart';
 import 'package:maru/pages/member/inbox.dart';
 import 'package:maru/pages/member/member_milk_details.dart';
+import 'package:maru/pages/member/member_reports.dart';
 import 'package:maru/pages/member/membership.dart';
 import 'package:maru/pages/member/view_profile.dart';
 import 'package:maru/pages/super_admin/Technicians.dart';
@@ -50,6 +52,7 @@ import 'package:maru/pages/member/member_qrcode.dart';
 import 'package:maru/pages/super_admin/dashboard.dart';
 import 'package:maru/pages/super_admin/technician_details.dart';
 import 'package:maru/pages/signup.dart';
+import 'package:maru/pages/technician/technician_report.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -110,7 +113,10 @@ void main() {
       "/super_admin_list" : (context) => const SuperAdminList(),
       "/super_admin_details": (context) => const SuperAdminDetails(),
       "/edit_super_admin_details" : (context) => const EditSuperAdminDetails(),
-      "/new_super_admin" : (context) => const NewSuperAdministrator()
+      "/new_super_admin" : (context) => const NewSuperAdministrator(),
+      "/generate_admin_report": (context) => const GenerateReports(),
+      "/member_reports" : (context) => const MemberReports(),
+      "/technician_reports" : (context) => const TechnicianReport()
     },
   ));
 }
