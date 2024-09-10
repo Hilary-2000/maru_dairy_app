@@ -171,8 +171,36 @@ class _MembershipState extends State<Membership> {
                               radius: width * 0.08,
                               backgroundColor: customs.primaryShade,
                               child: ClipOval(
-                                child: Image.asset(
-                                  "assets/images/hilla.jpg",
+                                child: (member_details != null) ?
+                                Image.network(
+                                  "${customs.apiURLDomain}${member_details['profile_photo']}",
+                                  fit: BoxFit.cover,
+                                  width: double.infinity,
+                                  height: double.infinity,
+                                  loadingBuilder: (context, child, loadingProgress) {
+                                    if (loadingProgress == null) return child;
+                                    return Center(
+                                      child: CircularProgressIndicator(
+                                        value: loadingProgress.expectedTotalBytes != null
+                                            ? loadingProgress.cumulativeBytesLoaded /
+                                            loadingProgress.expectedTotalBytes!
+                                            : null,
+                                      ),
+                                    );
+                                  },
+                                  errorBuilder: (context, error, stackTrace) {
+                                    return Image.asset(
+                                      "assets/images/placeholderImg.jpg",
+                                      fit: BoxFit.cover,
+                                      width: double.infinity,
+                                      height: double.infinity,
+                                    );
+                                  },
+                                )
+                                    :
+                                Image.asset(
+                                  // profile.length > 0 ? profile : "assets/images/placeholderImg.jpg",
+                                  "assets/images/placeholderImg.jpg",
                                   fit: BoxFit.cover,
                                   width: double.infinity,
                                   height: double.infinity,

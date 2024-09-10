@@ -17,12 +17,20 @@ class _MaruState extends State<Maru> {
   CustomThemes customThemes = CustomThemes();
   final FlutterSecureStorage _storage = const FlutterSecureStorage();
   CustomThemes customs = CustomThemes();
+  bool initialize = false;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    simulateRequest();
+  }
+
+  void didChangeDependencies(){
+    super.didChangeDependencies();
+
+    // initialize
+    if(!initialize){
+      simulateRequest();
+    }
   }
 
   bool isValidJson(String jsonString) {
@@ -43,7 +51,7 @@ class _MaruState extends State<Maru> {
     if(token != null){
       // get the user credentials
       ApiConnection api = new ApiConnection();
-      var response = await api.check_token(token!);
+      var response = await api.check_token(token);
       print(token);
 
       // check if it has a valid json structure

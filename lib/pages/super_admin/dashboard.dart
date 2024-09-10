@@ -713,7 +713,9 @@ class _SuperAdminDashState extends State<SuperAdminDash> {
         displayGraphPresentMembers();
       });
       customs.maruSnackBarDanger(
-          context: context, text: "Fatal error occured!");
+        context: context,
+        text: "Fatal error occured!"
+      );
     }
     setState(() {
       loading = false;
@@ -794,8 +796,38 @@ class _SuperAdminDashState extends State<SuperAdminDash> {
                                 radius: width * 0.08,
                                 backgroundColor: customs.primaryShade,
                                 child: ClipOval(
-                                  child: Image.asset(
-                                    "assets/images/hilla.jpg",
+                                  child: (member_data != null) ?
+                                  Image.network(
+                                    "${customs.apiURLDomain}${member_data['profile_photo']}",
+                                    fit: BoxFit.cover,
+                                    width: double.infinity,
+                                    height: double.infinity,
+                                    loadingBuilder: (context, child, loadingProgress) {
+                                      if (loadingProgress == null) return child;
+                                      return Center(
+                                        child: CircularProgressIndicator(
+                                          color: customs.primaryColor,
+                                          backgroundColor: customs.secondaryShade_2,
+                                          value: loadingProgress.expectedTotalBytes != null
+                                              ? loadingProgress.cumulativeBytesLoaded /
+                                              loadingProgress.expectedTotalBytes!
+                                              : null,
+                                        ),
+                                      );
+                                    },
+                                    errorBuilder: (context, error, stackTrace) {
+                                      return Image.asset(
+                                        "assets/images/placeholderImg.jpg",
+                                        fit: BoxFit.cover,
+                                        width: double.infinity,
+                                        height: double.infinity,
+                                      );
+                                    },
+                                  )
+                                      :
+                                  Image.asset(
+                                    // profile.length > 0 ? profile : "assets/images/placeholderImg.jpg",
+                                    "assets/images/placeholderImg.jpg",
                                     fit: BoxFit.cover,
                                     width: double.infinity,
                                     height: double.infinity,

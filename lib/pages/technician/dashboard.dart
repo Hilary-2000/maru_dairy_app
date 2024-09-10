@@ -373,8 +373,7 @@ class _TechnicianDashboardState extends State<TechnicianDashboard> {
             context: context, text: "A fatal error has occured!");
       }
     } else {
-      customs.maruSnackBarDanger(
-          context: context, text: "An fatal error has occured!");
+      customs.maruSnackBarDanger(context: context, text: "An fatal error has occured!");
     }
 
     // hide the skeletonizer
@@ -456,8 +455,38 @@ class _TechnicianDashboardState extends State<TechnicianDashboard> {
                                 radius: width * 0.08,
                                 backgroundColor: customs.primaryShade,
                                 child: ClipOval(
-                                  child: Image.network(
-                                    "$profile_photo",
+                                  child: (profile_photo.isNotEmpty) ?
+                                  Image.network(
+                                    "${customs.apiURLDomain}$profile_photo",
+                                    fit: BoxFit.cover,
+                                    width: double.infinity,
+                                    height: double.infinity,
+                                    loadingBuilder: (context, child, loadingProgress) {
+                                      if (loadingProgress == null) return child;
+                                      return Center(
+                                        child: CircularProgressIndicator(
+                                          color: customs.primaryColor,
+                                          backgroundColor: customs.secondaryShade_2,
+                                          value: loadingProgress.expectedTotalBytes != null
+                                              ? loadingProgress.cumulativeBytesLoaded /
+                                              loadingProgress.expectedTotalBytes!
+                                              : null,
+                                        ),
+                                      );
+                                    },
+                                    errorBuilder: (context, error, stackTrace) {
+                                      return Image.asset(
+                                        "assets/images/placeholderImg.jpg",
+                                        fit: BoxFit.cover,
+                                        width: double.infinity,
+                                        height: double.infinity,
+                                      );
+                                    },
+                                  )
+                                      :
+                                  Image.asset(
+                                    // profile.length > 0 ? profile : "assets/images/placeholderImg.jpg",
+                                    "assets/images/placeholderImg.jpg",
                                     fit: BoxFit.cover,
                                     width: double.infinity,
                                     height: double.infinity,

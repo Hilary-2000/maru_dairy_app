@@ -1,10 +1,16 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:maru/packages/api_connection.dart';
 import 'package:maru/packages/maru_theme.dart';
 import 'package:skeletonizer/skeletonizer.dart';
+import 'package:http/http.dart' as http;
+import 'package:mime/mime.dart';
+import 'package:http_parser/http_parser.dart';
 
 class EditSuperAdminDetails extends StatefulWidget {
   const EditSuperAdminDetails({super.key});
@@ -134,6 +140,120 @@ class _EditSuperAdminDetailsState extends State<EditSuperAdminDetails> {
     // set state
     setState(() {
       loading = false;
+    });
+  }
+
+  File? _image;
+  bool loading_image = false;
+  double progress = 0.0;
+
+  // Image picker function to select the image
+  Future<void> _pickImage() async {
+    final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
+
+    if (pickedFile != null) {
+      setState(() {
+        _image = File(pickedFile.path);
+      });
+    }
+  }
+
+  // upload image
+  Future<void> _uploadImage(BuildContext context) async {
+    if (_image == null) {
+      customs.maruSnackBarDanger(context: context, text: "Please select an image");
+      return;
+    }
+
+    setState(() {
+      loading_image = true;
+      progress = 0.0;
+    });
+
+    final url = Uri.parse("${customs.apiURLDomain}/api/admin/dp/update");
+    final request = http.MultipartRequest("POST", url);
+
+    // Add custom header
+    FlutterSecureStorage storage = new FlutterSecureStorage();
+    String? token = await storage.read(key: "token");
+
+    if (token == null) {
+      customs.maruSnackBarDanger(context: context, text: "Authentication token is missing");
+      setState(() {
+        loading_image = false;
+      });
+      return;
+    }
+
+    request.headers['maru-authentication-code'] = "$token";
+
+    try {
+      // Add user_id as part of the fields (replace with actual user_id)
+      request.fields['user_id'] = "${administratorData['user_id']}";
+      // Replace with the actual user_id
+
+      // Attach the image file
+      final mimeTypeData = lookupMimeType(_image!.path)!.split('/');
+      request.files.add(await http.MultipartFile.fromPath(
+        'mine_dp',
+        _image!.path,
+        contentType: MediaType(mimeTypeData[0], mimeTypeData[1]),
+      ));
+
+      // Send the request
+      final response = await request.send();
+
+      // Track progress
+      int totalBytes = response.contentLength ?? 0;
+      int bytesTransferred = 0;
+      String? respond = null;
+
+      response.stream.listen(
+            (chunk) {
+          bytesTransferred += chunk.length;
+          setState(() {
+            progress = totalBytes != 0 ? bytesTransferred / totalBytes : 0;
+          });
+        },
+        onDone: () async {
+          // Once done, read the response body
+          final responseBody = await response.stream.bytesToString();
+
+          if (response.statusCode == 200) {
+            respond = responseBody;
+            // customs.maruSnackBarSuccess(context: context, text: "Upload successful: $responseBody");
+            setState(() {
+              progress = 1.0;
+            });
+          } else {
+            respond = "{\"success\": false, \"message\": \"No response!\"}";
+            // customs.maruSnackBarDanger(context: context, text: "Failed to upload image. Status: ${response.statusCode}");
+            setState(() {
+              progress = 0.0;
+            });
+          }
+        },
+        onError: (e) {
+          respond = "{\"success\": false, \"message\": \"An error occurred: $e\"}";
+          // customs.maruSnackBarDanger(context: context, text: "An error occurred: $e");
+          setState(() {
+            progress = 0.0;
+          });
+        },
+        cancelOnError: true, // Cancel if there's an error
+      );
+
+      // done
+      customs.maruSnackBarSuccess(context: context, text: "Profile photo uploaded successfully!");
+    } catch (e) {
+      setState(() {
+        progress = 0.0;
+      });
+      customs.maruSnackBarDanger(context: context, text: "An error occurred: $e");
+    }
+
+    setState(() {
+      loading_image = false;
     });
   }
 
@@ -287,15 +407,46 @@ class _EditSuperAdminDetailsState extends State<EditSuperAdminDetails> {
                                     right: 0,
                                     child: Center(
                                       child: CircleAvatar(
-                                          radius: width * 0.1,
-                                          child: ClipOval(
-                                            child: Image.asset(
-                                              "assets/images/hilla.jpg",
-                                              fit: BoxFit.cover,
-                                              width: double.infinity,
-                                              height: double.infinity,
-                                            ),
-                                          )),
+                                        radius: width * 0.1,
+                                        child: ClipOval(
+                                          child: (administratorData != null) ?
+                                          Image.network(
+                                            "${customs.apiURLDomain}$administratorData['profile_photo']",
+                                            fit: BoxFit.cover,
+                                            width: double.infinity,
+                                            height: double.infinity,
+                                            loadingBuilder: (context, child, loadingProgress) {
+                                              if (loadingProgress == null) return child;
+                                              return Center(
+                                                child: CircularProgressIndicator(
+                                                  color: customs.primaryColor,
+                                                  backgroundColor: customs.secondaryShade_2,
+                                                  value: loadingProgress.expectedTotalBytes != null
+                                                      ? loadingProgress.cumulativeBytesLoaded /
+                                                      loadingProgress.expectedTotalBytes!
+                                                      : null,
+                                                ),
+                                              );
+                                            },
+                                            errorBuilder: (context, error, stackTrace) {
+                                              return Image.asset(
+                                                "assets/images/placeholderImg.jpg",
+                                                fit: BoxFit.cover,
+                                                width: double.infinity,
+                                                height: double.infinity,
+                                              );
+                                            },
+                                          )
+                                              :
+                                          Image.asset(
+                                            // profile.length > 0 ? profile : "assets/images/placeholderImg.jpg",
+                                            "assets/images/placeholderImg.jpg",
+                                            fit: BoxFit.cover,
+                                            width: double.infinity,
+                                            height: double.infinity,
+                                          ),
+                                        )
+                                      ),
                                     ),
                                   ),
                                   Positioned(
@@ -308,7 +459,10 @@ class _EditSuperAdminDetailsState extends State<EditSuperAdminDetails> {
                                           FontAwesomeIcons.penFancy,
                                           size: 10,
                                         ),
-                                        onPressed: () {
+                                        onPressed: () async {
+                                          await _pickImage();
+                                          await _uploadImage(context);
+                                          getAdministratorData();
                                         },
                                         color: customs.secondaryColor,
                                       ),

@@ -287,15 +287,46 @@ class _EditTechnicianState extends State<EditTechnician> {
                                     right: 0,
                                     child: Center(
                                       child: CircleAvatar(
-                                          radius: width * 0.1,
-                                          child: ClipOval(
-                                            child: Image.asset(
-                                              "assets/images/hilla.jpg",
-                                              fit: BoxFit.cover,
-                                              width: double.infinity,
-                                              height: double.infinity,
-                                            ),
-                                          )),
+                                        radius: width * 0.1,
+                                        child: ClipOval(
+                                          child: (technicianData != null) ?
+                                          Image.network(
+                                            "${customs.apiURLDomain}$technicianData['profile_photo']",
+                                            fit: BoxFit.cover,
+                                            width: double.infinity,
+                                            height: double.infinity,
+                                            loadingBuilder: (context, child, loadingProgress) {
+                                              if (loadingProgress == null) return child;
+                                              return Center(
+                                                child: CircularProgressIndicator(
+                                                  color: customs.primaryColor,
+                                                  backgroundColor: customs.secondaryShade_2,
+                                                  value: loadingProgress.expectedTotalBytes != null
+                                                      ? loadingProgress.cumulativeBytesLoaded /
+                                                      loadingProgress.expectedTotalBytes!
+                                                      : null,
+                                                ),
+                                              );
+                                            },
+                                            errorBuilder: (context, error, stackTrace) {
+                                              return Image.asset(
+                                                "assets/images/placeholderImg.jpg",
+                                                fit: BoxFit.cover,
+                                                width: double.infinity,
+                                                height: double.infinity,
+                                              );
+                                            },
+                                          )
+                                              :
+                                          Image.asset(
+                                            // profile.length > 0 ? profile : "assets/images/placeholderImg.jpg",
+                                            "assets/images/placeholderImg.jpg",
+                                            fit: BoxFit.cover,
+                                            width: double.infinity,
+                                            height: double.infinity,
+                                          ),
+                                        )
+                                      ),
                                     ),
                                   ),
                                   Positioned(
