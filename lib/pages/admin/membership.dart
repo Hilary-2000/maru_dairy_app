@@ -1297,7 +1297,7 @@ class _editEarningsState extends State<_editEarnings> {
       if(res['success']){
         setState(() {
           payment_data = res['payment'];
-          pdfUrl = "http://192.168.88.236:8000/api/admin/payment/receipt/${res['payment']['payment_id']}";
+          pdfUrl = "${customThemes.apiURLDomain}/api/admin/payment/receipt/${res['payment']['payment_id']}";
         });
       }else{
         setState(() {
