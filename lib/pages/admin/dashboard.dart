@@ -39,7 +39,7 @@ class _adminDashboardState extends State<adminDashboard> {
       // admin inquiries
       AdminInquiries(),
       // Admin Account
-      AdminAccount()
+      AdminAccount(updateIndex: _updateIndex)
     ];
     return Scaffold(
       backgroundColor: customs.whiteColor,

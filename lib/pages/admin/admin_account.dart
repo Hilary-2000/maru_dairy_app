@@ -7,7 +7,8 @@ import 'package:maru/packages/api_connection.dart';
 import 'package:maru/packages/maru_theme.dart';
 
 class AdminAccount extends StatefulWidget {
-  const AdminAccount({super.key});
+  final void Function(int) updateIndex;
+  const AdminAccount({super.key, required this.updateIndex});
 
   @override
   State<AdminAccount> createState() => _AdminAccountState();
@@ -18,6 +19,7 @@ class _AdminAccountState extends State<AdminAccount> {
   final FlutterSecureStorage _storage = const FlutterSecureStorage();
   bool _isLightMode = true;
   bool _isInitialized = false;
+  int index = 1;
   String price = "Kes 0";
 
   @override
@@ -213,6 +215,24 @@ class _AdminAccountState extends State<AdminAccount> {
                         ),
                         child: Column(
                           children: [
+                            ListTile(
+                              leading: CircleAvatar(
+                                radius: 30,
+                                backgroundColor: customs.infoShade_2,
+                                child: Icon(
+                                  FontAwesomeIcons.userDoctor,
+                                  size: 20,
+                                  color: customs.infoColor,
+                                ),
+                              ),
+                              title: Text("Members", style: customs.darkTextStyle(size: 14),),
+                              subtitle: Text("Manage members and their membership status.", style: customs.secondaryTextStyle(size: 12),),
+                              onTap: (){
+                                index = 1;
+                                widget.updateIndex(index);
+                              },
+                            ),
+                            Container(width: width * 0.8, child: Divider(color: customs.secondaryShade_2,)),
                             ListTile(
                               leading: CircleAvatar(
                                 radius: 30,

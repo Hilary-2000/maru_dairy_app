@@ -7,7 +7,8 @@ import 'package:maru/packages/api_connection.dart';
 import 'package:maru/packages/maru_theme.dart';
 
 class SuperAdminAccounts extends StatefulWidget {
-  const SuperAdminAccounts({super.key});
+  final void Function(int) updateIndex;
+  const SuperAdminAccounts({super.key, required this.updateIndex});
 
   @override
   State<SuperAdminAccounts> createState() => _SuperAdminAccountsState();
@@ -19,6 +20,7 @@ class _SuperAdminAccountsState extends State<SuperAdminAccounts> {
   bool _isLightMode = true;
   bool _isInitialized = false;
   String price = "Kes 0";
+  int index = 1;
 
   @override
   void didChangeDependencies() {
@@ -213,6 +215,24 @@ class _SuperAdminAccountsState extends State<SuperAdminAccounts> {
                         ),
                         child: Column(
                           children: [
+                            ListTile(
+                              leading: CircleAvatar(
+                                radius: 30,
+                                backgroundColor: customs.infoShade_2,
+                                child: Icon(
+                                  FontAwesomeIcons.userDoctor,
+                                  size: 20,
+                                  color: customs.infoColor,
+                                ),
+                              ),
+                              title: Text("Members", style: customs.darkTextStyle(size: 14),),
+                              subtitle: Text("Manage members and their membership status.", style: customs.secondaryTextStyle(size: 12),),
+                              onTap: (){
+                                index = 1;
+                                widget.updateIndex(index);
+                              },
+                            ),
+                            Container(width: width * 0.8, child: Divider(color: customs.secondaryShade_2,)),
                             ListTile(
                               leading: CircleAvatar(
                                 radius: 30,

@@ -40,7 +40,7 @@ class _superAdminDashboardState extends State<superAdminDashboard> {
       // admin inquiries
       AdminInquiries(),
       // Admin Account
-      SuperAdminAccounts()
+      SuperAdminAccounts(updateIndex: _updateIndex)
     ];
     return Scaffold(
       backgroundColor: customs.whiteColor,
