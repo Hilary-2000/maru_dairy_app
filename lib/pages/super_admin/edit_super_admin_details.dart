@@ -407,7 +407,7 @@ class _EditSuperAdminDetailsState extends State<EditSuperAdminDetails> {
                                     right: 0,
                                     child: Center(
                                       child: CircleAvatar(
-                                        radius: width * 0.1,
+                                        radius: 44,
                                         child: ClipOval(
                                           child: (administratorData != null) ?
                                           Image.network(

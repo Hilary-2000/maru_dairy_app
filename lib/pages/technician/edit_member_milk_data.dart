@@ -737,7 +737,7 @@ class _EditMemberMilkDataState extends State<EditMemberMilkData> {
                         right: 0,
                         child: Center(
                           child: CircleAvatar(
-                              radius: width * 0.1,
+                              radius: 44,
                               backgroundColor: colors_shade[index % colors_shade.length],
                               child: Text(nameAbbr(memberName), style: textStylesTitle[index % textStylesTitle.length],)
                           ),

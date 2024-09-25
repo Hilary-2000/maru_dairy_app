@@ -210,7 +210,7 @@ class _AdminProfileState extends State<AdminProfile> {
                                     right: 0,
                                     child: Center(
                                       child: CircleAvatar(
-                                          radius: width * 0.1,
+                                          radius: 44,
                                           child: ClipOval(
                                             child: (admin_data != null) ?
                                             Image.network(

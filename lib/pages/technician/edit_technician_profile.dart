@@ -436,7 +436,7 @@ class _EditTechnicianProfileState extends State<EditTechnicianProfile> {
                                     right: 0,
                                     child: Center(
                                       child: CircleAvatar(
-                                        radius: width * 0.1,
+                                        radius: 44,
                                         child: ClipOval(
                                           child: (user_profile != null && user_profile!.isNotEmpty) ?
                                           Image.network(
@@ -508,7 +508,7 @@ class _EditTechnicianProfileState extends State<EditTechnicianProfile> {
                                     right: 0,
                                     child: Center(
                                       child: loading_image ? CircleAvatar(
-                                        radius: width * 0.1,
+                                        radius: 44,
                                         backgroundColor: customs.secondaryShade_2.withOpacity(0.4),
                                         child: CircularProgressIndicator(
                                           value: progress,

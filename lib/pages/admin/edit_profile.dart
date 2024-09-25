@@ -357,13 +357,12 @@ class _AdminEditProfileState extends State<AdminEditProfile> {
                                       ),
                                     ),
                                     Positioned(
-                                      top:
-                                      65, // Adjust this value to move the CircleAvatar up
+                                      top: 65, // Adjust this value to move the CircleAvatar up
                                       left: 0,
                                       right: 0,
                                       child: Center(
                                         child: CircleAvatar(
-                                          radius: width * 0.1,
+                                          radius: 44,
                                           child: ClipOval(
                                             child: (admin_data != null) ?
                                             Image.network(
@@ -411,6 +410,7 @@ class _AdminEditProfileState extends State<AdminEditProfile> {
                                       child: Skeleton.ignore(
                                         child: CircleAvatar(
                                           radius: 15,
+                                          backgroundColor: customs.secondaryColor,
                                           child: IconButton(
                                             icon: Icon(
                                               FontAwesomeIcons.penFancy,
@@ -424,7 +424,7 @@ class _AdminEditProfileState extends State<AdminEditProfile> {
                                               //get the technician data
                                               getAdminDetails();
                                             },
-                                            color: customs.secondaryColor,
+                                            color: customs.whiteColor,
                                           ),
                                         ),
                                       ),
@@ -435,7 +435,7 @@ class _AdminEditProfileState extends State<AdminEditProfile> {
                                       right: 0,
                                       child: Center(
                                         child: loading_image ? CircleAvatar(
-                                          radius: width * 0.1,
+                                          radius: 44,
                                           backgroundColor: customs.secondaryShade_2.withOpacity(0.4),
                                           child: SpinKitCircle(
                                             color: customs.secondaryShade,

@@ -287,7 +287,7 @@ class _EditTechnicianState extends State<EditTechnician> {
                                     right: 0,
                                     child: Center(
                                       child: CircleAvatar(
-                                        radius: width * 0.1,
+                                        radius: 44,
                                         child: ClipOval(
                                           child: (technicianData != null) ?
                                           Image.network(
