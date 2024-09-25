@@ -494,7 +494,7 @@ class _memberDashState extends State<memberDash> {
                               Text(
                                 "$greetings",
                                 style: customs.primaryTextStyle(
-                                    size: width * 0.05,
+                                    size: 20,
                                     fontweight: FontWeight.normal),
                               ),
                               SizedBox(
@@ -503,7 +503,7 @@ class _memberDashState extends State<memberDash> {
                               Text(
                                 toCamelCase(member_data != null ? member_data['fullname'] ?? "N/A" : "N/A"),
                                 style: customs.successTextStyle(
-                                    size: width * 0.06,
+                                    size: 25,
                                     fontweight: FontWeight.bold),
                               )
                             ],
@@ -518,7 +518,7 @@ class _memberDashState extends State<memberDash> {
                             children: [
                               GestureDetector(
                                 child: CircleAvatar(
-                                  radius: width * 0.08,
+                                  radius: 34,
                                   backgroundColor: customs.primaryShade,
                                   child: ClipOval(
                                     child: (member_data != null) ?
@@ -561,7 +561,8 @@ class _memberDashState extends State<memberDash> {
                                 ),
                                 onTap: () {
                                   Navigator.pushNamed(
-                                      context, "/member_view_profile");
+                                      context, "/new_member"
+                                  );
                                 },
                               ),
                               SizedBox(
@@ -571,7 +572,7 @@ class _memberDashState extends State<memberDash> {
                                 child: Container(
                                   padding: const EdgeInsets.all(2),
                                   decoration: BoxDecoration(
-                                      color: customs.primaryShade,
+                                      color: customs.infoColor,
                                       borderRadius: BorderRadius.circular(5.0)),
                                   child: Text(
                                     member_data != null ? "${member_data['membership'] ?? "N/A"}" : "N/A",

@@ -292,7 +292,7 @@ class _AdministratorDetailsState extends State<AdministratorDetails> {
                                     right: 0,
                                     child: Center(
                                       child: CircleAvatar(
-                                          radius: width * 0.1,
+                                          radius: 44,
                                           child: ClipOval(
                                             child: Image.asset(
                                               "assets/images/hilla.jpg",

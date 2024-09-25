@@ -768,7 +768,7 @@ class _SuperAdminDashState extends State<SuperAdminDash> {
                               Text(
                                 "$greetings,",
                                 style: customs.primaryTextStyle(
-                                    size: width * 0.05,
+                                    size: 20,
                                     fontweight: FontWeight.normal),
                               ),
                               SizedBox(
@@ -779,7 +779,7 @@ class _SuperAdminDashState extends State<SuperAdminDash> {
                                     ? customs.toCamelCase(member_data['fullname'])
                                     : "N/A",
                                 style: customs.successTextStyle(
-                                    size: width * 0.06,
+                                    size: 25,
                                     fontweight: FontWeight.bold),
                               )
                             ],
@@ -793,7 +793,7 @@ class _SuperAdminDashState extends State<SuperAdminDash> {
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
                               CircleAvatar(
-                                radius: width * 0.08,
+                                radius: 34,
                                 backgroundColor: customs.primaryShade,
                                 child: ClipOval(
                                   child: (member_data != null) ?
@@ -839,7 +839,7 @@ class _SuperAdminDashState extends State<SuperAdminDash> {
                               ),
                               Skeleton.ignore(
                                 child: Container(
-                                  color: customs.warningColor,
+                                  color: customs.dangerColor,
                                   child: Text(
                                     "Super-Admin",
                                     style: customs.whiteTextStyle(size: 10),
@@ -955,7 +955,7 @@ class _SuperAdminDashState extends State<SuperAdminDash> {
                             radius: width * 0.06,
                             child: Icon(
                               Icons.water_drop_outlined,
-                              size: width * 0.1,
+                              size: 44,
                               color: customs.successColor,
                             ),
                           ),
@@ -1183,7 +1183,7 @@ class _SuperAdminDashState extends State<SuperAdminDash> {
                             radius: width * 0.06,
                             child: Icon(
                               Icons.people_alt_outlined,
-                              size: width * 0.1,
+                              size: 44,
                               color: customs.successColor,
                             ),
                           ),
@@ -1370,7 +1370,7 @@ class _SuperAdminDashState extends State<SuperAdminDash> {
                             radius: width * 0.06,
                             child: Icon(
                               Icons.people_alt_outlined,
-                              size: width * 0.1,
+                              size: 44,
                               color: customs.successColor,
                             ),
                           ),

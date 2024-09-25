@@ -648,10 +648,11 @@ class _TechnicianHistoryState extends State<TechnicianHistory> {
                 ),
               ),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10),
                 child: Row(children: [
+                  Spacer(),
                   Container(
-                    width: width * 0.25,
+                    width: width * 0.30,
                     child: customs.maruDropDownButton(
                       defaultValue: drop_down,
                       hintText: "Select days",
@@ -664,7 +665,6 @@ class _TechnicianHistoryState extends State<TechnicianHistory> {
                       },
                     ),
                   ),
-                  Spacer()
                 ]),
               ),
               Container(
@@ -700,7 +700,7 @@ class _TechnicianHistoryState extends State<TechnicianHistory> {
               ),
               Container(
                 margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                height: height - 316,
+                height: height - 322,
                 decoration: BoxDecoration(
                   color: customs.whiteColor,
                   borderRadius: BorderRadius.circular(10),

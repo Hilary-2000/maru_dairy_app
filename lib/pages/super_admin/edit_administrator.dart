@@ -287,7 +287,7 @@ class _EditAdministratorState extends State<EditAdministrator> {
                                     right: 0,
                                     child: Center(
                                       child: CircleAvatar(
-                                        radius: width * 0.1,
+                                        radius: 44,
                                         child: ClipOval(
                                           child: (administratorData != null) ?
                                           Image.network(

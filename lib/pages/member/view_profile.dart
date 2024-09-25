@@ -282,7 +282,7 @@ class _MemberProfileState extends State<MemberProfile> {
                                   right: 0,
                                   child: Center(
                                     child: CircleAvatar(
-                                      radius: width * 0.1,
+                                      radius: 44,
                                       child: ClipOval(
                                           child: (member_data != null) ?
                                           Image.network(

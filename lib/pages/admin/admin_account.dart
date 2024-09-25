@@ -216,11 +216,11 @@ class _AdminAccountState extends State<AdminAccount> {
                             ListTile(
                               leading: CircleAvatar(
                                 radius: 30,
-                                backgroundColor: customs.primaryShade_2,
+                                backgroundColor: customs.secondaryShade_2,
                                 child: Icon(
                                   FontAwesomeIcons.userDoctor,
                                   size: 20,
-                                  color: customs.primaryColor,
+                                  color: customs.secondaryColor,
                                 ),
                               ),
                               title: Text("Technicians", style: customs.darkTextStyle(size: 14),),

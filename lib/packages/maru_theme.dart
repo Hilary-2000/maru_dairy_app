@@ -10,8 +10,8 @@ enum Type { primary, secondary, warning, danger, info, dark, white, success }
 enum Sizes { lg, md, sm, xm }
 
 class CustomThemes {
-  // String apiURLDomain = "http://192.168.88.236:8000";
-  String apiURLDomain = "https://maru.ladybirdsmis.com";
+  String apiURLDomain = "http://192.168.88.236:8000";
+  // String apiURLDomain = "https://maru.ladybirdsmis.com";
   // colors
   Color primaryColor = const Color.fromRGBO(1, 176, 241, 1);
   Color secondaryColor = const Color.fromRGBO(90, 98, 104, 1);
@@ -853,23 +853,31 @@ class CustomThemes {
     );
   }
 
-  DropdownButton<String> maruDropDownButton({
+  Container maruDropDownButton({
     required String? defaultValue,
     List<DropdownMenuItem<String>>? items,
     required void Function(String?)? onChange,
     String? hintText,
   }) {
-    return DropdownButton<String>(
-      items: items,
-      onChanged: onChange,
-      value: defaultValue,
-      focusColor: primaryColor,
-      isExpanded: true,
-      dropdownColor: whiteColor,
-      iconEnabledColor: primaryColor,
-      style: darkTextStyle(size: 15),
-      elevation: 0,
-      underline: Container(),
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 5, vertical: 4),
+      decoration: BoxDecoration(
+        border: Border.all(color: secondaryColor), // Change the border color as needed
+        borderRadius: BorderRadius.circular(4), // Optional: add rounded corners
+      ),
+      child: DropdownButton<String>(
+        items: items,
+        onChanged: onChange,
+        value: defaultValue,
+        focusColor: primaryColor,
+        isExpanded: true,
+        isDense: true,
+        dropdownColor: whiteColor,
+        iconEnabledColor: secondaryColor,
+        style: secondaryTextStyle(size: 15),
+        elevation: 0,
+        underline: Container(),
+      ),
     );
   }
 }

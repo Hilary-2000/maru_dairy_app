@@ -426,7 +426,7 @@ class _TechnicianDashboardState extends State<TechnicianDashboard> {
                               Text(
                                 "$greetings,",
                                 style: customs.primaryTextStyle(
-                                    size: width * 0.05,
+                                    size: 20,
                                     fontweight: FontWeight.normal),
                               ),
                               SizedBox(
@@ -437,7 +437,7 @@ class _TechnicianDashboardState extends State<TechnicianDashboard> {
                                 child: Text(
                                   "$full_name",
                                   style: customs.successTextStyle(
-                                      size: width * 0.06,
+                                      size: 25,
                                       fontweight: FontWeight.bold),
                                 ),
                               )
@@ -452,7 +452,7 @@ class _TechnicianDashboardState extends State<TechnicianDashboard> {
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
                               CircleAvatar(
-                                radius: width * 0.08,
+                                radius: 34,
                                 backgroundColor: customs.primaryShade,
                                 child: ClipOval(
                                   child: (profile_photo.isNotEmpty) ?

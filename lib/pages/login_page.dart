@@ -80,40 +80,16 @@ class _LoginState extends State<Login> {
                     padding: EdgeInsets.symmetric(horizontal: 10),
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10.0)),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Container(
-                          width: width * 0.3,
-                          height: 30,
-                          child: Align(
-                            alignment: Alignment.center,
-                            child: Image(
-                              image: AssetImage("assets/images/koica-nobg.png"),
-                            ),
-                          ),
-                        ),
-                        Container(
-                          width: width * 0.3,
-                          height: (width * 0.3) - 10,
-                          padding: EdgeInsets.symmetric(horizontal: 5),
-                          margin: const EdgeInsets.symmetric(
-                              vertical: 10.0, horizontal: 0.0),
-                          child: Image(
-                            image: AssetImage("assets/images/maru-nobg.png"),
-                            fit: BoxFit.fill,
-                          ),
-                        ),
-                        Container(
-                          height: 50,
-                          width: width * 0.3,
-                          child: Image(
-                            image: AssetImage("assets/images/uniworld-nobg.png"),
-                            width: width * 0.3,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      ],
+                    child: Container(
+                      width: 150,
+                      height: 140,
+                      padding: EdgeInsets.symmetric(horizontal: 5),
+                      margin: const EdgeInsets.symmetric(
+                          vertical: 10.0, horizontal: 0.0),
+                      child: Image(
+                        image: AssetImage("assets/images/maru-nobg.png"),
+                        fit: BoxFit.fill,
+                      ),
                     ),
                   ),
                   const SizedBox(
@@ -235,6 +211,7 @@ class _LoginState extends State<Login> {
                                     text: TextSpan(
                                         text: "Forgot password?",
                                         style: customs.primaryTextStyle(
+                                            underline: true,
                                             size: width * 0.035,
                                             fontweight: FontWeight.bold),
                                         recognizer: TapGestureRecognizer()
@@ -331,7 +308,7 @@ class _LoginState extends State<Login> {
                     ),
                   ),
                   Container(
-                    padding: EdgeInsets.fromLTRB(15, 50, 15, 15),
+                    padding: EdgeInsets.fromLTRB(15, 15, 15, 15),
                     child: SizedBox(
                       width: double.infinity,
                       child: RichText(
@@ -347,6 +324,7 @@ class _LoginState extends State<Login> {
                               text: " Sign Up",
                               style: customs.primaryTextStyle(
                                   size: width * 0.035,
+                                  underline: true,
                                   fontweight: FontWeight.bold),
                               recognizer: TapGestureRecognizer()
                                 ..onTap = () {
@@ -354,6 +332,36 @@ class _LoginState extends State<Login> {
                                 })
                         ]),
                       ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: height > 710 ? height-710 : 0,
+                  ),
+                  Container(
+                    width: width,
+                    padding: EdgeInsets.only(right: 30),
+                    child: Row(
+                      children: [
+                        Container(
+                          width: width * 0.3,
+                          height: 25,
+                          child: Align(
+                            alignment: Alignment.center,
+                            child: Image(
+                              image: AssetImage("assets/images/koica-nobg.png"),
+                            ),
+                          ),
+                        ),
+                        Spacer(),
+                        Container(
+                          height: 50,
+                          child: Image(
+                            image: AssetImage("assets/images/uniworld-nobg.png"),
+                            width: width * 0.4,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ],
                     ),
                   )
                 ],

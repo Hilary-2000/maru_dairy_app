@@ -284,7 +284,7 @@ class _MemberReportsState extends State<MemberReports> {
                     children: [
                       Center(
                         child: CircleAvatar(
-                            radius: width * 0.1,
+                            radius: 44,
                             child: ClipOval(
                               child: (member_data != null) ?
                               Image.network(

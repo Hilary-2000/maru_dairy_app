@@ -324,7 +324,7 @@ class _GenerateReportsState extends State<GenerateReports> {
                     children: [
                       Center(
                         child: CircleAvatar(
-                          radius: width * 0.1,
+                          radius: 44,
                           child: ClipOval(
                             child: (admin_data != null) ?
                             Image.network(
