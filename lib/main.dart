@@ -26,6 +26,7 @@ import 'package:maru/pages/member/view_profile.dart';
 import 'package:maru/pages/super_admin/Technicians.dart';
 import 'package:maru/pages/super_admin/administrator_details.dart';
 import 'package:maru/pages/super_admin/administrator_list.dart';
+import 'package:maru/pages/super_admin/deduction_management.dart';
 import 'package:maru/pages/super_admin/edit_administrator.dart';
 import 'package:maru/pages/super_admin/edit_super_admin_details.dart';
 import 'package:maru/pages/super_admin/edit_technician.dart';
@@ -116,7 +117,8 @@ void main() {
       "/new_super_admin" : (context) => const NewSuperAdministrator(),
       "/generate_admin_report": (context) => const GenerateReports(),
       "/member_reports" : (context) => const MemberReports(),
-      "/technician_reports" : (context) => const TechnicianReport()
+      "/technician_reports" : (context) => const TechnicianReport(),
+      "/deduction_management" : (context) => const DeductionManagement()
     },
   ));
 }

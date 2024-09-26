@@ -626,7 +626,6 @@ class _AddTodoPopupCard extends StatefulWidget {
   @override
   State<_AddTodoPopupCard> createState() => _AddTodoPopupCardState();
 }
-
 class _AddTodoPopupCardState extends State<_AddTodoPopupCard> {
   CustomThemes customThemes = new CustomThemes();
 
@@ -717,6 +716,7 @@ class _AddTodoPopupCardState extends State<_AddTodoPopupCard> {
     );
   }
 }
+
 class HeroDialogRoute<T> extends PageRoute<T> {
   /// {@macro hero_dialog_route}
   HeroDialogRoute({

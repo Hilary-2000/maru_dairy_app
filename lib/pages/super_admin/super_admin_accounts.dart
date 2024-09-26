@@ -334,7 +334,7 @@ class _SuperAdminAccountsState extends State<SuperAdminAccounts> {
                               title: Text("Set Up Deduction", style: customs.darkTextStyle(size: 14),),
                               subtitle: Text("Add, update and delete the various deductions present!", style: customs.secondaryTextStyle(size: 12),),
                               onTap: (){
-                                Navigator.pushNamed(context, "/milk_prices");
+                                Navigator.pushNamed(context, "/deduction_management");
                               },
                             ),
                             Container(width: width * 0.8, child: Divider(color: customs.secondaryShade_2,)),

@@ -1504,4 +1504,141 @@ class ApiConnection{
       client.close();
     }
   }
+
+  // get member data
+  Future<String> getDeductions() async{
+    var client = rq.Client();
+    var url = Uri.http(apiLink,"/api/admin/deductions");
+    var body = jsonEncode({});
+    FlutterSecureStorage storage = new FlutterSecureStorage();
+    String? token = await storage.read(key: "token");
+    try{
+      var response = await client.post(
+          url,
+          headers: {
+            'Content-Type': 'application/json',
+            'maru-authentication-code' : token!
+          },
+          body: body
+      ).timeout(Duration(seconds: 60));
+      return response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body;
+    }on TimeoutException {
+      return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
+    } catch(e){
+      return "{\"success\":false, \"message\":\"$e\"}";
+    }finally{
+      client.close();
+    }
+  }
+
+  // get member data
+  Future<String> deleteDeductions({required String deduction_id}) async{
+    var client = rq.Client();
+    var url = Uri.http(apiLink,"/api/admin/deductions/delete/$deduction_id");
+    var body = jsonEncode({});
+    FlutterSecureStorage storage = new FlutterSecureStorage();
+    String? token = await storage.read(key: "token");
+    try{
+      var response = await client.post(
+          url,
+          headers: {
+            'Content-Type': 'application/json',
+            'maru-authentication-code' : token!
+          },
+          body: body
+      ).timeout(Duration(seconds: 60));
+      return response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body;
+    }on TimeoutException {
+      return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
+    } catch(e){
+      return "{\"success\":false, \"message\":\"$e\"}";
+    }finally{
+      client.close();
+    }
+  }
+  // get member data
+  Future<String> updateDeduction({required String deduction_id, required String deduction_name}) async{
+    var client = rq.Client();
+    var url = Uri.http(apiLink,"/api/admin/deductions/update");
+    var body = jsonEncode({
+      "deduction_id": deduction_id,
+      "deduction_name": deduction_name
+    });
+    FlutterSecureStorage storage = new FlutterSecureStorage();
+    String? token = await storage.read(key: "token");
+    try{
+      var response = await client.post(
+          url,
+          headers: {
+            'Content-Type': 'application/json',
+            'maru-authentication-code' : token!
+          },
+          body: body
+      ).timeout(Duration(seconds: 60));
+      return response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body;
+    }on TimeoutException {
+      return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
+    } catch(e){
+      return "{\"success\":false, \"message\":\"$e\"}";
+    }finally{
+      client.close();
+    }
+  }
+
+  // get member data
+  Future<String> addDeductions({required String deduction_name}) async{
+    var client = rq.Client();
+    var url = Uri.http(apiLink,"/api/admin/deductions/add");
+    var body = jsonEncode({
+      "deduction_name": deduction_name
+    });
+    FlutterSecureStorage storage = new FlutterSecureStorage();
+    String? token = await storage.read(key: "token");
+    try{
+      var response = await client.post(
+          url,
+          headers: {
+            'Content-Type': 'application/json',
+            'maru-authentication-code' : token!
+          },
+          body: body
+      ).timeout(Duration(seconds: 60));
+      return response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body;
+    }on TimeoutException {
+      return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
+    } catch(e){
+      return "{\"success\":false, \"message\":\"$e\"}";
+    }finally{
+      client.close();
+    }
+  }
+
+  // get member data
+  Future<String> changeDeductionStatus({required int deduction_id, required String deduction_status}) async{
+    var client = rq.Client();
+    var url = Uri.http(apiLink,"/api/admin/deductions/update_status");
+    var body = jsonEncode({
+      "deduction_id": deduction_id,
+      "deduction_status": deduction_status
+    });
+    FlutterSecureStorage storage = new FlutterSecureStorage();
+    String? token = await storage.read(key: "token");
+    try{
+      var response = await client.post(
+          url,
+          headers: {
+            'Content-Type': 'application/json',
+            'maru-authentication-code' : token!
+          },
+          body: body
+      ).timeout(Duration(seconds: 60));
+      return response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body;
+    }on TimeoutException {
+      return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
+    } catch(e){
+      return "{\"success\":false, \"message\":\"$e\"}";
+    }finally{
+      client.close();
+    }
+  }
 }
