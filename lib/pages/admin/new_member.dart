@@ -3,6 +3,10 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:maru/packages/api_connection.dart';
 import 'package:maru/packages/maru_theme.dart';
+import 'package:bottom_picker/bottom_picker.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:bottom_picker/resources/arrays.dart';
+import 'package:intl/intl.dart';
 
 class NewMember extends StatefulWidget {
   const NewMember({super.key});
@@ -13,6 +17,7 @@ class NewMember extends StatefulWidget {
 
 class _NewMemberState extends State<NewMember> {
   CustomThemes customs = CustomThemes();
+  TextEditingController reg_date = new TextEditingController();
   List<Color> bg_color = [];
   bool loading = false;
   bool save_loader = false;
@@ -22,7 +27,55 @@ class _NewMemberState extends State<NewMember> {
   String collection_days = "0";
   String collected_amount = "0";
   final _formKey = GlobalKey<FormState>();
+  bool init = false;
 
+  void didChangeDependencies(){
+    super.didChangeDependencies();
+
+    if(!init){
+      init = !init;
+      reg_date.text = addDaysOrMonthsToDate(dateTime: DateTime.now(), monthsToAdd: 0);
+    }
+  }
+
+  String addDaysOrMonthsToDate({
+    required DateTime dateTime,
+    int? daysToAdd,
+    int? monthsToAdd,
+  }) {
+    DateTime newDate = dateTime;
+
+    // Add days if specified
+    if (daysToAdd != null) {
+      newDate = newDate.add(Duration(days: daysToAdd));
+    }
+
+    // Add months if specified
+    if (monthsToAdd != null) {
+      int newYear = newDate.year;
+      int newMonth = newDate.month + monthsToAdd;
+
+      // Adjust the year if the month goes beyond December
+      while (newMonth > 12) {
+        newYear += 1;
+        newMonth -= 12;
+      }
+
+      // Handle case where day of the month might not exist (e.g., February 30)
+      int newDay = newDate.day;
+      int daysInNewMonth = DateTime(newYear, newMonth + 1, 0).day; // Get the last day of the new month
+      if (newDay > daysInNewMonth) {
+        newDay = daysInNewMonth;
+      }
+
+      newDate = DateTime(newYear, newMonth, newDay);
+    }
+
+    // Format the new date as a string
+    String formattedDate = DateFormat('dd/MM/yyyy').format(newDate);
+
+    return formattedDate;
+  }
   // region DV
   var regionDV = "";
   List<DropdownMenuItem<String>> regions = [
@@ -173,6 +226,77 @@ class _NewMemberState extends State<NewMember> {
                                     }
                                     return null;
                                   }),
+                              Divider(
+                                color: customs.secondaryShade_2,
+                              )
+                            ],
+                          ),
+                        ),
+                        Container(
+                          width: width * 0.9,
+                          margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Registered Date:",
+                                style: customs.darkTextStyle(
+                                    size: 12, fontweight: FontWeight.bold),
+                              ),
+                              GestureDetector(
+                                onTap: (){
+                                  String dateString = reg_date.text; // Example date in dd/MM/yyyy format
+                                  dateString = dateString.replaceAll("/", "");
+    
+                                  // Extract day, month, and year
+                                  String day = dateString.substring(0, 2);
+                                  String month = dateString.substring(2, 4);
+                                  String year = dateString.substring(4, 8);
+    
+                                  // Reformat to yyyy-MM-dd
+                                  String reformattedDate = "$year-$month-$day";
+                                  DateTime parsedDate = DateTime.parse(reformattedDate);
+    
+                                  BottomPicker.date(
+                                    pickerTitle: Text(
+                                      'Select Start Date',
+                                      style: customs.secondaryTextStyle(
+                                        fontweight: FontWeight.bold,
+                                        size: 15,
+                                      ),
+                                    ),
+                                    dateOrder: DatePickerDateOrder.dmy,
+                                    initialDateTime: parsedDate,
+                                    maxDateTime: DateTime.now().add(Duration(seconds: 1)),
+                                    minDateTime: DateTime.now().subtract(Duration(days: 5000)),
+                                    pickerTextStyle: customs.secondaryTextStyle(
+                                        size: 13, fontweight: FontWeight.bold),
+                                    onChange: (index) {
+                                      print(index);
+                                    },
+                                    onSubmit: (selected_date) {
+                                      setState(() {
+                                        reg_date.text = addDaysOrMonthsToDate(dateTime: selected_date, daysToAdd: 0);
+                                      });
+                                    },
+                                    bottomPickerTheme: BottomPickerTheme.blue,
+                                  ).show(context);
+                                },
+                                child: customs.maruTextFormField(
+                                    isChanged: (value) {},
+                                    enabled: false,
+                                    textType: TextInputType.text,
+                                    floatingBehaviour: FloatingLabelBehavior.always,
+                                    hintText: "Click to select date",
+                                    editingController: reg_date,
+                                    validator: (value) {
+                                      if(value == null || value.isEmpty){
+                                        return "Set Start date";
+                                      }
+                                      return null;
+                                    }
+                                ),
+                              ),
                               Divider(
                                 color: customs.secondaryShade_2,
                               )
@@ -417,6 +541,7 @@ class _NewMemberState extends State<NewMember> {
                                       "animals": animalController.text,
                                       "membership": membershipController.text,
                                       "gender": genderDV,
+                                      "registration_date": reg_date.text
                                     };
                                     var response = await apiCon.adminAddMember(datapass);
                                     if(customs.isValidJson(response)){

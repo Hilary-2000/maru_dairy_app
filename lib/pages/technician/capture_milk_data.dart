@@ -25,42 +25,6 @@ class _CaptureMilkDataState extends State<CaptureMilkData> {
   List<TextStyle> textStyles = [];
   bool _init = false;
 
-  // Future<void> _selectDate(BuildContext context) async {
-  //   final DateTime? pickedDate = await showDatePicker(
-  //     context: context,
-  //     initialDate: DateTime.now(),
-  //     firstDate: DateTime.now(),
-  //     lastDate: DateTime(2101),
-  //   );
-  //   if (pickedDate != null && pickedDate != _selectedDate)
-  //     setState(() {
-  //       _selectedDate = pickedDate;
-  //       _dateController.text = DateFormat("MMMM d, yyyy").format(_selectedDate!).toString();
-  //     });
-  // }
-  //
-  // Future<void> _selectTime(BuildContext context) async {
-  //   final TimeOfDay? pickedTime = await showTimePicker(
-  //     context: context,
-  //     initialTime: _selectedTime != null
-  //         ? TimeOfDay.fromDateTime(_selectedTime!)
-  //         : TimeOfDay.now(),
-  //   );
-  //   if (pickedTime != null) {
-  //     setState(() {
-  //       _selectedTime = DateTime(
-  //         _selectedTime?.year ?? DateTime.now().year,
-  //         _selectedTime?.month ?? DateTime.now().month,
-  //         _selectedTime?.day ?? DateTime.now().day,
-  //         pickedTime.hour,
-  //         pickedTime.minute,
-  //       );
-  //
-  //       _timeController.text = DateFormat("h:mm a").format(_selectedTime!).toString();
-  //     });
-  //   }
-  // }
-
   bool isValidJson(String jsonString) {
     try {
       jsonDecode(jsonString);
@@ -70,8 +34,6 @@ class _CaptureMilkDataState extends State<CaptureMilkData> {
     }
   }
 
-  // TextEditingController _dateController = TextEditingController();
-  // TextEditingController _timeController = TextEditingController();
   TextEditingController amountCollected = TextEditingController();
   bool saveLoader = false;
 
@@ -149,19 +111,24 @@ class _CaptureMilkDataState extends State<CaptureMilkData> {
         colors_shade = [customs.primaryShade, customs.secondaryShade, customs.warningShade, customs.darkShade, customs.successShade];
         textStyles = [
           customs.primaryTextStyle(
-              size: 30, fontweight: FontWeight.bold
+              size: 30,
+              fontweight: FontWeight.bold
           ),
           customs.secondaryTextStyle(
-              size: 30, fontweight: FontWeight.bold
+              size: 30,
+              fontweight: FontWeight.bold
           ),
           customs.warningTextStyle(
-              size: 30, fontweight: FontWeight.bold
+              size: 30,
+              fontweight: FontWeight.bold
           ),
           customs.darkTextStyle(
-              size: 30, fontweight: FontWeight.bold
+              size: 30,
+              fontweight: FontWeight.bold
           ),
           customs.secondaryTextStyle(
-              size: 30, fontweight: FontWeight.bold
+              size: 30,
+              fontweight: FontWeight.bold
           ),
         ];
       });

@@ -320,6 +320,40 @@ class _SuperAdminAccountsState extends State<SuperAdminAccounts> {
                                 Navigator.pushNamed(context, "/milk_prices");
                               },
                             ),
+                            Container(width: width * 0.8, child: Divider(color: customs.secondaryShade_2,)),
+                            ListTile(
+                              leading: CircleAvatar(
+                                radius: 30,
+                                backgroundColor: customs.primaryShade_2,
+                                child: Icon(
+                                  FontAwesomeIcons.circleMinus,
+                                  size: 20,
+                                  color: customs.primaryColor,
+                                ),
+                              ),
+                              title: Text("Set Up Deduction", style: customs.darkTextStyle(size: 14),),
+                              subtitle: Text("Add, update and delete the various deductions present!", style: customs.secondaryTextStyle(size: 12),),
+                              onTap: (){
+                                Navigator.pushNamed(context, "/milk_prices");
+                              },
+                            ),
+                            Container(width: width * 0.8, child: Divider(color: customs.secondaryShade_2,)),
+                            ListTile(
+                              leading: CircleAvatar(
+                                radius: 30,
+                                backgroundColor: customs.primaryShade_2,
+                                child: Icon(
+                                  FontAwesomeIcons.globe,
+                                  size: 20,
+                                  color: customs.primaryColor,
+                                ),
+                              ),
+                              title: Text("Set Up Regions", style: customs.darkTextStyle(size: 14),),
+                              subtitle: Text("Manage all regions present!", style: customs.secondaryTextStyle(size: 12),),
+                              onTap: (){
+                                Navigator.pushNamed(context, "/milk_prices");
+                              },
+                            ),
                           ],
                         ),
                       ),

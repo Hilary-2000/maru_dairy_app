@@ -178,14 +178,13 @@ class _UpdateMilkPricesState extends State<UpdateMilkPrices> {
                             padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                             width: width,
                             child: RichText(
-                                text: TextSpan(
-                                    text: "Milk Price per Litre:",
-                                    style: customs.secondaryTextStyle(
-                                        size: 14, fontweight: FontWeight.bold),
+                              text: TextSpan(
+                                  text: "Milk Price per Litre:",
+                                  style: customs.secondaryTextStyle(
+                                    size: 14, fontweight: FontWeight.bold),
                                     children: [
                                       TextSpan(
-                                          text:
-                                          " Kes $_currentDoubleValue per Litre",
+                                          text: " Kes $_currentDoubleValue per Litre",
                                           style: customs.primaryTextStyle(size: 14)
                                       )
                                     ]

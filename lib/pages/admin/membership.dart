@@ -475,7 +475,7 @@ class _MembershipState extends State<Membership> {
                                             margin: EdgeInsets.only(top: 30),
                                             padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
                                             width: width - 50,
-                                            height: 200,
+                                            height: height - 400,
                                             decoration: BoxDecoration(
                                                 color: customs.whiteColor,
                                                 borderRadius: BorderRadius.circular(20),
@@ -489,7 +489,7 @@ class _MembershipState extends State<Membership> {
                                               mainAxisAlignment: MainAxisAlignment.center,
                                               children: [
                                                 Text("No annual subscription found!", style: customs.primaryTextStyle(size: 20, fontweight: FontWeight.bold),),
-                                                Spacer(),
+                                                SizedBox(height: height / 8,),
                                                 SizedBox(
                                                   width: width,
                                                   child: Image(
@@ -498,6 +498,7 @@ class _MembershipState extends State<Membership> {
                                                     width: width/4,
                                                   ),
                                                 ),
+                                                Spacer()
                                               ],
                                             ),
                                           ),
@@ -517,7 +518,7 @@ class _MembershipState extends State<Membership> {
                                               child: GestureDetector(
                                                 child: Container(
                                                   width: width,
-                                                  height: 92,
+                                                  height: 110,
                                                   child: Column(
                                                     children: [
                                                       Container(
@@ -547,17 +548,18 @@ class _MembershipState extends State<Membership> {
                                                             dense: true,
                                                             style: ListTileStyle.drawer,
                                                             title: RichText(
-                                                                text: TextSpan(
-                                                                    text: "Kes ${item['payment_amount']}",
-                                                                    style: customs.secondaryTextStyle(size: 14, fontweight: FontWeight.bold)
-                                                                )
+                                                              text: TextSpan(
+                                                                  text: "Kes ${item['total_payment']}",
+                                                                  style: customs.secondaryTextStyle(size: 14, fontweight: FontWeight.bold)
+                                                              )
                                                             ),
+                                                            subtitle: Text("Kes ${item['payment_amount']}", style: customs.secondaryTextStyle(size: 10, fontweight: FontWeight.normal)),
                                                             trailing: Column(
                                                               mainAxisAlignment: MainAxisAlignment.center,
                                                               crossAxisAlignment: CrossAxisAlignment.end,
                                                               children: [
-                                                                Text("${item['publish_date']}", style: customs.secondaryTextStyle(size: 10, fontweight: FontWeight.bold),),
-                                                                Text("X-Cost: Kes ${item['transaction_cost']}", style: customs.secondaryTextStyle(size: 12, fontweight: FontWeight.bold),),
+                                                                Text("${item['publish_date']}", style: customs.secondaryTextStyle(size: 10, fontweight: FontWeight.normal),),
+                                                                Text("X-Cost: Kes ${item['transaction_cost']}", style: customs.secondaryTextStyle(size: 10, fontweight: FontWeight.normal),),
                                                                 item['confirmed'] ? Container(
                                                                   padding: EdgeInsets.symmetric(vertical: 2, horizontal: 4),
                                                                   child: Text("confirmed", style: customs.successTextStyle(size: 8.6, fontweight: FontWeight.bold),),
@@ -628,8 +630,8 @@ class _MembershipState extends State<Membership> {
                                                           mainAxisAlignment: MainAxisAlignment.center,
                                                           crossAxisAlignment: CrossAxisAlignment.end,
                                                           children: [
-                                                            Text("${item['publish_date']}", style: customs.secondaryTextStyle(size: 10, fontweight: FontWeight.bold),),
-                                                            Text("X-Cost: Kes ${item['transaction_cost']}", style: customs.secondaryTextStyle(size: 12, fontweight: FontWeight.bold),),
+                                                            Text("${item['publish_date']}", style: customs.secondaryTextStyle(size: 10, fontweight: FontWeight.normal),),
+                                                            Text("X-Cost: Kes ${item['transaction_cost']}", style: customs.secondaryTextStyle(size: 12, fontweight: FontWeight.normal),),
                                                             item['confirmed'] ? Container(
                                                               padding: EdgeInsets.symmetric(vertical: 2, horizontal: 4),
                                                               child: Text("confirmed", style: customs.successTextStyle(size: 8.6, fontweight: FontWeight.bold),),
