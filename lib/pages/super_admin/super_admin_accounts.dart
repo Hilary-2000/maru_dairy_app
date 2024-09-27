@@ -349,9 +349,9 @@ class _SuperAdminAccountsState extends State<SuperAdminAccounts> {
                                 ),
                               ),
                               title: Text("Set Up Regions", style: customs.darkTextStyle(size: 14),),
-                              subtitle: Text("Manage all regions present!", style: customs.secondaryTextStyle(size: 12),),
+                              subtitle: Text("Manage all regions you have!", style: customs.secondaryTextStyle(size: 12),),
                               onTap: (){
-                                Navigator.pushNamed(context, "/milk_prices");
+                                Navigator.pushNamed(context, "/region_management");
                               },
                             ),
                           ],

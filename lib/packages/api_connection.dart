@@ -1641,4 +1641,143 @@ class ApiConnection{
       client.close();
     }
   }
+
+  // get member data
+  Future<String> getRegions() async{
+    var client = rq.Client();
+    var url = Uri.http(apiLink,"/api/admin/regions");
+    var body = jsonEncode({});
+    FlutterSecureStorage storage = new FlutterSecureStorage();
+    String? token = await storage.read(key: "token");
+    try{
+      var response = await client.post(
+          url,
+          headers: {
+            'Content-Type': 'application/json',
+            'maru-authentication-code' : token!
+          },
+          body: body
+      ).timeout(Duration(seconds: 60));
+      return response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body;
+    }on TimeoutException {
+      return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
+    } catch(e){
+      return "{\"success\":false, \"message\":\"$e\"}";
+    }finally{
+      client.close();
+    }
+  }
+
+  // get member data
+  Future<String> updateRegion({required String region_id, required String region_name}) async{
+    var client = rq.Client();
+    var url = Uri.http(apiLink,"/api/admin/region/update");
+    var body = jsonEncode({
+      "region_id": region_id,
+      "region_name": region_name
+    });
+    FlutterSecureStorage storage = new FlutterSecureStorage();
+    String? token = await storage.read(key: "token");
+    try{
+      var response = await client.post(
+          url,
+          headers: {
+            'Content-Type': 'application/json',
+            'maru-authentication-code' : token!
+          },
+          body: body
+      ).timeout(Duration(seconds: 60));
+      return response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body;
+    }on TimeoutException {
+      return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
+    } catch(e){
+      return "{\"success\":false, \"message\":\"$e\"}";
+    }finally{
+      client.close();
+    }
+  }
+
+  // get member data
+  Future<String> deleteRegion({required String region_id}) async{
+    var client = rq.Client();
+    var url = Uri.http(apiLink,"/api/admin/region/delete/$region_id");
+    var body = jsonEncode({});
+    FlutterSecureStorage storage = new FlutterSecureStorage();
+    String? token = await storage.read(key: "token");
+    try{
+      var response = await client.post(
+          url,
+          headers: {
+            'Content-Type': 'application/json',
+            'maru-authentication-code' : token!
+          },
+          body: body
+      ).timeout(Duration(seconds: 60));
+      return response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body;
+    }on TimeoutException {
+      return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
+    } catch(e){
+      return "{\"success\":false, \"message\":\"$e\"}";
+    }finally{
+      client.close();
+    }
+  }
+
+  // get member data
+  Future<String> addRegions({required String region_name}) async{
+    var client = rq.Client();
+    var url = Uri.http(apiLink,"/api/admin/regions/add");
+    var body = jsonEncode({
+      "region_name": region_name
+    });
+    FlutterSecureStorage storage = new FlutterSecureStorage();
+    String? token = await storage.read(key: "token");
+    try{
+      var response = await client.post(
+          url,
+          headers: {
+            'Content-Type': 'application/json',
+            'maru-authentication-code' : token!
+          },
+          body: body
+      ).timeout(Duration(seconds: 60));
+      return response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body;
+    }on TimeoutException {
+      return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
+    } catch(e){
+      return "{\"success\":false, \"message\":\"$e\"}";
+    }finally{
+      client.close();
+    }
+  }
+
+
+  // get member data
+  Future<String> changeRegionStatus({required String region_id, required String region_status}) async{
+    var client = rq.Client();
+    var url = Uri.http(apiLink,"/api/admin/region/update_status");
+    var body = jsonEncode({
+      "region_id": region_id,
+      "region_status": region_status
+    });
+    FlutterSecureStorage storage = new FlutterSecureStorage();
+    String? token = await storage.read(key: "token");
+    try{
+      var response = await client.post(
+          url,
+          headers: {
+            'Content-Type': 'application/json',
+            'maru-authentication-code' : token!
+          },
+          body: body
+      ).timeout(Duration(seconds: 60));
+      return response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body;
+    }on TimeoutException {
+      return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
+    } catch(e){
+      return "{\"success\":false, \"message\":\"$e\"}";
+    }finally{
+      client.close();
+    }
+  }
 }

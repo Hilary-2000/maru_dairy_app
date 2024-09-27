@@ -178,193 +178,188 @@ class _MilkPricesState extends State<MilkPrices> {
           double height = constraints.maxHeight;
           double calculatedWidth = width / 2 - 170;
           calculatedWidth = calculatedWidth > 0 ? calculatedWidth : 0;
-          return Skeletonizer(
-            enabled: loading,
-            child: Container(
-              height: height,
-              width: width,
-              decoration: BoxDecoration(color: customs.whiteColor),
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      children: [
-                        Text(
-                          "Milk Prices",
-                          style: customs.darkTextStyle(
-                              size: 20, fontweight: FontWeight.bold),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                    width: width,
-                    child: RichText(
-                      text: TextSpan(text: "Current Price : ", style: customs.secondaryTextStyle(size: 14, fontweight: FontWeight.bold), children: [TextSpan(text: "$current_price", style: customs.primaryTextStyle(size: 14, underline: true))]),
-                    ),
-                  ),
-                  Row(
+          return Container(
+            height: height,
+            width: width,
+            decoration: BoxDecoration(color: customs.whiteColor),
+            child: Column(
+              children: [
+                Skeletonizer(
+                  enabled: loading,
+                  child: Column(
                     children: [
-                      Container(
-                        width: width / 3,
-                        height: 50,
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          children: [
+                            Text(
+                              "Milk Prices",
+                              style: customs.darkTextStyle(
+                                  size: 20, fontweight: FontWeight.bold),
+                            ),
+                          ],
+                        ),
                       ),
                       Container(
-                        padding: EdgeInsets.symmetric(horizontal: 10),
-                        width: width / 1.5,
-                        height: 50,
-                        child: Center(
-                          child: display_data.length > 0 ? customs.maruSearchTextField(
-                            isChanged: (value){
-                              findKeyWord(value);
-                            },
-                            editingController: searchField,
-                            hintText: "Type to search!",
-                          ) : SizedBox(),
+                        padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                        width: width,
+                        child: RichText(
+                          text: TextSpan(text: "Current Price : ", style: customs.secondaryTextStyle(size: 14, fontweight: FontWeight.bold), children: [TextSpan(text: "$current_price", style: customs.primaryTextStyle(size: 14, underline: true))]),
                         ),
-                      )
+                      ),
                     ],
                   ),
-                  SizedBox(height: 10,),
-                  SizedBox(
-                    width: width/1.5,
-                    child: Divider(),
-                  ),
-                  SizedBox(height: 10,),
-                  Container(
-                    height: height - 190,
-                    width: width,
-                    padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-                    child: !loading ? (display_data.length > 0 ? ListView.builder(
-                      itemCount: display_data.length,
-                      itemBuilder: (context, index) {
-                        var item = display_data[index];
-                        return Container(
-                          margin: EdgeInsets.symmetric(vertical: 5),
-                          decoration: BoxDecoration(
-                            color: customs.whiteColor,
-                            borderRadius: BorderRadius.circular(10),
-                            boxShadow: [
-                              BoxShadow(color: customs.secondaryShade_2, blurRadius: 2, spreadRadius: 1),
-                              BoxShadow(color: customs.secondaryShade_2, blurRadius: 2, spreadRadius: 1),
-                              BoxShadow(color: customs.secondaryShade_2, blurRadius: 2, spreadRadius: 1),
-                              BoxShadow(color: customs.secondaryShade_2, blurRadius: 2, spreadRadius: 1),
-                              BoxShadow(color: customs.secondaryShade_2, blurRadius: 2, spreadRadius: 1),
-                            ]
-                          ),
-                          child: ListTile(
-                            leading: Icon(Icons.label, size: 20, color: item['status'] == 1 ? customs.successColor : customs.secondaryColor,),
-                            title: Row(
-                              children: [
-                                Text("Kes ${item['amount']}", style: customs.secondaryTextStyle(size: 17, fontweight: FontWeight.bold),),
-                                SizedBox(
-                                  width: 10,
+                ),
+                Row(
+                  children: [
+                    Container(
+                      width: width / 3,
+                      height: 50,
+                    ),
+                    Container(
+                      padding: EdgeInsets.symmetric(horizontal: 10),
+                      width: width / 1.5,
+                      height: 50,
+                      child: Center(
+                        child: display_data.length > 0 ? customs.maruSearchTextField(
+                          isChanged: (value){
+                            findKeyWord(value);
+                          },
+                          editingController: searchField,
+                          hintText: "Type to search!",
+                        ) : SizedBox(),
+                      ),
+                    )
+                  ],
+                ),
+                SizedBox(height: 10,),
+                SizedBox(
+                  width: width/1.5,
+                  child: Divider(),
+                ),
+                SizedBox(height: 10,),
+                Container(
+                  height: height - 190,
+                  width: width,
+                  padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+                  child: !loading ? (display_data.length > 0 ? ListView.builder(
+                    itemCount: display_data.length,
+                    itemBuilder: (context, index) {
+                      var item = display_data[index];
+                      return Container(
+                        margin: EdgeInsets.symmetric(vertical: 5),
+                        decoration: BoxDecoration(
+                          color: customs.whiteColor,
+                          borderRadius: BorderRadius.circular(10),
+                          boxShadow: [
+                            BoxShadow(color: customs.secondaryShade_2, blurRadius: 2, spreadRadius: 1),
+                            BoxShadow(color: customs.secondaryShade_2, blurRadius: 2, spreadRadius: 1),
+                            BoxShadow(color: customs.secondaryShade_2, blurRadius: 2, spreadRadius: 1),
+                            BoxShadow(color: customs.secondaryShade_2, blurRadius: 2, spreadRadius: 1),
+                            BoxShadow(color: customs.secondaryShade_2, blurRadius: 2, spreadRadius: 1),
+                          ]
+                        ),
+                        child: ListTile(
+                          leading: Icon(Icons.label, size: 20, color: item['status'] == 1 ? customs.successColor : customs.secondaryColor,),
+                          title: Row(
+                            children: [
+                              Text("Kes ${item['amount']}", style: customs.secondaryTextStyle(size: 17, fontweight: FontWeight.bold),),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              item['current'] ? Container(
+                                padding: EdgeInsets.symmetric(horizontal: 3, vertical: 1),
+                                decoration: BoxDecoration(
+                                  color: customs.successColor,
+                                  borderRadius: BorderRadius.circular(2)
                                 ),
-                                item['current'] ? Container(
-                                  padding: EdgeInsets.symmetric(horizontal: 3, vertical: 1),
-                                  decoration: BoxDecoration(
-                                    color: customs.successColor,
-                                    borderRadius: BorderRadius.circular(2)
-                                  ),
-                                  child: Text("Current", style: customs.whiteTextStyle(size: 10, fontweight: FontWeight.bold),),
-                                ) : SizedBox(height: 0, width: 0,)
-                              ],
-                            ),
-                            subtitle: Text(item['status'] == 1 ? '${item['effect_date']} to ${item['end_date']}' : "Not-published", style: customs.secondaryTextStyle(size: 14),),
-                            isThreeLine: false,
-                            trailing: Icon(Icons.arrow_forward_ios_rounded, size: 15,),
-                            onTap: () async {
-                              // Handle the tap event
-                              await Navigator.pushNamed(context, "/update_milk_prices", arguments: {"price_id": item['price_id']});
-                              getMilkPrices();
-                            },
+                                child: Text("Current", style: customs.whiteTextStyle(size: 10, fontweight: FontWeight.bold),),
+                              ) : SizedBox(height: 0, width: 0,)
+                            ],
                           ),
-                        );
-                      },
-                    ) :
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        GestureDetector(
-                          child: Container(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Container(
-                                  margin: EdgeInsets.only(top: 30),
-                                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                                  width: width - 50,
-                                  height: width - 100,
-                                  decoration: BoxDecoration(
-                                      color: customs.whiteColor,
-                                      borderRadius: BorderRadius.circular(20),
-                                      boxShadow: [
-                                        BoxShadow(color: customs.secondaryShade_2, blurRadius: 1, blurStyle: BlurStyle.normal),
-                                        BoxShadow(color: customs.secondaryShade_2, blurRadius: 1, blurStyle: BlurStyle.normal),
-                                        BoxShadow(color: customs.secondaryShade_2, blurRadius: 1, blurStyle: BlurStyle.normal),
-                                      ]
-                                  ),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text("No milk prices found!", style: customs.primaryTextStyle(size: 20, fontweight: FontWeight.bold),),
-                                      Spacer(),
-                                      SizedBox(
-                                        width: width,
-                                        child: Image(
-                                          image: AssetImage("assets/images/search.jpg"),
-                                          height: width/3,
-                                          width: width/3,
+                          subtitle: Text(item['status'] == 1 ? '${item['effect_date']} to ${item['end_date']}' : "Not-published", style: customs.secondaryTextStyle(size: 14),),
+                          isThreeLine: false,
+                          trailing: Icon(Icons.arrow_forward_ios_rounded, size: 15,),
+                          onTap: () async {
+                            // Handle the tap event
+                            await Navigator.pushNamed(context, "/update_milk_prices", arguments: {"price_id": item['price_id']});
+                            getMilkPrices();
+                          },
+                        ),
+                      );
+                    },
+                  ) :
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      GestureDetector(
+                        child: Container(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Container(
+                                margin: EdgeInsets.only(top: 30),
+                                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                                width: width - 50,
+                                height: width - 100,
+                                decoration: BoxDecoration(
+                                    color: customs.whiteColor,
+                                    borderRadius: BorderRadius.circular(20),
+                                    boxShadow: [
+                                      BoxShadow(color: customs.secondaryShade_2, blurRadius: 1, blurStyle: BlurStyle.normal),
+                                      BoxShadow(color: customs.secondaryShade_2, blurRadius: 1, blurStyle: BlurStyle.normal),
+                                      BoxShadow(color: customs.secondaryShade_2, blurRadius: 1, blurStyle: BlurStyle.normal),
+                                    ]
+                                ),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text("No milk prices found!", style: customs.primaryTextStyle(size: 20, fontweight: FontWeight.bold),),
+                                    Spacer(),
+                                    SizedBox(
+                                      width: width,
+                                      child: Image(
+                                        image: AssetImage("assets/images/search.jpg"),
+                                        height: width/3,
+                                        width: width/3,
+                                      ),
+                                    ),
+                                    Spacer(),
+                                    Container(
+                                      margin: EdgeInsets.fromLTRB(0, 0, 5, 0),
+                                      child: CircleAvatar(
+                                        backgroundColor: customs.primaryShade_2,
+                                        radius: 30,
+                                        child: IconButton(
+                                          onPressed: () async {
+                                            await Navigator.pushNamed(context, "/change_milk_price");
+                                            getMilkPrices();
+                                          },
+                                          icon: Icon(Icons.add_circle_rounded, size: 40, color: customs.primaryColor,),
                                         ),
                                       ),
-                                      Spacer(),
-                                      Container(
-                                        margin: EdgeInsets.fromLTRB(0, 0, 5, 0),
-                                        child: CircleAvatar(
-                                          backgroundColor: customs.primaryShade_2,
-                                          radius: 30,
-                                          child: IconButton(
-                                            onPressed: () async {
-                                              await Navigator.pushNamed(context, "/change_milk_price");
-                                              getMilkPrices();
-                                            },
-                                            icon: Icon(Icons.add_circle_rounded, size: 40, color: customs.primaryColor,),
-                                          ),
-                                        ),
-                                      )
-                                    ],
-                                  ),
+                                    )
+                                  ],
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
                         ),
-                      ],
-                    )) : Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        SpinKitCircle(
-                          color: customs.primaryColor,
-                          size: 50.0,
-                        )
-                      ],
-                    ),
+                      ),
+                    ],
+                  )) : Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SpinKitCircle(
+                        color: customs.primaryColor,
+                        size: 50.0,
+                      ),
+                      Text("Loading Milk Prices...", style: customs.primaryTextStyle(size: 10,))
+                    ],
                   ),
-                  // Container(
-                  //   height: height - 190,
-                  //   width: width,
-                  //   child: SingleChildScrollView(
-                  //     child: Column(
-                  //       crossAxisAlignment: CrossAxisAlignment.center,
-                  //       children: table_rows,
-                  //     ),
-                  //   ),
-                  // ),
-                ],
-              ),
+                ),
+              ],
             ),
           );
         },

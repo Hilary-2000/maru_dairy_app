@@ -6,20 +6,20 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:maru/packages/api_connection.dart';
 import 'package:maru/packages/maru_theme.dart';
 
-class DeductionManagement extends StatefulWidget {
-  const DeductionManagement({super.key});
+class RegionManagement extends StatefulWidget {
+  const RegionManagement({super.key});
 
   @override
-  State<DeductionManagement> createState() => _DeductionManagementState();
+  State<RegionManagement> createState() => _RegionManagementState();
 }
 
-class _DeductionManagementState extends State<DeductionManagement> {
+class _RegionManagementState extends State<RegionManagement> {
   CustomThemes customs = new CustomThemes();
   bool init = false;
-  var deductions = [];
+  var regions = [];
   var _isLightMode = {};
   String hero_tags = "";
-  bool load_deductions = false;
+  bool load_regions = false;
 
   @override
   void didChangeDependencies() {
@@ -31,40 +31,40 @@ class _DeductionManagementState extends State<DeductionManagement> {
         init = !init;
       });
 
-      // get deductions
-      getDeductions();
+      // get regions
+      getRegions();
     }
   }
 
   // get deductions
-  Future<void> getDeductions() async {
+  Future<void> getRegions() async {
     setState(() {
-      load_deductions = true;
+      load_regions = true;
     });
     ApiConnection apiConnection = ApiConnection();
-    var response = await apiConnection.getDeductions();
+    var response = await apiConnection.getRegions();
     print(response);
     if(customs.isValidJson(response)){
       var res = jsonDecode(response);
       if(res['success']){
         setState(() {
-          deductions = res['deductions'];
-          for(int index = 0; index < deductions.length; index++){
-            _isLightMode[deductions[index]['deduction_id']] = deductions[index]['status'] == 1;
+          regions = res['regions'];
+          for(int index = 0; index < regions.length; index++){
+            _isLightMode[regions[index]['region_id']] = regions[index]['status'] == 1;
           }
         });
       }else{
         setState(() {
-          deductions = [];
+          regions = [];
         });
       }
     }else{
       setState(() {
-        deductions = [];
+        regions = [];
       });
     }
     setState(() {
-      load_deductions = false;
+      load_regions = false;
     });
   }
 
@@ -111,7 +111,7 @@ class _DeductionManagementState extends State<DeductionManagement> {
           double height = constraints.maxHeight;
           double calculatedWidth = width / 2 - 170;
           calculatedWidth = calculatedWidth > 0 ? calculatedWidth : 0;
-          return load_deductions ?
+          return load_regions ?
           Container(
             child: Center(
               child: Container(
@@ -122,7 +122,7 @@ class _DeductionManagementState extends State<DeductionManagement> {
                       color: customs.primaryColor,
                       size: 50.0,
                     ),
-                    Text("Loading deductions...", style: customs.primaryTextStyle(size: 12, fontweight: FontWeight.bold),)
+                    Text("Loading regions...", style: customs.primaryTextStyle(size: 12, fontweight: FontWeight.bold),)
                   ],
                 ),
               ),
@@ -140,17 +140,17 @@ class _DeductionManagementState extends State<DeductionManagement> {
                 Container(
                   width: width,
                   padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                  child: Text("Deduction Management", style: customs.darkTextStyle(size: 15, fontweight: FontWeight.bold),),
+                  child: Text("Region Management", style: customs.darkTextStyle(size: 15, fontweight: FontWeight.bold),),
                 ),
                 Container(width: width * 0.8, child: Divider(color: customs.secondaryShade_2,)),
                 Container(
                   width: width,
                   height: height - 57,
                   padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                  child: deductions.length > 0 ? ListView.builder(
-                      itemCount: deductions.length,
+                  child: regions.length > 0 ? ListView.builder(
+                      itemCount: regions.length,
                       itemBuilder: (context, index){
-                        var items = deductions[index];
+                        var items = regions[index];
                         return Container(
                           margin: EdgeInsets.symmetric(vertical: 3, horizontal: 5),
                           padding: EdgeInsets.symmetric(vertical: 5),
@@ -159,56 +159,54 @@ class _DeductionManagementState extends State<DeductionManagement> {
                               borderRadius: BorderRadius.circular(10)
                           ),
                           child: Hero(
-                            tag: "modify_deduction_${items['deduction_id']}",
+                            tag: "modify_region_${items['region_id']}",
                             child: Material(
                               color: Colors.transparent,
                               child: ListTile(
                                 leading: Transform.scale(
-                                  scale: 0.7,
-                                  child: Switch(
-                                    value: _isLightMode[items['deduction_id']],
-                                    activeTrackColor: customs.primaryColor,
-                                    inactiveThumbColor: customs.primaryColor,
-                                    trackOutlineColor: WidgetStateProperty.all<Color>(customs.primaryColor),
-                                    onChanged: (bool value) async {
-                                      setState(() {
-                                        _isLightMode[items['deduction_id']] = value;
-                                      });
-                                      //change the deduction status
-                                      ApiConnection apiConn = ApiConnection();
-                                      String status = _isLightMode[items['deduction_id']] ? "1" : "0";
-                                      var response = await apiConn.changeDeductionStatus(deduction_id: items['deduction_id'], deduction_status: status);
-                                      print(response);
-                                      if(customs.isValidJson(response)){
-                                        var res = jsonDecode(response);
-                                        if(res['success']){
-                                          customs.maruSnackBarSuccess(context: context, text: res['message']);
-                                          // REFRESH DEDUCTIONS
-                                          getDeductions();
-                                        }else{
-                                          customs.maruSnackBarDanger(context: context, text: res['message']);
+                                    scale: 0.7,
+                                    child: Switch(
+                                      value: _isLightMode[items['region_id']],
+                                      activeTrackColor: customs.primaryColor,
+                                      inactiveThumbColor: customs.primaryColor,
+                                      trackOutlineColor: WidgetStateProperty.all<Color>(customs.primaryColor),
+                                      onChanged: (bool value) async {
+                                        setState(() {
+                                          _isLightMode[items['region_id']] = value;
+                                        });
+                                        //change the deduction status
+                                        ApiConnection apiConn = ApiConnection();
+                                        String status = _isLightMode[items['region_id']] ? "1" : "0";
+                                        var response = await apiConn.changeRegionStatus(region_id: "${items['region_id']}", region_status: status);
+                                        if(customs.isValidJson(response)){
+                                          var res = jsonDecode(response);
+                                          if(res['success']){
+                                            customs.maruSnackBarSuccess(context: context, text: res['message']);
+                                            // REFRESH DEDUCTIONS
+                                            getRegions();
+                                          }else{
+                                            customs.maruSnackBarDanger(context: context, text: res['message']);
+                                          }
                                         }
-                                      }
-                                    },
-                                  )
+                                      },
+                                    )
                                 ),
                                 dense: true,
                                 style: ListTileStyle.drawer,
-                                title: Text( "${items['deduction_name']}", style: customs.secondaryTextStyle(size: 14, fontweight: FontWeight.bold)),
+                                title: Text( "${items['region_name']}", style: customs.secondaryTextStyle(size: 14, fontweight: FontWeight.bold)),
                                 trailing: PopupMenuButton<String>(
                                   icon: Icon(FontAwesomeIcons.ellipsisVertical, size: 15),
                                   onSelected: (String result) async {
                                     // Handle the selection here
                                     if(result == "edit"){
                                       var result = await Navigator.of(context).push(HeroDialogRoute(builder: (context) {
-                                        return  EditDeduction(deduction_data: items);
+                                        return  EditRegions(region_data: items);
                                       }));
                                       if(result != null){
                                         if(result['success']){
                                           customs.maruSnackBarSuccess(context: context, text: result['message']);
-
                                           // REFRESH DEDUCTIONS
-                                          getDeductions();
+                                          getRegions();
                                         }else{
                                           customs.maruSnackBarDanger(context: context, text: result['message']);
                                         }
@@ -217,14 +215,14 @@ class _DeductionManagementState extends State<DeductionManagement> {
                                       }
                                     }else if(result == "delete"){
                                       var result = await Navigator.of(context).push(HeroDialogRoute(builder: (context) {
-                                        return  DeleteDeduction(deduction_data: items);
+                                        return  DeleteRegions(region_data: items);
                                       }));
                                       if(result != null){
                                         if(result['success']){
                                           customs.maruSnackBarSuccess(context: context, text: result['message']);
 
                                           // REFRESH DEDUCTIONS
-                                          getDeductions();
+                                          getRegions();
                                         }else{
                                           customs.maruSnackBarDanger(context: context, text: result['message']);
                                         }
@@ -322,7 +320,7 @@ class _DeductionManagementState extends State<DeductionManagement> {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text("No deductions found!", style: customs.primaryTextStyle(size: 20, fontweight: FontWeight.bold),),
+                            Text("No regions found!", style: customs.primaryTextStyle(size: 20, fontweight: FontWeight.bold),),
                             Spacer(),
                             SizedBox(
                               width: width,
@@ -351,19 +349,19 @@ class _DeductionManagementState extends State<DeductionManagement> {
         child: Material(
           color: Colors.transparent,
           child: Hero(
-            tag: "add_deduction",
+            tag: "add_region",
             child: IconButton(
               icon: Icon(Icons.add_circle_rounded, color: customs.primaryColor,),
               onPressed: () async {
                 var result = await Navigator.of(context).push(HeroDialogRoute(builder: (context) {
-                  return  AddDeductions();
+                  return  AddRegions();
                 }));
                 if(result != null){
                   if(result['success']){
                     customs.maruSnackBarSuccess(context: context, text: result['message']);
 
                     // REFRESH DEDUCTIONS
-                    getDeductions();
+                    getRegions();
                   }else{
                     customs.maruSnackBarDanger(context: context, text: result['message']);
                   }
@@ -379,16 +377,139 @@ class _DeductionManagementState extends State<DeductionManagement> {
   }
 }
 
-
-class DeleteDeduction extends StatefulWidget {
-  var deduction_data = null;
-  DeleteDeduction({super.key, required this.deduction_data});
+class EditRegions extends StatefulWidget {
+  var region_data = null;
+  EditRegions({super.key, required this.region_data});
 
   @override
-  State<DeleteDeduction> createState() => _DeleteDeductionState();
+  State<EditRegions> createState() => _EditRegionsState();
 }
 
-class _DeleteDeductionState extends State<DeleteDeduction> {
+class _EditRegionsState extends State<EditRegions> {
+  CustomThemes customThemes = new CustomThemes();
+  bool init = false;
+  TextEditingController regionNameController = TextEditingController();
+
+  void didChangeDependencies(){
+    super.didChangeDependencies();
+    setState(() {
+      init = !init;
+      regionNameController.text = widget.region_data['region_name'];
+    });
+  }
+
+  bool saveLoader = false;
+  final _formKey = GlobalKey<FormState>();
+  @override
+  Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(32.0),
+        child: Hero(
+          tag: "modify_region_${widget.region_data['region_id']}",
+          child: Material(
+            color: customThemes.whiteColor,
+            elevation: 2,
+            shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: SingleChildScrollView(
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text("Update Region", style: customThemes.darkTextStyle(size: 15, fontweight: FontWeight.bold),),
+                        SizedBox(height: 10,),
+                        Container(
+                            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                            width: width,
+                            child: customThemes.maruTextFormField(
+                              isChanged: (value){},
+                              hintText: "Region Name",
+                              editingController: regionNameController,
+                              validator: (value){
+                                if(value == null || value.isEmpty){
+                                  return "Provide Region Name";
+                                }
+                                return null;
+                              }
+                            )
+                        ),
+                        Container(
+                          padding: EdgeInsets.symmetric(horizontal: 10),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Container(
+                                width: width/3,
+                                child: customThemes.maruButton(
+                                    text: "Update",
+                                    showLoader: saveLoader,
+                                    disabled: saveLoader,
+                                    onPressed: () async {
+                                      if (_formKey.currentState!.validate()){
+                                        setState((){
+                                          saveLoader = true;
+                                        });
+                                        ApiConnection apiConn = ApiConnection();
+                                        var response = await apiConn.updateRegion(region_id: widget.region_data['region_id'].toString(), region_name: regionNameController.text);
+                                        if(customThemes.isValidJson(response)){
+                                          var res = jsonDecode(response);
+                                          if(res['success']){
+                                            Navigator.pop(context, res);
+                                          }else{
+                                            Navigator.pop(context, res);
+                                          }
+                                        }
+                                      }
+                                    },
+                                    type: Type.success
+                                ),
+                              ),
+                              Container(
+                                width: width/3,
+                                child: customThemes.marOutlineuButton(
+                                    text: "Cancel",
+                                    showLoader: saveLoader,
+                                    disabled: saveLoader,
+                                    onPressed: (){
+                                      // Navigator.pop(context, {"success" : false, "message" : "Cancelled!"});
+                                      Navigator.pop(context);
+                                    },
+                                    type: Type.secondary
+                                ),
+                              )
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+
+// delete regions
+class DeleteRegions extends StatefulWidget {
+  var region_data = null;
+  DeleteRegions({super.key, required this.region_data});
+
+  @override
+  State<DeleteRegions> createState() => _DeleteRegionsState();
+}
+
+class _DeleteRegionsState extends State<DeleteRegions> {
   CustomThemes customThemes = new CustomThemes();
 
   bool saveLoader = false;
@@ -399,7 +520,7 @@ class _DeleteDeductionState extends State<DeleteDeduction> {
       child: Padding(
         padding: const EdgeInsets.all(32.0),
         child: Hero(
-          tag: "modify_deduction_${widget.deduction_data['deduction_id']}",
+          tag: "modify_region_${widget.region_data['region_id']}",
           child: Material(
             color: customThemes.whiteColor,
             elevation: 2,
@@ -412,7 +533,7 @@ class _DeleteDeductionState extends State<DeleteDeduction> {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Text("Are you sure you want to delete \"${customThemes.toCamelCase(widget.deduction_data['deduction_name'])}\" ?", style: customThemes.darkTextStyle(size: 15, fontweight: FontWeight.bold),),
+                      Text("Are you sure you want to delete \"${customThemes.toCamelCase(widget.region_data['region_name'])}\" ?", style: customThemes.darkTextStyle(size: 15, fontweight: FontWeight.bold),),
                       SizedBox(height: 10,),
                       Container(width: width, child: Text("Deduction will be deleted permanently!", style: customThemes.secondaryTextStyle(size: 12, ),)),
                       Container(
@@ -431,7 +552,7 @@ class _DeleteDeductionState extends State<DeleteDeduction> {
                                       saveLoader = true;
                                     });
                                     ApiConnection apiConn = ApiConnection();
-                                    var response = await apiConn.deleteDeductions(deduction_id: widget.deduction_data['deduction_id'].toString());
+                                    var response = await apiConn.deleteRegion(region_id: widget.region_data['region_id'].toString());
                                     print(response);
                                     if(customThemes.isValidJson(response)){
                                       var res = jsonDecode(response);
@@ -472,29 +593,20 @@ class _DeleteDeductionState extends State<DeleteDeduction> {
   }
 }
 
-class EditDeduction extends StatefulWidget {
-  var deduction_data = null;
-  EditDeduction({super.key, required this.deduction_data});
+// add regions
+class AddRegions extends StatefulWidget {
+  const AddRegions({super.key});
 
   @override
-  State<EditDeduction> createState() => _EditDeductionState();
+  State<AddRegions> createState() => _AddRegionsState();
 }
 
-class _EditDeductionState extends State<EditDeduction> {
+class _AddRegionsState extends State<AddRegions> {
   CustomThemes customThemes = new CustomThemes();
-  bool init = false;
-  TextEditingController deductionAmountController = TextEditingController();
-
-  void didChangeDependencies(){
-    super.didChangeDependencies();
-    setState(() {
-      init = !init;
-      deductionAmountController.text = widget.deduction_data['deduction_name'];
-    });
-  }
+  TextEditingController region_name_controller = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
 
   bool saveLoader = false;
-  final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -502,7 +614,7 @@ class _EditDeductionState extends State<EditDeduction> {
       child: Padding(
         padding: const EdgeInsets.all(32.0),
         child: Hero(
-          tag: "modify_deduction_${widget.deduction_data['deduction_id']}",
+          tag: "add_region",
           child: Material(
             color: customThemes.whiteColor,
             elevation: 2,
@@ -517,133 +629,20 @@ class _EditDeductionState extends State<EditDeduction> {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Text("Update Deduction", style: customThemes.darkTextStyle(size: 15, fontweight: FontWeight.bold),),
-                        SizedBox(height: 10,),
-                        Container(
-                          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                          width: width,
-                          child: customThemes.maruTextFormField(
-                            isChanged: (value){},
-                            hintText: "Deduction Name",
-                            editingController: deductionAmountController,
-                            validator: (value){
-                              if(value == null || value.isEmpty){
-                                return "Provide Deduction Name";
-                              }
-                              return null;
-                            }
-                          )
-                        ),
-                        Container(
-                          padding: EdgeInsets.symmetric(horizontal: 10),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Container(
-                                width: width/3,
-                                child: customThemes.maruButton(
-                                  text: "Update",
-                                  showLoader: saveLoader,
-                                  disabled: saveLoader,
-                                  onPressed: () async {
-                                    if (_formKey.currentState!.validate()){
-                                      setState((){
-                                        saveLoader = true;
-                                      });
-                                      ApiConnection apiConn = ApiConnection();
-                                      var response = await apiConn.updateDeduction(deduction_id: widget.deduction_data['deduction_id'].toString(), deduction_name: deductionAmountController.text);
-                                      print(response);
-                                      if(customThemes.isValidJson(response)){
-                                        var res = jsonDecode(response);
-                                        if(res['success']){
-                                          Navigator.pop(context, res);
-                                        }else{
-                                          Navigator.pop(context, res);
-                                        }
-                                      }
-                                    }
-                                  },
-                                  type: Type.success
-                                ),
-                              ),
-                              Container(
-                                width: width/3,
-                                child: customThemes.marOutlineuButton(
-                                  text: "Cancel",
-                                  showLoader: saveLoader,
-                                  disabled: saveLoader,
-                                  onPressed: (){
-                                    // Navigator.pop(context, {"success" : false, "message" : "Cancelled!"});
-                                    Navigator.pop(context);
-                                  },
-                                  type: Type.secondary
-                                ),
-                              )
-                            ],
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class AddDeductions extends StatefulWidget {
-  const AddDeductions({super.key});
-
-  @override
-  State<AddDeductions> createState() => _AddDeductionsState();
-}
-
-class _AddDeductionsState extends State<AddDeductions> {
-  CustomThemes customThemes = new CustomThemes();
-  TextEditingController deductionAmountController = TextEditingController();
-
-  bool saveLoader = false;
-  final _formKey = GlobalKey<FormState>();
-  @override
-  Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(32.0),
-        child: Hero(
-          tag: "add_deduction",
-          child: Material(
-            color: customThemes.whiteColor,
-            elevation: 2,
-            shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-            child: SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: SingleChildScrollView(
-                  child: Form(
-                    key: _formKey,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text("Add Deduction", style: customThemes.darkTextStyle(size: 20, fontweight: FontWeight.bold),),
+                        Text("Add Region", style: customThemes.darkTextStyle(size: 20, fontweight: FontWeight.bold),),
                         SizedBox(height: 10,),
                         Container(
                             padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                             width: width,
                             child: customThemes.maruTextFormField(
                               isChanged: (value){},
-                              hintText: "Deduction Name",
+                              hintText: "Region Name",
                               floatingBehaviour: FloatingLabelBehavior.always,
-                              label: "Deduction Name",
-                              editingController: deductionAmountController,
+                              label: "Region Name",
+                              editingController: region_name_controller,
                               validator:  (value) {
                                 if(value == null || value.isEmpty){
-                                  return "Provide Deduction Name";
+                                  return "Provide Region Name";
                                 }
                                 return null;
                               }
@@ -666,7 +665,7 @@ class _AddDeductionsState extends State<AddDeductions> {
                                           saveLoader = true;
                                         });
                                         ApiConnection apiConn = ApiConnection();
-                                        var response = await apiConn.addDeductions(deduction_name: deductionAmountController.text);
+                                        var response = await apiConn.addRegions(region_name: region_name_controller.text);
                                         if(customThemes.isValidJson(response)){
                                           var res = jsonDecode(response);
                                           if(res['success']){
@@ -687,6 +686,7 @@ class _AddDeductionsState extends State<AddDeductions> {
                                     showLoader: saveLoader,
                                     disabled: saveLoader,
                                     onPressed: (){
+                                      // Navigator.pop(context, {"success" : false, "message" : "Cancelled!"});
                                       Navigator.pop(context);
                                     },
                                     type: Type.secondary

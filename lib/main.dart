@@ -33,6 +33,7 @@ import 'package:maru/pages/super_admin/edit_technician.dart';
 import 'package:maru/pages/super_admin/new_administrator.dart';
 import 'package:maru/pages/super_admin/new_super_administrator.dart';
 import 'package:maru/pages/super_admin/new_technician.dart';
+import 'package:maru/pages/super_admin/region_management.dart';
 import 'package:maru/pages/super_admin/super_admin_details.dart';
 import 'package:maru/pages/super_admin/super_admin_list.dart';
 import 'package:maru/pages/technician/edit_member_milk_data.dart';
@@ -118,7 +119,8 @@ void main() {
       "/generate_admin_report": (context) => const GenerateReports(),
       "/member_reports" : (context) => const MemberReports(),
       "/technician_reports" : (context) => const TechnicianReport(),
-      "/deduction_management" : (context) => const DeductionManagement()
+      "/deduction_management" : (context) => const DeductionManagement(),
+      "/region_management" : (context) => const RegionManagement()
     },
   ));
 }
