@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:maru/packages/api_connection.dart';
 import 'package:maru/packages/maru_theme.dart';
@@ -23,6 +24,8 @@ class _MemberDetailsEditState extends State<MemberDetailsEdit> {
   String collection_days = "0";
   String collected_amount = "0";
   final _formKey = GlobalKey<FormState>();
+  bool loading_regions = false;
+  var region_data = [];
 
   // editing controller
   TextEditingController phone_controller = TextEditingController();
@@ -35,12 +38,13 @@ class _MemberDetailsEditState extends State<MemberDetailsEdit> {
 
   var regionDV = "";
   bool _init = false;
-  List<DropdownMenuItem<String>> regions = [
-    const DropdownMenuItem(child: Text("Select your region"), value: ""),
-    const DropdownMenuItem(child: Text("Njebi"), value: "Njebi"),
-    const DropdownMenuItem(child: Text("Njembi"), value: "Njembi"),
-    const DropdownMenuItem(child: Text("Munyu/Kiriti"), value: "Munyu/Kiriti"),
-  ];
+  // List<DropdownMenuItem<String>> regions = [
+  //   const DropdownMenuItem(child: Text("Select your region"), value: ""),
+  //   const DropdownMenuItem(child: Text("Njebi"), value: "Njebi"),
+  //   const DropdownMenuItem(child: Text("Njembi"), value: "Njembi"),
+  //   const DropdownMenuItem(child: Text("Munyu/Kiriti"), value: "Munyu/Kiriti"),
+  // ];
+  List<DropdownMenuItem<String>> regions = [];
 
   var genderDV = "";
   List<DropdownMenuItem<String>> genderList = [
@@ -49,7 +53,7 @@ class _MemberDetailsEditState extends State<MemberDetailsEdit> {
     const DropdownMenuItem(child: Text("Female"), value: "female"),
   ];
 
-  void didChangeDependencies() {
+  Future<void> didChangeDependencies() async {
     super.didChangeDependencies();
     setState(() {
       bg_color = [
@@ -66,9 +70,39 @@ class _MemberDetailsEditState extends State<MemberDetailsEdit> {
         _init = true;
       });
 
+      await getRegions();
+
       //GET MEMBER DATA
       getMemberData();
     }
+  }
+
+  Future<void> getRegions() async {
+    setState(() {
+      loading_regions = true;
+    });
+    ApiConnection apiConnection = new ApiConnection();
+    var response = await apiConnection.getActiveRegions();
+    if(customs.isValidJson(response)){
+      var res = jsonDecode(response);
+      if(res['success']){
+        // regions
+        setState(() {
+          region_data = res['regions'];
+          regions = (res['regions'] as List).map((region){
+            return DropdownMenuItem(child: Text("${region['region_name']}"), value: "${region['region_id']}");
+          }).toList();
+        });
+      }else{
+        region_data = [];
+        customs.maruSnackBarDanger(context: context, text: res['message']);
+      }
+    }
+
+    // set state
+    setState(() {
+      loading_regions = false;
+    });
   }
 
   Future<void> getMemberData() async {
@@ -84,8 +118,7 @@ class _MemberDetailsEditState extends State<MemberDetailsEdit> {
         index = arguments['index'];
       });
       ApiConnection apiConnection = new ApiConnection();
-      var response = await apiConnection
-          .adminMemberDetails(arguments['member_id'].toString());
+      var response = await apiConnection.adminMemberDetails(arguments['member_id'].toString());
       if (customs.isValidJson(response)) {
         var res = jsonDecode(response);
         if (res['success']) {
@@ -102,9 +135,25 @@ class _MemberDetailsEditState extends State<MemberDetailsEdit> {
             animalController.text = (res['member_details']['animals'] ?? "").toString();
             membershipController.text = (res['member_details']['membership'] ?? "").toString();
 
+            // check if the region value is present or not
+            String region_detail = res['member_details']['region'] ?? "";
+            bool present = false;
+            for(int index = 0; index < region_data.length; index++){
+              if("${region_data[index]['region_id']}" == "$region_detail"){
+                present = true;
+                break;
+              }
+            }
+            if(!present){
+              regionDV = "";
+            }else{
+              regionDV = region_detail;
+            }
+            print(region_data);
+
             // gender dv
             genderDV = res['member_details']['gender'] ?? "";
-            regionDV = res['member_details']['region'] ?? "";
+            // regionDV = res['member_details']['region'] ?? "";
           });
         } else {
           setState(() {
@@ -143,7 +192,7 @@ class _MemberDetailsEditState extends State<MemberDetailsEdit> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: customs.primaryShade,
+      backgroundColor: customs.whiteColor,
       appBar: AppBar(
         backgroundColor: customs.whiteColor,
         elevation: 1,
@@ -182,7 +231,21 @@ class _MemberDetailsEditState extends State<MemberDetailsEdit> {
           double height = constraints.maxHeight;
           double calculatedWidth = width / 2 - 170;
           calculatedWidth = calculatedWidth > 0 ? calculatedWidth : 0;
-          return Container(
+          return loading_regions || loading ?
+          Container(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SpinKitCircle(
+                  size: 50,
+                  color: customs.primaryColor,
+                ),
+                Text("Loading member details...", style: customs.primaryTextStyle(size: 14))
+              ],
+            ),
+          )    
+              : 
+          Container(
             height: height,
             width: width,
             decoration: const BoxDecoration(
@@ -540,7 +603,11 @@ class _MemberDetailsEditState extends State<MemberDetailsEdit> {
                                   ),
                                   customs.maruDropdownButtonFormField(
                                     defaultValue: genderDV,
-                                    onChange: (value) {},
+                                    onChange: (value) {
+                                      setState(() {
+                                        genderDV = value!;
+                                      });
+                                    },
                                     items: genderList,
                                     validator: (value) {
                                     if(value == null || value.isEmpty){
@@ -630,7 +697,11 @@ class _MemberDetailsEditState extends State<MemberDetailsEdit> {
                                   ),
                                   customs.maruDropdownButtonFormField(
                                       defaultValue: regionDV,
-                                      onChange: (value) {},
+                                      onChange: (value) {
+                                        setState(() {
+                                          regionDV = value!;
+                                        });
+                                      },
                                       items: regions,
                                       validator: (value) {
                                         if(value == null || value.isEmpty){
@@ -729,6 +800,7 @@ class _MemberDetailsEditState extends State<MemberDetailsEdit> {
                                           "membership": membershipController.text,
                                           "gender": genderDV
                                         };
+                                        print(datapass);
                                         var response = await apiCon.adminUpdateMember(datapass);
                                         if(customs.isValidJson(response)){
                                           var res = jsonDecode(response);

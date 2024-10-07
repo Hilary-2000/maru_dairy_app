@@ -516,7 +516,7 @@ class _MemberMembershipState extends State<MemberMembership> {
                                                 child: GestureDetector(
                                                   child: Container(
                                                     width: width,
-                                                    height: 92,
+                                                    height: 110,
                                                     child: Column(
                                                       children: [
                                                         Container(
@@ -547,10 +547,11 @@ class _MemberMembershipState extends State<MemberMembership> {
                                                               style: ListTileStyle.drawer,
                                                               title: RichText(
                                                                   text: TextSpan(
-                                                                      text: "Kes ${item['payment_amount']}",
+                                                                      text: "Kes ${item['total_payment']}",
                                                                       style: customs.secondaryTextStyle(size: 14, fontweight: FontWeight.bold)
                                                                   )
                                                               ),
+                                                              subtitle: Text("Kes ${item['payment_amount']}", style: customs.secondaryTextStyle(size: 10, fontweight: FontWeight.normal)),
                                                               trailing: Column(
                                                                 mainAxisAlignment: MainAxisAlignment.center,
                                                                 crossAxisAlignment: CrossAxisAlignment.end,
@@ -732,23 +733,6 @@ class _rejectEarningsState extends State<rejectEarnings> {
   final _formKey = GlobalKey<FormState>();
   List deductions = [];
 
-  String deduction_type(String deduction_type){
-    if(deduction_type == "subscription"){
-      return "Subscription";
-    }else if(deduction_type == "joining_fees"){
-      return "Joining Fees";
-    }else if(deduction_type == "membership_fees"){
-      return "Membership Fees";
-    }else if(deduction_type == "advance"){
-      return "Advance";
-    }else if(deduction_type == "balance_carry_over"){
-      return "Balance Carry-Over";
-    }else if(deduction_type == "transaction_cost"){
-      return "Transaction Cost";
-    }
-    return "N/A";
-  }
-
   void removeDeduction(int index){
     setState(() {
       deductions.removeAt(index);
@@ -757,15 +741,6 @@ class _rejectEarningsState extends State<rejectEarnings> {
 
   bool addDeductions = false;
   bool isChecked = true;
-  var paymentType = "";
-  List<DropdownMenuItem<String>> paymentTypes = [
-    const DropdownMenuItem(child: Text("Select Deduction Type"), value: ""),
-    const DropdownMenuItem(child: Text("Subscription"), value: "subscription"),
-    const DropdownMenuItem(child: Text("Joining Fees"), value: "joining_fees"),
-    const DropdownMenuItem(child: Text("Membership Fees"), value: "membership_fees"),
-    const DropdownMenuItem(child: Text("Advance"), value: "advance"),
-    const DropdownMenuItem(child: Text("Balance Carry-Over"), value: "balance_carry_over"),
-  ];
   TextEditingController howMuch = TextEditingController();
   bool saveLoader = false;
   bool init = false;
@@ -863,6 +838,7 @@ class _editEarningsState extends State<_editEarnings> {
   bool downloading = false;
   bool downloaded = false;
   String? localFilePath;
+  var deductionType = [];
 
 
 
@@ -991,17 +967,12 @@ class _editEarningsState extends State<_editEarnings> {
   }
 
   String deduction_type(String deduction_type){
-    if(deduction_type == "subscription"){
-      return "Subscription";
-    }else if(deduction_type == "joining_fees"){
-      return "Joining Fees";
-    }else if(deduction_type == "membership_fees"){
-      return "Membership Fees";
-    }else if(deduction_type == "advance"){
-      return "Advance";
-    }else if(deduction_type == "balance_carry_over"){
-      return "Balance Carry-Over";
-    }else if(deduction_type == "transaction_cost"){
+    for(int index = 0; index < deductionType.length; index++){
+      if("${deductionType[index]['deduction_id']}" == "$deduction_type"){
+        return deductionType[index]['deduction_name'];
+      }
+    }
+    if("$deduction_type" == "transaction_cost"){
       return "Transaction Cost";
     }
     return "N/A";
@@ -1029,6 +1000,7 @@ class _editEarningsState extends State<_editEarnings> {
       if(res['success']){
         setState(() {
           payment_data = res['payment'];
+          deductionType = res['deduction_type'];
           pdfUrl = "${customThemes.apiURLDomain}/api/admin/payment/receipt/${res['payment']['payment_id']}";
         });
       }else{

@@ -89,7 +89,7 @@ class _OurMembersState extends State<OurMembers> {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(item['region'] ?? "",
+                    Text(item['region_name'] ?? "-",
                         style: customs.darkTextStyle(size: 12)),
                     Text(
                       item['phone_number'],

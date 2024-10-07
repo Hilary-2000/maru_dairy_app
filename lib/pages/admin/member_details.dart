@@ -43,6 +43,7 @@ class _MemberDetailsState extends State<MemberDetails> {
         if(res['success']){
           setState(() {
             memberData = res['member_details'];
+            print(memberData);
             collection_days = res['collection_days'];
             collected_amount = res['total_collection'];
           });
@@ -521,7 +522,7 @@ class _MemberDetailsState extends State<MemberDetails> {
                                       size: 12, fontweight: FontWeight.bold),
                                 ),
                                 Text(
-                                  memberData != null ? customs.toCamelCase(memberData['region'] ?? "N/A") : "N/A",
+                                  memberData != null ? customs.toCamelCase(memberData['region_name'] ?? "N/A") : "N/A",
                                   style: customs.secondaryTextStyle(size: 16),
                                 ),
                                 Divider(
@@ -607,8 +608,12 @@ class _MemberDetailsState extends State<MemberDetails> {
         backgroundColor: customs.primaryShade_2,
         child: IconButton(
           icon: Icon(Icons.edit, color: customs.primaryColor,),
-          onPressed: () {
-            Navigator.pushNamed(context, "/admin_edit_member_details", arguments: {"index": index, "member_id": (memberData != null ? (memberData['user_id'] ?? "0") : "0")});
+          onPressed: () async {
+            await Navigator.pushNamed(context, "/admin_edit_member_details", arguments: {"index": index, "member_id": (memberData != null ? (memberData['user_id'] ?? "0") : "0")});
+
+            print("Done");
+            //get member details
+            getMemberData();
           },
         ),
       ),

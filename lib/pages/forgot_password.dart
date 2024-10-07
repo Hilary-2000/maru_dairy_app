@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:maru/packages/api_connection.dart';
 import 'package:maru/packages/maru_theme.dart';
 
 
@@ -13,6 +16,8 @@ class forgotPassword extends StatefulWidget {
 class _forgotPasswordState extends State<forgotPassword> {
   CustomThemes customs = CustomThemes();
   final _formKey = GlobalKey<FormState>();
+  TextEditingController username = TextEditingController();
+  bool loadData = false;
 
   @override
   Widget build(BuildContext context) {
@@ -96,7 +101,7 @@ class _forgotPasswordState extends State<forgotPassword> {
                           padding: const EdgeInsets.symmetric(
                               vertical: 0.0, horizontal: 15.0),
                           child: Text(
-                            "Provide your username or phone number to reset your password!",
+                            "Provide your username to reset your password!",
                             style: customs.secondaryTextStyle(size: width * 0.03),
                             textAlign: TextAlign.left,
                             softWrap: true,
@@ -120,17 +125,17 @@ class _forgotPasswordState extends State<forgotPassword> {
                           padding: const EdgeInsets.symmetric(
                               vertical: 5, horizontal: 15.0),
                           child: customs.maruTextFormField(
-                              label: "Username Or Phone number",
+                              label: "Provide your Username",
                               isChanged: (text) {
-                                print("Value :  $text");
                               },
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
-                                  return "Enter your Username or Phone Number!";
+                                  return "Enter your Username!";
                                 }
                                 return null;
                               },
-                              hintText: "Provide Username or Phone number"),
+                              editingController: username,
+                              hintText: "Provide Username"),
                         ),
 
                         const SizedBox(
@@ -141,16 +146,36 @@ class _forgotPasswordState extends State<forgotPassword> {
                               vertical: 8.0, horizontal: 15.0),
                           child: SizedBox(
                             width: double.infinity,
-                            child: customs.maruIconButton(
-                                icons: Icons.lock_reset,
+                            child: customs.maruButton(
                                 type: Type.primary,
                                 text: "Reset Password",
-                                onPressed: () {
+                                disabled: loadData,
+                                showLoader: loadData,
+                                onPressed: () async {
                                   if (_formKey.currentState!.validate()) {
-                                    // this mean everything is fine!
-                                    customs.maruSnackBar(
-                                        context: context,
-                                        text: "Everything is good!");
+                                    // set state
+                                    setState(() {
+                                      loadData = true;
+                                    });
+                                    // go ahead and reset the password!
+                                    ApiConnection apiConnection = ApiConnection();
+                                    var response = await apiConnection.resetPassword(username: username.text);
+                                    print([response, username.text]);
+                                    if(customs.isValidJson(response)){
+                                      var res = jsonDecode(response);
+                                      if(res['success']){
+                                        customs.maruSnackBarSuccess(context: context, text: res['message']);
+                                      }else{
+                                        customs.maruSnackBarDanger(context: context, text: res['message']);
+                                      }
+                                    }else{
+                                      customs.maruSnackBarDanger(context: context, text: "An error has occured!");
+                                    }
+
+                                    // set state
+                                    setState(() {
+                                      loadData = false;
+                                    });
                                   }
                                 },
                                 size: Sizes.md,

@@ -21,7 +21,7 @@ class ApiConnection{
           },
           body: body
       ).timeout(Duration(seconds: 60));
-      return response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body;
+      return response.body.length > 0 ? (response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body) : "{\"success\":false, \"message\":\"No response!\"}";
     }on TimeoutException {
       return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
     } catch(e){
@@ -44,7 +44,7 @@ class ApiConnection{
           },
           body: body
       ).timeout(Duration(seconds: 60));
-      return response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body;
+      return response.body.length > 0 ? (response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body) : "{\"success\":false, \"message\":\"No response!\"}";
     }on TimeoutException {
       return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
     } catch(e){
@@ -67,7 +67,7 @@ class ApiConnection{
           },
           body: body
       ).timeout(Duration(seconds: 60));
-      return response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body;
+      return response.body.length > 0 ? (response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body) : "{\"success\":false, \"message\":\"No response!\"}";
     }on TimeoutException {
       return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
     } catch(e){
@@ -90,7 +90,7 @@ class ApiConnection{
           },
           body: body
       ).timeout(Duration(seconds: 60));
-      return response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body;
+      return response.body.length > 0 ? (response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body) : "{\"success\":false, \"message\":\"No response!\"}";
     }on TimeoutException {
       return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
     } catch(e){
@@ -131,7 +131,7 @@ class ApiConnection{
           },
           body: body
       ).timeout(Duration(seconds: 60));
-      return response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body;
+      return response.body.length > 0 ? (response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body) : "{\"success\":false, \"message\":\"No response!\"}";
     }on TimeoutException {
       return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
     } catch(e){
@@ -155,7 +155,7 @@ class ApiConnection{
           },
           body: body
       ).timeout(Duration(seconds: 60));
-      return response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body;
+      return response.body.length > 0 ? (response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body) : "{\"success\":false, \"message\":\"No response!\"}";
     }on TimeoutException {
       return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
     } catch(e){
@@ -179,7 +179,7 @@ class ApiConnection{
           },
           body: body
       ).timeout(Duration(seconds: 60));
-      return response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body;
+      return response.body.length > 0 ? (response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body) : "{\"success\":false, \"message\":\"No response!\"}";
     }on TimeoutException {
       return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
     } catch(e){
@@ -205,7 +205,7 @@ class ApiConnection{
           },
           body: body
       ).timeout(Duration(seconds: 60));
-      return response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body;
+      return response.body.length > 0 ? (response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body) : "{\"success\":false, \"message\":\"No response!\"}";
     }on TimeoutException {
       return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
     } catch(e){
@@ -231,7 +231,7 @@ class ApiConnection{
           },
           body: body
       ).timeout(Duration(seconds: 60));
-      return response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body;
+      return response.body.length > 0 ? (response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body) : "{\"success\":false, \"message\":\"No response!\"}";
     }on TimeoutException {
       return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
     } catch(e){
@@ -255,7 +255,7 @@ class ApiConnection{
           },
           body: body
       ).timeout(Duration(seconds: 60));
-      return response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body;
+      return response.body.length > 0 ? (response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body) : "{\"success\":false, \"message\":\"No response!\"}";
     }on TimeoutException {
       return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
     } catch(e){
@@ -279,7 +279,7 @@ class ApiConnection{
           },
           body: body
       ).timeout(Duration(seconds: 60));
-      return response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body;
+      return response.body.length > 0 ? (response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body) : "{\"success\":false, \"message\":\"No response!\"}";
     }on TimeoutException {
       return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
     } catch(e){
@@ -306,7 +306,7 @@ class ApiConnection{
           },
           body: body
       ).timeout(Duration(seconds: 60));
-      return response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body;
+      return response.body.length > 0 ? (response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body) : "{\"success\":false, \"message\":\"No response!\"}";
     }on TimeoutException {
       return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
     } catch(e){
@@ -333,7 +333,7 @@ class ApiConnection{
           },
           body: body
       ).timeout(Duration(seconds: 60));
-      return response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body;
+      return response.body.length > 0 ? (response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body) : "{\"success\":false, \"message\":\"No response!\"}";
     }on TimeoutException {
       return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
     } catch(e){
@@ -357,7 +357,7 @@ class ApiConnection{
           },
           body: body
       ).timeout(Duration(seconds: 60));
-      return response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body;
+      return response.body.length > 0 ? (response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body) : "{\"success\":false, \"message\":\"No response!\"}";
     }on TimeoutException {
       return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
     } catch(e){
@@ -400,7 +400,7 @@ class ApiConnection{
           },
           body: body
       ).timeout(Duration(seconds: 60));
-      return response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body;
+      return response.body.length > 0 ? (response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body) : "{\"success\":false, \"message\":\"No response!\"}";
     }on TimeoutException {
       return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
     } catch(e){
@@ -431,7 +431,7 @@ class ApiConnection{
           },
           body: body
       ).timeout(Duration(seconds: 60));
-      return response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body;
+      return response.body.length > 0 ? (response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body) : "{\"success\":false, \"message\":\"No response!\"}";
     }on TimeoutException {
       return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
     } catch(e){
@@ -457,7 +457,7 @@ class ApiConnection{
           },
           body: body
       ).timeout(Duration(seconds: 60));
-      return response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body;
+      return response.body.length > 0 ? (response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body) : "{\"success\":false, \"message\":\"No response!\"}";
     }on TimeoutException {
       return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
     } catch(e){
@@ -483,7 +483,7 @@ class ApiConnection{
           },
           body: body
       ).timeout(Duration(seconds: 60));
-      return response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body;
+      return response.body.length > 0 ? (response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body) : "{\"success\":false, \"message\":\"No response!\"}";
     }on TimeoutException {
       return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
     } catch(e){
@@ -509,7 +509,7 @@ class ApiConnection{
           },
           body: body
       ).timeout(Duration(seconds: 60));
-      return response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body;
+      return response.body.length > 0 ? (response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body) : "{\"success\":false, \"message\":\"No response!\"}";
     }on TimeoutException {
       return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
     } catch(e){
@@ -537,7 +537,7 @@ class ApiConnection{
           },
           body: body
       ).timeout(Duration(seconds: 60));
-      return response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body;
+      return response.body.length > 0 ? (response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body) : "{\"success\":false, \"message\":\"No response!\"}";
     }on TimeoutException {
       return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
     } catch(e){
@@ -563,7 +563,7 @@ class ApiConnection{
           },
           body: body
       ).timeout(Duration(seconds: 60));
-      return response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body;
+      return response.body.length > 0 ? (response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body) : "{\"success\":false, \"message\":\"No response!\"}";
     }on TimeoutException {
       return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
     } catch(e){
@@ -589,7 +589,7 @@ class ApiConnection{
           },
           body: body
       ).timeout(Duration(seconds: 60));
-      return response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body;
+      return response.body.length > 0 ? (response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body) : "{\"success\":false, \"message\":\"No response!\"}";
     }on TimeoutException {
       return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
     } catch(e){
@@ -615,7 +615,7 @@ class ApiConnection{
           },
           body: body
       ).timeout(Duration(seconds: 60));
-      return response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body;
+      return response.body.length > 0 ? (response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body) : "{\"success\":false, \"message\":\"No response!\"}";
     }on TimeoutException {
       return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
     } catch(e){
@@ -641,7 +641,7 @@ class ApiConnection{
           },
           body: body
       ).timeout(Duration(seconds: 60));
-      return response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body;
+      return response.body.length > 0 ? (response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body) : "{\"success\":false, \"message\":\"No response!\"}";
     }on TimeoutException {
       return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
     } catch(e){
@@ -667,7 +667,7 @@ class ApiConnection{
           },
           body: body
       ).timeout(Duration(seconds: 60));
-      return response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body;
+      return response.body.length > 0 ? (response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body) : "{\"success\":false, \"message\":\"No response!\"}";
     }on TimeoutException {
       return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
     } catch(e){
@@ -693,7 +693,7 @@ class ApiConnection{
           },
           body: body
       ).timeout(Duration(seconds: 60));
-      return response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body;
+      return response.body.length > 0 ? (response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body) : "{\"success\":false, \"message\":\"No response!\"}";
     }on TimeoutException {
       return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
     } catch(e){
@@ -719,7 +719,7 @@ class ApiConnection{
           },
           body: body
       ).timeout(Duration(seconds: 60));
-      return response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body;
+      return response.body.length > 0 ? (response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body) : "{\"success\":false, \"message\":\"No response!\"}";
     }on TimeoutException {
       return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
     } catch(e){
@@ -745,7 +745,7 @@ class ApiConnection{
           },
           body: body
       ).timeout(Duration(seconds: 60));
-      return response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body;
+      return response.body.length > 0 ? (response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body) : "{\"success\":false, \"message\":\"No response!\"}";
     }on TimeoutException {
       return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
     } catch(e){
@@ -771,7 +771,7 @@ class ApiConnection{
           },
           body: body
       ).timeout(Duration(seconds: 60));
-      return response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body;
+      return response.body.length > 0 ? (response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body) : "{\"success\":false, \"message\":\"No response!\"}";
     }on TimeoutException {
       return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
     } catch(e){
@@ -797,7 +797,7 @@ class ApiConnection{
           },
           body: body
       ).timeout(Duration(seconds: 60));
-      return response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body;
+      return response.body.length > 0 ? (response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body) : "{\"success\":false, \"message\":\"No response!\"}";
     }on TimeoutException {
       return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
     } catch(e){
@@ -823,7 +823,7 @@ class ApiConnection{
           },
           body: body
       ).timeout(Duration(seconds: 60));
-      return response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body;
+      return response.body.length > 0 ? (response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body) : "{\"success\":false, \"message\":\"No response!\"}";
     }on TimeoutException {
       return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
     } catch(e){
@@ -849,7 +849,7 @@ class ApiConnection{
           },
           body: body
       ).timeout(Duration(seconds: 60));
-      return response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body;
+      return response.body.length > 0 ? (response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body) : "{\"success\":false, \"message\":\"No response!\"}";
     }on TimeoutException {
       return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
     } catch(e){
@@ -874,7 +874,7 @@ class ApiConnection{
           },
           body: body
       ).timeout(Duration(seconds: 60));
-      return response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body;
+      return response.body.length > 0 ? (response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body) : "{\"success\":false, \"message\":\"No response!\"}";
     }on TimeoutException {
       return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
     } catch(e){
@@ -899,7 +899,7 @@ class ApiConnection{
           },
           body: body
       ).timeout(Duration(seconds: 60));
-      return response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body;
+      return response.body.length > 0 ? (response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body) : "{\"success\":false, \"message\":\"No response!\"}";
     }on TimeoutException {
       return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
     } catch(e){
@@ -924,7 +924,7 @@ class ApiConnection{
           },
           body: body
       ).timeout(Duration(seconds: 60));
-      return response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body;
+      return response.body.length > 0 ? (response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body) : "{\"success\":false, \"message\":\"No response!\"}";
     }on TimeoutException {
       return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
     } catch(e){
@@ -949,7 +949,7 @@ class ApiConnection{
           },
           body: body
       ).timeout(Duration(seconds: 60));
-      return response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body;
+      return response.body.length > 0 ? (response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body) : "{\"success\":false, \"message\":\"No response!\"}";
     }on TimeoutException {
       return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
     } catch(e){
@@ -974,7 +974,7 @@ class ApiConnection{
           },
           body: body
       ).timeout(Duration(seconds: 60));
-      return response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body;
+      return response.body.length > 0 ? (response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body) : "{\"success\":false, \"message\":\"No response!\"}";
     }on TimeoutException {
       return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
     } catch(e){
@@ -999,7 +999,7 @@ class ApiConnection{
           },
           body: body
       ).timeout(Duration(seconds: 60));
-      return response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body;
+      return response.body.length > 0 ? (response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body) : "{\"success\":false, \"message\":\"No response!\"}";
     }on TimeoutException {
       return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
     } catch(e){
@@ -1024,7 +1024,7 @@ class ApiConnection{
           },
           body: body
       ).timeout(Duration(seconds: 60));
-      return response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body;
+      return response.body.length > 0 ? (response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body) : "{\"success\":false, \"message\":\"No response!\"}";
     }on TimeoutException {
       return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
     } catch(e){
@@ -1050,7 +1050,7 @@ class ApiConnection{
           },
           body: body
       ).timeout(Duration(seconds: 60));
-      return response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body;
+      return response.body.length > 0 ? (response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body) : "{\"success\":false, \"message\":\"No response!\"}";
     }on TimeoutException {
       return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
     } catch(e){
@@ -1077,7 +1077,7 @@ class ApiConnection{
           },
           body: body
       ).timeout(Duration(seconds: 60));
-      return response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body;
+      return response.body.length > 0 ? (response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body) : "{\"success\":false, \"message\":\"No response!\"}";
     }on TimeoutException {
       return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
     } catch(e){
@@ -1104,7 +1104,7 @@ class ApiConnection{
           },
           body: body
       ).timeout(Duration(seconds: 60));
-      return response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body;
+      return response.body.length > 0 ? (response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body) : "{\"success\":false, \"message\":\"No response!\"}";
     }on TimeoutException {
       return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
     } catch(e){
@@ -1130,7 +1130,7 @@ class ApiConnection{
           },
           body: body
       ).timeout(Duration(seconds: 60));
-      return response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body;
+      return response.body.length > 0 ? (response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body) : "{\"success\":false, \"message\":\"No response!\"}";
     }on TimeoutException {
       return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
     } catch(e){
@@ -1156,7 +1156,7 @@ class ApiConnection{
           },
           body: body
       ).timeout(Duration(seconds: 60));
-      return response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body;
+      return response.body.length > 0 ? (response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body) : "{\"success\":false, \"message\":\"No response!\"}";
     }on TimeoutException {
       return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
     } catch(e){
@@ -1183,7 +1183,7 @@ class ApiConnection{
           },
           body: body
       ).timeout(Duration(seconds: 60));
-      return response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body;
+      return response.body.length > 0 ? (response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body) : "{\"success\":false, \"message\":\"No response!\"}";
     }on TimeoutException {
       return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
     } catch(e){
@@ -1208,7 +1208,7 @@ class ApiConnection{
           },
           body: body
       ).timeout(Duration(seconds: 60));
-      return response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body;
+      return response.body.length > 0 ? (response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body) : "{\"success\":false, \"message\":\"No response!\"}";
     }on TimeoutException {
       return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
     } catch(e){
@@ -1234,7 +1234,7 @@ class ApiConnection{
           },
           body: body
       ).timeout(Duration(seconds: 60));
-      return response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body;
+      return response.body.length > 0 ? (response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body) : "{\"success\":false, \"message\":\"No response!\"}";
     }on TimeoutException {
       return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
     } catch(e){
@@ -1259,7 +1259,7 @@ class ApiConnection{
           },
           body: body
       ).timeout(Duration(seconds: 60));
-      return response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body;
+      return response.body.length > 0 ? (response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body) : "{\"success\":false, \"message\":\"No response!\"}";
     }on TimeoutException {
       return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
     } catch(e){
@@ -1285,7 +1285,7 @@ class ApiConnection{
           },
           body: body
       ).timeout(Duration(seconds: 60));
-      return response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body;
+      return response.body.length > 0 ? (response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body) : "{\"success\":false, \"message\":\"No response!\"}";
     }on TimeoutException {
       return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
     } catch(e){
@@ -1310,7 +1310,7 @@ class ApiConnection{
           },
           body: body
       ).timeout(Duration(seconds: 60));
-      return response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body;
+      return response.body.length > 0 ? (response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body) : "{\"success\":false, \"message\":\"No response!\"}";
     }on TimeoutException {
       return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
     } catch(e){
@@ -1337,7 +1337,7 @@ class ApiConnection{
           },
           body: body
       ).timeout(Duration(seconds: 60));
-      return response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body;
+      return response.body.length > 0 ? (response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body) : "{\"success\":false, \"message\":\"No response!\"}";
     }on TimeoutException {
       return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
     } catch(e){
@@ -1363,7 +1363,7 @@ class ApiConnection{
           },
           body: body
       ).timeout(Duration(seconds: 60));
-      return response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body;
+      return response.body.length > 0 ? (response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body) : "{\"success\":false, \"message\":\"No response!\"}";
     }on TimeoutException {
       return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
     } catch(e){
@@ -1390,7 +1390,7 @@ class ApiConnection{
           },
           body: body
       ).timeout(Duration(seconds: 60));
-      return response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body;
+      return response.body.length > 0 ? (response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body) : "{\"success\":false, \"message\":\"No response!\"}";
     }on TimeoutException {
       return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
     } catch(e){
@@ -1417,7 +1417,7 @@ class ApiConnection{
           },
           body: body
       ).timeout(Duration(seconds: 60));
-      return response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body;
+      return response.body.length > 0 ? (response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body) : "{\"success\":false, \"message\":\"No response!\"}";
     }on TimeoutException {
       return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
     } catch(e){
@@ -1443,7 +1443,7 @@ class ApiConnection{
           },
           body: body
       ).timeout(Duration(seconds: 60));
-      return response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body;
+      return response.body.length > 0 ? (response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body) : "{\"success\":false, \"message\":\"No response!\"}";
     }on TimeoutException {
       return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
     } catch(e){
@@ -1469,7 +1469,7 @@ class ApiConnection{
           },
           body: body
       ).timeout(Duration(seconds: 60));
-      return response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body;
+      return response.body.length > 0 ? (response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body) : "{\"success\":false, \"message\":\"No response!\"}";
     }on TimeoutException {
       return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
     } catch(e){
@@ -1495,7 +1495,7 @@ class ApiConnection{
           },
           body: body
       ).timeout(Duration(seconds: 60));
-      return response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body;
+      return response.body.length > 0 ? (response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body) : "{\"success\":false, \"message\":\"No response!\"}";
     }on TimeoutException {
       return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
     } catch(e){
@@ -1521,7 +1521,7 @@ class ApiConnection{
           },
           body: body
       ).timeout(Duration(seconds: 60));
-      return response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body;
+      return response.body.length > 0 ? (response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body) : "{\"success\":false, \"message\":\"No response!\"}";
     }on TimeoutException {
       return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
     } catch(e){
@@ -1547,7 +1547,7 @@ class ApiConnection{
           },
           body: body
       ).timeout(Duration(seconds: 60));
-      return response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body;
+      return response.body.length > 0 ? (response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body) : "{\"success\":false, \"message\":\"No response!\"}";
     }on TimeoutException {
       return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
     } catch(e){
@@ -1575,7 +1575,7 @@ class ApiConnection{
           },
           body: body
       ).timeout(Duration(seconds: 60));
-      return response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body;
+      return response.body.length > 0 ? (response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body) : "{\"success\":false, \"message\":\"No response!\"}";
     }on TimeoutException {
       return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
     } catch(e){
@@ -1603,7 +1603,7 @@ class ApiConnection{
           },
           body: body
       ).timeout(Duration(seconds: 60));
-      return response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body;
+      return response.body.length > 0 ? (response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body) : "{\"success\":false, \"message\":\"No response!\"}";
     }on TimeoutException {
       return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
     } catch(e){
@@ -1632,7 +1632,7 @@ class ApiConnection{
           },
           body: body
       ).timeout(Duration(seconds: 60));
-      return response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body;
+      return response.body.length > 0 ? (response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body) : "{\"success\":false, \"message\":\"No response!\"}";
     }on TimeoutException {
       return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
     } catch(e){
@@ -1658,7 +1658,7 @@ class ApiConnection{
           },
           body: body
       ).timeout(Duration(seconds: 60));
-      return response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body;
+      return response.body.length > 0 ? (response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body) : "{\"success\":false, \"message\":\"No response!\"}";
     }on TimeoutException {
       return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
     } catch(e){
@@ -1687,7 +1687,7 @@ class ApiConnection{
           },
           body: body
       ).timeout(Duration(seconds: 60));
-      return response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body;
+      return response.body.length > 0 ? (response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body) : "{\"success\":false, \"message\":\"No response!\"}";
     }on TimeoutException {
       return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
     } catch(e){
@@ -1713,7 +1713,7 @@ class ApiConnection{
           },
           body: body
       ).timeout(Duration(seconds: 60));
-      return response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body;
+      return response.body.length > 0 ? (response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body) : "{\"success\":false, \"message\":\"No response!\"}";
     }on TimeoutException {
       return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
     } catch(e){
@@ -1741,7 +1741,7 @@ class ApiConnection{
           },
           body: body
       ).timeout(Duration(seconds: 60));
-      return response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body;
+      return response.body.length > 0 ? (response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body) : "{\"success\":false, \"message\":\"No response!\"}";
     }on TimeoutException {
       return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
     } catch(e){
@@ -1771,7 +1771,84 @@ class ApiConnection{
           },
           body: body
       ).timeout(Duration(seconds: 60));
-      return response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body;
+      return response.body.length > 0 ? (response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body) : "{\"success\":false, \"message\":\"No response!\"}";
+    }on TimeoutException {
+      return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
+    } catch(e){
+      return "{\"success\":false, \"message\":\"$e\"}";
+    }finally{
+      client.close();
+    }
+  }
+
+  // get member data
+  Future<String> getActiveRegions() async{
+    var client = rq.Client();
+    var url = Uri.http(apiLink,"/api/admin/regions/active");
+    var body = jsonEncode({});
+    FlutterSecureStorage storage = new FlutterSecureStorage();
+    String? token = await storage.read(key: "token");
+    try{
+      var response = await client.post(
+          url,
+          headers: {
+            'Content-Type': 'application/json',
+            'maru-authentication-code' : token!
+          },
+          body: body
+      ).timeout(Duration(seconds: 60));
+      return response.body.length > 0 ? (response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body) : "{\"success\":false, \"message\":\"No response!\"}";
+    }on TimeoutException {
+      return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
+    } catch(e){
+      return "{\"success\":false, \"message\":\"$e\"}";
+    }finally{
+      client.close();
+    }
+  }
+
+  // get member data
+  Future<String> getActiveDeductions() async{
+    var client = rq.Client();
+    var url = Uri.http(apiLink,"/api/admin/deductions/active");
+    var body = jsonEncode({});
+    FlutterSecureStorage storage = new FlutterSecureStorage();
+    String? token = await storage.read(key: "token");
+    try{
+      var response = await client.post(
+          url,
+          headers: {
+            'Content-Type': 'application/json',
+            'maru-authentication-code' : token!
+          },
+          body: body
+      ).timeout(Duration(seconds: 60));
+      return response.body.length > 0 ? (response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body) : "{\"success\":false, \"message\":\"No response!\"}";
+    }on TimeoutException {
+      return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
+    } catch(e){
+      return "{\"success\":false, \"message\":\"$e\"}";
+    }finally{
+      client.close();
+    }
+  }
+
+  // get member data
+  Future<String> resetPassword({required String username}) async{
+    var client = rq.Client();
+    var url = Uri.http(apiLink,"/api/login/resetpassword");
+    var body = jsonEncode({
+      "username" : username
+    });
+    try{
+      var response = await client.post(
+          url,
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: body
+      ).timeout(Duration(seconds: 60));
+      return response.body.length > 0 ? (response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body) : "{\"success\":false, \"message\":\"No response!\"}";
     }on TimeoutException {
       return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
     } catch(e){

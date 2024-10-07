@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:maru/packages/api_connection.dart';
 import 'package:maru/packages/maru_theme.dart';
@@ -52,7 +53,7 @@ class _MembershipState extends State<Membership> {
   // member data
   Future<void> getMembershipDetails() async {
     args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
-    print(args);
+    // print(args);
     if(args != null){
       String member_id = args!['member_id'].toString();
       setState(() {
@@ -732,19 +733,15 @@ class _rejectEarningsState extends State<rejectEarnings> {
   CustomThemes customThemes = new CustomThemes();
   final _formKey = GlobalKey<FormState>();
   List deductions = [];
+  var deductionType = [];
 
   String deduction_type(String deduction_type){
-    if(deduction_type == "subscription"){
-      return "Subscription";
-    }else if(deduction_type == "joining_fees"){
-      return "Joining Fees";
-    }else if(deduction_type == "membership_fees"){
-      return "Membership Fees";
-    }else if(deduction_type == "advance"){
-      return "Advance";
-    }else if(deduction_type == "balance_carry_over"){
-      return "Balance Carry-Over";
-    }else if(deduction_type == "transaction_cost"){
+    for(int index = 0; index < deductionType.length; index++){
+      if("${deductionType[index]['deduction_id']}" == "$deduction_type"){
+        return deductionType[index]['deduction_name'];
+      }
+    }
+    if("$deduction_type" == "transaction_cost"){
       return "Transaction Cost";
     }
     return "N/A";
@@ -760,15 +757,16 @@ class _rejectEarningsState extends State<rejectEarnings> {
   bool isChecked = true;
   var paymentType = "";
   List<DropdownMenuItem<String>> paymentTypes = [
-    const DropdownMenuItem(child: Text("Select Deduction Type"), value: ""),
-    const DropdownMenuItem(child: Text("Subscription"), value: "subscription"),
-    const DropdownMenuItem(child: Text("Joining Fees"), value: "joining_fees"),
-    const DropdownMenuItem(child: Text("Membership Fees"), value: "membership_fees"),
-    const DropdownMenuItem(child: Text("Advance"), value: "advance"),
-    const DropdownMenuItem(child: Text("Balance Carry-Over"), value: "balance_carry_over"),
+    // const DropdownMenuItem(child: Text("Select Deduction Type"), value: ""),
+    // const DropdownMenuItem(child: Text("Subscription"), value: "subscription"),
+    // const DropdownMenuItem(child: Text("Joining Fees"), value: "joining_fees"),
+    // const DropdownMenuItem(child: Text("Membership Fees"), value: "membership_fees"),
+    // const DropdownMenuItem(child: Text("Advance"), value: "advance"),
+    // const DropdownMenuItem(child: Text("Balance Carry-Over"), value: "balance_carry_over"),
   ];
   TextEditingController howMuch = TextEditingController();
   bool saveLoader = false;
+  bool load_deductions = false;
   bool init = false;
 
   void initState(){
@@ -780,7 +778,37 @@ class _rejectEarningsState extends State<rejectEarnings> {
         howMuch.text = "0";
         init = true;
       });
+
+    //   get the deduction types
+      getDeductions();
     }
+  }
+
+  Future<void> getDeductions() async {
+    setState(() {
+      load_deductions = true;
+    });
+    ApiConnection apiConnection = new ApiConnection();
+    var response = await apiConnection.getActiveDeductions();
+    if(customThemes.isValidJson(response)){
+      var res = jsonDecode(response);
+      print(res);
+      if(res['success']){
+        setState(() {
+          paymentTypes = (res['deductions'] as List).map((deduction) {
+            return DropdownMenuItem(child: Text("${deduction['deduction_name']}"), value: "${deduction['deduction_id']}");
+          }).toList();
+          deductionType = res['deductiontype'];
+        });
+      }else{
+        setState(() {
+          paymentTypes = [];
+        });
+      }
+    }
+    setState(() {
+      load_deductions = false;
+    });
   }
 
   @override
@@ -970,13 +998,28 @@ class _rejectEarningsState extends State<rejectEarnings> {
                                     textType: TextInputType.number,
                                     validator: (value){
                                       if(value == null || value.isEmpty || double.parse(value) <= 0){
-                                        return "How much has the member paid?";
+                                        return "How much is the member deducted?";
                                       }
                                       return null;
                                     }
                                 ),
                               ),
                               SizedBox(height: 10),
+                              load_deductions ?
+                              Container(
+                                child: Center(
+                                  child: Column(
+                                    children: [
+                                      SpinKitCircle(
+                                        size: 25,
+                                        color: customThemes.primaryColor,
+                                      ),
+                                      Text("Load earnings!", style: customThemes.primaryTextStyle(size: 10),)
+                                    ],
+                                  ),
+                                ),
+                              )
+                                  :
                               customThemes.maruDropdownButtonFormField(
                                   defaultValue: paymentType,
                                   onChange: (value) {
@@ -1095,7 +1138,7 @@ class _rejectEarningsState extends State<rejectEarnings> {
                                   showLoader: saveLoader,
                                   disabled: saveLoader,
                                   onPressed: (){
-                                    Navigator.pop(context, {"success" : false, "message" : "Cancelled!"});
+                                    Navigator.pop(context);
                                   },
                                   type: Type.secondary
                               ),
@@ -1129,6 +1172,7 @@ class _editEarningsState extends State<_editEarnings> {
   bool saveLoader = false;
   bool init = false;
   var payment_data = null;
+  var deductionType = [];
   bool loading = false;
   String pdfUrl = "";
   bool downloading = false;
@@ -1190,17 +1234,12 @@ class _editEarningsState extends State<_editEarnings> {
   }
 
   String deduction_type(String deduction_type){
-    if(deduction_type == "subscription"){
-      return "Subscription";
-    }else if(deduction_type == "joining_fees"){
-      return "Joining Fees";
-    }else if(deduction_type == "membership_fees"){
-      return "Membership Fees";
-    }else if(deduction_type == "advance"){
-      return "Advance";
-    }else if(deduction_type == "balance_carry_over"){
-      return "Balance Carry-Over";
-    }else if(deduction_type == "transaction_cost"){
+    for(int index = 0; index < deductionType.length; index++){
+      if("${deductionType[index]['deduction_id']}" == "$deduction_type"){
+        return deductionType[index]['deduction_name'];
+      }
+    }
+    if("$deduction_type" == "transaction_cost"){
       return "Transaction Cost";
     }
     return "N/A";
@@ -1299,11 +1338,13 @@ class _editEarningsState extends State<_editEarnings> {
       if(res['success']){
         setState(() {
           payment_data = res['payment'];
+          deductionType = res['deduction_type'];
           pdfUrl = "${customThemes.apiURLDomain}/api/admin/payment/receipt/${res['payment']['payment_id']}";
         });
       }else{
         setState(() {
           payment_data = null;
+          deductionType = [];
           pdfUrl = "";
         });
       }
@@ -1311,6 +1352,7 @@ class _editEarningsState extends State<_editEarnings> {
       setState(() {
         payment_data = null;
         pdfUrl = "";
+        deductionType = [];
       });
     }
     setState(() {
@@ -1470,7 +1512,7 @@ class _editEarningsState extends State<_editEarnings> {
                                     showLoader: saveLoader,
                                     disabled: saveLoader,
                                     onPressed: (){
-                                      Navigator.pop(context, {"success" : false, "message" : "Closed!"});
+                                      Navigator.pop(context);
                                     },
                                     type: Type.secondary
                                 ),
