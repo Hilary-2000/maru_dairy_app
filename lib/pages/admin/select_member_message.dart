@@ -1,5 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:maru/packages/api_connection.dart';
 import 'package:maru/packages/maru_theme.dart';
 
 class SelectMemberMessage extends StatefulWidget {
@@ -11,7 +15,65 @@ class SelectMemberMessage extends StatefulWidget {
 
 class _SelectMemberMessageState extends State<SelectMemberMessage> {
   CustomThemes customs = CustomThemes();
+  bool init = false;
+  var members = [];
+  bool member_loading = false;
   final FlutterSecureStorage _storage = const FlutterSecureStorage();
+  List<Color> colors_shade = [];
+  List<TextStyle> textStyles = [];
+
+  void didChangeDependencies(){
+    super.didChangeDependencies();
+
+    if(!init){
+      setState(() {
+        init = !init;
+      });
+
+      // set colors and shades
+      setState(() {
+        colors_shade = [customs.primaryShade, customs.secondaryShade, customs.warningShade, customs.darkShade, customs.successShade];
+        textStyles = [
+          customs.primaryTextStyle(
+              size: 18, fontweight: FontWeight.bold
+          ),
+          customs.secondaryTextStyle(
+              size: 18, fontweight: FontWeight.bold
+          ),
+          customs.warningTextStyle(
+              size: 18, fontweight: FontWeight.bold
+          ),
+          customs.darkTextStyle(
+              size: 18, fontweight: FontWeight.bold
+          ),
+          customs.secondaryTextStyle(
+              size: 18, fontweight: FontWeight.bold
+          ),
+        ];
+      });
+
+      //get the members
+      getMembers();
+    }
+  }
+
+  Future<void> getMembers() async {
+    setState(() {
+      member_loading = true;
+    });
+    FlutterSecureStorage storage = new FlutterSecureStorage();
+    String? token = await storage.read(key: "token");
+    ApiConnection apiConnection = new ApiConnection();
+    var response = await apiConnection.getMembers(token!);
+    if(customs.isValidJson(response)){
+      var res = jsonDecode(response);
+      setState(() {
+        members = res['data'];
+        member_loading = false;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -58,7 +120,16 @@ class _SelectMemberMessageState extends State<SelectMemberMessage> {
             height: height,
             width: width,
             color: customs.secondaryShade_2.withOpacity(0.2),
-            child: Column(
+            child: member_loading ? Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SpinKitCircle(
+                  color: customs.primaryColor,
+                  size: 50.0,
+                ),
+                Text("Loading Members...", style: customs.primaryTextStyle(size: 10,))
+              ],
+            ) : Column(
               children: [
                 Container(
                   width: width,
@@ -96,265 +167,118 @@ class _SelectMemberMessageState extends State<SelectMemberMessage> {
                   padding: const EdgeInsets.all(8),
                   height: height - 115,
                   decoration: BoxDecoration(
-                      color: customs.whiteColor,
-                      borderRadius: BorderRadius.circular(15)),
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.pushNamed(
-                                context, "/admin_inquiry_inbox");
-                          },
-                          child: Container(
-                            margin: EdgeInsets.zero,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(5),
-                              color: customs.secondaryShade_2.withOpacity(0.2),
-                            ),
-                            child: Material(
-                              color: Colors.transparent,
-                              child: ListTile(
-                                dense: true,
-                                leading: CircleAvatar(
-                                  backgroundColor: customs.primaryShade,
-                                  child: Text(
-                                    "PM",
-                                    style: customs.primaryTextStyle(
-                                        size: 18, fontweight: FontWeight.bold),
-                                  ),
-                                ),
-                                title: Text(
-                                  "Patrick Mugoh",
-                                  style: customs.darkTextStyle(size: 14),
-                                ),
-                                subtitle: Text(
-                                  "REG2024-003",
-                                  style: customs.secondaryTextStyle(size: 12),
-                                ),
-                                trailing: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text("Njebi",
-                                        style: customs.darkTextStyle(size: 12)),
-                                    Text(
-                                      "0713620727",
-                                      style: customs.secondaryTextStyle(
-                                          size: 12,
-                                          fontweight: FontWeight.normal),
+                    color: customs.whiteColor,
+                    borderRadius: BorderRadius.circular(15)
+                  ),
+                  child: members.length > 0 ?
+                  ListView.builder(
+                    itemCount: members.length,
+                    itemBuilder: (context, index){
+                      var item = members[index];
+                      return Column(
+                        children: [
+                          GestureDetector(
+                            onTap: () async {
+                              await Navigator.pushNamed(context, "/admin_inquiry_inbox", arguments: {"index" : index, "member_id": item['user_id']});
+                              getMembers();
+                            },
+                            child: Container(
+                              margin: EdgeInsets.zero,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(5),
+                                color: customs.secondaryShade_2.withOpacity(0.2),
+                              ),
+                              child: Material(
+                                color: Colors.transparent,
+                                child: ListTile(
+                                  dense: true,
+                                  leading: CircleAvatar(
+                                    backgroundColor: colors_shade[index % colors_shade.length],
+                                    child: Text(
+                                      customs.nameAbbr(item['fullname']),
+                                      style: textStyles[index % textStyles.length],
                                     ),
-                                    Container(
-                                      width: 10,
-                                      height: 10,
-                                      decoration: BoxDecoration(
-                                          color: customs.secondaryShade,
-                                          borderRadius:BorderRadius.circular(5)
+                                  ),
+                                  title: Text(
+                                    customs.toCamelCase(item['fullname']),
+                                    style: customs.darkTextStyle(size: 14),
+                                  ),
+                                  subtitle: Text(
+                                    item['membership'] ?? "N/A",
+                                    style: customs.secondaryTextStyle(size: 12),
+                                  ),
+                                  trailing: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(item['region_name'] ?? "-",
+                                          style: customs.darkTextStyle(size: 12)),
+                                      Text(
+                                        item['phone_number'],
+                                        style: customs.secondaryTextStyle(
+                                            size: 12,
+                                            fontweight: FontWeight.normal),
                                       ),
-                                    )
-                                  ],
+                                      Container(
+                                        width: 5,
+                                        height: 5,
+                                        decoration: BoxDecoration(
+                                            color: customs.secondaryShade,
+                                            borderRadius:BorderRadius.circular(5)
+                                        ),
+                                      )
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
                           ),
-                        ),
-                        Container(
-                          width: width * 0.5,
-                          child: Divider(
-                            color: customs.secondaryShade_2.withOpacity(0.2),
-                          ),
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.pushNamed(
-                                context, "/admin_inquiry_inbox");
-                          },
-                          child: Container(
-                            margin: EdgeInsets.zero,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(5),
+                          Container(
+                            width: width * 0.5,
+                            child: Divider(
                               color: customs.secondaryShade_2.withOpacity(0.2),
                             ),
-                            child: Material(
-                              color: Colors.transparent,
-                              child: ListTile(
-                                dense: true,
-                                leading: CircleAvatar(
-                                  backgroundColor: customs.successShade_2,
-                                  child: Text(
-                                    "JM",
-                                    style: customs.successTextStyle(
-                                        size: 18, fontweight: FontWeight.bold),
-                                  ),
-                                ),
-                                title: Text(
-                                  "Jackline Murume",
-                                  style: customs.darkTextStyle(size: 14),
-                                ),
-                                subtitle: Text(
-                                  "REG2024-004",
-                                  style: customs.secondaryTextStyle(size: 12),
-                                ),
-                                trailing: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text("Munyu/Kiriti",
-                                        style: customs.darkTextStyle(size: 12)),
-                                    Text(
-                                      "0713622727",
-                                      style: customs.secondaryTextStyle(
-                                          size: 12,
-                                          fontweight: FontWeight.normal),
-                                    ),
-                                    Container(
-                                      width: 10,
-                                      height: 10,
-                                      decoration: BoxDecoration(
-                                          color: customs.successColor,
-                                          borderRadius:BorderRadius.circular(5)
-                                      ),
-                                    )
-                                  ],
-                                ),
+                          )
+                        ],
+                      );
+                    }
+                  )
+                      :
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Container(
+                        margin: EdgeInsets.only(top: 30),
+                        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                        width: width - 50,
+                        height: width - 100,
+                        decoration: BoxDecoration(
+                            color: customs.whiteColor,
+                            borderRadius: BorderRadius.circular(20),
+                            boxShadow: [
+                              BoxShadow(color: customs.secondaryShade_2, blurRadius: 1, blurStyle: BlurStyle.normal),
+                              BoxShadow(color: customs.secondaryShade_2, blurRadius: 1, blurStyle: BlurStyle.normal),
+                              BoxShadow(color: customs.secondaryShade_2, blurRadius: 1, blurStyle: BlurStyle.normal),
+                            ]
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text("No members found!", style: customs.primaryTextStyle(size: 20, fontweight: FontWeight.bold),),
+                            Spacer(),
+                            SizedBox(
+                              width: width,
+                              child: Image(
+                                image: AssetImage("assets/images/search.jpg"),
+                                height: width/3,
+                                width: width/3,
                               ),
                             ),
-                          ),
+                          ],
                         ),
-                        Container(
-                          width: width * 0.5,
-                          child: Divider(
-                            color: customs.secondaryShade_2.withOpacity(0.2),
-                          ),
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.pushNamed(
-                                context, "/admin_inquiry_inbox");
-                          },
-                          child: Container(
-                            margin: EdgeInsets.zero,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(5),
-                              color: customs.secondaryShade_2.withOpacity(0.2),
-                            ),
-                            child: Material(
-                              color: Colors.transparent,
-                              child: ListTile(
-                                dense: true,
-                                leading: CircleAvatar(
-                                  backgroundColor: customs.warningShade_2,
-                                  child: Text(
-                                    "GM",
-                                    style: customs.warningTextStyle(
-                                        size: 18, fontweight: FontWeight.bold),
-                                  ),
-                                ),
-                                title: Text(
-                                  "Gloria Muwanguzi",
-                                  style: customs.darkTextStyle(size: 14),
-                                ),
-                                subtitle: Text(
-                                  "REG2024-006",
-                                  style: customs.secondaryTextStyle(size: 12),
-                                ),
-                                trailing: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text("Njebi",
-                                        style: customs.darkTextStyle(size: 12)),
-                                    Text(
-                                      "0713620727",
-                                      style: customs.secondaryTextStyle(
-                                          size: 12,
-                                          fontweight: FontWeight.normal),
-                                    ),
-                                    Container(
-                                      width: 10,
-                                      height: 10,
-                                      decoration: BoxDecoration(
-                                          color: customs.secondaryShade,
-                                          borderRadius:BorderRadius.circular(5)
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        Container(
-                          width: width * 0.5,
-                          child: Divider(
-                            color: customs.secondaryShade_2.withOpacity(0.2),
-                          ),
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.pushNamed(
-                                context, "/admin_inquiry_inbox");
-                          },
-                          child: Container(
-                            margin: EdgeInsets.zero,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(5),
-                              color: customs.secondaryShade_2.withOpacity(0.2),
-                            ),
-                            child: Material(
-                              color: Colors.transparent,
-                              child: ListTile(
-                                dense: true,
-                                leading: CircleAvatar(
-                                  backgroundColor: customs.secondaryShade_2,
-                                  child: Text(
-                                    "PQ",
-                                    style: customs.secondaryTextStyle(
-                                        size: 18, fontweight: FontWeight.bold),
-                                  ),
-                                ),
-                                title: Text(
-                                  "Patrick Quacco",
-                                  style: customs.darkTextStyle(size: 14),
-                                ),
-                                subtitle: Text(
-                                  "REG2024-003",
-                                  style: customs.secondaryTextStyle(size: 12),
-                                ),
-                                trailing: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text("Kiriti",
-                                        style: customs.darkTextStyle(size: 12)),
-                                    Text(
-                                      "0713620727",
-                                      style: customs.secondaryTextStyle(
-                                          size: 12,
-                                          fontweight: FontWeight.normal),
-                                    ),
-                                    Container(
-                                      width: 10,
-                                      height: 10,
-                                      decoration: BoxDecoration(
-                                          color: customs.successColor,
-                                          borderRadius:BorderRadius.circular(5)
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        Container(
-                          width: width * 0.5,
-                          child: Divider(
-                            color: customs.secondaryShade_2.withOpacity(0.2),
-                          ),
-                        ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 )
               ],

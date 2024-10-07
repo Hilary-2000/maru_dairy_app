@@ -80,6 +80,9 @@ class CustomThemes {
 
   // change to camel case
   String toCamelCase(String text) {
+    if(text.length == 0){
+      return "";
+    }
     // Step 1: Split the string by spaces or underscores
     List<String> words = text.split(RegExp(r'[\s_]+'));
 
@@ -623,19 +626,22 @@ class CustomThemes {
     );
   }
 
-  TextField maruSearchTextField(
+  TextFormField maruSearchTextField(
       {String? hintText,
         TextEditingController? editingController,
         required void Function(String)? isChanged,
         TextInputType textType = TextInputType.text,
         bool hideText = false,
         TextAlign textAlign = TextAlign.center,
-        String label = ""}) {
-    return TextField(
+        String label = "",
+        String? Function(String?)? validator
+      }) {
+    return TextFormField(
       keyboardType: textType,
       obscureText: hideText,
       controller: editingController,
       textAlign: textAlign,
+      validator: validator,
       style: darkTextStyle(size: 14),
       decoration: InputDecoration(
         label: Text(

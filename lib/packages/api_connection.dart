@@ -1857,4 +1857,62 @@ class ApiConnection{
       client.close();
     }
   }
+
+
+  // get member data
+  Future<String> getMemberMessages({required String member_id}) async{
+    var client = rq.Client();
+    var url = Uri.http(apiLink,"/api/chats/member");
+    var body = jsonEncode({
+      "member_id" : member_id
+    });
+    FlutterSecureStorage storage = new FlutterSecureStorage();
+    String? token = await storage.read(key: "token");
+    try{
+      var response = await client.post(
+          url,
+          headers: {
+            'Content-Type': 'application/json',
+            'maru-authentication-code' : token!
+          },
+          body: body
+      ).timeout(Duration(seconds: 60));
+      return response.body.length > 0 ? (response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body) : "{\"success\":false, \"message\":\"No response!\"}";
+    }on TimeoutException {
+      return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
+    } catch(e){
+      return "{\"success\":false, \"message\":\"$e\"}";
+    }finally{
+      client.close();
+    }
+  }
+
+  // get member data
+  Future<String> sendMessage({required String member_id, required String message}) async{
+    var client = rq.Client();
+    var url = Uri.http(apiLink,"/api/chats/send_message");
+    var body = jsonEncode({
+      "member_id" : member_id,
+      "message" : message
+    });
+    FlutterSecureStorage storage = new FlutterSecureStorage();
+    String? token = await storage.read(key: "token");
+    try{
+      var response = await client.post(
+          url,
+          headers: {
+            'Content-Type': 'application/json',
+            'maru-authentication-code' : token!
+          },
+          body: body
+      ).timeout(Duration(seconds: 60));
+      return response.body.length > 0 ? (response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body) : "{\"success\":false, \"message\":\"No response!\"}";
+    }on TimeoutException {
+      return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
+    } catch(e){
+      return "{\"success\":false, \"message\":\"$e\"}";
+    }finally{
+      client.close();
+    }
+  }
 }

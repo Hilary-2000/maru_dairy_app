@@ -328,7 +328,7 @@ class _MemberDetailsEditState extends State<MemberDetailsEdit> {
                                                   fontweight: FontWeight.bold),
                                             ),
                                             Text(
-                                              "REG2022-002",
+                                              memberData != null ? memberData['membership'] ?? "N/A" : "N/A",
                                               style: customs.secondaryTextStyle(
                                                   size: 12,
                                                   fontweight:

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:maru/packages/api_connection.dart';
 import 'package:maru/packages/maru_theme.dart';
@@ -29,156 +30,210 @@ class _technicianDashboardState extends State<technicianDashboard> {
     // ACCOUNT
     TechnicianAccount(),
   ];
+  Future<bool?> _showBackDialog() {
+    return showDialog<bool>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title:  Text('Are you sure?', style: customs.darkTextStyle(size: 25),),
+          content: Text(
+            'Are you sure you want to leave?', style: customs.darkTextStyle(size: 14, fontweight: FontWeight.normal),
+          ),
+          actions: <Widget>[
+            Row(
+              children: [
+                customs.maruButton(
+                    text: "Nevermind",
+                    onPressed: (){
+                      Navigator.pop(context, false);
+                    },
+                    type: Type.success,
+                    size: Sizes.sm
+                ),
+                Spacer(),
+                customs.marOutlineuButton(
+                    text: "Leave",
+                    onPressed: (){
+                      Navigator.pop(context, true);
+                    },
+                    type: Type.danger,
+                    size: Sizes.sm,
+                    showArrow: true
+                )
+              ],
+            )
+          ],
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: customs.whiteColor,
-      appBar: AppBar(
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (bool didPop, Object? result) async {
+        didPop = index == 0;
+        if(!didPop){
+          setState(() {
+            index = 0;
+          });
+          return;
+        }else{
+          final bool shouldPop = await _showBackDialog() ?? false;
+          if (context.mounted && shouldPop) {
+            SystemNavigator.pop();
+          }
+        }
+      },
+      child: Scaffold(
         backgroundColor: customs.whiteColor,
-        elevation: 1,
-        title: Builder(builder: (context) {
-          double screenWidth = MediaQuery.of(context).size.width;
-          return Container(
-            width: screenWidth,
-            child: Center(
-              child: Container(
-                width: 250,
-                child: Row(
-                  children: [
-                    SizedBox(
-                      height: 70,
-                      child:
-                      Image(image: AssetImage("assets/images/maru-nobg.png")),
-                    ),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    Text(
-                      "Maru Dairy Co-op",
-                      style: customs.primaryTextStyle(
-                          size: 20, fontweight: FontWeight.bold),
-                    ),
-                  ],
+        appBar: AppBar(
+          backgroundColor: customs.whiteColor,
+          elevation: 1,
+          title: Builder(builder: (context) {
+            double screenWidth = MediaQuery.of(context).size.width;
+            return Container(
+              width: screenWidth,
+              child: Center(
+                child: Container(
+                  width: 250,
+                  child: Row(
+                    children: [
+                      SizedBox(
+                        height: 70,
+                        child:
+                        Image(image: AssetImage("assets/images/maru-nobg.png")),
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Text(
+                        "Maru Dairy Co-op",
+                        style: customs.primaryTextStyle(
+                            size: 20, fontweight: FontWeight.bold),
+                      ),
+                    ],
+                  ),
                 ),
               ),
+            );
+          }),
+        ),
+        body: technician_windows[index],
+        bottomNavigationBar: Builder(builder: (context) {
+          double width = MediaQuery.of(context).size.width;
+          return Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(10.0), // Rounded corners
+              border: Border.all(
+                color: Colors.white,
+                width: 2.0,
+              ),
+            ),
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      index = 0;
+                    });
+                  },
+                  child: SizedBox(
+                    height: 41,
+                    width: width * 0.2,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.home_outlined,
+                          color: index == 0
+                              ? customs.primaryColor
+                              : customs.secondaryColor,
+                        ),
+                        Text(
+                          "Home",
+                          style: index == 0
+                              ? customs.primaryTextStyle(
+                                  size: 12, fontweight: FontWeight.bold)
+                              : customs.secondaryTextStyle(
+                                  size: 12, fontweight: FontWeight.bold),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      index = 1;
+                    });
+                  },
+                  child: SizedBox(
+                    height: 41,
+                    width: width * 0.2,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.history,
+                          color: index == 1
+                              ? customs.primaryColor
+                              : customs.secondaryColor,
+                        ),
+                        Text(
+                          "History",
+                          style: index == 1
+                              ? customs.primaryTextStyle(
+                                  size: 12, fontweight: FontWeight.bold)
+                              : customs.secondaryTextStyle(
+                                  size: 12, fontweight: FontWeight.bold),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      index = 2;
+                    });
+                  },
+                  child: SizedBox(
+                    height: 41,
+                    width: width * 0.2,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.person_3_outlined,
+                          color: index == 2
+                              ? customs.primaryColor
+                              : customs.secondaryColor,
+                        ),
+                        Text(
+                          "Account",
+                          style: index == 2
+                              ? customs.primaryTextStyle(
+                                  size: 12, fontweight: FontWeight.bold)
+                              : customs.secondaryTextStyle(
+                                  size: 12, fontweight: FontWeight.bold),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              ],
             ),
           );
         }),
       ),
-      body: technician_windows[index],
-      bottomNavigationBar: Builder(builder: (context) {
-        double width = MediaQuery.of(context).size.width;
-        return Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(10.0), // Rounded corners
-            border: Border.all(
-              color: Colors.white,
-              width: 2.0,
-            ),
-          ),
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              GestureDetector(
-                onTap: () {
-                  setState(() {
-                    index = 0;
-                  });
-                },
-                child: SizedBox(
-                  height: 41,
-                  width: width * 0.2,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.home_outlined,
-                        color: index == 0
-                            ? customs.primaryColor
-                            : customs.secondaryColor,
-                      ),
-                      Text(
-                        "Home",
-                        style: index == 0
-                            ? customs.primaryTextStyle(
-                                size: 12, fontweight: FontWeight.bold)
-                            : customs.secondaryTextStyle(
-                                size: 12, fontweight: FontWeight.bold),
-                      )
-                    ],
-                  ),
-                ),
-              ),
-              GestureDetector(
-                onTap: () {
-                  setState(() {
-                    index = 1;
-                  });
-                },
-                child: SizedBox(
-                  height: 41,
-                  width: width * 0.2,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.history,
-                        color: index == 1
-                            ? customs.primaryColor
-                            : customs.secondaryColor,
-                      ),
-                      Text(
-                        "History",
-                        style: index == 1
-                            ? customs.primaryTextStyle(
-                                size: 12, fontweight: FontWeight.bold)
-                            : customs.secondaryTextStyle(
-                                size: 12, fontweight: FontWeight.bold),
-                      )
-                    ],
-                  ),
-                ),
-              ),
-              GestureDetector(
-                onTap: () {
-                  setState(() {
-                    index = 2;
-                  });
-                },
-                child: SizedBox(
-                  height: 41,
-                  width: width * 0.2,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.person_3_outlined,
-                        color: index == 2
-                            ? customs.primaryColor
-                            : customs.secondaryColor,
-                      ),
-                      Text(
-                        "Account",
-                        style: index == 2
-                            ? customs.primaryTextStyle(
-                                size: 12, fontweight: FontWeight.bold)
-                            : customs.secondaryTextStyle(
-                                size: 12, fontweight: FontWeight.bold),
-                      )
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
-        );
-      }),
     );
   }
 }

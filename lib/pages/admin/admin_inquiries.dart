@@ -11,7 +11,7 @@ class AdminInquiries extends StatefulWidget {
 
 class _AdminInquiriesState extends State<AdminInquiries> {
   CustomThemes customs = CustomThemes();
-  bool hide = true;
+  bool hide = false;
   final FlutterSecureStorage _storage = const FlutterSecureStorage();
   @override
   Widget build(BuildContext context) {
@@ -25,7 +25,8 @@ class _AdminInquiriesState extends State<AdminInquiries> {
           height: height,
           width: width,
           color: customs.secondaryShade_2.withOpacity(0.2),
-          child: !hide ? Column(
+          child: !hide ?
+          Column(
             children: [
               Container(
                 margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
@@ -267,7 +268,9 @@ class _AdminInquiriesState extends State<AdminInquiries> {
                 ),
               )
             ],
-          ) : Column(
+          )
+              :
+          Column(
             children: [
               Container(
                 margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
