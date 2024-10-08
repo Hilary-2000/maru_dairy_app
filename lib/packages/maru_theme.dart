@@ -78,6 +78,12 @@ class CustomThemes {
     return abbr;
   }
 
+  String message_split(String name){
+    String abbr = "";
+    abbr = name.length > 30 ? name.substring(0, 30)+"..." : name;
+    return abbr;
+  }
+
   // change to camel case
   String toCamelCase(String text) {
     if(text.length == 0){
