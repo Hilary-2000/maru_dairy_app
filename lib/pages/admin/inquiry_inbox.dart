@@ -59,6 +59,29 @@ class _InquiryInboxState extends State<InquiryInbox> {
     );
   }
 
+  Future<bool?> _confirmChatClearing() {
+    return showDialog<bool>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title:  Text('Are you sure?', style: customs.darkTextStyle(size: 25),),
+          content: Text(
+            'Are you sure you want to clear all chat(s)? \nThis action is irreversible', style: customs.darkTextStyle(size: 14, fontweight: FontWeight.normal),
+          ),
+          actions: <Widget>[
+            Row(
+              children: [
+                Spacer(),
+                GestureDetector(onTap:(){Navigator.pop(context, false);}, child: Text("No", style: customs.successTextStyle(size: 15, fontweight: FontWeight.bold),)),
+                SizedBox(width: 20,),
+                GestureDetector(onTap:(){Navigator.pop(context, true);}, child: Text("Yes, Delete", style: customs.dangerTextStyle(size: 15, fontweight: FontWeight.bold),)),
+              ],
+            )
+          ],
+        );
+      },
+    );
+  }
   bool init = false;
   var chats = null;
   var keys = [];
@@ -229,10 +252,106 @@ class _InquiryInboxState extends State<InquiryInbox> {
                             member_data != null ? member_data['membership'] ?? "" : "",
                             style: customs.secondaryTextStyle(size: 12),
                           ),
-                          trailing: Icon(
-                            FontAwesomeIcons.ellipsisVertical,
-                            size: 15,
-                            color: customs.secondaryColor,
+                          trailing: PopupMenuButton<String>(
+                            icon: Icon(FontAwesomeIcons.ellipsisVertical, size: 18),
+                            onSelected: (String result) async {
+                              // Handle the selection here
+                              if(result == "member_info"){
+                                String member_id = "";
+                                chats.forEach((dateKey, chatInfo){
+                                  List chats = chatInfo['chats'];
+                                  for(var chat in chats){
+                                    member_id = "${chat['chat_thread_id']}";
+                                  }
+                                });
+
+                                await Navigator.pushNamed(context, "/admin_member_details", arguments: {"index" : 0, "member_id": member_id});
+                              }else if(result == "clear_chat"){
+                                bool clear_chat = await _confirmChatClearing() ?? false;
+                                if(clear_chat){
+                                  if(chats.length > 0){
+                                    List <String> all_chats = [];
+                                    chats.forEach((dateKey, chatInfo){
+                                      List chats = chatInfo['chats'];
+                                      for(var chat in chats){
+                                        all_chats.add("${chat['chat_thread_id']}");
+                                      }
+                                    });
+
+                                    ApiConnection apiCon = new ApiConnection();
+                                    var response = await apiCon.deleteChatThreads(chat_thread_ids: all_chats);
+                                    if(customs.isValidJson(response)){
+                                      var res = jsonDecode(response);
+                                      if(res['success']){
+                                        customs.maruSnackBarSuccess(context: context, text: res['message']);
+                                        getMessages();
+                                      }else{
+                                        customs.maruSnackBarDanger(context: context, text: res['message']);
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            color: customs.whiteColor,
+                            itemBuilder: (BuildContext context) =>
+                            <PopupMenuEntry<String>>[
+                              PopupMenuItem<String>(
+                                value: 'member_info',
+                                height: 15,
+                                padding: EdgeInsets.symmetric(horizontal: 5),
+                                child: Container(
+                                  padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                                  margin: EdgeInsets.zero,
+                                  child: Row(
+                                    mainAxisAlignment:
+                                    MainAxisAlignment.start,
+                                    children: [
+                                      Icon(
+                                        FontAwesomeIcons.info,
+                                        size: 13,
+                                        color: customs.secondaryColor,
+                                      ),
+                                      Text(
+                                        ' Member Info',
+                                        style: customs.secondaryTextStyle(
+                                            size: 12,
+                                            fontweight: FontWeight.bold
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              PopupMenuDivider(height: 1),
+                              PopupMenuItem<String>(
+                                value: 'clear_chat',
+                                height: 15,
+                                padding: EdgeInsets.symmetric(horizontal: 5),
+                                child: Container(
+                                  padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                                  margin: EdgeInsets.zero,
+                                  child: Row(
+                                    mainAxisAlignment:
+                                    MainAxisAlignment.start,
+                                    children: [
+                                      Icon(
+                                        FontAwesomeIcons.trash,
+                                        size: 13,
+                                        color: customs.dangerColor,
+                                      ),
+                                      Text(
+                                        ' Clear Chat',
+                                        style: customs.dangerTextStyle(
+                                            size: 12,
+                                            fontweight: FontWeight.bold
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         )
                           :
@@ -373,50 +492,67 @@ class _InquiryInboxState extends State<InquiryInbox> {
                                     margin: EdgeInsets.symmetric(vertical: 2),
                                     child: InkWell(
                                       onLongPress: (){
-                                        print("Long pressed");
+                                        if(message_ids.length == 0){
+                                          message_ids.add(chat['chat_thread_id']);
+                                          setState(() {
+                                            chats[keys[index]]['chats'][indexes]['selected'] = true;
+                                          });
+                                        }
+                                      },
+                                      onTap: (){
+                                        if(message_ids.length > 0){
+                                          setState(() {
+                                            chats[keys[index]]['chats'][indexes]['selected'] = !chats[keys[index]]['chats'][indexes]['selected'];
+                                          });
+                                          if(chats[keys[index]]['chats'][indexes]['selected']){
+                                            message_ids.add(chat['chat_thread_id']);
+                                          }else{
+                                            message_ids.remove(chat['chat_thread_id']);
+                                          }
+                                        }
                                       },
                                       child: IntrinsicHeight(
                                         child: Stack(
                                           children: [
                                             Container(
-                                            margin: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                                            child: Row(
-                                              children: [
-                                                Container(
-                                                  width: width * 0.75,
-                                                  padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                                                  decoration: BoxDecoration(
-                                                      color: customs.secondaryShade_2,
-                                                      borderRadius: BorderRadius.circular(10)
+                                              margin: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                                              child: Row(
+                                                children: [
+                                                  Container(
+                                                    width: width * 0.75,
+                                                    padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                                                    decoration: BoxDecoration(
+                                                        color: customs.secondaryShade_2,
+                                                        borderRadius: BorderRadius.circular(10)
+                                                    ),
+                                                    child: Column(
+                                                      children: [
+                                                        Container(
+                                                            width: width*0.7,
+                                                            child: Text(
+                                                              "${chat['message']}",
+                                                              style: customs.secondaryTextStyle(size: 14),
+                                                            )
+                                                        ),
+                                                        SizedBox(height: 10,),
+                                                        Row(
+                                                          mainAxisAlignment: MainAxisAlignment.end,
+                                                          children: [
+                                                            Text("${chat['date_sent']} ", style: customs.secondaryTextStyle(size: 10),),
+                                                            // Icon(Icons.checklist_outlined, size: 15, color: customs.secondaryColor)
+                                                          ],
+                                                        )
+                                                      ],
+                                                    ),
                                                   ),
-                                                  child: Column(
-                                                    children: [
-                                                      Container(
-                                                          width: width*0.7,
-                                                          child: Text(
-                                                            "${chat['message']}",
-                                                            style: customs.secondaryTextStyle(size: 14),
-                                                          )
-                                                      ),
-                                                      SizedBox(height: 10,),
-                                                      Row(
-                                                        mainAxisAlignment: MainAxisAlignment.end,
-                                                        children: [
-                                                          Text("${chat['date_sent']} ", style: customs.secondaryTextStyle(size: 10),),
-                                                          // Icon(Icons.checklist_outlined, size: 15, color: customs.secondaryColor)
-                                                        ],
-                                                      )
-                                                    ],
-                                                  ),
-                                                ),
-                                                Spacer()
-                                              ],
+                                                  Spacer()
+                                                ],
+                                              ),
                                             ),
-                                          ),
                                             // The second container that uses LayoutBuilder
                                             Container(
                                               width: width,
-                                              color: false ? customs.primaryShade_2 : Colors.transparent,
+                                              color: chats[keys[index]]['chats'][indexes]['selected'] ? customs.primaryShade_2 : Colors.transparent,
                                               // Match the height of the parent
                                             ),
                                           ],
@@ -471,7 +607,7 @@ class _InquiryInboxState extends State<InquiryInbox> {
                                                           child: Text(
                                                             "${chat['message']}",
                                                             style: customs.whiteTextStyle(size: 14),
-                                                            textAlign: TextAlign.right,
+                                                            textAlign: TextAlign.left,
                                                           ),
                                                         ),
                                                         SizedBox(height: 10),
@@ -479,7 +615,7 @@ class _InquiryInboxState extends State<InquiryInbox> {
                                                           mainAxisAlignment: MainAxisAlignment.end,
                                                           children: [
                                                             Text(
-                                                              "Hillary Ngige - ",
+                                                              "${customs.toCamelCase(chat['fullname'])} - ",
                                                               style: customs.secondaryTextStyle(size: 10),
                                                               textAlign: TextAlign.right,
                                                             ),

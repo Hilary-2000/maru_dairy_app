@@ -26,6 +26,7 @@ class _superAdminDashboardState extends State<superAdminDashboard> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
+          backgroundColor: customs.whiteColor,
           title:  Text('Are you sure?', style: customs.darkTextStyle(size: 25),),
           content: Text(
             'Are you sure you want to leave?', style: customs.darkTextStyle(size: 14, fontweight: FontWeight.normal),
@@ -33,24 +34,10 @@ class _superAdminDashboardState extends State<superAdminDashboard> {
           actions: <Widget>[
             Row(
               children: [
-                customs.maruButton(
-                    text: "Nevermind",
-                    onPressed: (){
-                      Navigator.pop(context, false);
-                    },
-                    type: Type.success,
-                    size: Sizes.sm
-                ),
                 Spacer(),
-                customs.marOutlineuButton(
-                    text: "Leave",
-                    onPressed: (){
-                      Navigator.pop(context, true);
-                    },
-                    type: Type.danger,
-                    size: Sizes.sm,
-                    showArrow: true
-                )
+                GestureDetector(onTap:(){Navigator.pop(context, false);}, child: Text("Nevermind", style: customs.successTextStyle(size: 15, fontweight: FontWeight.bold),)),
+                SizedBox(width: 20,),
+                GestureDetector(onTap:(){Navigator.pop(context, true);}, child: Text("Leave", style: customs.dangerTextStyle(size: 15, fontweight: FontWeight.bold),)),
               ],
             )
           ],
@@ -64,6 +51,7 @@ class _superAdminDashboardState extends State<superAdminDashboard> {
       index = newIndex;
     });
   }
+  bool load_inquiries = false;
   int notification_count = 0;
 
 
@@ -356,8 +344,10 @@ class _superAdminDashboardState extends State<superAdminDashboard> {
               color: customs.successColor,
             ),
             onPressed: () async {
-              await Navigator.pushNamed(
-                  context, "/select_member_to_send_message");
+              await Navigator.pushNamed(context, "/select_member_to_send_message");
+              setState(() {
+                load_inquiries = true;
+              });
             },
           ),
         )

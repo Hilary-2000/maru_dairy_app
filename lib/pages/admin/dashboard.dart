@@ -28,6 +28,8 @@ class _adminDashboardState extends State<adminDashboard> {
     });
   }
 
+  bool load_inquiries = false;
+
   @override
   Widget build(BuildContext context) {
     List<Widget> admin_dashboard = [
@@ -47,6 +49,7 @@ class _adminDashboardState extends State<adminDashboard> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
+            backgroundColor: customs.whiteColor,
             title:  Text('Are you sure?', style: customs.darkTextStyle(size: 25),),
             content: Text(
               'Are you sure you want to leave?', style: customs.darkTextStyle(size: 14, fontweight: FontWeight.normal),
@@ -54,24 +57,10 @@ class _adminDashboardState extends State<adminDashboard> {
             actions: <Widget>[
               Row(
                 children: [
-                  customs.maruButton(
-                      text: "Nevermind",
-                      onPressed: (){
-                        Navigator.pop(context, false);
-                      },
-                      type: Type.success,
-                      size: Sizes.sm
-                  ),
                   Spacer(),
-                  customs.marOutlineuButton(
-                      text: "Leave",
-                      onPressed: (){
-                        Navigator.pop(context, true);
-                      },
-                      type: Type.danger,
-                      size: Sizes.sm,
-                      showArrow: true
-                  )
+                  GestureDetector(onTap:(){Navigator.pop(context, false);}, child: Text("Nevermind", style: customs.successTextStyle(size: 15, fontweight: FontWeight.bold),)),
+                  SizedBox(width: 20,),
+                  GestureDetector(onTap:(){Navigator.pop(context, true);}, child: Text("Leave", style: customs.dangerTextStyle(size: 15, fontweight: FontWeight.bold),)),
                 ],
               )
             ],
@@ -347,7 +336,7 @@ class _adminDashboardState extends State<adminDashboard> {
                 ),
               ))
             : (index == 3
-                ? (false ? CircleAvatar(
+                ? CircleAvatar(
                     radius: 25,
                     backgroundColor: customs.successShade_2,
                     child: IconButton(
@@ -357,11 +346,10 @@ class _adminDashboardState extends State<adminDashboard> {
                         color: customs.successColor,
                       ),
                       onPressed: () async {
-                        await Navigator.pushNamed(
-                            context, "/select_member_to_send_message");
+                        await Navigator.pushNamed(context, "/select_member_to_send_message");
                       },
                     ),
-                  ) : SizedBox())
+                  )
                 : (index == 1
                     ? (CircleAvatar(
                         radius: 25,

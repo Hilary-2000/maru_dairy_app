@@ -26,12 +26,12 @@ class _SelectMemberMessageState extends State<SelectMemberMessage> {
     super.didChangeDependencies();
 
     if(!init){
-      setState(() {
-        init = !init;
-      });
+      if(mounted){
+        setState(() {
+          init = !init;
+        });
 
-      // set colors and shades
-      setState(() {
+        // set colors and shades
         colors_shade = [customs.primaryShade, customs.secondaryShade, customs.warningShade, customs.darkShade, customs.successShade];
         textStyles = [
           customs.primaryTextStyle(
@@ -50,7 +50,7 @@ class _SelectMemberMessageState extends State<SelectMemberMessage> {
               size: 18, fontweight: FontWeight.bold
           ),
         ];
-      });
+      }
 
       //get the members
       getMembers();
@@ -58,19 +58,23 @@ class _SelectMemberMessageState extends State<SelectMemberMessage> {
   }
 
   Future<void> getMembers() async {
-    setState(() {
-      member_loading = true;
-    });
+    if(mounted){
+      setState(() {
+        member_loading = true;
+      });
+    }
     FlutterSecureStorage storage = new FlutterSecureStorage();
     String? token = await storage.read(key: "token");
     ApiConnection apiConnection = new ApiConnection();
     var response = await apiConnection.getMembers(token!);
     if(customs.isValidJson(response)){
       var res = jsonDecode(response);
-      setState(() {
-        members = res['data'];
-        member_loading = false;
-      });
+      if(mounted){
+        setState(() {
+          members = res['data'];
+          member_loading = false;
+        });
+      }
     }
   }
 
@@ -179,8 +183,9 @@ class _SelectMemberMessageState extends State<SelectMemberMessage> {
                         children: [
                           GestureDetector(
                             onTap: () async {
-                              await Navigator.pushNamed(context, "/admin_inquiry_inbox", arguments: {"index" : index, "member_id": item['user_id']});
-                              getMembers();
+                              await Navigator.pushReplacementNamed(context, "/admin_inquiry_inbox", arguments: {"index" : index, "member_id": item['user_id']});
+                              // getMembers();
+                              print("Named");
                             },
                             child: Container(
                               margin: EdgeInsets.zero,
