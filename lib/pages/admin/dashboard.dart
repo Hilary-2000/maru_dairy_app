@@ -28,21 +28,34 @@ class _adminDashboardState extends State<adminDashboard> {
     });
   }
 
+  Future<void> getNotifications() async {
+    ApiConnection apiConnection = new ApiConnection();
+    var response = await apiConnection.getNotification();
+    if(customs.isValidJson(response)){
+      var res = jsonDecode(response);
+      if(res['success']){
+        setState(() {
+          notification_count = res['notification_count'];
+        });
+      }
+    }
+  }
+
   bool load_inquiries = false;
 
   @override
   Widget build(BuildContext context) {
     List<Widget> admin_dashboard = [
       // admin dashboard
-      AdminDashboard(updateIndex: _updateIndex),
+      AdminDashboard(updateIndex: _updateIndex, getNotifications: getNotifications,),
       // Maru members
-      OurMembers(),
+      OurMembers(getNotifications: getNotifications,),
       // Collection History
-      TechnicianHistory(),
+      TechnicianHistory(getNotifications: getNotifications,),
       // admin inquiries
-      AdminInquiries(),
+      AdminInquiries(getNotifications: getNotifications,),
       // Admin Account
-      AdminAccount(updateIndex: _updateIndex)
+      AdminAccount(updateIndex: _updateIndex, getNotifications: getNotifications,)
     ];
     Future<bool?> _showBackDialog() {
       return showDialog<bool>(
@@ -264,7 +277,7 @@ class _adminDashboardState extends State<adminDashboard> {
                                     borderRadius: BorderRadius.circular(5)),
                                 child: Center(
                                   child: Text(
-                                    "$notification_count",
+                                    notification_count > 9 ? "9+" : "$notification_count",
                                     style: customs.whiteTextStyle(
                                         size: 10, fontweight: FontWeight.bold),
                                   ),
@@ -377,7 +390,9 @@ class _adminDashboardState extends State<adminDashboard> {
 
 class AdminDashboard extends StatefulWidget {
   final void Function(int) updateIndex;
-  const AdminDashboard({super.key, required this.updateIndex});
+  final void Function() getNotifications;
+  const AdminDashboard({super.key, required this.updateIndex, this.getNotifications = _defaultFunction});
+  static void _defaultFunction(){}
 
   @override
   State<AdminDashboard> createState() => _AdminDashboardState();

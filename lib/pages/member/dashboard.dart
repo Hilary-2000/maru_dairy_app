@@ -24,18 +24,21 @@ class _memberDashboardState extends State<memberDashboard> {
     setState(() {});
   }
 
+  Future<void> getNotifications() async {
+    ApiConnection apiConnection = new ApiConnection();
+    var response = await apiConnection.getMemberNotification(entity: "member");
+    if(customs.isValidJson(response)){
+      var res = jsonDecode(response);
+      if(res['success']){
+        setState(() {
+          notification_count = res['notification_count'];
+        });
+      }
+    }
+  }
+
   var index = 0;
   int notification_count = 0;
-  List<Widget> member_windows = [
-    // THE MEMBER DASHBOARD AFTER LOGIN
-    const memberDash(),
-    // THE MEMBER MILK COLLECTION HISTORY
-    const memberHistory(),
-    // THE MEMBER HISTORY
-    const notificationWindow(),
-    // THE MEMBER PROFILE
-    const MemberSettings()
-  ];
 
   Future<bool?> _showBackDialog() {
     return showDialog<bool>(
@@ -64,6 +67,16 @@ class _memberDashboardState extends State<memberDashboard> {
 
   @override
   Widget build(BuildContext context) {
+    List<Widget> member_windows = [
+      // THE MEMBER DASHBOARD AFTER LOGIN
+      memberDash(getNotifications: getNotifications,),
+      // THE MEMBER MILK COLLECTION HISTORY
+      memberHistory(getNotifications: getNotifications),
+      // THE MEMBER HISTORY
+      notificationWindow(getNotifications: getNotifications, notification_count: notification_count,),
+      // THE MEMBER PROFILE
+      MemberSettings(getNotifications: getNotifications,)
+    ];
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (bool didPop, Object? result) async {
@@ -318,7 +331,9 @@ class _memberDashboardState extends State<memberDashboard> {
 }
 
 class memberDash extends StatefulWidget {
-  const memberDash({super.key});
+  final void Function() getNotifications;
+  const memberDash({super.key, this.getNotifications = _defualtFunction});
+  static void _defualtFunction(){}
 
   @override
   State<memberDash> createState() => _memberDashState();
@@ -351,6 +366,7 @@ class _memberDashState extends State<memberDash> {
     super.didChangeDependencies();
 
     if(!_init){
+      widget.getNotifications();
       setState(() {
         _init = true;
         barGroupData = [

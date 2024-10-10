@@ -8,7 +8,9 @@ import 'package:maru/packages/maru_theme.dart';
 
 class SuperAdminAccounts extends StatefulWidget {
   final void Function(int) updateIndex;
-  const SuperAdminAccounts({super.key, required this.updateIndex});
+  final void Function() getNotifications;
+  SuperAdminAccounts({super.key, required this.updateIndex, this.getNotifications = _defaultFunction});
+  static void _defaultFunction() {}
 
   @override
   State<SuperAdminAccounts> createState() => _SuperAdminAccountsState();
@@ -27,6 +29,9 @@ class _SuperAdminAccountsState extends State<SuperAdminAccounts> {
     super.didChangeDependencies();
 
     if(!_isInitialized){
+      // get notifications
+      widget.getNotifications();
+
       initializeAccount();
       setState(() {
         _isInitialized = true;

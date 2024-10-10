@@ -7,7 +7,9 @@ import 'package:maru/packages/maru_theme.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class TechnicianHistory extends StatefulWidget {
-  const TechnicianHistory({super.key});
+  final void Function() getNotifications;
+  TechnicianHistory({super.key, this.getNotifications = _defaultFunction});
+  static void _defaultFunction() {}
 
   @override
   State<TechnicianHistory> createState() => _TechnicianHistoryState();
@@ -109,6 +111,9 @@ class _TechnicianHistoryState extends State<TechnicianHistory> {
     super.didChangeDependencies();
 
     if(!_init){
+      // run notification
+      widget.getNotifications();
+
       // set the technicians history
       double width = MediaQuery.of(context).size.width;
       setState((){

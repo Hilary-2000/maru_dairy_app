@@ -1860,11 +1860,12 @@ class ApiConnection{
 
 
   // get member data
-  Future<String> getMemberMessages({required String member_id}) async{
+  Future<String> getMemberMessages({required String member_id, required String send_status}) async{
     var client = rq.Client();
     var url = Uri.http(apiLink,"/api/chats/member");
     var body = jsonEncode({
-      "member_id" : member_id
+      "member_id" : member_id,
+      "send_status" : send_status
     });
     FlutterSecureStorage storage = new FlutterSecureStorage();
     String? token = await storage.read(key: "token");
@@ -1888,12 +1889,13 @@ class ApiConnection{
   }
 
   // get member data
-  Future<String> sendMessage({required String member_id, required String message}) async{
+  Future<String> sendMessage({required String member_id, required String message, String message_status = "received"}) async{
     var client = rq.Client();
     var url = Uri.http(apiLink,"/api/chats/send_message");
     var body = jsonEncode({
       "member_id" : member_id,
-      "message" : message
+      "message" : message,
+      "message_status" : message_status
     });
     FlutterSecureStorage storage = new FlutterSecureStorage();
     String? token = await storage.read(key: "token");
@@ -1976,6 +1978,62 @@ class ApiConnection{
     var url = Uri.http(apiLink,"/api/chats/delete_chats");
     var body = jsonEncode({
       "chat_ids": chat_ids
+    });
+    FlutterSecureStorage storage = new FlutterSecureStorage();
+    String? token = await storage.read(key: "token");
+    try{
+      var response = await client.post(
+          url,
+          headers: {
+            'Content-Type': 'application/json',
+            'maru-authentication-code' : token!
+          },
+          body: body
+      ).timeout(Duration(seconds: 60));
+      return response.body.length > 0 ? (response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body) : "{\"success\":false, \"message\":\"No response!\"}";
+    }on TimeoutException {
+      return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
+    } catch(e){
+      return "{\"success\":false, \"message\":\"$e\"}";
+    }finally{
+      client.close();
+    }
+  }
+
+  // get member data
+  Future<String> getNotification({String entity = "admin"}) async{
+    var client = rq.Client();
+    var url = Uri.http(apiLink,"/api/notification/count");
+    var body = jsonEncode({
+      "entity": entity
+    });
+    FlutterSecureStorage storage = new FlutterSecureStorage();
+    String? token = await storage.read(key: "token");
+    try{
+      var response = await client.post(
+          url,
+          headers: {
+            'Content-Type': 'application/json',
+            'maru-authentication-code' : token!
+          },
+          body: body
+      ).timeout(Duration(seconds: 60));
+      return response.body.length > 0 ? (response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body) : "{\"success\":false, \"message\":\"No response!\"}";
+    }on TimeoutException {
+      return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
+    } catch(e){
+      return "{\"success\":false, \"message\":\"$e\"}";
+    }finally{
+      client.close();
+    }
+  }
+
+  // get member data
+  Future<String> getMemberNotification({String entity = "admin"}) async{
+    var client = rq.Client();
+    var url = Uri.http(apiLink,"/api/notification/member/count");
+    var body = jsonEncode({
+      "entity": entity
     });
     FlutterSecureStorage storage = new FlutterSecureStorage();
     String? token = await storage.read(key: "token");

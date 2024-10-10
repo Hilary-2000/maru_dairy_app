@@ -6,7 +6,8 @@ import 'package:maru/packages/maru_theme.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class OurMembers extends StatefulWidget {
-  const OurMembers({super.key});
+  final void Function() getNotifications;
+  const OurMembers({super.key, required this.getNotifications});
 
   @override
   State<OurMembers> createState() => _OurMembersState();
@@ -185,6 +186,10 @@ class _OurMembersState extends State<OurMembers> {
     super.didChangeDependencies();
 
     if(!_init){
+      // get notification
+      widget.getNotifications;
+
+
       // double width
       double width = MediaQuery.of(context).size.width;
       setState(() {

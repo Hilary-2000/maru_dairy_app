@@ -46,28 +46,48 @@ class _superAdminDashboardState extends State<superAdminDashboard> {
     );
   }
   int index = 0;
+
+  bool load_inquiries = false;
+  int notification_count = 0;
   void _updateIndex(int newIndex) {
     setState(() {
       index = newIndex;
     });
   }
-  bool load_inquiries = false;
-  int notification_count = 0;
+
+  void initState(){
+    super.initState();
+    //get notification count
+    getNotifications();
+  }
+
+  Future<void> getNotifications() async {
+    ApiConnection apiConnection = new ApiConnection();
+    var response = await apiConnection.getNotification();
+    if(customs.isValidJson(response)){
+      var res = jsonDecode(response);
+      if(res['success']){
+        setState(() {
+          notification_count = res['notification_count'];
+        });
+      }
+    }
+  }
 
 
   @override
   Widget build(BuildContext context) {
     List<Widget> super_admin_dashboard = [
       // admin dashboard
-      SuperAdminDash(updateIndex: _updateIndex),
+      SuperAdminDash(updateIndex: _updateIndex, getNotifications: getNotifications,),
       // Maru members
-      OurMembers(),
+      OurMembers(getNotifications: getNotifications,),
       // Collection History
-      TechnicianHistory(),
+      TechnicianHistory(getNotifications: getNotifications,),
       // admin inquiries
-      AdminInquiries(),
+      AdminInquiries(getNotifications: getNotifications,),
       // Admin Account
-      SuperAdminAccounts(updateIndex: _updateIndex)
+      SuperAdminAccounts(updateIndex: _updateIndex, getNotifications: getNotifications,)
     ];
     return PopScope(
       canPop: false,
@@ -241,35 +261,38 @@ class _superAdminDashboardState extends State<superAdminDashboard> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Stack(clipBehavior: Clip.none, children: [
-                          SizedBox(
-                            child: Icon(
-                              Icons.chat_bubble_outline,
-                              color: index == 3
-                                  ? customs.primaryColor
-                                  : customs.secondaryColor,
+                        Stack(
+                          clipBehavior: Clip.none,
+                          children: [
+                            SizedBox(
+                              child: Icon(
+                                Icons.chat_bubble_outline,
+                                color: index == 3
+                                    ? customs.primaryColor
+                                    : customs.secondaryColor,
+                              ),
                             ),
-                          ),
-                          Positioned(
-                              left: 12,
-                              top: -12,
-                              child: notification_count > 0 ? Container(
-                                width: 20,
-                                height: 20,
-                                padding: EdgeInsets.all(1),
-                                decoration: BoxDecoration(
-                                    color: Colors.red,
-                                    borderRadius: BorderRadius.circular(5)),
-                                child: Center(
-                                  child: Text(
-                                    "$notification_count",
-                                    style: customs.whiteTextStyle(
-                                        size: 10, fontweight: FontWeight.bold),
-                                  ),
+                            Positioned(
+                            left: 12,
+                            top: -12,
+                            child: notification_count > 0 ? Container(
+                              width: 20,
+                              height: 20,
+                              padding: EdgeInsets.all(1),
+                              decoration: BoxDecoration(
+                                  color: Colors.red,
+                                  borderRadius: BorderRadius.circular(5)),
+                              child: Center(
+                                child: Text(
+                                  notification_count > 9 ? "9+" : "$notification_count",
+                                  style: customs.whiteTextStyle(
+                                      size: 10, fontweight: FontWeight.bold),
                                 ),
-                              ): SizedBox(height: 0)
-                          )
-                        ]),
+                              ),
+                            ): SizedBox(height: 0)
+                        )
+                          ]
+                        ),
                         Text(
                           "Inquiries",
                           style: index == 3
@@ -376,7 +399,8 @@ class _superAdminDashboardState extends State<superAdminDashboard> {
 
 class SuperAdminDash extends StatefulWidget {
   final void Function(int) updateIndex;
-  const SuperAdminDash({super.key, required this.updateIndex});
+  final void Function() getNotifications;
+  const SuperAdminDash({super.key, required this.updateIndex, required this.getNotifications});
 
   @override
   State<SuperAdminDash> createState() => _SuperAdminDashState();
@@ -506,6 +530,9 @@ class _SuperAdminDashState extends State<SuperAdminDash> {
 
     // get the admin dashboard
     if(!_init){
+      // get notifications
+      widget.getNotifications;
+
       setState(() {
         collectionPlot = [
           BarChartGroupData(x: 1, barRods: [

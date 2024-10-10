@@ -108,7 +108,7 @@ class _InquiryInboxState extends State<InquiryInbox> {
 
       // apiConnection
       ApiConnection apiConnection = new ApiConnection();
-      var response = await apiConnection.getMemberMessages(member_id: member_id);
+      var response = await apiConnection.getMemberMessages(member_id: member_id, send_status: "sent");
       if(customs.isValidJson(response)){
         var res = jsonDecode(response);
         if(res['success']){
@@ -153,7 +153,6 @@ class _InquiryInboxState extends State<InquiryInbox> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       backgroundColor: customs.whiteColor,
       body: SafeArea(child: LayoutBuilder(

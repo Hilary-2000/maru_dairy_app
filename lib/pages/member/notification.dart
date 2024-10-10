@@ -1,9 +1,15 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:maru/packages/api_connection.dart';
 import 'package:maru/packages/maru_theme.dart';
 
 class notificationWindow extends StatefulWidget {
-  const notificationWindow({super.key});
+  final void Function() getNotifications;
+  final int notification_count;
+  const notificationWindow({super.key, this.getNotifications = _defualtFunction, this.notification_count = 0});
+  static void _defualtFunction(){}
 
   @override
   State<notificationWindow> createState() => _notificationWindowState();
@@ -11,6 +17,44 @@ class notificationWindow extends StatefulWidget {
 
 class _notificationWindowState extends State<notificationWindow> {
   CustomThemes customs = CustomThemes();
+  var member_data = null;
+  String member_id = "";
+  bool init = false;
+
+  void didChangeDependencies(){
+    super.didChangeDependencies();
+
+    if(!init){
+      setState(() {
+        init = true;
+      });
+      widget.getNotifications();
+
+      // get the member data
+      getMemberDetails();
+    }
+  }
+
+  Future<void> getMemberDetails() async {
+    ApiConnection apiConnection = new ApiConnection();
+    var response = await apiConnection.getMemberDetails();
+    if(customs.isValidJson(response)){
+      var res = jsonDecode(response);
+      if(res['success']){
+        // set state
+        setState(() {
+          member_data = res['member_details'];
+          member_id = "${member_data['user_id']}";
+        });
+      }else{
+        setState(() {
+          member_data = res['member_details'];
+          member_id = "";
+        });
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(child: LayoutBuilder(
@@ -23,478 +67,133 @@ class _notificationWindowState extends State<notificationWindow> {
           height: height,
           width: width,
           decoration: BoxDecoration(
-            color: customs.secondaryShade_2.withOpacity(0.2),
+            color: customs.whiteColor,
           ),
-          child: false ? Column(
-            children: [
-              Container(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 8.0, horizontal: 12.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "Notifications",
-                      style: customs.darkTextStyle(
-                          size: 20, fontweight: FontWeight.bold),
-                    ),
-                    Text(
-                      "Mark all as reads",
-                      style: customs.primaryTextStyle(
-                          size: 12, fontweight: FontWeight.bold),
-                    )
-                  ],
-                ),
-              ),
-              Container(
-                height: height - 50,
-                width: width,
-                margin: const EdgeInsets.fromLTRB(0, 5, 0, 0),
-                child: SingleChildScrollView(
-                  child: Column(
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                Container(
+                  padding:
+                  const EdgeInsets.symmetric(vertical: 8.0, horizontal: 12.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      GestureDetector(
-                        onTap: (){
-                          Navigator.pushNamed(context, "/read_member_notification");
-                        },
-                        child: Container(
-                          height: height * 0.15 < 100 ? 100 : height * 0.15,
-                          margin: EdgeInsets.symmetric(
-                              vertical: 4.0, horizontal: width * 0.02),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(15),
-                            color: customs.whiteColor,
-                          ),
-                          child: Row(
-                            children: [
-                              Container(
-                                width: width * 0.15,
-                                height: height * 0.15,
-                                decoration: BoxDecoration(
-                                  borderRadius: const BorderRadius.horizontal(
-                                      left: Radius.circular(15)),
-                                  color: customs.primaryShade_2,
-                                ),
-                                child: Center(
-                                  child: Icon(
-                                    Icons.notifications_active_outlined,
-                                    size: width * 0.06,
-                                    color: customs.primaryColor,
-                                  ),
-                                ),
-                              ),
-                              Container(
-                                width: width * 0.7,
-                                padding: const EdgeInsets.all(8.0),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      "New Update Alert!",
-                                      style: customs.darkTextStyle(
-                                          size: 15, fontweight: FontWeight.bold),
-                                      softWrap: true,
-                                    ),
-                                    Text(
-                                      "You can now be able to upload you milk details by taking a photo of...",
-                                      style:
-                                          customs.secondaryTextStyle(size: 12.0),
-                                    )
-                                  ],
-                                ),
-                              ),
-                              Container(
-                                width: width * 0.11,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.horizontal(
-                                      right: Radius.circular(15)),
-                                ),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      "1 hr",
-                                      style: customs.secondaryTextStyle(size: 10),
-                                    ),
-                                    PopupMenuButton<String>(
-                                      icon: Icon(Icons.more_horiz_outlined),
-                                      onSelected: (String result) {
-                                        // Handle the selection here
-                                        print(result);
-                                      },
-                                      color: customs.secondaryColor,
-                                      itemBuilder: (BuildContext context) =>
-                                          <PopupMenuEntry<String>>[
-                                        PopupMenuItem<String>(
-                                          value: 'Delete',
-                                          height: 15,
-                                          child: Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: [
-                                                  Icon(
-                                                    Icons
-                                                        .restore_from_trash_sharp,
-                                                    size: 15,
-                                                    color: customs.whiteColor,
-                                                  ),
-                                                  Text(
-                                                    'Delete',
-                                                    style: customs.whiteTextStyle(
-                                                        size: 12),
-                                                  ),
-                                                ],
-                                              ),
-                                              Divider()
-                                            ],
-                                          ),
-                                        ),
-                                        PopupMenuItem<String>(
-                                          value: 'Option 2',
-                                          height: 15,
-                                          child: Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: [
-                                                  Icon(
-                                                    Icons.remove_red_eye_outlined,
-                                                    size: 15,
-                                                    color: customs.whiteColor,
-                                                  ),
-                                                  Text(
-                                                    'View',
-                                                    style: customs.whiteTextStyle(
-                                                        size: 12),
-                                                  ),
-                                                ],
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    const SizedBox(
-                                      height: 2,
-                                    ),
-                                    Icon(
-                                      Icons.circle,
-                                      color: customs.primaryColor,
-                                      size: 5,
-                                    )
-                                  ],
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
+                      Text(
+                        "Notifications",
+                        style: customs.darkTextStyle(
+                            size: 20, fontweight: FontWeight.bold),
                       ),
-                      GestureDetector(
-                        onTap: (){
-                          Navigator.pushNamed(context, "/member_inbox");
-                        },
-                        child: Container(
-                          height: height * 0.15 < 100 ? 100 : height * 0.15,
-                          margin: EdgeInsets.symmetric(
-                              vertical: 4.0, horizontal: width * 0.02),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(15),
-                            color: customs.whiteColor,
-                          ),
-                          child: Row(
-                            children: [
-                              Container(
-                                width: width * 0.15,
-                                height: height * 0.15,
-                                decoration: BoxDecoration(
-                                  borderRadius: const BorderRadius.horizontal(
-                                      left: Radius.circular(15)),
-                                  color: customs.warningShade_2,
-                                ),
-                                child: Center(
-                                  child: Icon(
-                                    Icons.send_outlined,
-                                    size: width * 0.06,
-                                    color: customs.warningColor,
-                                  ),
-                                ),
-                              ),
-                              Container(
-                                width: width * 0.7,
-                                padding: const EdgeInsets.all(8.0),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      "Message From Joseph!",
-                                      style: customs.darkTextStyle(
-                                          size: 15, fontweight: FontWeight.bold),
-                                      softWrap: true,
-                                    ),
-                                    Text(
-                                      "Welcome! You are now part of our big Family at Maru D...",
-                                      style:
-                                          customs.secondaryTextStyle(size: 12.0),
-                                    )
-                                  ],
-                                ),
-                              ),
-                              Container(
-                                width: width * 0.11,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.horizontal(
-                                      right: Radius.circular(15)),
-                                ),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      "1 hr",
-                                      style: customs.secondaryTextStyle(size: 10),
-                                    ),
-                                    PopupMenuButton<String>(
-                                      icon: Icon(Icons.more_horiz_outlined),
-                                      onSelected: (String result) {
-                                        // Handle the selection here
-                                        print(result);
-                                      },
-                                      color: customs.secondaryColor,
-                                      itemBuilder: (BuildContext context) =>
-                                          <PopupMenuEntry<String>>[
-                                        PopupMenuItem<String>(
-                                          value: 'Delete',
-                                          height: 15,
-                                          child: Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: [
-                                                  Icon(
-                                                    Icons
-                                                        .restore_from_trash_sharp,
-                                                    size: 15,
-                                                    color: customs.whiteColor,
-                                                  ),
-                                                  Text(
-                                                    'Delete',
-                                                    style: customs.whiteTextStyle(
-                                                        size: 12),
-                                                  ),
-                                                ],
-                                              ),
-                                              Divider()
-                                            ],
-                                          ),
-                                        ),
-                                        PopupMenuItem<String>(
-                                          value: 'Option 2',
-                                          height: 15,
-                                          child: Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: [
-                                                  Icon(
-                                                    Icons.remove_red_eye_outlined,
-                                                    size: 15,
-                                                    color: customs.whiteColor,
-                                                  ),
-                                                  Text(
-                                                    'View',
-                                                    style: customs.whiteTextStyle(
-                                                        size: 12),
-                                                  ),
-                                                ],
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    const SizedBox(
-                                      height: 2,
-                                    ),
-                                    Icon(
-                                      Icons.circle,
-                                      color: customs.primaryColor,
-                                      size: 5,
-                                    )
-                                  ],
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                      GestureDetector(
-                        onTap: (){
-                          print("Tapped!");
-                        },
-                        child: Container(
-                          height: height * 0.15,
-                          margin: EdgeInsets.symmetric(
-                              vertical: 3.0, horizontal: width * 0.02),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(15),
-                            color: customs.whiteColor,
-                          ),
-                          child: Row(
-                            children: [
-                              Container(
-                                width: width * 0.15,
-                                height: height * 0.15,
-                                decoration: BoxDecoration(
-                                  borderRadius: const BorderRadius.horizontal(
-                                      left: Radius.circular(15)),
-                                  color: customs.successShade_2,
-                                ),
-                                child: Center(
-                                  child: Icon(
-                                    FontAwesomeIcons.sackDollar,
-                                    size: width * 0.09,
-                                    color: customs.successColor,
-                                  ),
-                                ),
-                              ),
-                              Container(
-                                width: width * 0.7,
-                                padding: const EdgeInsets.all(8.0),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      "Account credited Successfully!!",
-                                      style: customs.darkTextStyle(
-                                          size: 15, fontweight: FontWeight.bold),
-                                      softWrap: true,
-                                    ),
-                                    Text(
-                                      "We are pleased to inform you that your account has been credited...",
-                                      style:
-                                          customs.secondaryTextStyle(size: 12.0),
-                                    )
-                                  ],
-                                ),
-                              ),
-                              Container(
-                                width: width * 0.11,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.horizontal(
-                                      right: Radius.circular(15)),
-                                ),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      "1 hr",
-                                      style: customs.secondaryTextStyle(size: 10),
-                                    ),
-                                    PopupMenuButton<String>(
-                                      icon: Icon(Icons.more_horiz_outlined),
-                                      onSelected: (String result) {
-                                        // Handle the selection here
-                                        print(result);
-                                      },
-                                      color: customs.secondaryColor,
-                                      itemBuilder: (BuildContext context) =>
-                                      <PopupMenuEntry<String>>[
-                                        PopupMenuItem<String>(
-                                          value: 'Delete',
-                                          height: 15,
-                                          child: Column(
-                                            mainAxisAlignment: MainAxisAlignment.center,
-                                            children: [
-                                              Row(
-                                                mainAxisAlignment: MainAxisAlignment.center,
-                                                children: [
-                                                  Icon(Icons.restore_from_trash_sharp, size: 15, color: customs.whiteColor,),
-                                                  Text('Delete', style: customs.whiteTextStyle(size: 12),),
-                                                ],
-                                              ),
-                                              Divider()
-                                            ],
-                                          ),
-                                        ),
-                                        PopupMenuItem<String>(
-                                          value: 'Option 2',
-                                          height: 15,
-                                          child: Column(
-                                            mainAxisAlignment: MainAxisAlignment.center,
-                                            children: [
-                                              Row(
-                                                mainAxisAlignment: MainAxisAlignment.center,
-                                                children: [
-                                                  Icon(Icons.remove_red_eye_outlined, size: 15, color: customs.whiteColor,),
-                                                  Text('View', style: customs.whiteTextStyle(size: 12),),
-                                                ],
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    const SizedBox(
-                                      height: 2,
-                                    ),
-                                    Icon(
-                                      Icons.circle,
-                                      color: customs.primaryColor,
-                                      size: 5,
-                                    )
-                                  ],
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
+                      Text(
+                        "Mark all as reads",
+                        style: customs.primaryTextStyle(
+                            size: 12, fontweight: FontWeight.bold),
+                      )
                     ],
                   ),
                 ),
-              )
-            ],
-          ) : Column(
-            children: [
-              Container(
-                padding:
-                const EdgeInsets.symmetric(vertical: 8.0, horizontal: 12.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "Notifications",
-                      style: customs.darkTextStyle(
-                          size: 20, fontweight: FontWeight.bold),
+                Container(
+                  height: height-40,
+                  child: DefaultTabController(
+                    length: 2, // Number of tabs
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: <Widget>[
+                        TabBar(
+                          labelColor: customs.primaryColor,
+                          unselectedLabelColor: customs.secondaryColor,
+                          indicatorColor: customs.primaryColor,
+                          labelStyle: customs.secondaryTextStyle(
+                              size: 12,
+                              fontweight: FontWeight.normal,
+                              underline: false
+                          ),
+                          tabs: [
+                            Tab(child: Column(children: [Icon(Icons.message, size: 20), SizedBox(height: 5,), Text("Inquiry")],),),
+                            Tab(child: Column(children: [Icon(Icons.notifications_outlined, size: 20), Text("Nofications")])),
+                          ],
+                        ),
+                        Expanded(
+                          child: TabBarView(
+                            children: <Widget>[
+                              Container(
+                                padding: EdgeInsets.all(10),
+                                child: SingleChildScrollView(
+                                  child: Column(
+                                    children: [
+                                      GestureDetector(
+                                        onTap: () async {
+                                          if(member_id.length > 0){
+                                            await Navigator.pushNamed(context, "/member_chat", arguments: {"index": "0", "member_id":  member_id});
+                                            widget.getNotifications();
+                                          }else{
+                                            customs.maruSnackBarDanger(context: context, text: "An error occured! \nRestart the application and try again!");
+                                          }
+                                        },
+                                        child: Container(
+                                          margin: EdgeInsets.zero,
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(5),
+                                            color: customs.secondaryShade_2.withOpacity(0.2),
+                                          ),
+                                          child: Material(
+                                            color: Colors.transparent,
+                                            child: ListTile(
+                                              dense: true,
+                                              leading: CircleAvatar(
+                                                backgroundColor: customs.primaryShade_2,
+                                                child: false ? Text(
+                                                  "A",
+                                                  style: customs.primaryTextStyle(size: 14),
+                                                ) : 
+                                                Icon(Icons.person, size: 25, color: customs.primaryColor,),
+                                              ),
+                                              title: Text(
+                                                "Chat Your Favourite Administrator",
+                                                style: customs.darkTextStyle(size: 14),
+                                              ),
+                                              subtitle: Text(
+                                                "Ask your favourite administrator issues you are encountering",
+                                                style: customs.secondaryTextStyle(size: 12),
+                                              ),
+                                              trailing: Column(
+                                                crossAxisAlignment: CrossAxisAlignment.end,
+                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                children: [
+                                                  Text("-", style: customs.darkTextStyle(size: 12)),
+                                                  Container(
+                                                    width: 5,
+                                                    height: 5,
+                                                    decoration: BoxDecoration(
+                                                        color: widget.notification_count > 0 ? customs.successColor : customs.secondaryShade,
+                                                        borderRadius:BorderRadius.circular(8)
+                                                    ),
+                                                  )
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                padding: EdgeInsets.all(10),
+                                child: SingleChildScrollView(
+                                  child: Center(child: Text("No notification available at the moment!", style: customs.primaryTextStyle(size: 14, fontweight: FontWeight.normal),)),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
-                    Text(
-                      "Mark all as reads",
-                      style: customs.primaryTextStyle(
-                          size: 12, fontweight: FontWeight.bold),
-                    )
-                  ],
+                  ),
                 ),
-              ),
-              Container(
-                child: Text("No notifications present!", style: customs.secondaryTextStyle(size: 14, fontweight: FontWeight.normal),),
-              )
-            ],
-          ),
+              ],
+            ),
+          )
         );
       },
     ));

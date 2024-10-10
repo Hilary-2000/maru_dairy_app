@@ -16,6 +16,7 @@ import 'package:maru/pages/admin/new_member.dart';
 import 'package:maru/pages/admin/select_member_message.dart';
 import 'package:maru/pages/admin/update_milk_prices.dart';
 import 'package:maru/pages/member/changeMemberPassword.dart';
+import 'package:maru/pages/member/chat_administrators.dart';
 import 'package:maru/pages/member/confirmed_declined_collection.dart';
 import 'package:maru/pages/member/edit_profile.dart';
 import 'package:maru/pages/member/inbox.dart';
@@ -120,7 +121,8 @@ void main() {
       "/member_reports" : (context) => const MemberReports(),
       "/technician_reports" : (context) => const TechnicianReport(),
       "/deduction_management" : (context) => const DeductionManagement(),
-      "/region_management" : (context) => const RegionManagement()
+      "/region_management" : (context) => const RegionManagement(),
+      "/member_chat" : (context) => const ChatAdministrators()
     },
   ));
 }

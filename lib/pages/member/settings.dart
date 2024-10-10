@@ -7,7 +7,9 @@ import 'package:maru/packages/api_connection.dart';
 import 'package:maru/packages/maru_theme.dart';
 
 class MemberSettings extends StatefulWidget {
-  const MemberSettings({super.key});
+  final void Function() getNotifications;
+  const MemberSettings({super.key, this.getNotifications = _defualtFunction});
+  static void _defualtFunction(){}
 
   @override
   State<MemberSettings> createState() => _MemberSettingsState();
@@ -32,6 +34,7 @@ class _MemberSettingsState extends State<MemberSettings> {
     super.didChangeDependencies();
 
     if(!_init){
+      widget.getNotifications();
       setState(() {
         _init = true;
       });

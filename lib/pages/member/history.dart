@@ -7,7 +7,9 @@ import 'package:maru/packages/maru_theme.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class memberHistory extends StatefulWidget {
-  const memberHistory({super.key});
+  final void Function() getNotifications;
+  const memberHistory({super.key, this.getNotifications = _defualtFunction});
+  static void _defualtFunction(){}
 
   @override
   State<memberHistory> createState() => _memberHistoryState();
@@ -46,6 +48,7 @@ class _memberHistoryState extends State<memberHistory> {
     double width = MediaQuery.of(context).size.width;
 
     if(!_init){
+      widget.getNotifications();
       setState(() {
         collections = [
           GestureDetector(

@@ -66,28 +66,6 @@ class _EditMemberMilkDataState extends State<EditMemberMilkData> {
   List<TextStyle> textStylesTitle = [];
   List<Color> fullcolor = [];
 
-  // Future<void> _selectTime(BuildContext context) async {
-  //   final TimeOfDay? pickedTime = await showTimePicker(
-  //     context: context,
-  //     initialTime: _selectedTime != null
-  //         ? TimeOfDay.fromDateTime(_selectedTime!)
-  //         : TimeOfDay.now(),
-  //   );
-  //   if (pickedTime != null) {
-  //     setState(() {
-  //       _selectedTime = DateTime(
-  //         _selectedTime?.year ?? DateTime.now().year,
-  //         _selectedTime?.month ?? DateTime.now().month,
-  //         _selectedTime?.day ?? DateTime.now().day,
-  //         pickedTime.hour,
-  //         pickedTime.minute,
-  //       );
-  //
-  //       _timeController.text = DateFormat("h:mm a").format(_selectedTime!).toString();
-  //     });
-  //   }
-  // }
-
   bool isValidJson(String jsonString) {
     try {
       jsonDecode(jsonString);

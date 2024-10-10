@@ -8,7 +8,9 @@ import 'package:maru/packages/maru_theme.dart';
 
 class AdminAccount extends StatefulWidget {
   final void Function(int) updateIndex;
-  const AdminAccount({super.key, required this.updateIndex});
+  final void Function() getNotifications;
+  const AdminAccount({super.key, required this.updateIndex, this.getNotifications = _defaultFunction });
+  static void _defaultFunction(){}
 
   @override
   State<AdminAccount> createState() => _AdminAccountState();

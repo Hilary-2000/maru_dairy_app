@@ -8,7 +8,9 @@ import 'package:maru/packages/api_connection.dart';
 import 'package:maru/packages/maru_theme.dart';
 
 class AdminInquiries extends StatefulWidget {
-  const AdminInquiries({super.key});
+  final void Function() getNotifications;
+  AdminInquiries({super.key, this.getNotifications = _defaultFunction});
+  static void _defaultFunction() {}
 
   @override
   State<AdminInquiries> createState() => _AdminInquiriesState();
@@ -32,6 +34,9 @@ class _AdminInquiriesState extends State<AdminInquiries>{
     super.didChangeDependencies();
 
     if (!init) {
+      // get notifications
+      widget.getNotifications();
+
       setState(() {
         init = true;
       });
@@ -235,11 +240,13 @@ class _AdminInquiriesState extends State<AdminInquiries>{
                             itemCount: chats.length,
                             itemBuilder: (context, index){
                               var chat = chats[index];
+                              bool new_message = chat['seen_status'] == "notseen" && chat['message_status'] == "sent";
                               return InkWell(
                                 onTap: () async {
                                   if(selected_chat_ids.length == 0){
                                     await Navigator.pushNamed(context, "/admin_inquiry_inbox", arguments: {"index" : index, "member_id": chat['chat_owner']});
                                     getChats();
+                                    widget.getNotifications();
                                   }else{
                                     for(int indexes = 0; indexes < chats.length; indexes++){
                                       if(chat['chat_id'] == chats[indexes]['chat_id']){
@@ -276,7 +283,7 @@ class _AdminInquiriesState extends State<AdminInquiries>{
                                             margin: EdgeInsets.symmetric(vertical: 2),
                                             decoration: BoxDecoration(
                                               borderRadius: BorderRadius.circular(5),
-                                              color: customs.secondaryShade_2.withOpacity(0.2),
+                                              color: new_message ? customs.secondaryShade_2.withOpacity(0.5) : customs.secondaryShade_2.withOpacity(0.2),
                                             ),
                                             child: Material(
                                               color: Colors.transparent,
@@ -287,23 +294,25 @@ class _AdminInquiriesState extends State<AdminInquiries>{
                                                   child: Text(
                                                     "${customs.nameAbbr(chat['fullname'])}",
                                                     style: customs.primaryTextStyle(
-                                                        size: 18, fontweight: FontWeight.bold),
+                                                      size: 18,
+                                                      fontweight: FontWeight.bold,
+                                                    ),
                                                   ),
                                                 ),
                                                 title: Text(
                                                   "${customs.toCamelCase(chat['fullname'])}",
-                                                  style: customs.darkTextStyle(size: 14),
+                                                  style: customs.darkTextStyle(size: 14, fontweight: new_message ? FontWeight.bold : FontWeight.normal),
                                                 ),
                                                 subtitle: Text(
                                                   customs.message_split("${chat['last_message']}"),
-                                                  style: customs.secondaryTextStyle(size: 12),
+                                                  style: customs.secondaryTextStyle(size: 12, fontweight: new_message ? FontWeight.bold : FontWeight.normal),
                                                 ),
                                                 trailing: Column(
                                                   crossAxisAlignment: CrossAxisAlignment.end,
                                                   mainAxisAlignment: MainAxisAlignment.center,
                                                   children: [
                                                     Text("${chat['chat_sent']}",
-                                                        style: customs.secondaryTextStyle(size: 10)),
+                                                        style: customs.secondaryTextStyle(size: 10, fontweight: new_message ? FontWeight.bold : FontWeight.normal)),
                                                     SizedBox(height: 5,),
                                                     chat['message_status'] == "received" ? Icon(Icons.check, size: 15, color: customs.secondaryColor,) : SizedBox(),
                                                   ],
