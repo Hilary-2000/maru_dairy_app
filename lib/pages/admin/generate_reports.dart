@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:maru/packages/api_connection.dart';
 import 'package:maru/packages/maru_theme.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -34,6 +35,9 @@ class _GenerateReportsState extends State<GenerateReports> {
   bool downloaded = false;
   String buttonMessage = "Generate Reports";
   String? localFilePath;
+  bool loading_regions = false;
+  var regionDV = "";
+  List<DropdownMenuItem<String>> regions = [];
   
   
   void openPDF() {
@@ -42,6 +46,37 @@ class _GenerateReportsState extends State<GenerateReports> {
     } else {
       customs.maruSnackBarDanger(context: context, text: "No file available to open!");
     }
+  }
+
+  Future<void> getRegions() async {
+    setState(() {
+      loading_regions = true;
+    });
+    ApiConnection apiConnection = new ApiConnection();
+    var response = await apiConnection.getActiveRegions();
+    if(customs.isValidJson(response)){
+      var res = jsonDecode(response);
+      if(res['success']){
+        // regions
+        setState(() {
+          res['regions'].insert(1, {
+            "region_name" : "All regions",
+            "region_id" : "0",
+          });
+          print(res['regions']);
+          regions = (res['regions'] as List).map((region){
+            return DropdownMenuItem(child: Text("${region['region_name']}"), value: "${region['region_id']}");
+          }).toList();
+        });
+      }else{
+        customs.maruSnackBarDanger(context: context, text: res['message']);
+      }
+    }
+
+    // set state
+    setState(() {
+      loading_regions = false;
+    });
   }
 
   Future<bool> _requestPermission() async {
@@ -149,6 +184,7 @@ class _GenerateReportsState extends State<GenerateReports> {
     if(!_init){
       // get member details
       getAdminDetails();
+      getRegions();
 
       // set state
       setState(() {
@@ -423,6 +459,52 @@ class _GenerateReportsState extends State<GenerateReports> {
                             Container(
                               width: width * 0.9,
                               margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                              child: loading_regions ?
+                              Column(
+                                children: [
+                                  SpinKitCircle(
+                                    color: customs.primaryColor,
+                                    size: 25,
+                                  ),
+                                  Text(
+                                    "Please wait loading regions...",
+                                    style: customs.primaryTextStyle(size: 10, fontweight: FontWeight.bold),
+                                  )
+                                ],
+                              )
+                                  :
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "Region:",
+                                    style: customs.darkTextStyle(
+                                        size: 12, fontweight: FontWeight.bold
+                                    ),
+                                  ),
+                                  customs.maruDropdownButtonFormField(
+                                      defaultValue: regionDV,
+                                      onChange: (value) {
+                                        setState(() {
+                                          regionDV = value!;
+                                        });
+                                      },
+                                      items: regions,
+                                      validator: (value) {
+                                        if(value == null || value.isEmpty){
+                                          return "Select member region";
+                                        }
+                                        return null;
+                                      }),
+                                  Divider(
+                                    color: customs.secondaryShade_2,
+                                  )
+                                ],
+                              ),
+                            ),
+                            Container(
+                              width: width * 0.9,
+                              margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
@@ -574,7 +656,7 @@ class _GenerateReportsState extends State<GenerateReports> {
                                     if (_formKey.currentState!.validate()){
                                       // set url
                                       setState(() {
-                                        pdfUrl = "${customs.apiURLDomain}/api/admin/reports?report_type=${reportType}&start_date=${convertDate(dateString: start_date.text)}&end_date=${convertDate(dateString: end_date.text)}";
+                                        pdfUrl = "${customs.apiURLDomain}/api/admin/reports?report_type=${reportType}&start_date=${convertDate(dateString: start_date.text)}&end_date=${convertDate(dateString: end_date.text)}&region=${regionDV}";
                                         print(pdfUrl);
                                         downloading = true;
                                       });
