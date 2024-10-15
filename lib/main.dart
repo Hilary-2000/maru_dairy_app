@@ -1,5 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:maru/packages/api_connection.dart';
+import 'package:maru/pages/admin/admin_inquiries.dart';
 import 'package:maru/pages/admin/admin_profile.dart';
 import 'package:maru/pages/admin/admin_qr_code_finder.dart';
 import 'package:maru/pages/admin/dashboard.dart';
@@ -57,6 +61,7 @@ import 'package:maru/pages/super_admin/technician_details.dart';
 import 'package:maru/pages/signup.dart';
 import 'package:maru/pages/technician/technician_report.dart';
 
+final navigatorKey = GlobalKey<NavigatorState>();
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   // Lock orientation to portrait mode
@@ -64,8 +69,10 @@ void main() {
     DeviceOrientation.portraitUp,
   ]);
 
+
   runApp(MaterialApp(
     initialRoute: "/",
+    navigatorKey: navigatorKey,
     routes: {
       "/": (context) => const Maru(),
       "/login": (context) => const Login(),
@@ -122,7 +129,8 @@ void main() {
       "/technician_reports" : (context) => const TechnicianReport(),
       "/deduction_management" : (context) => const DeductionManagement(),
       "/region_management" : (context) => const RegionManagement(),
-      "/member_chat" : (context) => const ChatAdministrators()
+      "/member_chat" : (context) => const ChatAdministrators(),
+      "/admin_inquiries": (context) => AdminInquiries()
     },
   ));
 }

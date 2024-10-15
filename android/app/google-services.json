@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "456384741739",
+    "project_id": "maru-dairy",
+    "storage_bucket": "maru-dairy.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:456384741739:android:971c1751b887722693cc2e",
+        "android_client_info": {
+          "package_name": "com.example.maru"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDZsIMjRIxqKdg3iElqvBRHWMWOD545pBA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

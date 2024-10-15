@@ -1,10 +1,12 @@
 import 'dart:convert';
 
+import 'package:firebase_core/firebase_core.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:maru/packages/api_connection.dart';
 import 'package:maru/packages/maru_theme.dart';
+import 'package:maru/packages/push_notification_api.dart';
 import 'package:maru/pages/super_admin/super_admin_accounts.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:maru/pages/admin/admin_inquiries.dart';
@@ -367,10 +369,16 @@ class _superAdminDashboardState extends State<superAdminDashboard> {
               color: customs.successColor,
             ),
             onPressed: () async {
-              await Navigator.pushNamed(context, "/select_member_to_send_message");
-              setState(() {
-                load_inquiries = true;
-              });
+              if(true){
+                WidgetsFlutterBinding.ensureInitialized();
+                await Firebase.initializeApp();
+                await PushNotificationApi().initNotifications();
+              }else{
+                await Navigator.pushNamed(context, "/select_member_to_send_message");
+                setState(() {
+                  load_inquiries = true;
+                });
+              }
             },
           ),
         )
