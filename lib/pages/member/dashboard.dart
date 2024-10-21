@@ -19,6 +19,7 @@ class memberDashboard extends StatefulWidget {
 
 class _memberDashboardState extends State<memberDashboard> {
   CustomThemes customs = CustomThemes();
+  Map<String, dynamic>? args;
 
   void changeWindow(index) {
     setState(() {});
@@ -38,6 +39,7 @@ class _memberDashboardState extends State<memberDashboard> {
   }
 
   var index = 0;
+  bool init = false;
   int notification_count = 0;
 
   Future<bool?> _showBackDialog() {
@@ -63,6 +65,25 @@ class _memberDashboardState extends State<memberDashboard> {
         );
       },
     );
+  }
+
+  void didChangeDependencies(){
+    super.didChangeDependencies();
+    if(!init){
+      setState(() {
+        init = true;
+      });
+
+      // get the passed index for notification purposes
+      args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+      if (customs.isValidJson(jsonEncode(args))){
+        var arguments = jsonDecode(jsonEncode(args));
+        int passed_index = arguments == null ? 0 : arguments['index'] ?? 0;
+        setState(() {
+          index = passed_index;
+        });
+      }
+    }
   }
 
   @override

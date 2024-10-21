@@ -21,12 +21,41 @@ class adminDashboard extends StatefulWidget {
 class _adminDashboardState extends State<adminDashboard> {
   int index = 0;
   int notification_count = 0;
+  bool init = false;
+  Map<String, dynamic>? args;
   CustomThemes customs = CustomThemes();
   void _updateIndex(int newIndex) {
     setState(() {
       index = newIndex;
     });
   }
+
+  void initState(){
+    super.initState();
+    //get notification count
+    getNotifications();
+  }
+
+  void didChangeDependencies(){
+    super.didChangeDependencies();
+
+    if(!init){
+      setState(() {
+        init = true;
+      });
+
+      // get the passed index for notification purposes
+      args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+      if (customs.isValidJson(jsonEncode(args))){
+        var arguments = jsonDecode(jsonEncode(args));
+        int passed_index = arguments == null ? 0 : arguments['index'] ?? 0;
+        setState(() {
+          index = passed_index;
+        });
+      }
+    }
+  }
+
 
   Future<void> getNotifications() async {
     ApiConnection apiConnection = new ApiConnection();

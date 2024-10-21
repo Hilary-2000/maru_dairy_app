@@ -22,6 +22,8 @@ class superAdminDashboard extends StatefulWidget {
 
 class _superAdminDashboardState extends State<superAdminDashboard> {
   CustomThemes customs = CustomThemes();
+  Map<String, dynamic>? args;
+  bool init = false;
 
   Future<bool?> _showBackDialog() {
     return showDialog<bool>(
@@ -61,6 +63,31 @@ class _superAdminDashboardState extends State<superAdminDashboard> {
     super.initState();
     //get notification count
     getNotifications();
+  }
+
+  Future<void> didChangeDependencies() async {
+    super.didChangeDependencies();
+
+    if(!init){
+      setState(() {
+        init = true;
+      });
+
+      // get the passed index for notification purposes
+      args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+      if (customs.isValidJson(jsonEncode(args))){
+        var arguments = jsonDecode(jsonEncode(args));
+        int passed_index = arguments == null ? 0 : arguments['index'] ?? 0;
+        setState(() {
+          index = passed_index;
+        });
+      }
+
+      // initialize
+      WidgetsFlutterBinding.ensureInitialized();
+      await Firebase.initializeApp();
+      await PushNotificationApi().initNotifications();
+    }
   }
 
   Future<void> getNotifications() async {
@@ -369,16 +396,10 @@ class _superAdminDashboardState extends State<superAdminDashboard> {
               color: customs.successColor,
             ),
             onPressed: () async {
-              if(true){
-                WidgetsFlutterBinding.ensureInitialized();
-                await Firebase.initializeApp();
-                await PushNotificationApi().initNotifications();
-              }else{
-                await Navigator.pushNamed(context, "/select_member_to_send_message");
-                setState(() {
-                  load_inquiries = true;
-                });
-              }
+              await Navigator.pushNamed(context, "/select_member_to_send_message");
+              setState(() {
+                load_inquiries = true;
+              });
             },
           ),
         )
