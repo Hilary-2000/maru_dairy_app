@@ -49,7 +49,7 @@ class _LoginOrSignupState extends State<LoginOrSignup> {
                       children: <Widget>[
                         Container(
                           width: width * 0.3,
-                          height: 30,
+                          height: 40,
                           child: Align(
                             alignment: Alignment.center,
                             child: Image(
@@ -58,8 +58,8 @@ class _LoginOrSignupState extends State<LoginOrSignup> {
                           ),
                         ),
                         Container(
-                          width: width * 0.3,
-                          height: (width * 0.3) - 10,
+                          width: width * 0.25,
+                          height: (width * 0.25) - 10,
                           padding: EdgeInsets.symmetric(horizontal: 5),
                           margin: const EdgeInsets.symmetric(
                               vertical: 10.0, horizontal: 0.0),

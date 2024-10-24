@@ -115,13 +115,14 @@ class _MaruState extends State<Maru> {
                 padding: const EdgeInsets.all(10.0),
                 child: Container(
                   decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10.0)),
+                      borderRadius: BorderRadius.circular(10.0)
+                  ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       Container(
                         width: width * 0.3,
-                        height: 30,
+                        height: 20,
                         child: Align(
                           alignment: Alignment.center,
                           child: Image(
@@ -134,7 +135,8 @@ class _MaruState extends State<Maru> {
                         height: (width * 0.3) - 10,
                         padding: EdgeInsets.symmetric(horizontal: 5),
                         margin: const EdgeInsets.symmetric(
-                            vertical: 10.0, horizontal: 0.0),
+                            vertical: 10.0, horizontal: 0.0
+                        ),
                         child: Image(
                           image: AssetImage("assets/images/maru-nobg.png"),
                           fit: BoxFit.fill,

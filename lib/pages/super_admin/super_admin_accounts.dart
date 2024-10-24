@@ -412,17 +412,21 @@ class _SuperAdminAccountsState extends State<SuperAdminAccounts> {
                       Container(
                         margin: EdgeInsets.fromLTRB(10, 30, 10, 0),
                         child: customs.marOutlineuButton(
-                            text: "Log-out",
-                            type: Type.danger,
-                            onPressed: () {
-                              _storage.delete(key: "username");
-                              _storage.delete(key: "password");
-                              _storage.delete(key: "token");
-                              Navigator.pushReplacementNamed(
-                                  context, "/landing_page");
-                            },
-                            fontWeight: FontWeight.bold,
-                            fontSize: 15),
+                          text: "Log-out",
+                          type: Type.danger,
+                          onPressed: () async {
+                            ApiConnection apiConn = new ApiConnection();
+                            var response = await apiConn.logout();
+                            _storage.delete(key: "username");
+                            _storage.delete(key: "password");
+                            _storage.delete(key: "token");
+                            Navigator.pushReplacementNamed(
+                                context, "/landing_page"
+                            );
+                          },
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15
+                        ),
                       ),
                     ],
                   ),

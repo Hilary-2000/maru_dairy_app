@@ -1,10 +1,12 @@
 import 'dart:convert';
 
+import 'package:firebase_core/firebase_core.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:maru/packages/api_connection.dart';
 import 'package:maru/packages/maru_theme.dart';
+import 'package:maru/packages/push_notification_api.dart';
 import 'package:maru/pages/admin/admin_account.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:maru/pages/admin/admin_inquiries.dart';
@@ -36,7 +38,7 @@ class _adminDashboardState extends State<adminDashboard> {
     getNotifications();
   }
 
-  void didChangeDependencies(){
+  Future<void> didChangeDependencies() async {
     super.didChangeDependencies();
 
     if(!init){
@@ -53,6 +55,11 @@ class _adminDashboardState extends State<adminDashboard> {
           index = passed_index;
         });
       }
+
+      // initialize
+      WidgetsFlutterBinding.ensureInitialized();
+      await Firebase.initializeApp();
+      await PushNotificationApi().initNotifications();
     }
   }
 
@@ -857,7 +864,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                               Text(
                                 "$greetings,",
                                 style: customs.primaryTextStyle(
-                                    size: 20,
+                                    size: 16,
                                     fontweight: FontWeight.normal),
                               ),
                               SizedBox(
@@ -868,8 +875,9 @@ class _AdminDashboardState extends State<AdminDashboard> {
                                     ? customs.toCamelCase(member_data['fullname'])
                                     : "N/A",
                                 style: customs.successTextStyle(
-                                    size: 25,
-                                    fontweight: FontWeight.bold),
+                                    size: 20,
+                                    fontweight: FontWeight.bold
+                                ),
                               )
                             ],
                           ),
@@ -1004,7 +1012,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                     children: [
                       Text(
                         "Collection Stats",
-                        style: customs.darkTextStyle(size: 15, underline: true),
+                        style: customs.darkTextStyle(size: 12, underline: true),
                       ),
                       const Spacer(),
                       Container(
@@ -1039,12 +1047,11 @@ class _AdminDashboardState extends State<AdminDashboard> {
                           padding: const EdgeInsets.symmetric(
                               vertical: 20.0, horizontal: 10.0),
                           child: CircleAvatar(
-                            backgroundColor:
-                                customs.successColor.withOpacity(0.2),
-                            radius: width * 0.06,
+                            backgroundColor: customs.successColor.withOpacity(0.2),
+                            radius: 30,
                             child: Icon(
                               Icons.water_drop_outlined,
-                              size: 44,
+                              size: 24,
                               color: customs.successColor,
                             ),
                           ),
@@ -1057,7 +1064,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                                 Text(
                                   "$collection_count Ltrs",
                                   style: customs.darkTextStyle(
-                                      size: width * 0.05,
+                                      size: 16,
                                       fontweight: FontWeight.bold),
                                 ),
                                 const SizedBox(
@@ -1065,8 +1072,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                                 ),
                                 Text(
                                   "$report_period",
-                                  style:
-                                      customs.darkTextStyle(size: width * 0.03),
+                                  style: customs.darkTextStyle(size: 12),
                                 )
                               ],
                             )
@@ -1095,14 +1101,14 @@ class _AdminDashboardState extends State<AdminDashboard> {
                                     collection_percentage,
                                     style: collection_status == "constant"
                                         ? customs.darkTextStyle(
-                                            size: width * 0.03,
+                                            size: 12,
                                             fontweight: FontWeight.bold)
                                         : (collection_status == "increase"
                                             ? customs.successTextStyle(
-                                                size: width * 0.03,
+                                                size: 12,
                                                 fontweight: FontWeight.bold)
                                             : customs.dangerTextStyle(
-                                                size: width * 0.03,
+                                                size: 12,
                                                 fontweight: FontWeight.bold)),
                                   ),
                                 ],
@@ -1133,7 +1139,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                           Text(
                             "MILK COLLECTION STATS",
                             style: customs.darkTextStyle(
-                                size: 15,
+                                size: 12,
                                 underline: true,
                                 fontweight: FontWeight.bold),
                           ),
@@ -1208,7 +1214,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                                                     size: 12))),
                                         sideTitles: SideTitles(
                                           showTitles: true,
-                                          reservedSize: 15,
+                                          reservedSize: 20,
                                           getTitlesWidget: (value, meta) {
                                             return Text(
                                               daysOfWeek[int.parse(
@@ -1249,7 +1255,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                     children: [
                       Text(
                         "Farmer Stats",
-                        style: customs.darkTextStyle(size: 15, underline: true),
+                        style: customs.darkTextStyle(size: 12, underline: true),
                       ),
                       const Spacer()
                     ],
@@ -1269,10 +1275,10 @@ class _AdminDashboardState extends State<AdminDashboard> {
                           child: CircleAvatar(
                             backgroundColor:
                                 customs.successColor.withOpacity(0.2),
-                            radius: width * 0.06,
+                            radius: 30,
                             child: Icon(
                               Icons.people_alt_outlined,
-                              size: 44,
+                              size: 24,
                               color: customs.successColor,
                             ),
                           ),
@@ -1285,7 +1291,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                                 Text(
                                   "$member_present_count Farmers Present",
                                   style: customs.darkTextStyle(
-                                      size: width * 0.05,
+                                      size: 16,
                                       fontweight: FontWeight.bold),
                                 ),
                                 const SizedBox(
@@ -1294,7 +1300,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                                 Text(
                                   "$report_period",
                                   style:
-                                      customs.darkTextStyle(size: width * 0.03),
+                                      customs.darkTextStyle(size: 12),
                                 )
                               ],
                             )
@@ -1322,7 +1328,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                         Text(
                           "No. OF FARMERS PRESENT",
                           style: customs.darkTextStyle(
-                              size: 15,
+                              size: 12,
                               underline: true,
                               fontweight: FontWeight.bold),
                         ),
@@ -1396,7 +1402,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                                                   size: 12))),
                                       sideTitles: SideTitles(
                                         showTitles: true,
-                                        reservedSize: 15,
+                                        reservedSize: 20,
                                         getTitlesWidget: (value, meta) {
                                           return Text(
                                             daysOfWeek[
@@ -1436,7 +1442,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                     children: [
                       Text(
                         "New Member Stats",
-                        style: customs.darkTextStyle(size: 15, underline: true),
+                        style: customs.darkTextStyle(size: 12, underline: true),
                       ),
                       const Spacer()
                     ],
@@ -1446,8 +1452,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                   enabled: loading,
                   child: Card(
                     color: customs.whiteColor,
-                    margin:
-                        const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                    margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
                     child: Row(
                       children: [
                         Padding(
@@ -1456,10 +1461,10 @@ class _AdminDashboardState extends State<AdminDashboard> {
                           child: CircleAvatar(
                             backgroundColor:
                                 customs.successColor.withOpacity(0.2),
-                            radius: width * 0.06,
+                            radius: 30,
                             child: Icon(
                               Icons.people_alt_outlined,
-                              size: 44,
+                              size: 24,
                               color: customs.successColor,
                             ),
                           ),
@@ -1472,7 +1477,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                                 Text(
                                   "$members_registered_count New Members",
                                   style: customs.darkTextStyle(
-                                      size: width * 0.05,
+                                      size: 16,
                                       fontweight: FontWeight.bold),
                                 ),
                                 const SizedBox(
@@ -1481,7 +1486,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                                 Text(
                                   "$report_period",
                                   style:
-                                      customs.darkTextStyle(size: width * 0.03),
+                                      customs.darkTextStyle(size: 12),
                                 )
                               ],
                             )
@@ -1510,14 +1515,14 @@ class _AdminDashboardState extends State<AdminDashboard> {
                                     member_percentage,
                                     style: member_status == "constant"
                                         ? customs.darkTextStyle(
-                                            size: width * 0.03,
+                                            size: 12,
                                             fontweight: FontWeight.bold)
                                         : (member_status == "increase"
                                             ? customs.successTextStyle(
-                                                size: width * 0.03,
+                                                size: 12,
                                                 fontweight: FontWeight.bold)
                                             : customs.dangerTextStyle(
-                                                size: width * 0.03,
+                                                size: 12,
                                                 fontweight: FontWeight.bold)),
                                   ),
                                 ],
@@ -1548,7 +1553,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                           Text(
                             "No. OF NEW MEMBERS",
                             style: customs.darkTextStyle(
-                                size: 15,
+                                size: 12,
                                 underline: true,
                                 fontweight: FontWeight.bold),
                           ),
@@ -1623,7 +1628,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                                                     size: 12))),
                                         sideTitles: SideTitles(
                                           showTitles: true,
-                                          reservedSize: 15,
+                                          reservedSize: 20,
                                           getTitlesWidget: (value, meta) {
                                             return Text(
                                               daysOfWeek[int.parse(

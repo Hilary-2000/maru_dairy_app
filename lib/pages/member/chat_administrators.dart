@@ -88,10 +88,17 @@ class _ChatAdministratorsState extends State<ChatAdministrators> {
   var member_data = null;
   bool send_message = false;
   bool load_members = false;
+  final ScrollController _scrollController = ScrollController();
 
   void copyToClipboard(BuildContext context, String text) {
     Clipboard.setData(ClipboardData(text: text));
     customs.maruSnackBarSuccess(context: context, text: "Copied to clipboard");
+  }
+
+  void _scrollToBottom() {
+    if (_scrollController.hasClients) {
+      _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+    }
   }
 
   Future<void> getMessages() async {
@@ -135,6 +142,9 @@ class _ChatAdministratorsState extends State<ChatAdministrators> {
     setState(() {
       load_members = false;
     });
+
+    // Scroll to the bottom when a new message is added
+    WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToBottom());
   }
 
   void didChangeDependencies(){
@@ -205,15 +215,15 @@ class _ChatAdministratorsState extends State<ChatAdministrators> {
                       child: Container(
                         decoration: BoxDecoration(
                           // borderRadius: BorderRadius.circular(5),
-                            color: customs.whiteColor,
-                            boxShadow: [
-                              BoxShadow(
-                                  color: customs.secondaryShade_2,
-                                  spreadRadius: 0.5,
-                                  blurRadius: 1,
-                                  offset: Offset.fromDirection(-1,-3)
-                              )
-                            ]
+                          color: customs.whiteColor,
+                          boxShadow: [
+                            BoxShadow(
+                                color: customs.secondaryShade_2,
+                                spreadRadius: 0.5,
+                                blurRadius: 1,
+                                offset: Offset.fromDirection(-1,-3)
+                            )
+                          ]
                         ),
                         child: Material(
                           color: Colors.transparent,
@@ -234,7 +244,7 @@ class _ChatAdministratorsState extends State<ChatAdministrators> {
                                   CircleAvatar(
                                     backgroundColor: customs.primaryShade,
                                     child: Text(
-                                      member_data != null ? customs.nameAbbr("${(member_data['fullname'] ?? "NA")}") : "NA",
+                                      "MA",
                                       style: customs.primaryTextStyle(
                                           size: 18, fontweight: FontWeight.bold),
                                     ),
@@ -243,12 +253,8 @@ class _ChatAdministratorsState extends State<ChatAdministrators> {
                               ),
                             ),
                             title: Text(
-                              customs.toCamelCase(member_data != null ? member_data['fullname'] ?? "" : ""),
+                              "Maru Admin",
                               style: customs.darkTextStyle(size: 14),
-                            ),
-                            subtitle: Text(
-                              member_data != null ? member_data['membership'] ?? "" : "",
-                              style: customs.secondaryTextStyle(size: 12),
                             ),
                             trailing: PopupMenuButton<String>(
                               icon: Icon(FontAwesomeIcons.ellipsisVertical, size: 18),
@@ -262,7 +268,6 @@ class _ChatAdministratorsState extends State<ChatAdministrators> {
                                       member_id = "${chat['chat_thread_id']}";
                                     }
                                   });
-
                                   await Navigator.pushNamed(context, "/admin_member_details", arguments: {"index" : 0, "member_id": member_id});
                                 }else if(result == "clear_chat"){
                                   bool clear_chat = await _confirmChatClearing() ?? false;
@@ -294,34 +299,6 @@ class _ChatAdministratorsState extends State<ChatAdministrators> {
                               color: customs.whiteColor,
                               itemBuilder: (BuildContext context) =>
                               <PopupMenuEntry<String>>[
-                                PopupMenuItem<String>(
-                                  value: 'member_info',
-                                  height: 15,
-                                  padding: EdgeInsets.symmetric(horizontal: 5),
-                                  child: Container(
-                                    padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                                    margin: EdgeInsets.zero,
-                                    child: Row(
-                                      mainAxisAlignment:
-                                      MainAxisAlignment.start,
-                                      children: [
-                                        Icon(
-                                          FontAwesomeIcons.info,
-                                          size: 13,
-                                          color: customs.secondaryColor,
-                                        ),
-                                        Text(
-                                          ' Member Info',
-                                          style: customs.secondaryTextStyle(
-                                              size: 12,
-                                              fontweight: FontWeight.bold
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                                PopupMenuDivider(height: 1),
                                 PopupMenuItem<String>(
                                   value: 'clear_chat',
                                   height: 15,
@@ -455,6 +432,7 @@ class _ChatAdministratorsState extends State<ChatAdministrators> {
                     margin: EdgeInsets.symmetric(vertical: 10),
                     child: chats != null && chats.length > 0 ?
                     ListView.builder(
+                        controller: _scrollController,
                         itemCount: chats.length,
                         itemBuilder: (context, index){
                           var inner_chats = chats[keys[index]]['chats'] ?? [];
@@ -479,202 +457,204 @@ class _ChatAdministratorsState extends State<ChatAdministrators> {
                                 ],
                               ),
                               ListView.builder(
-                                  shrinkWrap: true,
-                                  physics: NeverScrollableScrollPhysics(),
-                                  itemCount: inner_chats.length,
-                                  itemBuilder: (context, indexes){
-                                    String message_status = inner_chats[indexes]['message_status'];
-                                    var chat = inner_chats[indexes];
-                                    if(message_status == "received"){
-                                      return Container(
-                                        margin: EdgeInsets.symmetric(vertical: 2),
-                                        child: InkWell(
-                                          onLongPress: (){
-                                            if(message_ids.length == 0){
+                                shrinkWrap: true,
+                                physics: NeverScrollableScrollPhysics(),
+                                itemCount: inner_chats.length,
+                                itemBuilder: (context, indexes){
+                                  String message_status = inner_chats[indexes]['message_status'];
+                                  var chat = inner_chats[indexes];
+                                  if(message_status == "received"){
+                                    return Container(
+                                      margin: EdgeInsets.symmetric(vertical: 2),
+                                      child: InkWell(
+                                        onLongPress: (){
+                                          if(message_ids.length == 0){
+                                            message_ids.add(chat['chat_thread_id']);
+                                            setState(() {
+                                              chats[keys[index]]['chats'][indexes]['selected'] = true;
+                                            });
+                                          }
+                                        },
+                                        onTap: (){
+                                          if(message_ids.length > 0){
+                                            setState(() {
+                                              chats[keys[index]]['chats'][indexes]['selected'] = !chats[keys[index]]['chats'][indexes]['selected'];
+                                            });
+                                            if(chats[keys[index]]['chats'][indexes]['selected']){
                                               message_ids.add(chat['chat_thread_id']);
-                                              setState(() {
-                                                chats[keys[index]]['chats'][indexes]['selected'] = true;
-                                              });
+                                            }else{
+                                              message_ids.remove(chat['chat_thread_id']);
                                             }
-                                          },
-                                          onTap: (){
-                                            if(message_ids.length > 0){
-                                              setState(() {
-                                                chats[keys[index]]['chats'][indexes]['selected'] = !chats[keys[index]]['chats'][indexes]['selected'];
-                                              });
-                                              if(chats[keys[index]]['chats'][indexes]['selected']){
-                                                message_ids.add(chat['chat_thread_id']);
-                                              }else{
-                                                message_ids.remove(chat['chat_thread_id']);
-                                              }
-                                            }
-                                          },
-                                          child: IntrinsicHeight(
-                                            child: Stack(
-                                              children: [
-                                                Container(
-                                                  margin: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                                                  child: Row(
-                                                    children: [
-                                                      Container(
-                                                        width: width * 0.75,
-                                                        padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                                                        decoration: BoxDecoration(
-                                                            color: customs.secondaryShade_2,
-                                                            borderRadius: BorderRadius.circular(10)
-                                                        ),
-                                                        child: Column(
-                                                          children: [
-                                                            Container(
-                                                                width: width*0.7,
-                                                                child: Text(
-                                                                  "${chat['message']}",
-                                                                  style: customs.secondaryTextStyle(size: 14),
-                                                                )
-                                                            ),
-                                                            SizedBox(height: 10,),
-                                                            Row(
-                                                              mainAxisAlignment: MainAxisAlignment.end,
-                                                              children: [
-                                                                Text(
-                                                                  "${customs.toCamelCase(chat['fullname'])} - ",
-                                                                  style: customs.secondaryTextStyle(size: 10),
-                                                                  textAlign: TextAlign.right,
-                                                                ),
-                                                                Text("${chat['date_sent']} ", style: customs.secondaryTextStyle(size: 10),),
-                                                                // Icon(Icons.checklist_outlined, size: 15, color: customs.secondaryColor)
-                                                              ],
-                                                            )
-                                                          ],
-                                                        ),
+                                          }
+                                        },
+                                        child: IntrinsicHeight(
+                                          child: Stack(
+                                            children: [
+                                              Container(
+                                                margin: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                                                child: Row(
+                                                  children: [
+                                                    Container(
+                                                      width: width * 0.75,
+                                                      padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                                                      decoration: BoxDecoration(
+                                                          color: customs.secondaryShade_2,
+                                                          borderRadius: BorderRadius.circular(10)
                                                       ),
-                                                      Spacer()
-                                                    ],
-                                                  ),
-                                                ),
-                                                // The second container that uses LayoutBuilder
-                                                Container(
-                                                  width: width,
-                                                  color: chats[keys[index]]['chats'][indexes]['selected'] ? customs.primaryShade_2 : Colors.transparent,
-                                                  // Match the height of the parent
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      );
-                                    }else{
-                                      return Container(
-                                        margin: EdgeInsets.symmetric(vertical: 2),
-                                        child: InkWell(
-                                          onLongPress: (){
-                                            if(message_ids.length == 0){
-                                              message_ids.add(chat['chat_thread_id']);
-                                              setState(() {
-                                                chats[keys[index]]['chats'][indexes]['selected'] = true;
-                                              });
-                                            }
-                                          },
-                                          onTap: (){
-                                            if(message_ids.length > 0){
-                                              setState(() {
-                                                chats[keys[index]]['chats'][indexes]['selected'] = !chats[keys[index]]['chats'][indexes]['selected'];
-                                              });
-                                              if(chats[keys[index]]['chats'][indexes]['selected']){
-                                                message_ids.add(chat['chat_thread_id']);
-                                              }else{
-                                                message_ids.remove(chat['chat_thread_id']);
-                                              }
-                                            }
-                                          },
-                                          child: IntrinsicHeight(
-                                            child: Stack(
-                                              children: [
-                                                // The first container that displays the chat message
-                                                Container(
-                                                  margin: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                                                  child: Row(
-                                                    children: [
-                                                      Spacer(),
-                                                      Container(
-                                                        width: width * 0.75,
-                                                        padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                                                        decoration: BoxDecoration(
-                                                            color: customs.primaryColor,
-                                                            borderRadius: BorderRadius.circular(10)
-                                                        ),
-                                                        child: Column(
-                                                          children: [
-                                                            Container(
-                                                              width: width * 0.7,
+                                                      child: Column(
+                                                        children: [
+                                                          Container(
+                                                              width: width*0.7,
                                                               child: Text(
                                                                 "${chat['message']}",
-                                                                style: customs.whiteTextStyle(size: 14),
-                                                                textAlign: TextAlign.left,
+                                                                style: customs.secondaryTextStyle(size: 14),
+                                                              )
+                                                          ),
+                                                          SizedBox(height: 10,),
+                                                          Row(
+                                                            mainAxisAlignment: MainAxisAlignment.end,
+                                                            children: [
+                                                              Text(
+                                                                "${customs.toCamelCase(chat['fullname'])} - ",
+                                                                style: customs.secondaryTextStyle(size: 10),
+                                                                textAlign: TextAlign.right,
                                                               ),
-                                                            ),
-                                                            SizedBox(height: 10),
-                                                            Row(
-                                                              mainAxisAlignment: MainAxisAlignment.end,
-                                                              children: [
-                                                                Text("${chat['date_sent']}  ", style: customs.secondaryTextStyle(size: 10)),
-                                                                Icon(
-                                                                  FontAwesomeIcons.checkDouble,
-                                                                  size: 15,
-                                                                  color: chat['seen_status'] == "notseen" ? customs.whiteColor : customs.warningColor,
-                                                                ),
-                                                              ],
-                                                            ),
-                                                          ],
-                                                        ),
+                                                              Text("${chat['date_sent']} ", style: customs.secondaryTextStyle(size: 10),),
+                                                              // Icon(Icons.checklist_outlined, size: 15, color: customs.secondaryColor)
+                                                            ],
+                                                          )
+                                                        ],
                                                       ),
-                                                    ],
-                                                  ),
+                                                    ),
+                                                    Spacer()
+                                                  ],
                                                 ),
-                                                // The second container that uses LayoutBuilder
-                                                Container(
-                                                  width: width,
-                                                  color: chats[keys[index]]['chats'][indexes]['selected'] ? customs.primaryShade_2 : Colors.transparent, // Match the height of the parent
-                                                ),
-                                              ],
-                                            ),
+                                              ),
+                                              // The second container that uses LayoutBuilder
+                                              Container(
+                                                width: width,
+                                                color: chats[keys[index]]['chats'][indexes]['selected'] ? customs.primaryShade_2 : Colors.transparent,
+                                                // Match the height of the parent
+                                              ),
+                                            ],
                                           ),
                                         ),
-                                      );
-                                    }
+                                      ),
+                                    );
+                                  }else{
+                                    return Container(
+                                      margin: EdgeInsets.symmetric(vertical: 2),
+                                      child: InkWell(
+                                        onLongPress: (){
+                                          if(message_ids.length == 0){
+                                            message_ids.add(chat['chat_thread_id']);
+                                            setState(() {
+                                              chats[keys[index]]['chats'][indexes]['selected'] = true;
+                                            });
+                                          }
+                                        },
+                                        onTap: (){
+                                          if(message_ids.length > 0){
+                                            setState(() {
+                                              chats[keys[index]]['chats'][indexes]['selected'] = !chats[keys[index]]['chats'][indexes]['selected'];
+                                            });
+                                            if(chats[keys[index]]['chats'][indexes]['selected']){
+                                              message_ids.add(chat['chat_thread_id']);
+                                            }else{
+                                              message_ids.remove(chat['chat_thread_id']);
+                                            }
+                                          }
+                                        },
+                                        child: IntrinsicHeight(
+                                          child: Stack(
+                                            children: [
+                                              // The first container that displays the chat message
+                                              Container(
+                                                margin: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                                                child: Row(
+                                                  children: [
+                                                    Spacer(),
+                                                    Container(
+                                                      width: width * 0.75,
+                                                      padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                                                      decoration: BoxDecoration(
+                                                          color: customs.primaryColor,
+                                                          borderRadius: BorderRadius.circular(10)
+                                                      ),
+                                                      child: Column(
+                                                        children: [
+                                                          Container(
+                                                            width: width * 0.7,
+                                                            child: Text(
+                                                              "${chat['message']}",
+                                                              style: customs.whiteTextStyle(size: 14),
+                                                              textAlign: TextAlign.left,
+                                                            ),
+                                                          ),
+                                                          SizedBox(height: 10),
+                                                          Row(
+                                                            mainAxisAlignment: MainAxisAlignment.end,
+                                                            children: [
+                                                              Text("${chat['date_sent']}  ", style: customs.secondaryTextStyle(size: 10)),
+                                                              Icon(
+                                                                FontAwesomeIcons.checkDouble,
+                                                                size: 15,
+                                                                color: chat['seen_status'] == "notseen" ? customs.whiteColor : customs.warningColor,
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              // The second container that uses LayoutBuilder
+                                              Container(
+                                                width: width,
+                                                color: chats[keys[index]]['chats'][indexes]['selected'] ? customs.primaryShade_2 : Colors.transparent, // Match the height of the parent
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    );
                                   }
+                                }
                               )
                             ],
                           );
                         }
                     )
                         :
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Container(
-                          margin: EdgeInsets.only(top: 30),
-                          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                          width: width - 50,
-                          height: width - 100,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text("No chats found with ${customs.toCamelCase(member_data != null ? member_data['fullname'] ?? "" : "")}!", style: customs.primaryTextStyle(size: 20, fontweight: FontWeight.bold),textAlign: TextAlign.center,),
-                              SizedBox(height: 30,),
-                              SizedBox(
-                                width: width,
-                                child: Image(
-                                  image: AssetImage("assets/images/search.jpg"),
-                                  height: width/3,
-                                  width: width/3,
+                    SingleChildScrollView(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Container(
+                            margin: EdgeInsets.only(top: 30),
+                            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                            width: width - 50,
+                            height: height > 200 ? height - 200 : 200,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text("No chats found!", style: customs.primaryTextStyle(size: 20, fontweight: FontWeight.bold),textAlign: TextAlign.center,),
+                                SizedBox(height: 30,),
+                                SizedBox(
+                                  width: width,
+                                  child: Image(
+                                    image: AssetImage("assets/images/search.jpg"),
+                                    height: width/3 > 200 ? 200 : width/3,
+                                    width: width/3,
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                   Container(

@@ -64,9 +64,9 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // Lock orientation to portrait mode
-  SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitUp,
-  ]);
+  // SystemChrome.setPreferredOrientations([
+  //   DeviceOrientation.portraitUp,
+  // ]);
 
 
   runApp(MaterialApp(

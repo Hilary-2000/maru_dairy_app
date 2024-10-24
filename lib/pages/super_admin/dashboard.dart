@@ -870,7 +870,7 @@ class _SuperAdminDashState extends State<SuperAdminDash> {
                               Text(
                                 "$greetings,",
                                 style: customs.primaryTextStyle(
-                                    size: 20,
+                                    size: 16,
                                     fontweight: FontWeight.normal),
                               ),
                               SizedBox(
@@ -881,7 +881,7 @@ class _SuperAdminDashState extends State<SuperAdminDash> {
                                     ? customs.toCamelCase(member_data['fullname'])
                                     : "N/A",
                                 style: customs.successTextStyle(
-                                    size: 25,
+                                    size: 20,
                                     fontweight: FontWeight.bold),
                               )
                             ],
@@ -1054,10 +1054,10 @@ class _SuperAdminDashState extends State<SuperAdminDash> {
                           child: CircleAvatar(
                             backgroundColor:
                             customs.successColor.withOpacity(0.2),
-                            radius: width * 0.06,
+                            radius: 30,
                             child: Icon(
                               Icons.water_drop_outlined,
-                              size: 44,
+                              size: 24,
                               color: customs.successColor,
                             ),
                           ),
@@ -1070,7 +1070,7 @@ class _SuperAdminDashState extends State<SuperAdminDash> {
                                 Text(
                                   "$collection_count Ltrs",
                                   style: customs.darkTextStyle(
-                                      size: width * 0.05,
+                                      size: 16,
                                       fontweight: FontWeight.bold),
                                 ),
                                 const SizedBox(
@@ -1079,7 +1079,7 @@ class _SuperAdminDashState extends State<SuperAdminDash> {
                                 Text(
                                   "$report_period",
                                   style:
-                                  customs.darkTextStyle(size: width * 0.03),
+                                  customs.darkTextStyle(size: 12),
                                 )
                               ],
                             )
@@ -1108,14 +1108,14 @@ class _SuperAdminDashState extends State<SuperAdminDash> {
                                     collection_percentage,
                                     style: collection_status == "constant"
                                         ? customs.darkTextStyle(
-                                        size: width * 0.03,
+                                        size: 12,
                                         fontweight: FontWeight.bold)
                                         : (collection_status == "increase"
                                         ? customs.successTextStyle(
-                                        size: width * 0.03,
+                                        size: 12,
                                         fontweight: FontWeight.bold)
                                         : customs.dangerTextStyle(
-                                        size: width * 0.03,
+                                        size: 12,
                                         fontweight: FontWeight.bold)),
                                   ),
                                 ],
@@ -1282,10 +1282,10 @@ class _SuperAdminDashState extends State<SuperAdminDash> {
                           child: CircleAvatar(
                             backgroundColor:
                             customs.successColor.withOpacity(0.2),
-                            radius: width * 0.06,
+                            radius: 30,
                             child: Icon(
                               Icons.people_alt_outlined,
-                              size: 44,
+                              size: 24,
                               color: customs.successColor,
                             ),
                           ),
@@ -1298,7 +1298,7 @@ class _SuperAdminDashState extends State<SuperAdminDash> {
                                 Text(
                                   "$member_present_count Farmers Present",
                                   style: customs.darkTextStyle(
-                                      size: width * 0.05,
+                                      size: 16,
                                       fontweight: FontWeight.bold),
                                 ),
                                 const SizedBox(
@@ -1307,7 +1307,7 @@ class _SuperAdminDashState extends State<SuperAdminDash> {
                                 Text(
                                   "$report_period",
                                   style:
-                                  customs.darkTextStyle(size: width * 0.03),
+                                  customs.darkTextStyle(size: 12),
                                 )
                               ],
                             )
@@ -1469,10 +1469,10 @@ class _SuperAdminDashState extends State<SuperAdminDash> {
                           child: CircleAvatar(
                             backgroundColor:
                             customs.successColor.withOpacity(0.2),
-                            radius: width * 0.06,
+                            radius: 30,
                             child: Icon(
                               Icons.people_alt_outlined,
-                              size: 44,
+                              size: 24,
                               color: customs.successColor,
                             ),
                           ),
@@ -1485,7 +1485,7 @@ class _SuperAdminDashState extends State<SuperAdminDash> {
                                 Text(
                                   "$members_registered_count New Members",
                                   style: customs.darkTextStyle(
-                                      size: width * 0.05,
+                                      size: 16,
                                       fontweight: FontWeight.bold),
                                 ),
                                 const SizedBox(
@@ -1494,7 +1494,7 @@ class _SuperAdminDashState extends State<SuperAdminDash> {
                                 Text(
                                   "$report_period",
                                   style:
-                                  customs.darkTextStyle(size: width * 0.03),
+                                  customs.darkTextStyle(size: 12),
                                 )
                               ],
                             )
@@ -1523,14 +1523,14 @@ class _SuperAdminDashState extends State<SuperAdminDash> {
                                     member_percentage,
                                     style: member_status == "constant"
                                         ? customs.darkTextStyle(
-                                        size: width * 0.03,
+                                        size: 12,
                                         fontweight: FontWeight.bold)
                                         : (member_status == "increase"
                                         ? customs.successTextStyle(
-                                        size: width * 0.03,
+                                        size: 12,
                                         fontweight: FontWeight.bold)
                                         : customs.dangerTextStyle(
-                                        size: width * 0.03,
+                                        size: 12,
                                         fontweight: FontWeight.bold)),
                                   ),
                                 ],

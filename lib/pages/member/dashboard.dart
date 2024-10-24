@@ -1,10 +1,12 @@
 import 'dart:convert';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:maru/packages/api_connection.dart';
 import 'package:maru/packages/maru_theme.dart';
+import 'package:maru/packages/push_notification_api.dart';
 import 'package:maru/pages/member/history.dart';
 import 'package:maru/pages/member/notification.dart';
 import 'package:maru/pages/member/settings.dart';
@@ -67,7 +69,7 @@ class _memberDashboardState extends State<memberDashboard> {
     );
   }
 
-  void didChangeDependencies(){
+  Future<void> didChangeDependencies() async {
     super.didChangeDependencies();
     if(!init){
       setState(() {
@@ -83,6 +85,11 @@ class _memberDashboardState extends State<memberDashboard> {
           index = passed_index;
         });
       }
+
+      // initialize
+      WidgetsFlutterBinding.ensureInitialized();
+      await Firebase.initializeApp();
+      await PushNotificationApi().initNotifications();
     }
   }
 
@@ -574,7 +581,7 @@ class _memberDashState extends State<memberDash> {
                               Text(
                                 "$greetings",
                                 style: customs.primaryTextStyle(
-                                    size: 20,
+                                    size: 16,
                                     fontweight: FontWeight.normal),
                               ),
                               SizedBox(
@@ -583,7 +590,7 @@ class _memberDashState extends State<memberDash> {
                               Text(
                                 toCamelCase(member_data != null ? member_data['fullname'] ?? "N/A" : "N/A"),
                                 style: customs.successTextStyle(
-                                    size: 25,
+                                    size: 20,
                                     fontweight: FontWeight.bold),
                               )
                             ],
@@ -764,10 +771,10 @@ class _memberDashState extends State<memberDash> {
                           child: CircleAvatar(
                             backgroundColor:
                                 customs.successColor.withOpacity(0.2),
-                            radius: width * 0.06,
+                            radius: 30,
                             child: Icon(
                               Icons.water_drop_outlined,
-                              size: width * 0.1,
+                              size: 24,
                               color: customs.successColor,
                             ),
                           ),
@@ -780,7 +787,7 @@ class _memberDashState extends State<memberDash> {
                                 Text(
                                   "$total_collection Ltrs",
                                   style: customs.darkTextStyle(
-                                      size: width * 0.05,
+                                      size: 16,
                                       fontweight: FontWeight.bold),
                                 ),
                                 const SizedBox(
@@ -789,7 +796,7 @@ class _memberDashState extends State<memberDash> {
                                 Text(
                                   "$duration",
                                   style:
-                                      customs.darkTextStyle(size: width * 0.03),
+                                      customs.darkTextStyle(size: 12),
                                 )
                               ],
                             )
@@ -808,7 +815,7 @@ class _memberDashState extends State<memberDash> {
                                   ),
                                   Text(
                                     "$growth%",
-                                    style: trajectory != "constant" ? (trajectory == "increase" ? customs.successTextStyle(size: width * 0.03,fontweight: FontWeight.bold) : customs.dangerTextStyle(size: width * 0.03,fontweight: FontWeight.bold)) : customs.darkTextStyle(size: width * 0.03,fontweight: FontWeight.bold),
+                                    style: trajectory != "constant" ? (trajectory == "increase" ? customs.successTextStyle(size: 12,fontweight: FontWeight.bold) : customs.dangerTextStyle(size: 12,fontweight: FontWeight.bold)) : customs.darkTextStyle(size: 12,fontweight: FontWeight.bold),
                                   ),
                                 ],
                               ),
@@ -835,7 +842,7 @@ class _memberDashState extends State<memberDash> {
                       Text(
                         "MILK COLLECTION STATS",
                         style: customs.darkTextStyle(
-                            size: 18,
+                            size: 12,
                             underline: true,
                             fontweight: FontWeight.bold),
                       ),

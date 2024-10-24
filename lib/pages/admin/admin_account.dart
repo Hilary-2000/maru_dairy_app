@@ -377,7 +377,9 @@ class _AdminAccountState extends State<AdminAccount> {
                         child: customs.marOutlineuButton(
                             text: "Log-out",
                             type: Type.danger,
-                            onPressed: () {
+                            onPressed: () async {
+                              ApiConnection apiConn = new ApiConnection();
+                              await apiConn.logout();
                               _storage.delete(key: "username");
                               _storage.delete(key: "password");
                               _storage.delete(key: "token");

@@ -103,7 +103,7 @@ class _LoginState extends State<Login> {
                         child: Text(
                           "Login",
                           textAlign: TextAlign.left,
-                          style: customs.darkTextStyle(size: width * 0.07),
+                          style: customs.darkTextStyle(size: 25),
                         ),
                       ),
                     ],
@@ -115,7 +115,7 @@ class _LoginState extends State<Login> {
                           vertical: 0.0, horizontal: 15.0),
                       child: Text(
                         "Welcome back! Please provide your details.",
-                        style: customs.secondaryTextStyle(size: width * 0.03),
+                        style: customs.secondaryTextStyle(size: 15),
                         textAlign: TextAlign.left,
                       ),
                     ),
@@ -133,7 +133,6 @@ class _LoginState extends State<Login> {
                         ),
                       ),
                     ),
-
                   Form(
                     key: _formKey,
                     child: Column(
@@ -203,7 +202,7 @@ class _LoginState extends State<Login> {
                                 Text(
                                   "Remember me",
                                   style: customs.secondaryTextStyle(
-                                      size: width * 0.035),
+                                      size: 15),
                                 ),
                                 const Spacer(),
                                 RichText(
@@ -212,7 +211,7 @@ class _LoginState extends State<Login> {
                                         text: "Forgot password?",
                                         style: customs.primaryTextStyle(
                                             underline: true,
-                                            size: width * 0.035,
+                                            size: 15,
                                             fontweight: FontWeight.bold),
                                         recognizer: TapGestureRecognizer()
                                           ..onTap = () {
@@ -317,13 +316,13 @@ class _LoginState extends State<Login> {
                           TextSpan(
                             text: "Don`t have an account?",
                             style: customs.darkTextStyle(
-                                size: width * 0.035,
+                                size: 15,
                                 fontweight: FontWeight.normal),
                           ),
                           TextSpan(
                               text: " Sign Up",
                               style: customs.primaryTextStyle(
-                                  size: width * 0.035,
+                                  size: 15,
                                   underline: true,
                                   fontweight: FontWeight.bold),
                               recognizer: TapGestureRecognizer()
@@ -335,7 +334,7 @@ class _LoginState extends State<Login> {
                     ),
                   ),
                   SizedBox(
-                    height: height > 710 ? height-710 : 0,
+                    height: height > 710 ? height - 710 : 10,
                   ),
                   Container(
                     width: width,
@@ -344,7 +343,7 @@ class _LoginState extends State<Login> {
                       children: [
                         Container(
                           width: width * 0.3,
-                          height: 25,
+                          height: 30,
                           child: Align(
                             alignment: Alignment.center,
                             child: Image(
@@ -357,13 +356,14 @@ class _LoginState extends State<Login> {
                           height: 50,
                           child: Image(
                             image: AssetImage("assets/images/uniworld-nobg.png"),
-                            width: width * 0.4,
+                            height: 50,
+                            width: width * 0.4 > 250 ? 250 : width * 0.4,
                             fit: BoxFit.cover,
                           ),
                         ),
                       ],
                     ),
-                  )
+                  ),
                 ],
               ),
             ),

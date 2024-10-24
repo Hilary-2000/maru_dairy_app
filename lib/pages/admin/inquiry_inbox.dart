@@ -88,10 +88,17 @@ class _InquiryInboxState extends State<InquiryInbox> {
   var member_data = null;
   bool send_message = false;
   bool load_members = false;
+  final ScrollController _scrollController = ScrollController();
 
   void copyToClipboard(BuildContext context, String text) {
     Clipboard.setData(ClipboardData(text: text));
     customs.maruSnackBarSuccess(context: context, text: "Copied to clipboard");
+  }
+
+  void _scrollToBottom() {
+    if (_scrollController.hasClients) {
+      _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+    }
   }
 
   Future<void> getMessages() async {
@@ -110,6 +117,7 @@ class _InquiryInboxState extends State<InquiryInbox> {
       ApiConnection apiConnection = new ApiConnection();
       var response = await apiConnection.getMemberMessages(member_id: member_id, send_status: "sent");
       if(customs.isValidJson(response)){
+        print(response);
         var res = jsonDecode(response);
         if(res['success']){
           setState(() {
@@ -135,9 +143,12 @@ class _InquiryInboxState extends State<InquiryInbox> {
     setState(() {
       load_members = false;
     });
+
+    // Scroll to the bottom when a new message is added
+    WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToBottom());
   }
 
-  void didChangeDependencies(){
+  Future<void> didChangeDependencies() async {
     super.didChangeDependencies();
 
     if(!init){
@@ -147,7 +158,7 @@ class _InquiryInboxState extends State<InquiryInbox> {
       });
 
       // get messages
-      getMessages();
+      await getMessages();
     }
   }
 
@@ -456,6 +467,7 @@ class _InquiryInboxState extends State<InquiryInbox> {
                   margin: EdgeInsets.symmetric(vertical: 10),
                   child: chats != null && chats.length > 0 ?
                   ListView.builder(
+                      controller: _scrollController,
                       itemCount: chats.length,
                       itemBuilder: (context, index){
                         var inner_chats = chats[keys[index]]['chats'] ?? [];

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:maru/packages/api_connection.dart';
 import 'package:maru/packages/maru_theme.dart';
 
 class TechnicianAccount extends StatefulWidget {
@@ -208,7 +209,9 @@ class _TechnicianAccountState extends State<TechnicianAccount> {
                         child: customs.marOutlineuButton(
                             text: "Log-out",
                             type: Type.danger,
-                            onPressed: () {
+                            onPressed: () async {
+                              ApiConnection apiConn = new ApiConnection();
+                              await apiConn.logout();
                               _storage.delete(key: "username");
                               _storage.delete(key: "password");
                               _storage.delete(key: "token");

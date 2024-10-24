@@ -468,7 +468,7 @@ class _TechnicianDashboardState extends State<TechnicianDashboard> {
                               Text(
                                 "$greetings,",
                                 style: customs.primaryTextStyle(
-                                    size: 20,
+                                    size: 16,
                                     fontweight: FontWeight.normal),
                               ),
                               SizedBox(
@@ -479,7 +479,7 @@ class _TechnicianDashboardState extends State<TechnicianDashboard> {
                                 child: Text(
                                   "$full_name",
                                   style: customs.successTextStyle(
-                                      size: 25,
+                                      size: 20,
                                       fontweight: FontWeight.bold),
                                 ),
                               )
@@ -649,10 +649,10 @@ class _TechnicianDashboardState extends State<TechnicianDashboard> {
                             child: CircleAvatar(
                               backgroundColor:
                                   customs.successColor.withOpacity(0.2),
-                              radius: width * 0.06,
+                              radius: 30,
                               child: Icon(
                                 Icons.water_drop_outlined,
-                                size: width * 0.1,
+                                size: 24,
                                 color: customs.successColor,
                               ),
                             ),
@@ -666,7 +666,7 @@ class _TechnicianDashboardState extends State<TechnicianDashboard> {
                                 Text(
                                   "$total_litres Ltrs",
                                   style: customs.darkTextStyle(
-                                      size: width * 0.05,
+                                      size: 16,
                                       fontweight: FontWeight.bold),
                                 ),
                                 const SizedBox(
@@ -675,7 +675,7 @@ class _TechnicianDashboardState extends State<TechnicianDashboard> {
                                 Text(
                                   "$period_title",
                                   style:
-                                      customs.darkTextStyle(size: width * 0.03),
+                                      customs.darkTextStyle(size: 12),
                                 )
                               ],
                             )
@@ -695,7 +695,7 @@ class _TechnicianDashboardState extends State<TechnicianDashboard> {
                                     ),
                                     Text(
                                       "$collection_percentage%",
-                                      style:collection_status == "stagnant" ? customs.darkTextStyle(size: width * 0.03, fontweight: FontWeight.bold) : collection_status == "increase" ? customs.successTextStyle(size: width * 0.03, fontweight: FontWeight.bold) : customs.dangerTextStyle(size: width * 0.03, fontweight: FontWeight.bold),
+                                      style:collection_status == "stagnant" ? customs.darkTextStyle(size: 12, fontweight: FontWeight.bold) : collection_status == "increase" ? customs.successTextStyle(size: 12, fontweight: FontWeight.bold) : customs.dangerTextStyle(size: 12, fontweight: FontWeight.bold),
                                     ),
                                   ],
                                 ),
@@ -848,7 +848,7 @@ class _TechnicianDashboardState extends State<TechnicianDashboard> {
                     children: [
                       Text(
                         "Farmer Stats",
-                        style: customs.darkTextStyle(size: 18, underline: true),
+                        style: customs.darkTextStyle(size: 12, underline: true),
                       ),
                       const Spacer()
                     ],
@@ -869,10 +869,10 @@ class _TechnicianDashboardState extends State<TechnicianDashboard> {
                             child: CircleAvatar(
                               backgroundColor:
                                   customs.successColor.withOpacity(0.2),
-                              radius: width * 0.06,
+                              radius: 30,
                               child: Icon(
                                 Icons.people_alt_outlined,
-                                size: width * 0.1,
+                                size: 24,
                                 color: customs.successColor,
                               ),
                             ),
@@ -886,7 +886,7 @@ class _TechnicianDashboardState extends State<TechnicianDashboard> {
                                 Text(
                                   "$total_farmers Farmers",
                                   style: customs.darkTextStyle(
-                                      size: width * 0.05,
+                                      size: 16,
                                       fontweight: FontWeight.bold),
                                 ),
                                 const SizedBox(
@@ -895,7 +895,7 @@ class _TechnicianDashboardState extends State<TechnicianDashboard> {
                                 Text(
                                   "$period_title",
                                   style:
-                                      customs.darkTextStyle(size: width * 0.03),
+                                      customs.darkTextStyle(size: 12),
                                 )
                               ],
                             )
@@ -915,7 +915,7 @@ class _TechnicianDashboardState extends State<TechnicianDashboard> {
                                     ),
                                     Text(
                                       "$farmer_percentage%",
-                                      style: farmer_status == "stagnant" ? customs.darkTextStyle(size: width * 0.03, fontweight: FontWeight.bold) : farmer_status == "increase" ? customs.successTextStyle(size: width * 0.03, fontweight: FontWeight.bold) : customs.dangerTextStyle(size: width * 0.03, fontweight: FontWeight.bold),
+                                      style: farmer_status == "stagnant" ? customs.darkTextStyle(size: 12, fontweight: FontWeight.bold) : farmer_status == "increase" ? customs.successTextStyle(size: 12, fontweight: FontWeight.bold) : customs.dangerTextStyle(size: 12, fontweight: FontWeight.bold),
                                     ),
                                   ],
                                 ),
@@ -946,7 +946,7 @@ class _TechnicianDashboardState extends State<TechnicianDashboard> {
                           Text(
                             "No. OF FARMERS",
                             style: customs.darkTextStyle(
-                                size: 18,
+                                size: 12,
                                 underline: true,
                                 fontweight: FontWeight.bold),
                           ),
