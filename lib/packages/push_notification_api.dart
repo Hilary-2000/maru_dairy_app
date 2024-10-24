@@ -78,7 +78,7 @@ class PushNotificationApi{
 
  static Future<void> initLocalNotification() async{
     try{
-      const AndroidInitializationSettings androidInitializationSettings = AndroidInitializationSettings("@drawable/ic_launcher");
+      const AndroidInitializationSettings androidInitializationSettings = AndroidInitializationSettings("@mipmap/ic_launcher");
       const DarwinInitializationSettings darwinInitializationSettings = DarwinInitializationSettings();
       const InitializationSettings initializationSettings = InitializationSettings(
           android: androidInitializationSettings,
