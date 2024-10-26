@@ -291,7 +291,7 @@ class _SuperAdminListState extends State<SuperAdminList> {
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Text("No technician found!", style: customs.primaryTextStyle(size: 20, fontweight: FontWeight.bold),),
+                                  Text("No Super Administrators Found!", style: customs.primaryTextStyle(size: 20, fontweight: FontWeight.bold),),
                                   Spacer(),
                                   SizedBox(
                                     width: width,

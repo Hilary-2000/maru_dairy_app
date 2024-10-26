@@ -393,7 +393,7 @@ class _AdministratorDetailsState extends State<AdministratorDetails> {
                                       size: 12, fontweight: FontWeight.bold),
                                 ),
                                 Text(
-                                  administratorData != null ? customs.toCamelCase(administratorData['region'] ?? "N/A") : "N/A",
+                                  administratorData != null ? customs.toCamelCase(administratorData['region_name'] ?? "N/A") : "N/A",
                                   style: customs.secondaryTextStyle(size: 16),
                                 ),
                                 Divider(

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:maru/packages/api_connection.dart';
 import 'package:maru/packages/maru_theme.dart';
 
@@ -20,6 +21,8 @@ class _signUpState extends State<signUp> {
   bool? isChecked = true;
   bool? hidePassword = true;
   bool? hidePassword_2 = true;
+  bool loading_regions = false;
+  List<DropdownMenuItem<String>> regions = [];
   List<DropdownMenuItem<String>> genderList = [
     const DropdownMenuItem(child: Text("Select Gender"), value: ""),
     const DropdownMenuItem(child: Text("Male"), value: "male"),
@@ -27,11 +30,52 @@ class _signUpState extends State<signUp> {
   ];
 
 
-  List<DropdownMenuItem<String>> regions = [
-    const DropdownMenuItem(child: Text("Select your region"), value: ""),
-    const DropdownMenuItem(child: Text("Njebi"), value: "Njebi"),
-    const DropdownMenuItem(child: Text("Munyu/Kiriti"), value: "Munyu/Kiriti"),
-  ];
+  // List<DropdownMenuItem<String>> regions = [
+  //   const DropdownMenuItem(child: Text("Select your region"), value: ""),
+  //   const DropdownMenuItem(child: Text("Njebi"), value: "Njebi"),
+  //   const DropdownMenuItem(child: Text("Munyu/Kiriti"), value: "Munyu/Kiriti"),
+  // ];
+  Future<void> getRegions() async {
+    setState(() {
+      loading_regions = true;
+    });
+    ApiConnection apiConnection = new ApiConnection();
+    var response = await apiConnection.getActiveRegions();
+    if(customs.isValidJson(response)){
+      var res = jsonDecode(response);
+      if(res['success']){
+        // regions
+        if(res['regions'].length > 0){
+          setState(() {
+            regions = (res['regions'] as List).map((region){
+              return DropdownMenuItem(child: Text("${region['region_name']}"), value: "${region['region_id']}");
+            }).toList();
+          });
+        }else{
+          setState(() {
+            regions = [const DropdownMenuItem(child: Text("Select your region"), value: "")];
+          });
+        }
+      }else{
+        customs.maruSnackBarDanger(context: context, text: res['message']);
+      }
+    }
+
+    // set state
+    setState(() {
+      loading_regions = false;
+    });
+  }
+  bool init = false;
+  void didChangeDependencies(){
+    super.didChangeDependencies();
+    if(!init){
+      setState(() {
+        init = true;
+      });
+      getRegions();
+    }
+  }
 
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _passwordController_2 = TextEditingController();
@@ -249,25 +293,42 @@ class _signUpState extends State<signUp> {
                         ),
 
                         // REGION WIDGET
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 5, horizontal: 15.0),
-                          child: customs.maruDropdownButtonFormField(
-                            validator: (value){
-                              if(value == null || value.isEmpty){
-                                return "Select your region";
-                              }
-                              return null;
-                            },
-                            defaultValue: selectedRegion,
-                            hintText: "Regions",
-                            items: regions,
-                            onChange: (value){
-                              setState(() {
-                                selectedRegion = value;
-                              });
-                            },
-
+                        Container(
+                          width: width,
+                          padding: EdgeInsets.symmetric(vertical: 5, horizontal: 15),
+                          child: loading_regions ?
+                          Column(
+                            children: [
+                              SpinKitCircle(
+                                color: customs.primaryColor,
+                                size: 25,
+                              ),
+                              Text(
+                                "Please wait loading regions...",
+                                style: customs.primaryTextStyle(size: 10, fontweight: FontWeight.bold),
+                              )
+                            ],
+                          )
+                              :
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            customs.maruDropdownButtonFormField(
+                                defaultValue: selectedRegion,
+                                onChange: (value) {
+                                  setState(() {
+                                    selectedRegion = value!;
+                                  });
+                                },
+                                items: regions,
+                                validator: (value) {
+                                  if(value == null || value.isEmpty){
+                                    return "Select region";
+                                  }
+                                  return null;
+                                }
+                              ),
+                            ],
                           ),
                         ),
 

@@ -9,8 +9,8 @@ enum Type { primary, secondary, warning, danger, info, dark, white, success }
 enum Sizes { lg, md, sm, xm }
 
 class CustomThemes {
-  String apiURLDomain = "http://192.168.88.236:8000";
-  // String apiURLDomain = "https://maru.ladybirdsmis.com";
+  // String apiURLDomain = "http://192.168.88.236:8000";
+  String apiURLDomain = "https://maru.ladybirdsmis.com";
   // colors
   Color primaryColor = const Color.fromRGBO(1, 176, 241, 1);
   Color secondaryColor = const Color.fromRGBO(90, 98, 104, 1);

@@ -78,7 +78,7 @@ class PushNotificationApi{
 
  static Future<void> initLocalNotification() async{
     try{
-      const AndroidInitializationSettings androidInitializationSettings = AndroidInitializationSettings("@mipmap/ic_launcher");
+      const AndroidInitializationSettings androidInitializationSettings = AndroidInitializationSettings("@drawable/ic_notification");
       const DarwinInitializationSettings darwinInitializationSettings = DarwinInitializationSettings();
       const InitializationSettings initializationSettings = InitializationSettings(
           android: androidInitializationSettings,
@@ -97,12 +97,14 @@ class PushNotificationApi{
   }
 
   Future<void> showInstantNotification(String title, String body)async {
-    const NotificationDetails platformChannelSpecifics = NotificationDetails(
+    NotificationDetails platformChannelSpecifics = NotificationDetails(
       android: AndroidNotificationDetails(
         "channel_Id",
         "channel_Name",
         importance: Importance.high,
         priority: Priority.high,
+        icon: 'ic_notification',
+        largeIcon: const DrawableResourceAndroidBitmap('ic_notification')
       ),
       iOS: DarwinNotificationDetails()
     );
@@ -117,7 +119,7 @@ class PushNotificationApi{
       sound: true,
     );
 
-    // FirebaseMessaging.instance.getInitialMessage().then(handleBackGroundNotification);
+    FirebaseMessaging.instance.getInitialMessage().then(handleBackGroundNotification);
     FirebaseMessaging.onMessageOpenedApp.listen(handleBackGroundNotification);
     FirebaseMessaging.onBackgroundMessage(handleBackGroundNotification);
 

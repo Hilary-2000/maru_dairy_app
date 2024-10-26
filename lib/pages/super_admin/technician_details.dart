@@ -403,7 +403,7 @@ class _TechnicianDetailsState extends State<TechnicianDetails> {
                                       size: 12, fontweight: FontWeight.bold),
                                 ),
                                 Text(
-                                  technicianData != null ? customs.toCamelCase(technicianData['region'] ?? "N/A") : "N/A",
+                                  technicianData != null ? customs.toCamelCase(technicianData['region_name'] ?? "N/A") : "N/A",
                                   style: customs.secondaryTextStyle(size: 16),
                                 ),
                                 Divider(

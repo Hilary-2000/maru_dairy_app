@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:maru/packages/api_connection.dart';
 import 'package:maru/packages/maru_theme.dart';
 import 'package:skeletonizer/skeletonizer.dart';
@@ -33,13 +34,40 @@ class _NewAdministratorState extends State<NewAdministrator> {
   TextEditingController locationController = TextEditingController();
 
   var regionDV = "";
+  bool loading_regions = false;
+  List<DropdownMenuItem<String>> regions = [];
   bool _init = false;
-  List<DropdownMenuItem<String>> regions = [
-    const DropdownMenuItem(child: Text("Select your region"), value: ""),
-    const DropdownMenuItem(child: Text("Njebi"), value: "Njebi"),
-    const DropdownMenuItem(child: Text("Njembi"), value: "Njembi"),
-    const DropdownMenuItem(child: Text("Munyu/Kiriti"), value: "Munyu/Kiriti"),
-  ];
+  // List<DropdownMenuItem<String>> regions = [
+  //   const DropdownMenuItem(child: Text("Select your region"), value: ""),
+  //   const DropdownMenuItem(child: Text("Njebi"), value: "Njebi"),
+  //   const DropdownMenuItem(child: Text("Njembi"), value: "Njembi"),
+  //   const DropdownMenuItem(child: Text("Munyu/Kiriti"), value: "Munyu/Kiriti"),
+  // ];
+  Future<void> getRegions() async {
+    setState(() {
+      loading_regions = true;
+    });
+    ApiConnection apiConnection = new ApiConnection();
+    var response = await apiConnection.getActiveRegions();
+    if(customs.isValidJson(response)){
+      var res = jsonDecode(response);
+      if(res['success']){
+        // regions
+        setState(() {
+          regions = (res['regions'] as List).map((region){
+            return DropdownMenuItem(child: Text("${region['region_name']}"), value: "${region['region_id']}");
+          }).toList();
+        });
+      }else{
+        customs.maruSnackBarDanger(context: context, text: res['message']);
+      }
+    }
+
+    // set state
+    setState(() {
+      loading_regions = false;
+    });
+  }
 
   var genderDV = "";
   List<DropdownMenuItem<String>> genderList = [
@@ -69,6 +97,7 @@ class _NewAdministratorState extends State<NewAdministrator> {
           customs.successColor
         ];
       });
+      getRegions();
     }
   }
 
@@ -294,7 +323,21 @@ class _NewAdministratorState extends State<NewAdministrator> {
                               Container(
                                 width: width * 0.9,
                                 margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                                child: Column(
+                                child: loading_regions ?
+                                Column(
+                                  children: [
+                                    SpinKitCircle(
+                                      color: customs.primaryColor,
+                                      size: 25,
+                                    ),
+                                    Text(
+                                      "Please wait loading regions...",
+                                      style: customs.primaryTextStyle(size: 10, fontweight: FontWeight.bold),
+                                    )
+                                  ],
+                                )
+                                    :
+                                Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(

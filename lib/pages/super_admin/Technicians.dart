@@ -37,7 +37,7 @@ class _TechniciansState extends State<Technicians> {
           display_list = technician_list;
         });
       }else{
-        customs.maruSnackBarDanger(context: context, text: "Fatal error occurred!");
+        customs.maruSnackBarDanger(context: context, text: "${res['message']}");
       }
     }else{
       customs.maruSnackBarDanger(context: context, text: "An error occurred!");

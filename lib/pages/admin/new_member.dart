@@ -106,11 +106,17 @@ class _NewMemberState extends State<NewMember> {
       var res = jsonDecode(response);
       if(res['success']){
         // regions
-        setState(() {
-          regions = (res['regions'] as List).map((region){
-            return DropdownMenuItem(child: Text("${region['region_name']}"), value: "${region['region_id']}");
-          }).toList();
-        });
+        if(res['regions'].length > 0){
+          setState(() {
+            regions = (res['regions'] as List).map((region){
+              return DropdownMenuItem(child: Text("${region['region_name']}"), value: "${region['region_id']}");
+            }).toList();
+          });
+        }else{
+          setState(() {
+            regions = [const DropdownMenuItem(child: Text("Select your region"), value: "")];
+          });
+        }
       }else{
         customs.maruSnackBarDanger(context: context, text: res['message']);
       }

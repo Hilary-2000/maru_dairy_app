@@ -393,7 +393,7 @@ class _SuperAdminDetailsState extends State<SuperAdminDetails> {
                                       size: 12, fontweight: FontWeight.bold),
                                 ),
                                 Text(
-                                  superAdministratorData != null ? customs.toCamelCase(superAdministratorData['region'] ?? "N/A") : "N/A",
+                                  superAdministratorData != null ? customs.toCamelCase(superAdministratorData['region_name'] ?? "N/A") : "N/A",
                                   style: customs.secondaryTextStyle(size: 16),
                                 ),
                                 Divider(

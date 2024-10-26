@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:maru/packages/api_connection.dart';
 import 'package:maru/packages/maru_theme.dart';
@@ -22,6 +23,7 @@ class _EditTechnicianState extends State<EditTechnician> {
   var technicianData = null;
   int index = 0;
   final _formKey = GlobalKey<FormState>();
+  bool loading_regions = false;
 
   // editing controller
   TextEditingController phone_controller = TextEditingController();
@@ -32,13 +34,40 @@ class _EditTechnicianState extends State<EditTechnician> {
 
   var regionDV = "";
   bool _init = false;
-  List<DropdownMenuItem<String>> regions = [
-    const DropdownMenuItem(child: Text("Select your region"), value: ""),
-    const DropdownMenuItem(child: Text("Njebi"), value: "Njebi"),
-    const DropdownMenuItem(child: Text("Njembi"), value: "Njembi"),
-    const DropdownMenuItem(child: Text("Munyu/Kiriti"), value: "Munyu/Kiriti"),
-  ];
 
+  List<DropdownMenuItem<String>> regions = [];
+
+  Future<void> getRegions() async {
+    setState(() {
+      loading_regions = true;
+    });
+    ApiConnection apiConnection = new ApiConnection();
+    var response = await apiConnection.getActiveRegions();
+    if(customs.isValidJson(response)){
+      var res = jsonDecode(response);
+      if(res['success']){
+        // regions
+        if(res['regions'].length > 0){
+          setState(() {
+            regions = (res['regions'] as List).map((region){
+              return DropdownMenuItem(child: Text("${region['region_name']}"), value: "${region['region_id']}");
+            }).toList();
+          });
+        }else{
+          setState(() {
+            regions = [const DropdownMenuItem(child: Text("Select your region"), value: "")];
+          });
+        }
+      }else{
+        customs.maruSnackBarDanger(context: context, text: res['message']);
+      }
+    }
+
+    // set state
+    setState(() {
+      loading_regions = false;
+    });
+  }
   var genderDV = "";
   List<DropdownMenuItem<String>> genderList = [
     const DropdownMenuItem(child: Text("Select Gender"), value: ""),
@@ -53,7 +82,7 @@ class _EditTechnicianState extends State<EditTechnician> {
     const DropdownMenuItem(child: Text("In-Active"), value: "0"),
   ];
 
-  void didChangeDependencies() {
+  Future<void> didChangeDependencies() async {
     super.didChangeDependencies();
     setState(() {
       bg_color = [
@@ -71,6 +100,7 @@ class _EditTechnicianState extends State<EditTechnician> {
       });
 
       //GET MEMBER DATA
+      await getRegions();
       getMemberData();
     }
   }
@@ -514,7 +544,21 @@ class _EditTechnicianState extends State<EditTechnician> {
                               Container(
                                 width: width * 0.9,
                                 margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                                child: Column(
+                                child: loading_regions ?
+                                Column(
+                                  children: [
+                                    SpinKitCircle(
+                                      color: customs.primaryColor,
+                                      size: 25,
+                                    ),
+                                    Text(
+                                      "Please wait loading regions...",
+                                      style: customs.primaryTextStyle(size: 10, fontweight: FontWeight.bold),
+                                    )
+                                  ],
+                                )
+                                    :
+                                Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
@@ -524,11 +568,15 @@ class _EditTechnicianState extends State<EditTechnician> {
                                     ),
                                     customs.maruDropdownButtonFormField(
                                         defaultValue: regionDV,
-                                        onChange: (value) {},
+                                        onChange: (value) {
+                                          setState(() {
+                                            regionDV = value!;
+                                          });
+                                        },
                                         items: regions,
                                         validator: (value) {
                                           if(value == null || value.isEmpty){
-                                            return "Select member region";
+                                            return "Select region";
                                           }
                                           return null;
                                         }),

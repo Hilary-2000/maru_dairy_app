@@ -163,7 +163,7 @@ class _OurMembersState extends State<OurMembers> {
                         backgroundColor: customs.primaryShade_2,
                         child: IconButton(
                           onPressed: () async {
-                            await Navigator.pushNamed(context, "/technician_collect_milk");
+                            await Navigator.pushNamed(context, "/new_member");
                           },
                           icon: Icon(Icons.person_add_alt_outlined, color: customs.primaryColor,),
                         ),

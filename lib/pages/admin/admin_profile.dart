@@ -337,7 +337,7 @@ class _AdminProfileState extends State<AdminProfile> {
                                       size: 12, fontweight: FontWeight.bold),
                                 ),
                                 Text(
-                                  toCamelCase(admin_data != null ? admin_data['region'] ?? "N/A" : "N/A"),
+                                  toCamelCase(admin_data != null ? admin_data['region_name'] ?? "N/A" : "N/A"),
                                   style: customs.secondaryTextStyle(size: 16),
                                 ),
                                 Divider(
