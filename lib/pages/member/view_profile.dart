@@ -412,7 +412,7 @@ class _MemberProfileState extends State<MemberProfile> {
                                     size: 12, fontweight: FontWeight.bold),
                               ),
                               Text(
-                                toCamelCase(member_data != null ? member_data['region'] ?? "N/A" : "N/A"),
+                                toCamelCase(member_data != null ? member_data['region_name'] ?? "N/A" : "N/A"),
                                 style: customs.secondaryTextStyle(size: 16),
                               ),
                               Divider(

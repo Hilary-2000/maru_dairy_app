@@ -29,12 +29,6 @@ class _signUpState extends State<signUp> {
     const DropdownMenuItem(child: Text("Female"), value: "female"),
   ];
 
-
-  // List<DropdownMenuItem<String>> regions = [
-  //   const DropdownMenuItem(child: Text("Select your region"), value: ""),
-  //   const DropdownMenuItem(child: Text("Njebi"), value: "Njebi"),
-  //   const DropdownMenuItem(child: Text("Munyu/Kiriti"), value: "Munyu/Kiriti"),
-  // ];
   Future<void> getRegions() async {
     setState(() {
       loading_regions = true;
@@ -43,6 +37,7 @@ class _signUpState extends State<signUp> {
     var response = await apiConnection.getActiveRegions();
     if(customs.isValidJson(response)){
       var res = jsonDecode(response);
+      print(res);
       if(res['success']){
         // regions
         if(res['regions'].length > 0){
@@ -66,6 +61,7 @@ class _signUpState extends State<signUp> {
       loading_regions = false;
     });
   }
+
   bool init = false;
   void didChangeDependencies(){
     super.didChangeDependencies();

@@ -100,7 +100,7 @@ class ApiConnection{
     }
   }
 
-  //   process login
+  // process login
   Future<String> saveNewMember(
       String fullname,
       String phone_number,
@@ -1792,8 +1792,8 @@ class ApiConnection{
       var response = await client.post(
           url,
           headers: {
-            'Content-Type': 'application/json',
-            'maru-authentication-code' : token!
+            'Content-Type': 'application/json'
+            // 'maru-authentication-code' : token!
           },
           body: body
       ).timeout(Duration(seconds: 60));

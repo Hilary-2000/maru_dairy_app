@@ -34,6 +34,7 @@ class _EditProfileState extends State<EditProfile> {
   bool save_member = false;
   bool _init = false;
   final _formKey = GlobalKey<FormState>();
+  bool loading_regions = false;
 
   // change to camel case
   String toCamelCase(String text) {
@@ -51,6 +52,7 @@ class _EditProfileState extends State<EditProfile> {
 
   File? _image;
   bool loading_image = false;
+  List<DropdownMenuItem<String>> regions = [];
   double progress = 0.0;
 
   // Image picker function to select the image
@@ -160,10 +162,12 @@ class _EditProfileState extends State<EditProfile> {
     });
   }
 
-  void didChangeDependencies(){
+  // did change dependencies
+  Future<void> didChangeDependencies() async {
     super.didChangeDependencies();
 
     if(!_init){
+      await getRegions();
       // get member details
       getMemberDetails();
 
@@ -181,6 +185,7 @@ class _EditProfileState extends State<EditProfile> {
     });
     ApiConnection apiConnection = new ApiConnection();
     var response = await apiConnection.getMemberDetails();
+    print(response);
     if(customs.isValidJson(response)){
       var res = jsonDecode(response);
       if(res['success']){
@@ -209,16 +214,41 @@ class _EditProfileState extends State<EditProfile> {
     });
   }
 
+  Future<void> getRegions() async {
+    setState(() {
+      loading_regions = true;
+    });
+    ApiConnection apiConnection = new ApiConnection();
+    var response = await apiConnection.getActiveRegions();
+    if(customs.isValidJson(response)){
+      var res = jsonDecode(response);
+      print(res);
+      if(res['success']){
+        // regions
+        if(res['regions'].length > 0){
+          setState(() {
+            regions = (res['regions'] as List).map((region){
+              return DropdownMenuItem(child: Text("${region['region_name']}"), value: "${region['region_id']}");
+            }).toList();
+          });
+        }else{
+          setState(() {
+            regions = [const DropdownMenuItem(child: Text("Select your region"), value: "")];
+          });
+        }
+      }else{
+        customs.maruSnackBarDanger(context: context, text: res['message']);
+      }
+    }
+
+    // set state
+    setState(() {
+      loading_regions = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-
-    List<DropdownMenuItem<String>> regions = [
-      const DropdownMenuItem(child: Text("Select your region"), value: ""),
-      const DropdownMenuItem(child: Text("Njebi"), value: "Njebi"),
-      const DropdownMenuItem(child: Text("Njembi"), value: "Njembi"),
-      const DropdownMenuItem(child: Text("Munyu/Kiriti"), value: "Munyu/Kiriti"),
-    ];
-
     List<DropdownMenuItem<String>> genderList = [
       const DropdownMenuItem(child: Text("Select Gender"), value: ""),
       const DropdownMenuItem(child: Text("Male"), value: "male"),

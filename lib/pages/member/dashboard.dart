@@ -27,6 +27,12 @@ class _memberDashboardState extends State<memberDashboard> {
     setState(() {});
   }
 
+  void _updateIndex(int newIndex) {
+    setState(() {
+      index = newIndex;
+    });
+  }
+
   Future<void> getNotifications() async {
     ApiConnection apiConnection = new ApiConnection();
     var response = await apiConnection.getMemberNotification(entity: "member");
@@ -97,7 +103,7 @@ class _memberDashboardState extends State<memberDashboard> {
   Widget build(BuildContext context) {
     List<Widget> member_windows = [
       // THE MEMBER DASHBOARD AFTER LOGIN
-      memberDash(getNotifications: getNotifications,),
+      memberDash(updateIndex: _updateIndex, getNotifications: getNotifications,),
       // THE MEMBER MILK COLLECTION HISTORY
       memberHistory(getNotifications: getNotifications),
       // THE MEMBER HISTORY
@@ -359,8 +365,9 @@ class _memberDashboardState extends State<memberDashboard> {
 }
 
 class memberDash extends StatefulWidget {
+  final void Function(int) updateIndex;
   final void Function() getNotifications;
-  const memberDash({super.key, this.getNotifications = _defualtFunction});
+  const memberDash({super.key, this.getNotifications = _defualtFunction, required this.updateIndex});
   static void _defualtFunction(){}
 
   @override
@@ -717,7 +724,9 @@ class _memberDashState extends State<memberDash> {
                                 size: Sizes.sm,
                                 text: "Inquire",
                                 onPressed: () {
-                                  Navigator.pushNamed(context, "/member_inbox");
+                                  // Navigator.pushNamed(context, "/member_inbox");
+                                  int index = 2;
+                                  widget.updateIndex(index);
                                 }),
                           ],
                         )

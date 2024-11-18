@@ -21,7 +21,7 @@ class _notificationWindowState extends State<notificationWindow> {
   String member_id = "";
   bool init = false;
 
-  void didChangeDependencies(){
+  Future<void> didChangeDependencies() async {
     super.didChangeDependencies();
 
     if(!init){
@@ -31,7 +31,7 @@ class _notificationWindowState extends State<notificationWindow> {
       widget.getNotifications();
 
       // get the member data
-      getMemberDetails();
+      await getMemberDetails();
     }
   }
 
