@@ -69,10 +69,20 @@ class CustomThemes {
 
   String nameAbbr(String name){
     String abbr = "";
+
+    // remove unwanted spaces in words
     List<String> words = name.split(' ');
+    String formatted_text = "";
+    for(int index = 0; index < words.length; index++){
+      formatted_text += words[index].trim().length > 0 ? words[index].trim()+" " : "";
+    }
+    formatted_text = formatted_text.trim();
+    words = formatted_text.split(" ");
+    //end of formatting words
+
     int length = words.length >=2 ? 2 : words.length;
     for(int index = 0; index < length; index++){
-      abbr += words[index].substring(0,1);
+      abbr += words[index].length > 0 ? words[index].substring(0,1) : "";
     }
     return abbr;
   }

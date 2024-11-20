@@ -48,16 +48,6 @@ class _CaptureMilkDataState extends State<CaptureMilkData> {
   String memberShipNumber = "N/A";
   String prevTime = "N/A";
 
-  String nameAbbr(String name){
-    String abbr = "";
-    List<String> words = name.split(' ');
-    int length = words.length >=2 ? 2 : words.length;
-    for(int index = 0; index < length; index++){
-      abbr += words[index].substring(0,1);
-    }
-    return abbr;
-  }
-
   // get the member details
   Future<void> memberData() async {
     // Access the passed arguments here
@@ -315,7 +305,7 @@ class _CaptureMilkDataState extends State<CaptureMilkData> {
                           child: CircleAvatar(
                               radius: width * 0.1,
                               backgroundColor: colors_shade[jsonDecode(jsonEncode(args))['index'] % colors_shade.length],
-                              child: Skeleton.ignore(child: Text( memberName != "N/A" ? nameAbbr(memberName) : "N/A", style: textStyles[jsonDecode(jsonEncode(args))['index'] % textStyles.length],))
+                              child: Skeleton.ignore(child: Text( memberName != "N/A" ? customs.nameAbbr(memberName) : "N/A", style: textStyles[jsonDecode(jsonEncode(args))['index'] % textStyles.length],))
                           ),
                         ),
                       ),

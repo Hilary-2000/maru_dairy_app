@@ -75,17 +75,6 @@ class _EditMemberMilkDataState extends State<EditMemberMilkData> {
     }
   }
 
-
-  String nameAbbr(String name){
-    String abbr = "";
-    List<String> words = name.split(' ');
-    int length = words.length >=2 ? 2 : words.length;
-    for(int index = 0; index < length; index++){
-      abbr += words[index].substring(0,1);
-    }
-    return abbr;
-  }
-
   // change to camel case
   String toCamelCase(String text) {
     // Step 1: Split the string by spaces or underscores
@@ -329,7 +318,7 @@ class _EditMemberMilkDataState extends State<EditMemberMilkData> {
                       dense: true,
                       leading: CircleAvatar(
                         backgroundColor: colors_shade[index % colors_shade.length],
-                        child: Skeleton.ignore(child: Text(nameAbbr(item['collector_name']), style: textStyles[index % textStyles.length],)),
+                        child: Skeleton.ignore(child: Text(customs.nameAbbr(item['collector_name']), style: textStyles[index % textStyles.length],)),
                       ),
                       title: Text(
                         toCamelCase(item['collector_name']),
@@ -717,7 +706,7 @@ class _EditMemberMilkDataState extends State<EditMemberMilkData> {
                           child: CircleAvatar(
                               radius: 44,
                               backgroundColor: colors_shade[index % colors_shade.length],
-                              child: Text(nameAbbr(memberName), style: textStylesTitle[index % textStylesTitle.length],)
+                              child: Text(customs.nameAbbr(memberName), style: textStylesTitle[index % textStylesTitle.length],)
                           ),
                         ),
                       ),

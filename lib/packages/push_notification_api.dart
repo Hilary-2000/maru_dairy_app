@@ -78,7 +78,7 @@ class PushNotificationApi{
 
  static Future<void> initLocalNotification() async{
     try{
-      const AndroidInitializationSettings androidInitializationSettings = AndroidInitializationSettings("drawable/ic_notification");
+      const AndroidInitializationSettings androidInitializationSettings = AndroidInitializationSettings("ic_launcher");
       const DarwinInitializationSettings darwinInitializationSettings = DarwinInitializationSettings();
       const InitializationSettings initializationSettings = InitializationSettings(
           android: androidInitializationSettings,
@@ -103,8 +103,9 @@ class PushNotificationApi{
         "channel_Name",
         importance: Importance.high,
         priority: Priority.high,
-        icon: '@mipmap/ic_notification',
-        largeIcon: const DrawableResourceAndroidBitmap('@mipmap/ic_notification')
+        icon: 'ic_launcher',
+        playSound: true,
+        // largeIcon: const DrawableResourceAndroidBitmap('ic_launcher')
       ),
       iOS: DarwinNotificationDetails()
     );

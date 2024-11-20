@@ -175,16 +175,6 @@ class _EditTechnicianProfileState extends State<EditTechnicianProfile> {
     });
   }
 
-  String nameAbbr(String name){
-    String abbr = "";
-    List<String> words = name.split(' ');
-    int length = words.length >=2 ? 2 : words.length;
-    for(int index = 0; index < length; index++){
-      abbr += words[index].substring(0,1);
-    }
-    return abbr;
-  }
-
   // change to camel case
   String toCamelCase(String text) {
     // Step 1: Split the string by spaces or underscores
