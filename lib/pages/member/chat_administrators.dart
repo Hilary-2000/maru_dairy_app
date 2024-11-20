@@ -270,6 +270,8 @@ class _ChatAdministratorsState extends State<ChatAdministrators> {
                                   });
                                   await Navigator.pushNamed(context, "/admin_member_details", arguments: {"index" : 0, "member_id": member_id});
                                 }else if(result == "clear_chat"){
+                                  customs.maruSnackBar(context: context, text: "You can`t clear chats at the moment!");
+                                  return;
                                   bool clear_chat = await _confirmChatClearing() ?? false;
                                   if(clear_chat){
                                     if(chats.length > 0){

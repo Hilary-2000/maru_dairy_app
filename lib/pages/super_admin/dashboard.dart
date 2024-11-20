@@ -1294,7 +1294,7 @@ class _SuperAdminDashState extends State<SuperAdminDash> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  "$member_present_count Farmers Present",
+                                  "$member_present_count Farmers Registered",
                                   style: customs.darkTextStyle(
                                       size: 16,
                                       fontweight: FontWeight.bold),
@@ -1331,7 +1331,7 @@ class _SuperAdminDashState extends State<SuperAdminDash> {
                     child: Column(
                       children: [
                         Text(
-                          "No. OF FARMERS PRESENT",
+                          "No. OF FARMERS REGISTERED",
                           style: customs.darkTextStyle(
                               size: 15,
                               underline: true,

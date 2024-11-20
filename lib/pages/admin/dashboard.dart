@@ -1287,7 +1287,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  "$member_present_count Farmers Present",
+                                  "$member_present_count Farmers Registered",
                                   style: customs.darkTextStyle(
                                       size: 16,
                                       fontweight: FontWeight.bold),
@@ -1324,7 +1324,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                     child: Column(
                       children: [
                         Text(
-                          "No. OF FARMERS PRESENT",
+                          "No. OF FARMERS REGISTERED",
                           style: customs.darkTextStyle(
                               size: 12,
                               underline: true,
