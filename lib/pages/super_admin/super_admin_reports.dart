@@ -247,7 +247,6 @@ class _SuperAdminReportsState extends State<SuperAdminReports> {
     ApiConnection apiConnection = new ApiConnection();
     var response = await apiConnection.viewAdminProfile();
     if(customs.isValidJson(response)){
-      print(response);
       var res = jsonDecode(response);
       if(res['success']){
         // set state
@@ -460,7 +459,6 @@ class _SuperAdminReportsState extends State<SuperAdminReports> {
                                           pickerTextStyle: customs.secondaryTextStyle(
                                               size: 13, fontweight: FontWeight.bold),
                                           onChange: (index) {
-                                            print(index);
                                           },
                                           onSubmit: (selected_date) {
                                             setState(() {
@@ -531,7 +529,6 @@ class _SuperAdminReportsState extends State<SuperAdminReports> {
                                           pickerTextStyle: customs.secondaryTextStyle(
                                               size: 13, fontweight: FontWeight.bold),
                                           onChange: (index) {
-                                            print(index);
                                           },
                                           onSubmit: (selected_date) {
                                             setState(() {
@@ -575,7 +572,6 @@ class _SuperAdminReportsState extends State<SuperAdminReports> {
                                         // set url
                                         setState(() {
                                           pdfUrl = "${customs.apiURLDomain}/api/admin/reports?report_type=${reportType}&start_date=${convertDate(dateString: start_date.text)}&end_date=${convertDate(dateString: end_date.text)}";
-                                          print(pdfUrl);
                                           downloading = true;
                                         });
 

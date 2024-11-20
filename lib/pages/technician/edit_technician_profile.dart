@@ -197,7 +197,6 @@ class _EditTechnicianProfileState extends State<EditTechnicianProfile> {
     ApiConnection apiConnection = new ApiConnection();
     String? token = await _storage.read(key: 'token');
     var response = await apiConnection.getTechnicianDetails(token!);
-    print(response);
     if(isValidJson(response)){
       var res = jsonDecode(response);
       if(res['success']){

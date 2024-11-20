@@ -68,7 +68,6 @@ class _TechnicianHistoryState extends State<TechnicianHistory> {
     ApiConnection apiConnection = new ApiConnection();
     String? token = await _storage.read(key: 'token');
     var response = await apiConnection.collectHistory(token!, drop_down);
-    print(response);
     if(isValidJson(response)){
       var res = jsonDecode(response);
       if(res['success'] == true){
@@ -505,7 +504,6 @@ class _TechnicianHistoryState extends State<TechnicianHistory> {
                             GestureDetector(
                               onTap: (){
                                 Navigator.pushNamed(context, "/decline_or_confirmed_collection", arguments: {"collection_status" : "1"});
-                                print("Done!");
                               },
                               child: Container(
                                 height: 100,

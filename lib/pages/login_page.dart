@@ -46,7 +46,6 @@ class _LoginState extends State<Login> {
     bool showPass = false;
     String message = "";
     if(args != null){
-      print(args);
       showPass = true;
       message = args['message'];
     }
@@ -147,7 +146,6 @@ class _LoginState extends State<Login> {
                           child: customs.maruTextFormField(
                               label: "Username",
                               isChanged: (text) {
-                                print("Value :  $text");
                               },
                               editingController: _usernameController,
                               validator: (value) {
@@ -177,7 +175,6 @@ class _LoginState extends State<Login> {
                               return null;
                             },
                             isChanged: (text) {
-                              print("Value :  $text");
                             }
                           ),
                         ),
@@ -249,7 +246,6 @@ class _LoginState extends State<Login> {
                                     // get the user credentials
                                     ApiConnection api = new ApiConnection();
                                     var response = await api.processLogin(username, password);
-                                    print(response);
                                     setState(() {
                                       disableLogin = false;
                                     });
@@ -267,7 +263,6 @@ class _LoginState extends State<Login> {
 
                                         // store the token
                                         await _storage.write(key: "token", value: decode_res['token']);
-                                        print(decode_res['user_type']);
 
                                         // redirect to the other page
                                         if(decode_res['user_type'] == "1"){
@@ -289,7 +284,6 @@ class _LoginState extends State<Login> {
                                             text: "${decode_res['message']}"
                                         );
                                       }
-                                      print(decode_res);
                                     }else{
                                       customs.maruSnackBarDanger(
                                           context: context,

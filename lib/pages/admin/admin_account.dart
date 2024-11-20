@@ -41,7 +41,6 @@ class _AdminAccountState extends State<AdminAccount> {
     var response = await apiConnection.getMilkPrice();
     if(customs.isValidJson(response)){
       var res = jsonDecode(response);
-      print(res);
       if(res['success']){
         setState(() {
           price = "Kes ${res['price']}";
@@ -355,7 +354,6 @@ class _AdminAccountState extends State<AdminAccount> {
                               ),
                               title: Text("Light Mode", style: customs.darkTextStyle(size: 14),),
                               onTap: (){
-                                print("Tapped");
                               },
                               trailing: Switch(
                                 value: _isLightMode,

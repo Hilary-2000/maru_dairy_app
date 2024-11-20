@@ -337,7 +337,6 @@ class _adminDashboardState extends State<adminDashboard> {
                   onTap: () {
                     setState(() {
                       index = 4;
-                      print(index);
                     });
                   },
                   child: SizedBox(
@@ -745,7 +744,6 @@ class _AdminDashboardState extends State<AdminDashboard> {
     });
     ApiConnection apiConnection = new ApiConnection();
     var response = await apiConnection.adminDashboard(drop_down);
-    print(response);
     if (customs.isValidJson(response)) {
       var res = jsonDecode(response);
       if (res['success']) {

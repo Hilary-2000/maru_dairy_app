@@ -292,7 +292,6 @@ class _CollectMilkState extends State<CollectMilk> {
     });
     String? token = await _storage.read(key: 'token');
     String response = await apiConnection.getMembers(token!);
-    // print(response);
     if(isValidJson(response)){
       var data = jsonDecode(response);
       // GET THE MEMBER DATA

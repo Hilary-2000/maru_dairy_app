@@ -149,7 +149,6 @@ class _MemberDetailsEditState extends State<MemberDetailsEdit> {
             }else{
               regionDV = region_detail;
             }
-            print(region_data);
 
             // gender dv
             genderDV = res['member_details']['gender'] ?? "";
@@ -800,7 +799,6 @@ class _MemberDetailsEditState extends State<MemberDetailsEdit> {
                                           "membership": membershipController.text,
                                           "gender": genderDV
                                         };
-                                        print(datapass);
                                         var response = await apiCon.adminUpdateMember(datapass);
                                         if(customs.isValidJson(response)){
                                           var res = jsonDecode(response);

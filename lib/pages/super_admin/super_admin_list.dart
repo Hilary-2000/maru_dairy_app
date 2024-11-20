@@ -31,7 +31,6 @@ class _SuperAdminListState extends State<SuperAdminList> {
     if(customs.isValidJson(response)){
       var res = jsonDecode(response);
       if(res['success']){
-        print(res);
         setState(() {
           super_administrator_list = res['super_administrators'];
           display_list = super_administrator_list;

@@ -53,7 +53,6 @@ class _MembershipState extends State<Membership> {
   // member data
   Future<void> getMembershipDetails() async {
     args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
-    // print(args);
     if(args != null){
       String member_id = args!['member_id'].toString();
       setState(() {
@@ -459,7 +458,6 @@ class _MembershipState extends State<Membership> {
                                                         ],
                                                       ),
                                                       onTap: (){
-                                                        print(items);
                                                       },
                                                     ),
                                                   );
@@ -792,7 +790,6 @@ class _rejectEarningsState extends State<rejectEarnings> {
     var response = await apiConnection.getActiveDeductions();
     if(customThemes.isValidJson(response)){
       var res = jsonDecode(response);
-      print(res);
       if(res['success']){
         setState(() {
           paymentTypes = (res['deductions'] as List).map((deduction) {
@@ -1112,9 +1109,6 @@ class _rejectEarningsState extends State<rejectEarnings> {
                                       "deductions": deductions,
                                       "transaction_amount": isChecked ? "yes" : "no"
                                     };
-
-                                    // print data
-                                    print(datapass);
                                     var response = await apiConn.acceptMemberPayment(datapass);
                                     if(customThemes.isValidJson(response)){
                                       var res = jsonDecode(response);
@@ -1488,7 +1482,6 @@ class _editEarningsState extends State<_editEarnings> {
                                         saveLoader = true;
                                       });
                                       ApiConnection apiConn = ApiConnection();
-                                      print(widget.earning_data);
                                       var response = await apiConn.declineMemberPayment(widget.earning_data['id'].toString());
                                       if(customThemes.isValidJson(response)){
                                         var res = jsonDecode(response);

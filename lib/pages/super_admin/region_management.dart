@@ -43,7 +43,6 @@ class _RegionManagementState extends State<RegionManagement> {
     });
     ApiConnection apiConnection = ApiConnection();
     var response = await apiConnection.getRegions();
-    print(response);
     if(customs.isValidJson(response)){
       var res = jsonDecode(response);
       if(res['success']){
@@ -292,7 +291,6 @@ class _RegionManagementState extends State<RegionManagement> {
                                   ],
                                 ),
                                 onTap: (){
-                                  print(items);
                                 },
                               ),
                             ),
@@ -553,7 +551,6 @@ class _DeleteRegionsState extends State<DeleteRegions> {
                                     });
                                     ApiConnection apiConn = ApiConnection();
                                     var response = await apiConn.deleteRegion(region_id: widget.region_data['region_id'].toString());
-                                    print(response);
                                     if(customThemes.isValidJson(response)){
                                       var res = jsonDecode(response);
                                       if(res['success']){

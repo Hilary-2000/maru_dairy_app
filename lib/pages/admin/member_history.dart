@@ -181,7 +181,6 @@ class _MemberHistoryState extends State<MemberHistory> {
         member_code = respond['member_data']['membership'] ?? "";
       });
       var response = await apiConnection.adminMemberHistory(member_id);
-      print(response);
       if(customs.isValidJson(response)){
         var res = jsonDecode(response);
         if(res['success']){

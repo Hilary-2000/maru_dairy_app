@@ -63,7 +63,6 @@ class _GenerateReportsState extends State<GenerateReports> {
             "region_name" : "All regions",
             "region_id" : "0",
           });
-          print(res['regions']);
           regions = (res['regions'] as List).map((region){
             return DropdownMenuItem(child: Text("${region['region_name']}"), value: "${region['region_id']}");
           }).toList();
@@ -283,7 +282,6 @@ class _GenerateReportsState extends State<GenerateReports> {
     ApiConnection apiConnection = new ApiConnection();
     var response = await apiConnection.viewAdminProfile();
     if(customs.isValidJson(response)){
-      print(response);
       var res = jsonDecode(response);
       if(res['success']){
         // set state
@@ -542,7 +540,6 @@ class _GenerateReportsState extends State<GenerateReports> {
                                         pickerTextStyle: customs.secondaryTextStyle(
                                             size: 13, fontweight: FontWeight.bold),
                                         onChange: (index) {
-                                          print(index);
                                         },
                                         onSubmit: (selected_date) {
                                           setState(() {
@@ -613,7 +610,6 @@ class _GenerateReportsState extends State<GenerateReports> {
                                         pickerTextStyle: customs.secondaryTextStyle(
                                             size: 13, fontweight: FontWeight.bold),
                                         onChange: (index) {
-                                          print(index);
                                         },
                                         onSubmit: (selected_date) {
                                           setState(() {
@@ -657,7 +653,6 @@ class _GenerateReportsState extends State<GenerateReports> {
                                       // set url
                                       setState(() {
                                         pdfUrl = "${customs.apiURLDomain}/api/admin/reports?report_type=${reportType}&start_date=${convertDate(dateString: start_date.text)}&end_date=${convertDate(dateString: end_date.text)}&region=${regionDV}";
-                                        print(pdfUrl);
                                         downloading = true;
                                       });
 

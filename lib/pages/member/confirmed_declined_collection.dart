@@ -55,7 +55,6 @@ class _ConfirmedDeclinedCollectionState extends State<ConfirmedDeclinedCollectio
   }
 
   Future<void> loadCollectionHistory(BuildContext context) async {
-    print("In");
     setState(() {
       loading = true;
     });
@@ -69,7 +68,7 @@ class _ConfirmedDeclinedCollectionState extends State<ConfirmedDeclinedCollectio
       collectionStatus = passedData['collection_status'];
 
 
-      print(response.substring(response.length-1, response.length));
+
       // make the response json
       if(response.substring(response.length-1, response.length) == "]"){
         // sometimes it cuts the last character making it not a json format, add it when that happens

@@ -221,7 +221,6 @@ class _AdminEditProfileState extends State<AdminEditProfile> {
     });
     ApiConnection apiConnection = new ApiConnection();
     var response = await apiConnection.viewAdminProfile();
-    print(response);
     if(customs.isValidJson(response)){
       var res = jsonDecode(response);
       if(res['success']){
@@ -727,7 +726,6 @@ class _AdminEditProfileState extends State<AdminEditProfile> {
                                         };
                                         ApiConnection apiConnection = new ApiConnection();
                                         var response = await apiConnection.updateAdminProfile(body);
-                                        print(response);
                                         if(customs.isValidJson(response)){
                                           var res = jsonDecode(response);
                                           if(res['success']){

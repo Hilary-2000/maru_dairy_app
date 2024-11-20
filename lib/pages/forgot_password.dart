@@ -160,7 +160,6 @@ class _forgotPasswordState extends State<forgotPassword> {
                                     // go ahead and reset the password!
                                     ApiConnection apiConnection = ApiConnection();
                                     var response = await apiConnection.resetPassword(username: username.text);
-                                    print([response, username.text]);
                                     if(customs.isValidJson(response)){
                                       var res = jsonDecode(response);
                                       if(res['success']){

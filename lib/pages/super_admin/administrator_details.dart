@@ -36,7 +36,6 @@ class _AdministratorDetailsState extends State<AdministratorDetails> {
       });
       ApiConnection apiConnection = new ApiConnection();
       var response = await apiConnection.administratorDetails(arguments['admin_id'].toString());
-      print(response);
       if(customs.isValidJson(response)){
         var res = jsonDecode(response);
         if(res['success']){
@@ -163,7 +162,6 @@ class _AdministratorDetailsState extends State<AdministratorDetails> {
                                         icon: Icon(FontAwesomeIcons.ellipsisVertical, size: 20,),
                                         onSelected: (String result) async {
                                           // Handle the selection here
-                                          print(result);
                                           if(result == "delete"){
                                             var result = await Navigator.of(context).push(HeroDialogRoute(builder: (context) {
                                               return  _AddTodoPopupCard(administrator_data: administratorData,);

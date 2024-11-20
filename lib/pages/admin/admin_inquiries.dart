@@ -121,7 +121,6 @@ class _AdminInquiriesState extends State<AdminInquiries>{
                   getChats();
                 }
               }
-              print(increase);
             return true;
           },
           child: Stack(

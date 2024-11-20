@@ -56,7 +56,6 @@ class _AdminProfileState extends State<AdminProfile> {
     ApiConnection apiConnection = new ApiConnection();
     var response = await apiConnection.viewAdminProfile();
     if(customs.isValidJson(response)){
-      print(response);
       var res = jsonDecode(response);
       if(res['success']){
         // set state

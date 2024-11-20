@@ -298,7 +298,6 @@ class _EditMemberMilkDataState extends State<EditMemberMilkData> {
       if(isValidJson(response)){
         var res = jsonDecode(response);
         if(res['success']){
-          print(res['collection_history']);
           // var listHistory = res['collection_history'];
           double width = MediaQuery.of(context).size.width;
           List<Widget> history = (res['collection_history'] as List<dynamic>).asMap().entries.map((entry) {
@@ -441,7 +440,6 @@ class _EditMemberMilkDataState extends State<EditMemberMilkData> {
                             icon: Icon(FontAwesomeIcons.ellipsisVertical, size: 20,),
                             onSelected: (String result) async {
                               // Handle the selection here
-                              print(result);
                               if(result == "delete"){
                                 var result = await Navigator.of(context).push(HeroDialogRoute(builder: (context) {
                                   return  _AddTodoPopupCard(collection_id: collection_id,);
@@ -767,7 +765,6 @@ class _EditMemberMilkDataState extends State<EditMemberMilkData> {
                                     final FlutterSecureStorage _storage = const FlutterSecureStorage();
                                     String? token = await _storage.read(key: 'token');
                                     var response = await apiConnection.updateCollection(token!, _amountInLitres.text, collection_id);
-                                    print(response);
                                     if(isValidJson(response)){
                                       // this mean everything is fine!
                                       var res = jsonDecode(response);

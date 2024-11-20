@@ -308,7 +308,6 @@ class _NewMemberState extends State<NewMember> {
                                     pickerTextStyle: customs.secondaryTextStyle(
                                         size: 13, fontweight: FontWeight.bold),
                                     onChange: (index) {
-                                      print(index);
                                     },
                                     onSubmit: (selected_date) {
                                       setState(() {
@@ -596,7 +595,6 @@ class _NewMemberState extends State<NewMember> {
                                     var response = await apiCon.adminAddMember(datapass);
                                     if(customs.isValidJson(response)){
                                       var res = jsonDecode(response);
-                                      print(res);
                                       if(res['success']){
                                         customs.maruSnackBarSuccess(context: context, text: res['message']);
                                         setState(() {

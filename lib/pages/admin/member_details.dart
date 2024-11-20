@@ -43,7 +43,6 @@ class _MemberDetailsState extends State<MemberDetails> {
         if(res['success']){
           setState(() {
             memberData = res['member_details'];
-            print(memberData);
             collection_days = res['collection_days'];
             collected_amount = res['total_collection'];
           });
@@ -163,7 +162,6 @@ class _MemberDetailsState extends State<MemberDetails> {
                                       icon: Icon(FontAwesomeIcons.ellipsisVertical, size: 20,),
                                       onSelected: (String result) async {
                                         // Handle the selection here
-                                        print(result);
                                         if(result == "delete"){
                                           var result = await Navigator.of(context).push(HeroDialogRoute(builder: (context) {
                                             return  _AddTodoPopupCard(member_data: memberData,);
@@ -610,8 +608,6 @@ class _MemberDetailsState extends State<MemberDetails> {
           icon: Icon(Icons.edit, color: customs.primaryColor,),
           onPressed: () async {
             await Navigator.pushNamed(context, "/admin_edit_member_details", arguments: {"index": index, "member_id": (memberData != null ? (memberData['user_id'] ?? "0") : "0")});
-
-            print("Done");
             //get member details
             getMemberData();
           },

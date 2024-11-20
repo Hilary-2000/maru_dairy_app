@@ -55,11 +55,9 @@ class _CaptureMilkDataState extends State<CaptureMilkData> {
     if(isValidJson(jsonEncode(args))){
       String? token = await _storage.read(key: 'token');
       var passedData = jsonDecode(jsonEncode(args));
-      print(passedData['member_id']);
 
       //get the member data
       var response = await apiConnection.getMemberData(token!, passedData['member_id'].toString());
-      // print(response);
       if(isValidJson(response.toString())){
         // get the farmer`s data
         setState(() {

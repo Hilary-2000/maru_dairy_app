@@ -37,7 +37,6 @@ class _SuperAdminDetailsState extends State<SuperAdminDetails> {
       });
       ApiConnection apiConnection = new ApiConnection();
       var response = await apiConnection.superAdministratorDetails(arguments['super_admin_id'].toString());
-      print(response);
       if(customs.isValidJson(response)){
         var res = jsonDecode(response);
         if(res['success']){
@@ -164,7 +163,6 @@ class _SuperAdminDetailsState extends State<SuperAdminDetails> {
                                         icon: Icon(FontAwesomeIcons.ellipsisVertical, size: 20,),
                                         onSelected: (String result) async {
                                           // Handle the selection here
-                                          print(result);
                                           if(result == "delete"){
                                             var result = await Navigator.of(context).push(HeroDialogRoute(builder: (context) {
                                               return  _AddTodoPopupCard(super_administrator_data: superAdministratorData,);
@@ -531,7 +529,6 @@ class _AddTodoPopupCardState extends State<_AddTodoPopupCard> {
                                     });
                                     ApiConnection apiConn = ApiConnection();
                                     var response = await apiConn.deleteSuperAdministrator(widget.super_administrator_data['user_id'].toString());
-                                    print(response);
                                     if(customThemes.isValidJson(response)){
                                       var res = jsonDecode(response);
                                       if(res['success']){

@@ -43,7 +43,6 @@ class _DeductionManagementState extends State<DeductionManagement> {
     });
     ApiConnection apiConnection = ApiConnection();
     var response = await apiConnection.getDeductions();
-    print(response);
     if(customs.isValidJson(response)){
       var res = jsonDecode(response);
       if(res['success']){
@@ -178,7 +177,6 @@ class _DeductionManagementState extends State<DeductionManagement> {
                                       ApiConnection apiConn = ApiConnection();
                                       String status = _isLightMode[items['deduction_id']] ? "1" : "0";
                                       var response = await apiConn.changeDeductionStatus(deduction_id: items['deduction_id'], deduction_status: status);
-                                      print(response);
                                       if(customs.isValidJson(response)){
                                         var res = jsonDecode(response);
                                         if(res['success']){
@@ -432,7 +430,6 @@ class _DeleteDeductionState extends State<DeleteDeduction> {
                                     });
                                     ApiConnection apiConn = ApiConnection();
                                     var response = await apiConn.deleteDeductions(deduction_id: widget.deduction_data['deduction_id'].toString());
-                                    print(response);
                                     if(customThemes.isValidJson(response)){
                                       var res = jsonDecode(response);
                                       if(res['success']){
@@ -552,7 +549,6 @@ class _EditDeductionState extends State<EditDeduction> {
                                       });
                                       ApiConnection apiConn = ApiConnection();
                                       var response = await apiConn.updateDeduction(deduction_id: widget.deduction_data['deduction_id'].toString(), deduction_name: deductionAmountController.text);
-                                      print(response);
                                       if(customThemes.isValidJson(response)){
                                         var res = jsonDecode(response);
                                         if(res['success']){

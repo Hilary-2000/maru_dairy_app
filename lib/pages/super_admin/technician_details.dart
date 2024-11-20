@@ -167,7 +167,6 @@ class _TechnicianDetailsState extends State<TechnicianDetails> {
                                       icon: Icon(FontAwesomeIcons.ellipsisVertical, size: 20,),
                                       onSelected: (String result) async {
                                         // Handle the selection here
-                                        print(result);
                                         if(result == "delete"){
                                           var result = await Navigator.of(context).push(HeroDialogRoute(builder: (context) {
                                             return  _AddTodoPopupCard(technician_data: technicianData,);

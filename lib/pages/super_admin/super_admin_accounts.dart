@@ -44,7 +44,6 @@ class _SuperAdminAccountsState extends State<SuperAdminAccounts> {
     var response = await apiConnection.getMilkPrice();
     if(customs.isValidJson(response)){
       var res = jsonDecode(response);
-      print(res);
       if(res['success']){
         setState(() {
           price = "Kes ${res['price']}";
@@ -392,7 +391,6 @@ class _SuperAdminAccountsState extends State<SuperAdminAccounts> {
                               ),
                               title: Text("Light Mode", style: customs.darkTextStyle(size: 14),),
                               onTap: (){
-                                print("Tapped");
                               },
                               trailing: Switch(
                                 value: _isLightMode,

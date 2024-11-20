@@ -184,8 +184,6 @@ class _SelectMemberMessageState extends State<SelectMemberMessage> {
                           GestureDetector(
                             onTap: () async {
                               await Navigator.pushReplacementNamed(context, "/admin_inquiry_inbox", arguments: {"index" : index, "member_id": item['user_id']});
-                              // getMembers();
-                              print("Named");
                             },
                             child: Container(
                               margin: EdgeInsets.zero,

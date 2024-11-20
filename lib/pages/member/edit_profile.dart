@@ -185,7 +185,6 @@ class _EditProfileState extends State<EditProfile> {
     });
     ApiConnection apiConnection = new ApiConnection();
     var response = await apiConnection.getMemberDetails();
-    print(response);
     if(customs.isValidJson(response)){
       var res = jsonDecode(response);
       if(res['success']){
@@ -222,7 +221,6 @@ class _EditProfileState extends State<EditProfile> {
     var response = await apiConnection.getActiveRegions();
     if(customs.isValidJson(response)){
       var res = jsonDecode(response);
-      print(res);
       if(res['success']){
         // regions
         if(res['regions'].length > 0){

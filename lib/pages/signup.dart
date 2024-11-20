@@ -37,7 +37,6 @@ class _signUpState extends State<signUp> {
     var response = await apiConnection.getActiveRegions();
     if(customs.isValidJson(response)){
       var res = jsonDecode(response);
-      print(res);
       if(res['success']){
         // regions
         if(res['regions'].length > 0){
@@ -196,7 +195,6 @@ class _signUpState extends State<signUp> {
                           child: customs.maruTextFormField(
                               label: "Fullname",
                               isChanged: (text) {
-                                print("Value :  $text");
                               },
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
@@ -215,7 +213,6 @@ class _signUpState extends State<signUp> {
                               label: "Phone Number",
                               textType: TextInputType.number,
                               isChanged: (text) {
-                                print("Value :  $text");
                               },
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
@@ -234,7 +231,6 @@ class _signUpState extends State<signUp> {
                             textType: TextInputType.emailAddress,
                               label: "Email",
                               isChanged: (text) {
-                                print("Value :  $text");
                               },
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
@@ -254,7 +250,6 @@ class _signUpState extends State<signUp> {
                               textType: TextInputType.number,
                               label: "Id Number",
                               isChanged: (text) {
-                                print("Value :  $text");
                               },
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
@@ -336,7 +331,6 @@ class _signUpState extends State<signUp> {
                               textType: TextInputType.text,
                               label: "Username",
                               isChanged: (text) {
-                                print("Value :  $text");
                               },
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
@@ -365,7 +359,6 @@ class _signUpState extends State<signUp> {
                                 return null;
                               },
                               isChanged: (text) {
-                                print("Value :  $text");
                               }
                           ),
                         ),
@@ -389,7 +382,6 @@ class _signUpState extends State<signUp> {
                                 return null;
                               },
                               isChanged: (text) {
-                                print("Value :  $text");
                               }
                           ),
                         ),

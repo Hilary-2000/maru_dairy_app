@@ -57,7 +57,6 @@ class _UpdateMilkPricesState extends State<UpdateMilkPrices> {
     });
     ApiConnection apiConnection = ApiConnection();
     var response = await apiConnection.getEditMilkDetails(price_id);
-    print(response);
     if(customs.isValidJson(response)){
       var res = jsonDecode(response);
       if(res['success']){
@@ -286,7 +285,6 @@ class _UpdateMilkPricesState extends State<UpdateMilkPrices> {
                                     pickerTextStyle: customs.secondaryTextStyle(size: 13, fontweight: FontWeight.bold),
                                     onSubmit: (index) {
                                       setState(() {
-                                        print(index);
                                         date_time = index;
                                         date = DateFormat('EEE, d MMM yyyy').format(date_time);
                                       });
@@ -390,7 +388,6 @@ class _UpdateMilkPricesState extends State<UpdateMilkPrices> {
                                       var res = await apiConnection.updateMilkPrice(datapass);
                                       if(customs.isValidJson(res)){
                                         var response = jsonDecode(res);
-                                        print(res);
                                         if(response['success']){
                                           customs.maruSnackBarSuccess(context: context, text: response['message']);
                                           Navigator.pop(context);

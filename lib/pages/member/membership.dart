@@ -51,7 +51,6 @@ class _MemberMembershipState extends State<MemberMembership> {
   // member data
   Future<void> getMembershipDetails() async {
     args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
-    print(args);
     if(args != null){
       String member_id = args!['member_id'].toString();
       setState(() {
@@ -457,7 +456,6 @@ class _MemberMembershipState extends State<MemberMembership> {
                                                               ],
                                                             ),
                                                             onTap: (){
-                                                              print(items);
                                                             },
                                                           ),
                                                         );
@@ -638,7 +636,6 @@ class _MemberMembershipState extends State<MemberMembership> {
                                                             ],
                                                           ),
                                                           onTap: () async {
-                                                            print("Reject");
                                                             //confirm payment by saving it to the database
                                                             var result = await Navigator.of(context).push(HeroDialogRoute(builder: (context) {
                                                               return  rejectEarnings(earning_data: item, member_data: member_details,);
@@ -749,7 +746,6 @@ class _rejectEarningsState extends State<rejectEarnings> {
     super.initState();
 
     if(!init){
-      print("Initialize");
       setState(() {
         howMuch.text = "0";
         init = true;

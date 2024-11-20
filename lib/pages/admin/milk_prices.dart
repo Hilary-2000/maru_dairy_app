@@ -111,7 +111,6 @@ class _MilkPricesState extends State<MilkPrices> {
     var response = await apiConnection.getMilkPrices();
     if(customs.isValidJson(response)){
       var res = jsonDecode(response);
-      print(res);
       if(res['success']){
         setState(() {
           setState(() {

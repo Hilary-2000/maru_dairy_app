@@ -126,7 +126,6 @@ class _EditSuperAdminDetailsState extends State<EditSuperAdminDetails> {
       ApiConnection apiConnection = new ApiConnection();
 
       var response = await apiConnection.superAdministratorDetails(arguments['super_admin_id'].toString());
-      print(response);
       if (customs.isValidJson(response)) {
         var res = jsonDecode(response);
         if (res['success']) {
@@ -798,7 +797,6 @@ class _EditSuperAdminDetailsState extends State<EditSuperAdminDetails> {
 
                                           // update technician details
                                           var response = await apiCon.updateSuperAdministratorDetails(datapass);
-                                          print(response);
                                           if(customs.isValidJson(response)){
                                             var res = jsonDecode(response);
                                             if(res['success']){

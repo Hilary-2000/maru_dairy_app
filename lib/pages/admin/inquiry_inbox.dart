@@ -117,7 +117,6 @@ class _InquiryInboxState extends State<InquiryInbox> {
       ApiConnection apiConnection = new ApiConnection();
       var response = await apiConnection.getMemberMessages(member_id: member_id, send_status: "sent");
       if(customs.isValidJson(response)){
-        print(response);
         var res = jsonDecode(response);
         if(res['success']){
           setState(() {
@@ -727,7 +726,6 @@ class _InquiryInboxState extends State<InquiryInbox> {
                                   });
                                   ApiConnection apiConn = ApiConnection();
                                   var responses = await apiConn.sendMessage(member_id: "${member_data['user_id']}", message: textEditingController.text);
-                                  print(responses);
                                   if(customs.isValidJson(responses)){
                                     var res = jsonDecode(responses);
                                     if(res['success']){

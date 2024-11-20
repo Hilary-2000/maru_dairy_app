@@ -169,7 +169,6 @@ class _TechnicianReportState extends State<TechnicianReport> {
             "region_name" : "All regions",
             "region_id" : "0",
           });
-          print(res['regions']);
           regions = (res['regions'] as List).map((region){
             return DropdownMenuItem(child: Text("${region['region_name']}"), value: "${region['region_id']}");
           }).toList();
@@ -514,7 +513,6 @@ class _TechnicianReportState extends State<TechnicianReport> {
                                           pickerTextStyle: customs.secondaryTextStyle(
                                               size: 13, fontweight: FontWeight.bold),
                                           onChange: (index) {
-                                            print(index);
                                           },
                                           onSubmit: (selected_date) {
                                             setState(() {
@@ -585,7 +583,6 @@ class _TechnicianReportState extends State<TechnicianReport> {
                                           pickerTextStyle: customs.secondaryTextStyle(
                                               size: 13, fontweight: FontWeight.bold),
                                           onChange: (index) {
-                                            print(index);
                                           },
                                           onSubmit: (selected_date) {
                                             setState(() {
@@ -629,7 +626,6 @@ class _TechnicianReportState extends State<TechnicianReport> {
                                       // set url
                                       setState(() {
                                         pdfUrl = "${customs.apiURLDomain}/api/technician/reports?report_type=${reportType}&start_date=${convertDate(dateString: start_date.text)}&end_date=${convertDate(dateString: end_date.text)}&technician_id=${technician_data != null ? technician_data['user_id'] ?? "0" : "0"}&region=$regionDV";
-                                        print(pdfUrl);
                                         downloading = true;
                                       });
 

@@ -458,7 +458,6 @@ class _NewSuperAdministratorState extends State<NewSuperAdministrator> {
                                           return null;
                                         },
                                         isChanged: (text) {
-                                          print("Value :  $text");
                                         }
                                     ),
                                     Divider(
@@ -528,7 +527,6 @@ class _NewSuperAdministratorState extends State<NewSuperAdministrator> {
 
                                           // update technician details
                                           var response = await apiCon.registerSuperAdministrator(datapass);
-                                          print(response);
                                           if(customs.isValidJson(response)){
                                             var res = jsonDecode(response);
                                             if(res['success']){

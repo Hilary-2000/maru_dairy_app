@@ -255,7 +255,6 @@ class _MemberSettingsState extends State<MemberSettings> {
                               ),
                               title: Text("Light Mode", style: customs.darkTextStyle(size: 14),),
                               onTap: (){
-                                print("Tapped");
                               },
                               trailing: Switch(
                                 value: _isLightMode,

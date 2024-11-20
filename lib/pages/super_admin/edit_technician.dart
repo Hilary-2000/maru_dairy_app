@@ -120,7 +120,6 @@ class _EditTechnicianState extends State<EditTechnician> {
       ApiConnection apiConnection = new ApiConnection();
 
       var response = await apiConnection.technicianDetails(arguments['technician_id'].toString());
-      print(response);
       if (customs.isValidJson(response)) {
         var res = jsonDecode(response);
         if (res['success']) {

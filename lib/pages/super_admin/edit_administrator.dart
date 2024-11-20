@@ -120,7 +120,6 @@ class _EditAdministratorState extends State<EditAdministrator> {
       ApiConnection apiConnection = new ApiConnection();
 
       var response = await apiConnection.administratorDetails(arguments['admin_id'].toString());
-      print(response);
       if (customs.isValidJson(response)) {
         var res = jsonDecode(response);
         if (res['success']) {
@@ -675,7 +674,6 @@ class _EditAdministratorState extends State<EditAdministrator> {
 
                                           // update technician details
                                           var response = await apiCon.updateAdministratorDetails(datapass);
-                                          print(response);
                                           if(customs.isValidJson(response)){
                                             var res = jsonDecode(response);
                                             if(res['success']){

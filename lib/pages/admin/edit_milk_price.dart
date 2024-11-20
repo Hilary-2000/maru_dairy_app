@@ -260,10 +260,8 @@ class _EditMilkPriceState extends State<EditMilkPrice> {
                                     pickerTextStyle: customs.secondaryTextStyle(
                                         size: 13, fontweight: FontWeight.bold),
                                     onChange: (index) {
-                                      print(index);
                                     },
                                     onSubmit: (index) {
-                                      print(index);
                                       setState(() {
                                         date_time = index;
                                         date = DateFormat('EEE, d MMM yyyy').format(index);

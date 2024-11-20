@@ -276,7 +276,6 @@ class _AdminmembermembershipState extends State<Adminmembermembership> {
                                   ],
                                 ),
                                 onTap: (){
-                                  print("Tapped");
                                 },
                               ),
                             ),
@@ -320,7 +319,6 @@ class _AdminmembermembershipState extends State<Adminmembermembership> {
                                   ],
                                 ),
                                 onTap: (){
-                                  print("Tapped");
                                 },
                               ),
                             ),
@@ -364,7 +362,6 @@ class _AdminmembermembershipState extends State<Adminmembermembership> {
                                   ],
                                 ),
                                 onTap: (){
-                                  print("Tapped");
                                 },
                               ),
                             ),
@@ -408,7 +405,6 @@ class _AdminmembermembershipState extends State<Adminmembermembership> {
                                   ],
                                 ),
                                 onTap: (){
-                                  print("Tapped");
                                 },
                               ),
                             ),
@@ -452,7 +448,6 @@ class _AdminmembermembershipState extends State<Adminmembermembership> {
                                   ],
                                 ),
                                 onTap: (){
-                                  print("Tapped");
                                 },
                               ),
                             ),
@@ -496,7 +491,6 @@ class _AdminmembermembershipState extends State<Adminmembermembership> {
                                   ],
                                 ),
                                 onTap: (){
-                                  print("Tapped");
                                 },
                               ),
                             ),
@@ -540,7 +534,6 @@ class _AdminmembermembershipState extends State<Adminmembermembership> {
                                   ],
                                 ),
                                 onTap: (){
-                                  print("Tapped");
                                 },
                               ),
                             ),
@@ -584,7 +577,6 @@ class _AdminmembermembershipState extends State<Adminmembermembership> {
                                   ],
                                 ),
                                 onTap: (){
-                                  print("Tapped");
                                 },
                               ),
                             ),
@@ -628,7 +620,6 @@ class _AdminmembermembershipState extends State<Adminmembermembership> {
                                   ],
                                 ),
                                 onTap: (){
-                                  print("Tapped");
                                 },
                               ),
                             ),
@@ -672,7 +663,6 @@ class _AdminmembermembershipState extends State<Adminmembermembership> {
                                   ],
                                 ),
                                 onTap: (){
-                                  print("Tapped");
                                 },
                               ),
                             ),
@@ -716,7 +706,6 @@ class _AdminmembermembershipState extends State<Adminmembermembership> {
                                   ],
                                 ),
                                 onTap: (){
-                                  print("Tapped");
                                 },
                               ),
                             ),
@@ -760,7 +749,6 @@ class _AdminmembermembershipState extends State<Adminmembermembership> {
                                   ],
                                 ),
                                 onTap: (){
-                                  print("Tapped");
                                 },
                               ),
                             ),

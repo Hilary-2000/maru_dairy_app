@@ -453,7 +453,6 @@ class _NewTechnicianState extends State<NewTechnician> {
                                           return null;
                                         },
                                         isChanged: (text) {
-                                          print("Value :  $text");
                                         }
                                     ),
                                     Divider(
