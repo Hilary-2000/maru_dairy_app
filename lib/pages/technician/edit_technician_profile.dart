@@ -44,6 +44,7 @@ class _EditTechnicianProfileState extends State<EditTechnicianProfile> {
   TextEditingController emailAddress = TextEditingController();
   TextEditingController areaResidence = TextEditingController();
   TextEditingController nationalId = TextEditingController();
+  TextEditingController regionName = TextEditingController();
 
   void initState() {
     // TODO: implement initState
@@ -201,6 +202,7 @@ class _EditTechnicianProfileState extends State<EditTechnicianProfile> {
       var res = jsonDecode(response);
       if(res['success']){
         //get the success message
+        bool isValid = customs.checkRegion(res['regions'], res['technician_data']['region'].toString());
         setState(() {
           name = res['technician_data']['fullname'].toString();
           phone_number = res['technician_data']['phone_number'].toString();
@@ -210,7 +212,7 @@ class _EditTechnicianProfileState extends State<EditTechnicianProfile> {
           national_id = res['technician_data']['national_id'].toString();
           collection_days = res['technician_data']['collection_days'].toString();
           litresCollected = res['technician_data']['collection_amount'].toString();
-          region = res['technician_data']['region'].toString();
+          region = isValid ? res['technician_data']['region'].toString() : "";
           profile = res['technician_data']['profile_photo'].toString();
           technician_id = res['technician_data']['user_id'].toString();
           user_profile = res['technician_data']['profile_photo'].toString();
@@ -220,9 +222,8 @@ class _EditTechnicianProfileState extends State<EditTechnicianProfile> {
           emailAddress.text = email;
           areaResidence.text = residence;
           nationalId.text = national_id;
+          regionName.text = res['technician_data']['region_name'].toString();
         });
-      }else{
-
       }
     }
     setState((){
@@ -484,7 +485,7 @@ class _EditTechnicianProfileState extends State<EditTechnicianProfile> {
                                             await _uploadImage(context);
 
                                             //get the technician data
-                                            loadTechnicianDetails();
+                                            await loadTechnicianDetails();
                                           },
                                           color: customs.secondaryColor,
                                         ),
@@ -632,14 +633,14 @@ class _EditTechnicianProfileState extends State<EditTechnicianProfile> {
                                   style: customs.darkTextStyle(
                                       size: 12, fontweight: FontWeight.bold),
                                 ),
-                                customs.maruDropdownButtonFormField(
-                                  defaultValue: region,
-                                  onChange: (value) {
-                                    setState(() {
-                                      region = value!;
-                                    });
-                                  },
-                                  items: regions,
+                                customs.maruTextField(
+                                  isChanged: (value) {},
+                                  textType: TextInputType.text,
+                                  floatingBehaviour:
+                                  FloatingLabelBehavior.always,
+                                  hintText: "e.g, Njebi",
+                                  editingController: regionName,
+                                  enabled: false
                                 ),
                                 Divider(
                                   color: customs.secondaryShade_2,
@@ -664,10 +665,8 @@ class _EditTechnicianProfileState extends State<EditTechnicianProfile> {
                                     floatingBehaviour:
                                         FloatingLabelBehavior.always,
                                     hintText: "E,g: 11223322",
-                                  editingController: nationalId
-                                ),
-                                Divider(
-                                  color: customs.secondaryShade_2,
+                                  editingController: nationalId,
+                                  enabled: false
                                 )
                               ],
                             ),

@@ -38,12 +38,6 @@ class _MemberDetailsEditState extends State<MemberDetailsEdit> {
 
   var regionDV = "";
   bool _init = false;
-  // List<DropdownMenuItem<String>> regions = [
-  //   const DropdownMenuItem(child: Text("Select your region"), value: ""),
-  //   const DropdownMenuItem(child: Text("Njebi"), value: "Njebi"),
-  //   const DropdownMenuItem(child: Text("Njembi"), value: "Njembi"),
-  //   const DropdownMenuItem(child: Text("Munyu/Kiriti"), value: "Munyu/Kiriti"),
-  // ];
   List<DropdownMenuItem<String>> regions = [];
 
   var genderDV = "";
@@ -135,24 +129,11 @@ class _MemberDetailsEditState extends State<MemberDetailsEdit> {
             animalController.text = (res['member_details']['animals'] ?? "").toString();
             membershipController.text = (res['member_details']['membership'] ?? "").toString();
 
-            // check if the region value is present or not
-            String region_detail = res['member_details']['region'] ?? "";
-            bool present = false;
-            for(int index = 0; index < region_data.length; index++){
-              if("${region_data[index]['region_id']}" == "$region_detail"){
-                present = true;
-                break;
-              }
-            }
-            if(!present){
-              regionDV = "";
-            }else{
-              regionDV = region_detail;
-            }
+            bool isValid = customs.checkRegion(region_data, res['member_details']['region'].toString());
+            regionDV = isValid ? res['member_details']['region'] ?? "" : "";
 
             // gender dv
             genderDV = res['member_details']['gender'] ?? "";
-            // regionDV = res['member_details']['region'] ?? "";
           });
         } else {
           setState(() {

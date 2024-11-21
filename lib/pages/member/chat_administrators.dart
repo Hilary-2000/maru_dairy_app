@@ -238,8 +238,10 @@ class _ChatAdministratorsState extends State<ChatAdministrators> {
                                       onPressed: (){
                                         Navigator.pop(context);
                                       },
-                                      icon: Icon(Icons.arrow_back_ios,
-                                        size: 20,)
+                                      icon: Icon(
+                                        Icons.arrow_back_ios,
+                                        size: 20,
+                                      )
                                   ),
                                   CircleAvatar(
                                     backgroundColor: customs.primaryShade,

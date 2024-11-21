@@ -67,6 +67,19 @@ class CustomThemes {
   }
 
 
+
+  bool checkRegion(List<dynamic> regions, String region){
+    bool isValid = false;
+    for(int index = 0; index < regions.length; index++){
+      if(regions[index]['region_id'].toString() == region){
+        isValid = true;
+        break;
+      }
+    }
+    return isValid;
+  }
+
+
   String nameAbbr(String name){
     String abbr = "";
 
@@ -609,10 +622,12 @@ class CustomThemes {
       TextInputType textType = TextInputType.text,
       bool hideText = false,
       FloatingLabelBehavior floatingBehaviour = FloatingLabelBehavior.auto,
-      String label = ""}) {
+      String label = "",
+      bool enabled = true}) {
     return TextField(
       keyboardType: textType,
       obscureText: hideText,
+      enabled: enabled,
       controller: editingController,
       decoration: InputDecoration(
         label: Text(
@@ -649,11 +664,13 @@ class CustomThemes {
         bool hideText = false,
         TextAlign textAlign = TextAlign.center,
         String label = "",
-        String? Function(String?)? validator
+        String? Function(String?)? validator,
+        bool enabled = true
       }) {
     return TextFormField(
       keyboardType: textType,
       obscureText: hideText,
+      enabled: enabled,
       controller: editingController,
       textAlign: textAlign,
       validator: validator,
@@ -760,7 +777,8 @@ class CustomThemes {
     String? Function(String?)? validator,
     String label = "",
     String hintText = "",
-    FloatingLabelBehavior floatingBehaviour = FloatingLabelBehavior.always
+    FloatingLabelBehavior floatingBehaviour = FloatingLabelBehavior.always,
+    bool enabled = true
   }){
     return Container(
       child: Stack(
@@ -768,6 +786,7 @@ class CustomThemes {
         children: [
           maruTextFormField(
             label: label,
+            enabled: enabled,
             editingController: editingController,
             textType: TextInputType.text,
             hideText: hidePassword!,

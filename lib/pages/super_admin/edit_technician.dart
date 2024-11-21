@@ -126,6 +126,7 @@ class _EditTechnicianState extends State<EditTechnician> {
           setState(() {
             technicianData = res['technician_data'];
 
+            bool isValid = customs.checkRegion(res['regions'] ?? [], res['technician_data']['region'].toString());
             fullnameController.text = (res['technician_data']['fullname'] ?? "").toString();
             emailController.text = (res['technician_data']['email'] ?? "").toString();
             phone_controller.text = (res['technician_data']['phone_number'] ?? "").toString();
@@ -134,7 +135,7 @@ class _EditTechnicianState extends State<EditTechnician> {
 
             // gender dv
             genderDV = res['technician_data']['gender'] ?? "";
-            regionDV = res['technician_data']['region'] ?? "";
+            regionDV = isValid ? res['technician_data']['region'] ?? "" : "";
             status = "${res['technician_data']['status'] ?? ""}";
           });
         } else {

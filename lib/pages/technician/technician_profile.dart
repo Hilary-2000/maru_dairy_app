@@ -81,7 +81,7 @@ class _TechnicianProfileState extends State<TechnicianProfile> {
           national_id = res['technician_data']['national_id'].toString();
           collection_days = res['technician_data']['collection_days'].toString();
           litresCollected = res['technician_data']['collection_amount'].toString();
-          region = res['technician_data']['region'].toString();
+          region = res['technician_data']['region_name'].toString();
           profile = res['technician_data']['profile_photo'].toString();
         });
       }else{

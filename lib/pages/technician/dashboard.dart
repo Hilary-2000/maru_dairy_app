@@ -347,7 +347,6 @@ class _TechnicianDashboardState extends State<TechnicianDashboard> {
     ApiConnection apiConnection = new ApiConnection();
     String? token = await _storage.read(key: 'token');
     var dash_data = await apiConnection.getTechnicianDashboard(token!, period);
-    print(dash_data);
 
     //set the map data
     if (isValidJson(dash_data)) {
