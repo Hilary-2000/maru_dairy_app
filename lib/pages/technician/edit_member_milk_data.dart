@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:local_auth/local_auth.dart';
 import 'package:maru/packages/api_connection.dart';
 import 'package:maru/packages/maru_theme.dart';
 import 'package:intl/intl.dart';
@@ -31,20 +32,6 @@ class _EditMemberMilkDataState extends State<EditMemberMilkData> {
   TextEditingController _dateController = TextEditingController();
   TextEditingController _timeController = TextEditingController();
   TextEditingController _amountInLitres = TextEditingController();
-
-  // Future<void> _selectDate(BuildContext context) async {
-  //   final DateTime? pickedDate = await showDatePicker(
-  //     context: context,
-  //     initialDate: DateTime.now(),
-  //     firstDate: DateTime.now(),
-  //     lastDate: DateTime(2101),
-  //   );
-  //   if (pickedDate != null && pickedDate != _selectedDate)
-  //     setState(() {
-  //       _selectedDate = pickedDate;
-  //       _dateController.text = DateFormat("MMMM d, yyyy").format(_selectedDate!).toString();
-  //     });
-  // }
 
   // member data
   String collection_id = "";
@@ -351,9 +338,9 @@ class _EditMemberMilkDataState extends State<EditMemberMilkData> {
 
           setState(() {
             milkEditHistory = history;
-            memberName = toCamelCase(res['collection']['fullname'].toString());
+            memberName = res['collection']['fullname'] != null ? toCamelCase(res['collection']['fullname'].toString()) : "DELETED USER";
             collection_id = res['collection']['collection_id'].toString();
-            memberShipNumber = res['collection']['membership'].toString();
+            memberShipNumber = res['collection']['membership'] != null ? res['collection']['membership'].toString() : "-";
             collection_amount = res['collection']['collection_amount'].toString()+" Litres";
             date = res['collection'] != null ? res['collection']['date'].toString() : "N/A";
             time = res['collection'] != null ? res['collection']['time'].toString() : "N/A";
@@ -536,8 +523,9 @@ class _EditMemberMilkDataState extends State<EditMemberMilkData> {
                                     height: 35,
                                   ),
                                   Text(
-                                    memberName,
-                                    style: customs.darkTextStyle(
+                                    customs.toCamelCase(memberName),
+                                    style: memberName == "DELETED USER" ? customs.dangerTextStyle(
+                                        size: 20, fontweight: FontWeight.bold) : customs.darkTextStyle(
                                         size: 20, fontweight: FontWeight.bold),
                                   ),
                                   Text(
@@ -704,7 +692,7 @@ class _EditMemberMilkDataState extends State<EditMemberMilkData> {
                           child: CircleAvatar(
                               radius: 44,
                               backgroundColor: colors_shade[index % colors_shade.length],
-                              child: Text(customs.nameAbbr(memberName), style: textStylesTitle[index % textStylesTitle.length],)
+                              child: Text(customs.nameAbbr(memberName == "DELETED USER" ? "-" : memberName), style: textStylesTitle[index % textStylesTitle.length],)
                           ),
                         ),
                       ),
@@ -757,35 +745,41 @@ class _EditMemberMilkDataState extends State<EditMemberMilkData> {
                                 type: Type.success,
                                 text: "Update",
                                 onPressed: () async {
-                                  setState(() {
-                                    saveLoader = true;
-                                  });
                                   if (_formKey.currentState!.validate()) {
-                                    ApiConnection apiConnection = new ApiConnection();
-                                    final FlutterSecureStorage _storage = const FlutterSecureStorage();
-                                    String? token = await _storage.read(key: 'token');
-                                    var response = await apiConnection.updateCollection(token!, _amountInLitres.text, collection_id);
-                                    if(isValidJson(response)){
-                                      // this mean everything is fine!
-                                      var res = jsonDecode(response);
-                                      if(res['success'] == true){
-                                        customs.maruSnackBarSuccess(
-                                            context: context,
-                                            text: res['message']
-                                        );
-                                        // get collection details
-                                        getCollectionDetails();
+                                    LocalAuthentication auth = LocalAuthentication();
+                                    bool proceed = await customs.BiometricAuthenticate(auth: auth, context: context, auth_msg: "Please authenticate to find technician!");
+                                    if(proceed){
+                                      setState(() {
+                                        saveLoader = true;
+                                      });
+                                      ApiConnection apiConnection = new ApiConnection();
+                                      final FlutterSecureStorage _storage = const FlutterSecureStorage();
+                                      String? token = await _storage.read(key: 'token');
+                                      var response = await apiConnection.updateCollection(token!, _amountInLitres.text, collection_id);
+                                      if(isValidJson(response)){
+                                        // this mean everything is fine!
+                                        var res = jsonDecode(response);
+                                        if(res['success'] == true){
+                                          customs.maruSnackBarSuccess(
+                                              context: context,
+                                              text: res['message']
+                                          );
+                                          // get collection details
+                                          getCollectionDetails();
+                                        }else{
+                                          customs.maruSnackBarDanger(
+                                              context: context,
+                                              text: res['message']
+                                          );
+                                        }
                                       }else{
                                         customs.maruSnackBarDanger(
                                             context: context,
-                                            text: res['message']
+                                            text: "An error has occured!"
                                         );
                                       }
                                     }else{
-                                      customs.maruSnackBarDanger(
-                                          context: context,
-                                          text: "An error has occured!"
-                                      );
+                                      customs.maruSnackBarDanger(context: context, text: "Authenticated failed!");
                                     }
                                   }else{
                                     customs.maruSnackBarDanger(
@@ -866,18 +860,24 @@ class _AddTodoPopupCardState extends State<_AddTodoPopupCard> {
                                 showLoader: saveLoader,
                                 disabled: saveLoader,
                                 onPressed: () async {
-                                  setState((){
-                                    saveLoader = true;
-                                  });
-                                  ApiConnection apiConn = ApiConnection();
-                                  var response = await apiConn.deleteMilkData(widget.collection_id);
-                                  if(customThemes.isValidJson(response)){
-                                    var res = jsonDecode(response);
-                                    if(res['success']){
-                                      Navigator.pop(context, res);
-                                    }else{
-                                      Navigator.pop(context, res);
+                                  LocalAuthentication auth = LocalAuthentication();
+                                  bool proceed = await customThemes.BiometricAuthenticate(auth: auth, context: context, auth_msg: "Please authenticate to find technician!");
+                                  if(proceed){
+                                    setState((){
+                                      saveLoader = true;
+                                    });
+                                    ApiConnection apiConn = ApiConnection();
+                                    var response = await apiConn.deleteMilkData(widget.collection_id);
+                                    if(customThemes.isValidJson(response)){
+                                      var res = jsonDecode(response);
+                                      if(res['success']){
+                                        Navigator.pop(context, res);
+                                      }else{
+                                        Navigator.pop(context, res);
+                                      }
                                     }
+                                  }else{
+                                    customThemes.maruSnackBarDanger(context: context, text: "Authenticated failed!");
                                   }
                                 },
                                 type: Type.danger

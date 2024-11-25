@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:local_auth/local_auth.dart';
 import 'package:maru/packages/api_connection.dart';
 import 'package:maru/packages/maru_theme.dart';
 
@@ -529,7 +530,7 @@ class _MemberDetailsEditState extends State<MemberDetailsEdit> {
                                       editingController: membershipController,
                                       validator: (value) {
                                         if(value == null || value.isEmpty){
-                                          return "Enter member animal number";
+                                          return "Enter member, membership number";
                                         }
                                         return null;
                                       }),
@@ -764,37 +765,42 @@ class _MemberDetailsEditState extends State<MemberDetailsEdit> {
                                     disabled: save_loader,
                                     onPressed: () async {
                                       if (_formKey.currentState!.validate()){
-                                        setState(() {
-                                          save_loader = true;
-                                        });
-                                        ApiConnection apiCon = ApiConnection();
-                                        var datapass = {
-                                          "user_id": memberData['user_id'],
-                                          "fullname": fullnameController.text,
-                                          "phone_number": phone_controller.text,
-                                          "email": emailController.text,
-                                          "residence": locationController.text,
-                                          "region": regionDV,
-                                          "national_id": idController.text,
-                                          "animals": animalController.text,
-                                          "membership": membershipController.text,
-                                          "gender": genderDV
-                                        };
-                                        var response = await apiCon.adminUpdateMember(datapass);
-                                        if(customs.isValidJson(response)){
-                                          var res = jsonDecode(response);
-                                          if(res['success']){
-                                            customs.maruSnackBarSuccess(context: context, text: res['message']);
+                                        LocalAuthentication auth = LocalAuthentication();
+                                        bool proceed = await customs.BiometricAuthenticate(auth: auth, context: context, auth_msg: "Please authenticate to save member`s information!");
+                                        if(proceed){
+                                          setState(() {
+                                            save_loader = true;
+                                          });
+                                          ApiConnection apiCon = ApiConnection();
+                                          var datapass = {
+                                            "user_id": memberData['user_id'],
+                                            "fullname": fullnameController.text,
+                                            "phone_number": phone_controller.text,
+                                            "email": emailController.text,
+                                            "residence": locationController.text,
+                                            "region": regionDV,
+                                            "national_id": idController.text,
+                                            "animals": animalController.text,
+                                            "membership": membershipController.text,
+                                            "gender": genderDV
+                                          };
+                                          var response = await apiCon.adminUpdateMember(datapass);
+                                          if(customs.isValidJson(response)){
+                                            var res = jsonDecode(response);
+                                            if(res['success']){
+                                              customs.maruSnackBarSuccess(context: context, text: res['message']);
+                                            }else{
+                                              customs.maruSnackBarDanger(context: context, text: res['message']);
+                                            }
                                           }else{
-                                            customs.maruSnackBarDanger(context: context, text: res['message']);
+                                            customs.maruSnackBarDanger(context: context, text: "An error has occured!");
                                           }
+                                          setState(() {
+                                            save_loader = false;
+                                          });
                                         }else{
-                                          customs.maruSnackBarDanger(context: context, text: "An error has occured!");
+                                          customs.maruSnackBarDanger(context: context, text: "Authenticated failed!");
                                         }
-
-                                        setState(() {
-                                          save_loader = false;
-                                        });
                                       }
                                     }))
                           ]),

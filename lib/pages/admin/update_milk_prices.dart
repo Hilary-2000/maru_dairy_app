@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:local_auth/local_auth.dart';
 import 'package:maru/packages/api_connection.dart';
 import 'package:maru/packages/maru_theme.dart';
 import 'package:numberpicker/numberpicker.dart';
@@ -340,29 +341,35 @@ class _UpdateMilkPricesState extends State<UpdateMilkPrices> {
                                     disabled: save_n_publish,
                                     showLoader: save_n_publish,
                                     onPressed: () async {
-                                      setState(() {
-                                        save_n_publish = true;
-                                      });
-                                      ApiConnection apiConnection = ApiConnection();
-                                      var datapass = {
-                                        "amount": _currentDoubleValue,
-                                        "effect_date":DateFormat('yyyyMMdd').format(date_time),
-                                        "status" : "0",
-                                        "price_id":collection_id
-                                      };
-                                      var res = await apiConnection.updateMilkPrice(datapass);
-                                      if(customs.isValidJson(res)){
-                                        var response = jsonDecode(res);
-                                        if(response['success']){
-                                          customs.maruSnackBarSuccess(context: context, text: response['message']);
-                                          Navigator.pop(context);
-                                        }else{
-                                          customs.maruSnackBarDanger(context: context, text: response['message']);
+                                      LocalAuthentication auth = LocalAuthentication();
+                                      bool proceed = await customs.BiometricAuthenticate(auth: auth, context: context, auth_msg: "Please authenticate to find technician!");
+                                      if(proceed){
+                                        setState(() {
+                                          save_n_publish = true;
+                                        });
+                                        ApiConnection apiConnection = ApiConnection();
+                                        var datapass = {
+                                          "amount": _currentDoubleValue,
+                                          "effect_date":DateFormat('yyyyMMdd').format(date_time),
+                                          "status" : "0",
+                                          "price_id":collection_id
+                                        };
+                                        var res = await apiConnection.updateMilkPrice(datapass);
+                                        if(customs.isValidJson(res)){
+                                          var response = jsonDecode(res);
+                                          if(response['success']){
+                                            customs.maruSnackBarSuccess(context: context, text: response['message']);
+                                            Navigator.pop(context);
+                                          }else{
+                                            customs.maruSnackBarDanger(context: context, text: response['message']);
+                                          }
                                         }
+                                        setState(() {
+                                          save_n_publish = false;
+                                        });
+                                      }else{
+                                        customs.maruSnackBarDanger(context: context, text: "Authenticated failed!");
                                       }
-                                      setState(() {
-                                        save_n_publish = false;
-                                      });
                                     },
                                     type: Type.danger
                                 ) : SizedBox(height: 0, width: 0,),
@@ -375,29 +382,35 @@ class _UpdateMilkPricesState extends State<UpdateMilkPrices> {
                                     disabled: save_n_publish,
                                     showLoader: save_n_publish,
                                     onPressed: () async {
-                                      setState(() {
-                                        save_n_publish = true;
-                                      });
-                                      ApiConnection apiConnection = ApiConnection();
-                                      var datapass = {
-                                        "amount": _currentDoubleValue,
-                                        "effect_date":DateFormat('yyyyMMdd').format(date_time),
-                                        "status" : "1",
-                                        "price_id":collection_id
-                                      };
-                                      var res = await apiConnection.updateMilkPrice(datapass);
-                                      if(customs.isValidJson(res)){
-                                        var response = jsonDecode(res);
-                                        if(response['success']){
-                                          customs.maruSnackBarSuccess(context: context, text: response['message']);
-                                          Navigator.pop(context);
-                                        }else{
-                                          customs.maruSnackBarDanger(context: context, text: response['message']);
+                                      LocalAuthentication auth = LocalAuthentication();
+                                      bool proceed = await customs.BiometricAuthenticate(auth: auth, context: context, auth_msg: "Please authenticate to find technician!");
+                                      if(proceed){
+                                        setState(() {
+                                          save_n_publish = true;
+                                        });
+                                        ApiConnection apiConnection = ApiConnection();
+                                        var datapass = {
+                                          "amount": _currentDoubleValue,
+                                          "effect_date":DateFormat('yyyyMMdd').format(date_time),
+                                          "status" : "1",
+                                          "price_id":collection_id
+                                        };
+                                        var res = await apiConnection.updateMilkPrice(datapass);
+                                        if(customs.isValidJson(res)){
+                                          var response = jsonDecode(res);
+                                          if(response['success']){
+                                            customs.maruSnackBarSuccess(context: context, text: response['message']);
+                                            Navigator.pop(context);
+                                          }else{
+                                            customs.maruSnackBarDanger(context: context, text: response['message']);
+                                          }
                                         }
+                                        setState(() {
+                                          save_n_publish = false;
+                                        });
+                                      }else{
+                                        customs.maruSnackBarDanger(context: context, text: "Authenticated failed!");
                                       }
-                                      setState(() {
-                                        save_n_publish = false;
-                                      });
                                     },
                                     type: Type.success
                                 ),

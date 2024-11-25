@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:local_auth/local_auth.dart';
 import 'package:maru/packages/api_connection.dart';
 import 'package:maru/packages/maru_theme.dart';
 
@@ -25,7 +26,6 @@ class _MemberSettingsState extends State<MemberSettings> {
   String trajectory = "constant";
   String duration = "N/A";
   String greetings = "Hello,";
-  bool loading = false;
   var member_data = null;
   bool _init = false;
 
@@ -44,9 +44,6 @@ class _MemberSettingsState extends State<MemberSettings> {
   }
   // get the member dashboard
   Future<void> memberDashboard(String period) async {
-    setState(() {
-      loading = true;
-    });
     //get the member dashboard
     ApiConnection apiConnection = new ApiConnection();
     var response = await apiConnection.getMemberDetails();
@@ -60,10 +57,14 @@ class _MemberSettingsState extends State<MemberSettings> {
     } else {
       member_data = null;
     }
-    setState(() {
-      loading = false;
-    });
   }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(child: LayoutBuilder(
@@ -179,9 +180,15 @@ class _MemberSettingsState extends State<MemberSettings> {
                               ),
                               title: Text("View Membership", style: customs.darkTextStyle(size: 14),),
                               subtitle: Text("View your membership status", style: customs.secondaryTextStyle(size: 12),),
-                              onTap: (){
-                                Navigator.pushNamed(context, "/member_membership",
-                                arguments: {"member_id" : member_data['user_id']});
+                              onTap: () async {
+                                LocalAuthentication auth = LocalAuthentication();
+                                bool proceed = await customs.BiometricAuthenticate(auth: auth, context: context, auth_msg: "Please authenticate to find technician!");
+                                if(proceed){
+                                  Navigator.pushNamed(context, "/member_membership",
+                                      arguments: {"member_id" : member_data['user_id']});
+                                }else{
+                                  customs.maruSnackBarDanger(context: context, text: "Authenticated failed!");
+                                }
                               },
                               tileColor: customs.secondaryShade_2,
                             ),
@@ -218,8 +225,14 @@ class _MemberSettingsState extends State<MemberSettings> {
                               ),
                               title: Text("Generate Reports", style: customs.darkTextStyle(size: 14),),
                               subtitle: Text("Download your milk collection statement", style: customs.secondaryTextStyle(size: 12),),
-                              onTap: (){
-                                Navigator.pushNamed(context, "/member_reports");
+                              onTap: () async {
+                                LocalAuthentication auth = LocalAuthentication();
+                                bool proceed = await customs.BiometricAuthenticate(auth: auth, context: context, auth_msg: "Please authenticate to generate reports!");
+                                if(proceed){
+                                  Navigator.pushNamed(context, "/member_reports");
+                                }else{
+                                  customs.maruSnackBarDanger(context: context, text: "Authenticated failed!");
+                                }
                               },
                             ),
                           ],

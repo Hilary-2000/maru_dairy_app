@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:local_auth/local_auth.dart';
 import 'package:maru/packages/api_connection.dart';
 import 'package:maru/packages/maru_theme.dart';
 
@@ -199,26 +200,32 @@ class _ChangeMemberPasswordState extends State<ChangeMemberPassword> {
                                   onPressed: () async {
                                     if (_formKey.currentState!.validate()){
                                       if(password_1.text == password_2.text){
-                                        //proceed and save the password
-                                        ApiConnection apiConnection = new ApiConnection();
-                                        String? token = await _storage.read(key: "token");
-                                        setState(() {
-                                          save_loader = true;
-                                        });
-                                        var res = await apiConnection.updatePassword(token!, username.text, password_1.text);
-                                        if(isValidJson(res)){
-                                          var response = jsonDecode(res);
-                                          if(response['success']){
-                                            customs.maruSnackBarSuccess(context: context, text: response['message']);
+                                        LocalAuthentication auth = LocalAuthentication();
+                                        bool proceed = await customs.BiometricAuthenticate(auth: auth, context: context, auth_msg: "Please authenticate to find technician!");
+                                        if(proceed){
+                                          //proceed and save the password
+                                          ApiConnection apiConnection = new ApiConnection();
+                                          String? token = await _storage.read(key: "token");
+                                          setState(() {
+                                            save_loader = true;
+                                          });
+                                          var res = await apiConnection.updatePassword(token!, username.text, password_1.text);
+                                          if(isValidJson(res)){
+                                            var response = jsonDecode(res);
+                                            if(response['success']){
+                                              customs.maruSnackBarSuccess(context: context, text: response['message']);
+                                            }else{
+                                              customs.maruSnackBarDanger(context: context, text: response['message']);
+                                            }
                                           }else{
-                                            customs.maruSnackBarDanger(context: context, text: response['message']);
+                                            customs.maruSnackBarDanger(context: context, text: "An error has occured!");
                                           }
+                                          setState(() {
+                                            save_loader = false;
+                                          });
                                         }else{
-                                          customs.maruSnackBarDanger(context: context, text: "An error has occured!");
+                                          customs.maruSnackBarDanger(context: context, text: "Authenticated failed!");
                                         }
-                                        setState(() {
-                                          save_loader = false;
-                                        });
                                       }else{
                                         customs.maruSnackBarDanger(context: context, text: "Passwords don`t match!");
                                       }

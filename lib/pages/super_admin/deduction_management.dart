@@ -703,8 +703,6 @@ class _AddDeductionsState extends State<AddDeductions> {
     );
   }
 }
-
-
 class HeroDialogRoute<T> extends PageRoute<T> {
   /// {@macro hero_dialog_route}
   HeroDialogRoute({

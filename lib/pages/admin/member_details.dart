@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:local_auth/local_auth.dart';
 import 'package:maru/packages/api_connection.dart';
 import 'package:maru/packages/maru_theme.dart';
 import 'package:skeletonizer/skeletonizer.dart';
@@ -293,11 +294,11 @@ class _MemberDetailsState extends State<MemberDetails> {
                                                       Text(
                                                         "Collection Days",
                                                         style: customs
-                                                            .secondaryTextStyle(
-                                                            size: 10,
-                                                            fontweight:
-                                                            FontWeight
-                                                                .normal),
+                                                          .secondaryTextStyle(
+                                                          size: 10,
+                                                          fontweight:
+                                                          FontWeight.normal
+                                                        ),
                                                       ),
                                                     ],
                                                   ),
@@ -430,8 +431,14 @@ class _MemberDetailsState extends State<MemberDetails> {
                                 customs.maruIconButton(
                                     icons: Icons.history,
                                     text: "Membership",
-                                    onPressed: (){
-                                      Navigator.pushNamed(context, "/admin_member_membership", arguments: {"member_id": (memberData != null ? memberData['user_id'] ?? "-0" : "-0"), "member_data": memberData});
+                                    onPressed: () async {
+                                      LocalAuthentication auth = LocalAuthentication();
+                                      bool proceed = await customs.BiometricAuthenticate(auth: auth, context: context, auth_msg: "Please authenticate to find technician!");
+                                      if(proceed){
+                                        Navigator.pushNamed(context, "/admin_member_membership", arguments: {"member_id": (memberData != null ? memberData['user_id'] ?? "-0" : "-0"), "member_data": memberData});
+                                      }else{
+                                        customs.maruSnackBarDanger(context: context, text: "Authenticated failed!");
+                                      }
                                     },
                                     type: Type.secondary,
                                     fontSize: 14)
@@ -674,18 +681,24 @@ class _AddTodoPopupCardState extends State<_AddTodoPopupCard> {
                                   showLoader: saveLoader,
                                   disabled: saveLoader,
                                   onPressed: () async {
-                                    setState((){
-                                      saveLoader = true;
-                                    });
-                                    ApiConnection apiConn = ApiConnection();
-                                    var response = await apiConn.deleteMember(widget.member_data['user_id'].toString());
-                                    if(customThemes.isValidJson(response)){
-                                      var res = jsonDecode(response);
-                                      if(res['success']){
-                                        Navigator.pop(context, res);
-                                      }else{
-                                        Navigator.pop(context, res);
+                                    LocalAuthentication auth = LocalAuthentication();
+                                    bool proceed = await customThemes.BiometricAuthenticate(auth: auth, context: context, auth_msg: "Please authenticate to find technician!");
+                                    if(proceed){
+                                      setState((){
+                                        saveLoader = true;
+                                      });
+                                      ApiConnection apiConn = ApiConnection();
+                                      var response = await apiConn.deleteMember(widget.member_data['user_id'].toString());
+                                      if(customThemes.isValidJson(response)){
+                                        var res = jsonDecode(response);
+                                        if(res['success']){
+                                          Navigator.pop(context, res);
+                                        }else{
+                                          Navigator.pop(context, res);
+                                        }
                                       }
+                                    }else{
+                                      customThemes.maruSnackBarDanger(context: context, text: "Authenticated failed!");
                                     }
                                   },
                                   type: Type.danger

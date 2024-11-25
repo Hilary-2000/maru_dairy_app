@@ -4,6 +4,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:local_auth/local_auth.dart';
 import 'package:maru/packages/api_connection.dart';
 import 'package:maru/packages/maru_theme.dart';
 import 'package:maru/packages/push_notification_api.dart';
@@ -711,11 +712,19 @@ class _memberDashState extends State<memberDash> {
                                 fontSize: 16,
                                 size: Sizes.sm,
                                 text: "View Membership",
-                                onPressed: () {
-                                  Navigator.pushNamed(
-                                    context, "/member_membership",
-                                    arguments: {"member_id" : member_data['user_id']
-                                    });
+                                onPressed: () async {
+                                  LocalAuthentication auth = LocalAuthentication();
+                                  bool proceed = await customs.BiometricAuthenticate(auth: auth, context: context, auth_msg: "Please authenticate to find technician!");
+                                  if(proceed){
+                                    Navigator.pushNamed(
+                                      context, "/member_membership",
+                                      arguments: {
+                                        "member_id" : member_data['user_id']
+                                      }
+                                    );
+                                  }else{
+                                    customs.maruSnackBarDanger(context: context, text: "Authenticated failed!");
+                                  }
                                 }),
                             customs.maruButton(
                                 showArrow: true,

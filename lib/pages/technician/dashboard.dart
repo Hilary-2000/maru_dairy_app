@@ -594,13 +594,13 @@ class _TechnicianDashboardState extends State<TechnicianDashboard> {
                                 size: Sizes.sm,
                                 text: "Find Technician",
                                 onPressed: () async {
-                                  LocalAuthentication auth = LocalAuthentication();
-                                  bool proceed = await customs.BiometricAuthenticate(auth: auth, context: context, auth_msg: "Please authenticate to find technician!");
-                                  if(proceed){
-                                    customs.maruSnackBarSuccess(context: context, text: "Authenticated successfully!");
-                                  }else{
-                                    customs.maruSnackBarDanger(context: context, text: "Authenticated failed!");
-                                  }
+                                  // LocalAuthentication auth = LocalAuthentication();
+                                  // bool proceed = await customs.BiometricAuthenticate(auth: auth, context: context, auth_msg: "Please authenticate to find technician!");
+                                  // if(proceed){
+                                  //   customs.maruSnackBarSuccess(context: context, text: "Authenticated successfully!");
+                                  // }else{
+                                  //   customs.maruSnackBarDanger(context: context, text: "Authenticated failed!");
+                                  // }
                                 }
                             ),
                           ],

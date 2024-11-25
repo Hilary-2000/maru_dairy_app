@@ -113,80 +113,10 @@ class CustomThemes{
   }
 
   Future<bool> _askForPassword (String message, BuildContext context) async{
-    bool authenticate = false;
-    TextEditingController passwordController = TextEditingController();
-    passwordController.text = "1234";
-    bool loading = false;
-    await showDialog(
+    return await showDialog(
       context: context,
-      builder: (context) {
-        final _formKey = GlobalKey<FormState>();
-        double screenWidth = MediaQuery.of(context).size.width;
-        return AlertDialog(
-          backgroundColor: whiteColor,
-          title: Text('Provide Password', style: darkTextStyle(size: 16, fontweight: FontWeight.bold)),
-          content: Form(
-            key: _formKey,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(message, style: darkTextStyle(size: 12, fontweight: FontWeight.normal),),
-                SizedBox(height: 12,),
-                Container(width: screenWidth, child: Text("Password: ", style: darkTextStyle(size: 12, fontweight: FontWeight.bold),)),
-                maruTextFormField(
-                    editingController: passwordController,
-                    hideText: true,
-                    label: "Enter Password!",
-                    hintText: "Enter Password!",
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return "Enter your password!";
-                      }
-                      return null;
-                    },
-                    isChanged: (value) {}
-                ),
-              ],
-            ),
-          ),
-          actions: [
-            Row(
-              children: [
-                Container(
-                  width: screenWidth * 0.3,
-                  child: maruButton(
-                    text: "Confirm",
-                    type: Type.success,
-                    showLoader: loading,
-                    disabled: loading,
-                    onPressed: () async {
-                      if (_formKey.currentState!.validate()){
-                        String password = passwordController.text.trim();
-                        maruSnackBar(context: context, text: "Authenticating...");
-                        authenticate = await _validatePassword(password);
-                        Navigator.pop(context);
-                      }
-                    },
-                  ),
-                ),
-                Spacer(),
-                Container(
-                  width: screenWidth * 0.3,
-                  child: marOutlineuButton(
-                    text: "Cancel",
-                    type: Type.danger,
-                    onPressed: () {
-                      Navigator.pop(context); // Close the dialog
-                    },
-                  ),
-                )
-              ],
-            )
-          ],
-        );
-      },
+      builder: (context) => PasswordDialog(message: message),
     );
-    return authenticate;
   }
 
   Future<bool> _validatePassword(String password) async {
@@ -1052,6 +982,128 @@ class CustomThemes{
         elevation: 0,
         underline: Container(),
       ),
+    );
+  }
+}
+
+class PasswordDialog extends StatefulWidget {
+  final String message;
+
+  PasswordDialog({required this.message});
+
+  @override
+  _PasswordDialogState createState() => _PasswordDialogState();
+}
+
+class _PasswordDialogState extends State<PasswordDialog> {
+  final TextEditingController passwordController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+  CustomThemes customs = CustomThemes();
+  bool loading = false;
+  bool hidePassword = true;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    passwordController.dispose();
+    super.dispose();
+  }
+
+  Future<bool> _validatePassword(String password) async {
+    // Replace this with actual password validation logic
+    ApiConnection apiConnection = new ApiConnection();
+    var response = await apiConnection.authenticatePassword(password: password);
+    if(customs.isValidJson(response)){
+      var res = jsonDecode(response);
+      if(res['success']){
+        return true;
+      }
+    }
+    return false;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      backgroundColor: customs.whiteColor,
+      title: Text(
+        'Provide Password',
+        style: customs.darkTextStyle(size: 20, fontweight: FontWeight.bold),
+      ),
+      content: Form(
+        key: _formKey,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              widget.message,
+              style: customs.darkTextStyle(size: 12, fontweight: FontWeight.normal),
+            ),
+            SizedBox(height: 12),
+            customs.maruPassword(
+              passwordStatus: (){
+                setState(() {
+                  hidePassword = !hidePassword!;
+                });
+              },
+              hidePassword: hidePassword,
+              editingController: passwordController,
+              label: "Enter Password!",
+              hintText: "Enter Password!",
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return "Enter your password!";
+                }
+                return null;
+              },
+              isChanged: (value) {},
+            ),
+          ],
+        ),
+      ),
+      actions: [
+        Row(
+          children: [
+            Container(
+              width: MediaQuery.of(context).size.width * 0.3,
+              child: customs.maruButton(
+                text: "Confirm",
+                type: Type.success,
+                showLoader: loading,
+                disabled: loading,
+                onPressed: () async {
+                  if (_formKey.currentState!.validate()) {
+                    setState(() {
+                      loading = true;
+                    });
+                    String password = passwordController.text.trim();
+                    bool authenticate = await _validatePassword(password);
+                    setState(() {
+                      loading = false;
+                    });
+                    Navigator.pop(context, authenticate);
+                  }
+                },
+              ),
+            ),
+            Spacer(),
+            Container(
+              width: MediaQuery.of(context).size.width * 0.3,
+              child: customs.marOutlineuButton(
+                text: "Cancel",
+                type: Type.danger,
+                onPressed: () {
+                  Navigator.pop(context, false); // Close the dialog
+                },
+              ),
+            ),
+          ],
+        ),
+      ],
     );
   }
 }

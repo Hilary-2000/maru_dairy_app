@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:local_auth/local_auth.dart';
 import 'package:maru/packages/api_connection.dart';
 import 'package:maru/packages/maru_theme.dart';
 import 'package:path_provider/path_provider.dart';
@@ -1096,31 +1097,37 @@ class _rejectEarningsState extends State<rejectEarnings> {
                                   showLoader: saveLoader,
                                   disabled: saveLoader,
                                   onPressed: () async {
-                                    setState((){
-                                      saveLoader = true;
-                                    });
-                                    ApiConnection apiConn = ApiConnection();
-                                    var datapass = {
-                                      "payment_amount": widget.earning_data['raw_amount'],
-                                      "transaction_cost": widget.earning_data['transaction_cost'],
-                                      "member_id": widget.member_data['user_id'],
-                                      "month_paid_for": widget.earning_data['month_paid_for'],
-                                      "litres_amount": widget.earning_data['litres_collected'],
-                                      "deductions": deductions,
-                                      "transaction_amount": isChecked ? "yes" : "no"
-                                    };
-                                    var response = await apiConn.acceptMemberPayment(datapass);
-                                    if(customThemes.isValidJson(response)){
-                                      var res = jsonDecode(response);
-                                      if(res['success']){
-                                        Navigator.pop(context, res);
-                                      }else{
-                                        Navigator.pop(context, res);
+                                    LocalAuthentication auth = LocalAuthentication();
+                                    bool proceed = await customThemes.BiometricAuthenticate(auth: auth, context: context, auth_msg: "Please authenticate to find technician!");
+                                    if(proceed){
+                                      setState((){
+                                        saveLoader = true;
+                                      });
+                                      ApiConnection apiConn = ApiConnection();
+                                      var datapass = {
+                                        "payment_amount": widget.earning_data['raw_amount'],
+                                        "transaction_cost": widget.earning_data['transaction_cost'],
+                                        "member_id": widget.member_data['user_id'],
+                                        "month_paid_for": widget.earning_data['month_paid_for'],
+                                        "litres_amount": widget.earning_data['litres_collected'],
+                                        "deductions": deductions,
+                                        "transaction_amount": isChecked ? "yes" : "no"
+                                      };
+                                      var response = await apiConn.acceptMemberPayment(datapass);
+                                      if(customThemes.isValidJson(response)){
+                                        var res = jsonDecode(response);
+                                        if(res['success']){
+                                          Navigator.pop(context, res);
+                                        }else{
+                                          Navigator.pop(context, res);
+                                        }
                                       }
+                                      setState((){
+                                        saveLoader = false;
+                                      });
+                                    }else{
+                                      customThemes.maruSnackBarDanger(context: context, text: "Authenticated failed!");
                                     }
-                                    setState((){
-                                      saveLoader = false;
-                                    });
                                   },
                                   type: Type.success
                               ),
@@ -1478,22 +1485,28 @@ class _editEarningsState extends State<_editEarnings> {
                                     showLoader: saveLoader,
                                     disabled: saveLoader,
                                     onPressed: () async {
-                                      setState((){
-                                        saveLoader = true;
-                                      });
-                                      ApiConnection apiConn = ApiConnection();
-                                      var response = await apiConn.declineMemberPayment(widget.earning_data['id'].toString());
-                                      if(customThemes.isValidJson(response)){
-                                        var res = jsonDecode(response);
-                                        if(res['success']){
-                                          Navigator.pop(context, res);
-                                        }else{
-                                          Navigator.pop(context, res);
+                                      LocalAuthentication auth = LocalAuthentication();
+                                      bool proceed = await customThemes.BiometricAuthenticate(auth: auth, context: context, auth_msg: "Please authenticate to find technician!");
+                                      if(proceed){
+                                        setState((){
+                                          saveLoader = true;
+                                        });
+                                        ApiConnection apiConn = ApiConnection();
+                                        var response = await apiConn.declineMemberPayment(widget.earning_data['id'].toString());
+                                        if(customThemes.isValidJson(response)){
+                                          var res = jsonDecode(response);
+                                          if(res['success']){
+                                            Navigator.pop(context, res);
+                                          }else{
+                                            Navigator.pop(context, res);
+                                          }
                                         }
+                                        setState((){
+                                          saveLoader = false;
+                                        });
+                                      }else{
+                                        customThemes.maruSnackBarDanger(context: context, text: "Authenticated failed!");
                                       }
-                                      setState((){
-                                        saveLoader = false;
-                                      });
                                     },
                                     type: Type.danger
                                 ),

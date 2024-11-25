@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:local_auth/local_auth.dart';
 import 'package:maru/packages/api_connection.dart';
 import 'package:maru/packages/maru_theme.dart';
 import 'package:bottom_picker/bottom_picker.dart';
@@ -576,48 +577,54 @@ class _NewMemberState extends State<NewMember> {
                                 disabled: save_loader,
                                 onPressed: () async {
                                   if (_formKey.currentState!.validate()){
-                                    setState(() {
-                                      save_loader = true;
-                                    });
-                                    ApiConnection apiCon = ApiConnection();
-                                    var datapass = {
-                                      "fullname": fullnameController.text,
-                                      "phone_number": phone_controller.text,
-                                      "email": emailController.text,
-                                      "residence": locationController.text,
-                                      "region": regionDV,
-                                      "national_id": idController.text,
-                                      "animals": animalController.text,
-                                      "membership": membershipController.text,
-                                      "gender": genderDV,
-                                      "registration_date": reg_date.text
-                                    };
-                                    var response = await apiCon.adminAddMember(datapass);
-                                    if(customs.isValidJson(response)){
-                                      var res = jsonDecode(response);
-                                      if(res['success']){
-                                        customs.maruSnackBarSuccess(context: context, text: res['message']);
-                                        setState(() {
-                                          fullnameController.text = "";
-                                          phone_controller.text = "";
-                                          emailController.text = "";
-                                          locationController.text = "";
-                                          regionDV = "";
-                                          idController.text = "";
-                                          animalController.text = "";
-                                          membershipController.text = "";
-                                          genderDV = "";
-                                        });
+                                    LocalAuthentication auth = LocalAuthentication();
+                                    bool proceed = await customs.BiometricAuthenticate(auth: auth, context: context, auth_msg: "Please authenticate to find technician!");
+                                    if(proceed){
+                                      setState(() {
+                                        save_loader = true;
+                                      });
+                                      ApiConnection apiCon = ApiConnection();
+                                      var datapass = {
+                                        "fullname": fullnameController.text,
+                                        "phone_number": phone_controller.text,
+                                        "email": emailController.text,
+                                        "residence": locationController.text,
+                                        "region": regionDV,
+                                        "national_id": idController.text,
+                                        "animals": animalController.text,
+                                        "membership": membershipController.text,
+                                        "gender": genderDV,
+                                        "registration_date": reg_date.text
+                                      };
+                                      var response = await apiCon.adminAddMember(datapass);
+                                      if(customs.isValidJson(response)){
+                                        var res = jsonDecode(response);
+                                        if(res['success']){
+                                          customs.maruSnackBarSuccess(context: context, text: res['message']);
+                                          setState(() {
+                                            fullnameController.text = "";
+                                            phone_controller.text = "";
+                                            emailController.text = "";
+                                            locationController.text = "";
+                                            regionDV = "";
+                                            idController.text = "";
+                                            animalController.text = "";
+                                            membershipController.text = "";
+                                            genderDV = "";
+                                          });
+                                        }else{
+                                          customs.maruSnackBarDanger(context: context, text: res['message']);
+                                        }
                                       }else{
-                                        customs.maruSnackBarDanger(context: context, text: res['message']);
+                                        customs.maruSnackBarDanger(context: context, text: "An error has occured!");
                                       }
-                                    }else{
-                                      customs.maruSnackBarDanger(context: context, text: "An error has occured!");
-                                    }
 
-                                    setState(() {
-                                      save_loader = false;
-                                    });
+                                      setState(() {
+                                        save_loader = false;
+                                      });
+                                    }else{
+                                      customs.maruSnackBarDanger(context: context, text: "Authenticated failed!");
+                                    }
                                   }
                                 }))
                       ]),

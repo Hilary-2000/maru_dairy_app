@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:maru/packages/api_connection.dart';
 import 'package:maru/packages/maru_theme.dart';
@@ -20,6 +21,7 @@ class _notificationWindowState extends State<notificationWindow> {
   var member_data = null;
   String member_id = "";
   bool init = false;
+  bool loading = false;
 
   Future<void> didChangeDependencies() async {
     super.didChangeDependencies();
@@ -36,6 +38,9 @@ class _notificationWindowState extends State<notificationWindow> {
   }
 
   Future<void> getMemberDetails() async {
+    setState(() {
+      loading = true;
+    });
     ApiConnection apiConnection = new ApiConnection();
     var response = await apiConnection.getMemberDetails();
     if(customs.isValidJson(response)){
@@ -53,6 +58,9 @@ class _notificationWindowState extends State<notificationWindow> {
         });
       }
     }
+    setState(() {
+      loading = false;
+    });
   }
 
   @override
@@ -115,6 +123,7 @@ class _notificationWindowState extends State<notificationWindow> {
                         Expanded(
                           child: TabBarView(
                             children: <Widget>[
+                              !loading ?
                               Container(
                                 padding: EdgeInsets.all(10),
                                 child: SingleChildScrollView(
@@ -177,6 +186,17 @@ class _notificationWindowState extends State<notificationWindow> {
                                     ],
                                   ),
                                 ),
+                              )
+                                  :
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  SpinKitCircle(
+                                    color: customs.primaryColor,
+                                    size: 50.0,
+                                  ),
+                                  Text("Loading...", style: customs.primaryTextStyle(size: 10,))
+                                ],
                               ),
                               Container(
                                 padding: EdgeInsets.all(10),

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:local_auth/local_auth.dart';
 import 'package:maru/packages/api_connection.dart';
 import 'package:maru/packages/maru_theme.dart';
 
@@ -170,22 +171,28 @@ class _RegionManagementState extends State<RegionManagement> {
                                       inactiveThumbColor: customs.primaryColor,
                                       trackOutlineColor: WidgetStateProperty.all<Color>(customs.primaryColor),
                                       onChanged: (bool value) async {
-                                        setState(() {
-                                          _isLightMode[items['region_id']] = value;
-                                        });
-                                        //change the deduction status
-                                        ApiConnection apiConn = ApiConnection();
-                                        String status = _isLightMode[items['region_id']] ? "1" : "0";
-                                        var response = await apiConn.changeRegionStatus(region_id: "${items['region_id']}", region_status: status);
-                                        if(customs.isValidJson(response)){
-                                          var res = jsonDecode(response);
-                                          if(res['success']){
-                                            customs.maruSnackBarSuccess(context: context, text: res['message']);
-                                            // REFRESH DEDUCTIONS
-                                            getRegions();
-                                          }else{
-                                            customs.maruSnackBarDanger(context: context, text: res['message']);
+                                        LocalAuthentication auth = LocalAuthentication();
+                                        bool proceed = await customs.BiometricAuthenticate(auth: auth, context: context, auth_msg: "Please authenticate to find technician!");
+                                        if(proceed){
+                                          setState(() {
+                                            _isLightMode[items['region_id']] = value;
+                                          });
+                                          //change the deduction status
+                                          ApiConnection apiConn = ApiConnection();
+                                          String status = _isLightMode[items['region_id']] ? "1" : "0";
+                                          var response = await apiConn.changeRegionStatus(region_id: "${items['region_id']}", region_status: status);
+                                          if(customs.isValidJson(response)){
+                                            var res = jsonDecode(response);
+                                            if(res['success']){
+                                              customs.maruSnackBarSuccess(context: context, text: res['message']);
+                                              // REFRESH DEDUCTIONS
+                                              getRegions();
+                                            }else{
+                                              customs.maruSnackBarDanger(context: context, text: res['message']);
+                                            }
                                           }
+                                        }else{
+                                          customs.maruSnackBarDanger(context: context, text: "Authenticated failed!");
                                         }
                                       },
                                     )
@@ -450,18 +457,24 @@ class _EditRegionsState extends State<EditRegions> {
                                     disabled: saveLoader,
                                     onPressed: () async {
                                       if (_formKey.currentState!.validate()){
-                                        setState((){
-                                          saveLoader = true;
-                                        });
-                                        ApiConnection apiConn = ApiConnection();
-                                        var response = await apiConn.updateRegion(region_id: widget.region_data['region_id'].toString(), region_name: regionNameController.text);
-                                        if(customThemes.isValidJson(response)){
-                                          var res = jsonDecode(response);
-                                          if(res['success']){
-                                            Navigator.pop(context, res);
-                                          }else{
-                                            Navigator.pop(context, res);
+                                        LocalAuthentication auth = LocalAuthentication();
+                                        bool proceed = await customThemes.BiometricAuthenticate(auth: auth, context: context, auth_msg: "Please authenticate to find technician!");
+                                        if(proceed){
+                                          setState((){
+                                            saveLoader = true;
+                                          });
+                                          ApiConnection apiConn = ApiConnection();
+                                          var response = await apiConn.updateRegion(region_id: widget.region_data['region_id'].toString(), region_name: regionNameController.text);
+                                          if(customThemes.isValidJson(response)){
+                                            var res = jsonDecode(response);
+                                            if(res['success']){
+                                              Navigator.pop(context, res);
+                                            }else{
+                                              Navigator.pop(context, res);
+                                            }
                                           }
+                                        }else{
+                                          customThemes.maruSnackBarDanger(context: context, text: "Authenticated failed!");
                                         }
                                       }
                                     },
@@ -546,18 +559,24 @@ class _DeleteRegionsState extends State<DeleteRegions> {
                                   showLoader: saveLoader,
                                   disabled: saveLoader,
                                   onPressed: () async {
-                                    setState((){
-                                      saveLoader = true;
-                                    });
-                                    ApiConnection apiConn = ApiConnection();
-                                    var response = await apiConn.deleteRegion(region_id: widget.region_data['region_id'].toString());
-                                    if(customThemes.isValidJson(response)){
-                                      var res = jsonDecode(response);
-                                      if(res['success']){
-                                        Navigator.pop(context, res);
-                                      }else{
-                                        Navigator.pop(context, res);
+                                    LocalAuthentication auth = LocalAuthentication();
+                                    bool proceed = await customThemes.BiometricAuthenticate(auth: auth, context: context, auth_msg: "Please authenticate to find technician!");
+                                    if(proceed){
+                                      setState((){
+                                        saveLoader = true;
+                                      });
+                                      ApiConnection apiConn = ApiConnection();
+                                      var response = await apiConn.deleteRegion(region_id: widget.region_data['region_id'].toString());
+                                      if(customThemes.isValidJson(response)){
+                                        var res = jsonDecode(response);
+                                        if(res['success']){
+                                          Navigator.pop(context, res);
+                                        }else{
+                                          Navigator.pop(context, res);
+                                        }
                                       }
+                                    }else{
+                                      customThemes.maruSnackBarDanger(context: context, text: "Authenticated failed!");
                                     }
                                   },
                                   type: Type.danger
@@ -658,18 +677,24 @@ class _AddRegionsState extends State<AddRegions> {
                                     disabled: saveLoader,
                                     onPressed: () async {
                                       if (_formKey.currentState!.validate()){
-                                        setState((){
-                                          saveLoader = true;
-                                        });
-                                        ApiConnection apiConn = ApiConnection();
-                                        var response = await apiConn.addRegions(region_name: region_name_controller.text);
-                                        if(customThemes.isValidJson(response)){
-                                          var res = jsonDecode(response);
-                                          if(res['success']){
-                                            Navigator.pop(context, res);
-                                          }else{
-                                            Navigator.pop(context, res);
+                                        LocalAuthentication auth = LocalAuthentication();
+                                        bool proceed = await customThemes.BiometricAuthenticate(auth: auth, context: context, auth_msg: "Please authenticate to find technician!");
+                                        if(proceed){
+                                          setState((){
+                                            saveLoader = true;
+                                          });
+                                          ApiConnection apiConn = ApiConnection();
+                                          var response = await apiConn.addRegions(region_name: region_name_controller.text);
+                                          if(customThemes.isValidJson(response)){
+                                            var res = jsonDecode(response);
+                                            if(res['success']){
+                                              Navigator.pop(context, res);
+                                            }else{
+                                              Navigator.pop(context, res);
+                                            }
                                           }
+                                        }else{
+                                          customThemes.maruSnackBarDanger(context: context, text: "Authenticated failed!");
                                         }
                                       }
                                     },

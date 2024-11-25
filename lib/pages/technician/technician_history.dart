@@ -356,14 +356,14 @@ class _TechnicianHistoryState extends State<TechnicianHistory> {
                   dense: true,
                   leading: CircleAvatar(
                     backgroundColor: colors_shade[index % colors_shade.length],
-                    child: Skeleton.ignore(child: Text(customs.nameAbbr(item['fullname']), style: textStyles[index % textStyles.length],)),
+                    child: Skeleton.ignore(child: Text(customs.nameAbbr(item['fullname'] ?? "-"), style: textStyles[index % textStyles.length],)),
                   ),
                   title: Text(
-                    toCamelCase(item['fullname']),
-                    style: customs.darkTextStyle(size: 14),
+                    toCamelCase(item['fullname'] ?? "DELETED MEMBER"),
+                    style: item['fullname'] != null ? customs.darkTextStyle(size: 14) : customs.dangerTextStyle(size: 14),
                   ),
                   subtitle: Text(
-                    "${item['collection_amount']} Litres",
+                    "${item['collection_amount'] ?? "0"} Litres",
                     style: customs.secondaryTextStyle(size: 12),
                   ),
                   trailing: Column(
