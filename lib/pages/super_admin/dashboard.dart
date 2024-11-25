@@ -1214,20 +1214,23 @@ class _SuperAdminDashState extends State<SuperAdminDash> {
                                         )),
                                     bottomTitles: AxisTitles(
                                         axisNameWidget: Center(
-                                            child: Text("Days",
+                                            child: Text("",
                                                 style: customs.primaryTextStyle(
                                                     size: 12))),
                                         sideTitles: SideTitles(
                                           showTitles: true,
                                           reservedSize: 15,
                                           getTitlesWidget: (value, meta) {
-                                            return Text(
-                                              daysOfWeek[int.parse(
-                                                  meta.formattedValue)],
-                                              textAlign: TextAlign.center,
-                                              style: customs.darkTextStyle(
-                                                  size: 12,
-                                                  fontweight: FontWeight.bold),
+                                            return Transform.rotate(
+                                              angle: -30 * (3.1415927 / 180),
+                                              child: Text(
+                                                daysOfWeek[int.parse(
+                                                    meta.formattedValue)],
+                                                textAlign: TextAlign.center,
+                                                style: customs.darkTextStyle(
+                                                    size: 10,
+                                                    fontweight: FontWeight.bold),
+                                              ),
                                             );
                                           },
                                         )),
@@ -1402,20 +1405,23 @@ class _SuperAdminDashState extends State<SuperAdminDash> {
                                       )),
                                   bottomTitles: AxisTitles(
                                       axisNameWidget: Center(
-                                          child: Text("Days",
+                                          child: Text("",
                                               style: customs.primaryTextStyle(
                                                   size: 12))),
                                       sideTitles: SideTitles(
                                         showTitles: true,
                                         reservedSize: 15,
                                         getTitlesWidget: (value, meta) {
-                                          return Text(
-                                            daysOfWeek[
-                                            int.parse(meta.formattedValue)],
-                                            textAlign: TextAlign.center,
-                                            style: customs.darkTextStyle(
-                                                size: 12,
-                                                fontweight: FontWeight.bold),
+                                          return Transform.rotate(
+                                            angle: -30 * (3.1415927 / 180),
+                                            child: Text(
+                                              daysOfWeek[
+                                              int.parse(meta.formattedValue)],
+                                              textAlign: TextAlign.center,
+                                              style: customs.darkTextStyle(
+                                                  size: 10,
+                                                  fontweight: FontWeight.bold),
+                                            ),
                                           );
                                         },
                                       )),
@@ -1629,20 +1635,23 @@ class _SuperAdminDashState extends State<SuperAdminDash> {
                                         )),
                                     bottomTitles: AxisTitles(
                                         axisNameWidget: Center(
-                                            child: Text("Days",
+                                            child: Text("",
                                                 style: customs.primaryTextStyle(
                                                     size: 12))),
                                         sideTitles: SideTitles(
                                           showTitles: true,
                                           reservedSize: 15,
                                           getTitlesWidget: (value, meta) {
-                                            return Text(
-                                              daysOfWeek[int.parse(
-                                                  meta.formattedValue)],
-                                              textAlign: TextAlign.center,
-                                              style: customs.darkTextStyle(
-                                                  size: 12,
-                                                  fontweight: FontWeight.bold),
+                                            return Transform.rotate(
+                                              angle: -30 * (3.1415927 / 180),
+                                              child: Text(
+                                                daysOfWeek[int.parse(
+                                                    meta.formattedValue)],
+                                                textAlign: TextAlign.center,
+                                                style: customs.darkTextStyle(
+                                                    size: 10,
+                                                    fontweight: FontWeight.bold),
+                                              ),
                                             );
                                           },
                                         )),

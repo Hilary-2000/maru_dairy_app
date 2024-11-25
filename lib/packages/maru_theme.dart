@@ -1,14 +1,17 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:local_auth/local_auth.dart';
+import 'package:maru/packages/api_connection.dart';
 
 enum Type { primary, secondary, warning, danger, info, dark, white, success }
 
 enum Sizes { lg, md, sm, xm }
 
-class CustomThemes {
+class CustomThemes{
   // String apiURLDomain = "http://192.168.88.236:8000";
   String apiURLDomain = "https://maru.ladybirdsmis.com";
   // colors
@@ -66,7 +69,138 @@ class CustomThemes {
     }
   }
 
+  Future<bool> BiometricAuthenticate ({
+    required LocalAuthentication auth,
+    required BuildContext context,
+    String auth_msg = "Ooops! Authenticate before you proceed!"
+  }) async {
+    late bool authenticated = false;
+    try {
+      authenticated = await auth.authenticate(
+        localizedReason: auth_msg,
+        options: const AuthenticationOptions(
+          biometricOnly: false, // Allows PIN/Pattern/Password as well
+          stickyAuth: true,
+        ),
+      );
+    } on PlatformException catch  (e) {
+      // Handle specific exceptions based on error codes
+      switch (e.code) {
+        case 'NotAvailable':
+          authenticated = await _askForPassword('Biometric authentication is not available on this device.', context);
+          break;
+        case 'NotEnrolled':
+          maruSnackBarDanger( text: 'No biometric data is enrolled. Please set up biometrics and try again.', context: context);
+          break;
+        case 'LockedOut':
+          authenticated = await _askForPassword('You`ve been locked out due to many attempts, Try again later!', context);
+          break;
+        case 'PermanentlyLockedOut':
+          authenticated = await _askForPassword('Biometric authentication is not set. Provide your login password.', context);
+          break;
+        case 'UserCanceled':
+          authenticated = await _askForPassword('Provide your login password.', context);
+          break;
+        case 'AuthenticationFailed':
+          authenticated = await _askForPassword('Authentication failed! Provide your login password.', context);
+          break;
+        default:
+          authenticated = await _askForPassword('Provide your login password to proceed!', context);
+          break;
+      }
+    }
+    return authenticated;
+  }
 
+  Future<bool> _askForPassword (String message, BuildContext context) async{
+    bool authenticate = false;
+    TextEditingController passwordController = TextEditingController();
+    passwordController.text = "1234";
+    bool loading = false;
+    await showDialog(
+      context: context,
+      builder: (context) {
+        final _formKey = GlobalKey<FormState>();
+        double screenWidth = MediaQuery.of(context).size.width;
+        return AlertDialog(
+          backgroundColor: whiteColor,
+          title: Text('Provide Password', style: darkTextStyle(size: 16, fontweight: FontWeight.bold)),
+          content: Form(
+            key: _formKey,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(message, style: darkTextStyle(size: 12, fontweight: FontWeight.normal),),
+                SizedBox(height: 12,),
+                Container(width: screenWidth, child: Text("Password: ", style: darkTextStyle(size: 12, fontweight: FontWeight.bold),)),
+                maruTextFormField(
+                    editingController: passwordController,
+                    hideText: true,
+                    label: "Enter Password!",
+                    hintText: "Enter Password!",
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "Enter your password!";
+                      }
+                      return null;
+                    },
+                    isChanged: (value) {}
+                ),
+              ],
+            ),
+          ),
+          actions: [
+            Row(
+              children: [
+                Container(
+                  width: screenWidth * 0.3,
+                  child: maruButton(
+                    text: "Confirm",
+                    type: Type.success,
+                    showLoader: loading,
+                    disabled: loading,
+                    onPressed: () async {
+                      if (_formKey.currentState!.validate()){
+                        String password = passwordController.text.trim();
+                        maruSnackBar(context: context, text: "Authenticating...");
+                        authenticate = await _validatePassword(password);
+                        Navigator.pop(context);
+                      }
+                    },
+                  ),
+                ),
+                Spacer(),
+                Container(
+                  width: screenWidth * 0.3,
+                  child: marOutlineuButton(
+                    text: "Cancel",
+                    type: Type.danger,
+                    onPressed: () {
+                      Navigator.pop(context); // Close the dialog
+                    },
+                  ),
+                )
+              ],
+            )
+          ],
+        );
+      },
+    );
+    return authenticate;
+  }
+
+  Future<bool> _validatePassword(String password) async {
+    // Replace this with actual password validation logic
+    ApiConnection apiConnection = new ApiConnection();
+    var response = await apiConnection.authenticatePassword(password: password);
+    if(isValidJson(response)){
+      var res = jsonDecode(response);
+      if(res['success']){
+        return true;
+      }
+    }
+    return false;
+  }
 
   bool checkRegion(List<dynamic> regions, String region){
     bool isValid = false;
@@ -223,15 +357,15 @@ class CustomThemes {
 
   TextButton maruButton(
       {Sizes size = Sizes.sm,
-      Type type = Type.primary,
-      required String text,
-      double fontSize = 15,
-      double iconSize = 15,
-      bool showArrow = false,
-      bool showLoader = false,
-      bool disabled = false,
-      FontWeight fontWeight = FontWeight.normal,
-      required void Function()? onPressed}) {
+        Type type = Type.primary,
+        required String text,
+        double fontSize = 15,
+        double iconSize = 15,
+        bool showArrow = false,
+        bool showLoader = false,
+        bool disabled = false,
+        FontWeight fontWeight = FontWeight.normal,
+        required void Function()? onPressed}) {
     Color foreground = whiteColor;
     Color background = primaryColor;
     Color disabledForeground = secondaryShade;
@@ -304,14 +438,14 @@ class CustomThemes {
         break;
     }
     EdgeInsets edgeInsets =
-        const EdgeInsets.symmetric(vertical: 3.0, horizontal: 10.0);
+    const EdgeInsets.symmetric(vertical: 3.0, horizontal: 10.0);
     switch (size) {
       case (Sizes.lg):
         edgeInsets =
-            const EdgeInsets.symmetric(vertical: 8.0, horizontal: 24.0);
+        const EdgeInsets.symmetric(vertical: 8.0, horizontal: 24.0);
       case (Sizes.md):
         edgeInsets =
-            const EdgeInsets.symmetric(vertical: 6.0, horizontal: 18.0);
+        const EdgeInsets.symmetric(vertical: 6.0, horizontal: 18.0);
       case (Sizes.sm):
         edgeInsets = const EdgeInsets.symmetric(vertical: 3.0, horizontal: 10.0);
       case (Sizes.xm):
@@ -347,7 +481,7 @@ class CustomThemes {
       ),
       onPressed: disabled ? null : onPressed,
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
               text,
@@ -367,15 +501,15 @@ class CustomThemes {
 
   TextButton marOutlineuButton(
       {Sizes size = Sizes.sm,
-      Type type = Type.primary,
-      double iconSize = 15,
-      bool showArrow = false,
-      bool showLoader = false,
-      required String text,
-      double fontSize = 15,
-      bool disabled = false,
-      FontWeight fontWeight = FontWeight.normal,
-      required void Function()? onPressed}) {
+        Type type = Type.primary,
+        double iconSize = 15,
+        bool showArrow = false,
+        bool showLoader = false,
+        required String text,
+        double fontSize = 15,
+        bool disabled = false,
+        FontWeight fontWeight = FontWeight.normal,
+        required void Function()? onPressed}) {
     Color foreground = whiteColor;
     Color background = primaryColor;
     Color disabledForeground = secondaryShade;
@@ -448,14 +582,14 @@ class CustomThemes {
         break;
     }
     EdgeInsets edgeInsets =
-        const EdgeInsets.symmetric(vertical: 5.0, horizontal: 8.0);
+    const EdgeInsets.symmetric(vertical: 5.0, horizontal: 8.0);
     switch (size) {
       case (Sizes.lg):
         edgeInsets =
-            const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0);
+        const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0);
       case (Sizes.md):
         edgeInsets =
-            const EdgeInsets.symmetric(vertical: 9.0, horizontal: 12.0);
+        const EdgeInsets.symmetric(vertical: 9.0, horizontal: 12.0);
       case (Sizes.sm):
         edgeInsets = const EdgeInsets.symmetric(vertical: 5.0, horizontal: 8.0);
       case (Sizes.xm):
@@ -484,7 +618,7 @@ class CustomThemes {
           textStyle(size: fontSize, fontweight: fontWeight),
         ),
         side:
-            WidgetStateProperty.all(BorderSide(color: foreground, width: 1.0)),
+        WidgetStateProperty.all(BorderSide(color: foreground, width: 1.0)),
         shape: WidgetStateProperty.all<RoundedRectangleBorder>(
           RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(5.0),
@@ -494,35 +628,35 @@ class CustomThemes {
       onPressed: disabled ? null : onPressed,
       child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          SizedBox(width: 1,),
-          Text(
-            text,
-            style: textStyle(size: fontSize, fontweight: fontWeight),
-          ),
-          SizedBox(width: 2,),
-          showLoader ? SpinKitCircle(
+          children: [
+            SizedBox(width: 1,),
+            Text(
+              text,
+              style: textStyle(size: fontSize, fontweight: fontWeight),
+            ),
+            SizedBox(width: 2,),
+            showLoader ? SpinKitCircle(
               color: foreground,
               size: 30.0,
             ) : SizedBox(),
-          SizedBox(width: 1,),
-          showArrow ? Icon(Icons.arrow_circle_right, size: iconSize,) : SizedBox()
-        ]
-    ),
+            SizedBox(width: 1,),
+            showArrow ? Icon(Icons.arrow_circle_right, size: iconSize,) : SizedBox()
+          ]
+      ),
     );
   }
 
 //   textButton Icon
   TextButton maruIconButton(
       {Sizes size = Sizes.sm,
-      double iconSize = 15,
-      bool showArrow = true,
-      Type type = Type.primary,
-      required IconData icons,
-      required String text,
-      double fontSize = 12,
-      FontWeight fontWeight = FontWeight.normal,
-      required void Function()? onPressed}) {
+        double iconSize = 15,
+        bool showArrow = true,
+        Type type = Type.primary,
+        required IconData icons,
+        required String text,
+        double fontSize = 12,
+        FontWeight fontWeight = FontWeight.normal,
+        required void Function()? onPressed}) {
     Color foreground = whiteColor;
     Color background = primaryColor;
     TextStyle Function({double size, FontWeight fontweight}) textStyle =
@@ -575,14 +709,14 @@ class CustomThemes {
         break;
     }
     EdgeInsets edgeInsets =
-        const EdgeInsets.symmetric(vertical: 5.0, horizontal: 8.0);
+    const EdgeInsets.symmetric(vertical: 5.0, horizontal: 8.0);
     switch (size) {
       case (Sizes.lg):
         edgeInsets =
-            const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0);
+        const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0);
       case (Sizes.md):
         edgeInsets =
-            const EdgeInsets.symmetric(vertical: 9.0, horizontal: 12.0);
+        const EdgeInsets.symmetric(vertical: 9.0, horizontal: 12.0);
       case (Sizes.sm):
         edgeInsets = const EdgeInsets.symmetric(vertical: 5.0, horizontal: 8.0);
       case (Sizes.xm):
@@ -617,13 +751,13 @@ class CustomThemes {
 
   TextField maruTextField(
       {String? hintText,
-      TextEditingController? editingController,
-      required void Function(String)? isChanged,
-      TextInputType textType = TextInputType.text,
-      bool hideText = false,
-      FloatingLabelBehavior floatingBehaviour = FloatingLabelBehavior.auto,
-      String label = "",
-      bool enabled = true}) {
+        TextEditingController? editingController,
+        required void Function(String)? isChanged,
+        TextInputType textType = TextInputType.text,
+        bool hideText = false,
+        FloatingLabelBehavior floatingBehaviour = FloatingLabelBehavior.auto,
+        String label = "",
+        bool enabled = true}) {
     return TextField(
       keyboardType: textType,
       obscureText: hideText,
@@ -723,7 +857,7 @@ class CustomThemes {
             )
           ],
         )
-      )
+    )
     );
   }
 
@@ -785,15 +919,15 @@ class CustomThemes {
         alignment: Alignment(1,0),
         children: [
           maruTextFormField(
-            label: label,
-            enabled: enabled,
-            editingController: editingController,
-            textType: TextInputType.text,
-            hideText: hidePassword!,
-            isChanged: isChanged,
-            validator: validator,
-            floatingBehaviour: floatingBehaviour,
-            hintText: hintText
+              label: label,
+              enabled: enabled,
+              editingController: editingController,
+              textType: TextInputType.text,
+              hideText: hidePassword!,
+              isChanged: isChanged,
+              validator: validator,
+              floatingBehaviour: floatingBehaviour,
+              hintText: hintText
           ),
           Container(
             width: 60,
@@ -806,14 +940,14 @@ class CustomThemes {
 
   TextFormField maruTextFormField(
       {String? hintText,
-      TextEditingController? editingController,
-      required void Function(String)? isChanged,
-      TextInputType textType = TextInputType.text,
-      bool hideText = false,
-      String label = "",
-      bool enabled = true,
-      FloatingLabelBehavior floatingBehaviour = FloatingLabelBehavior.auto,
-      String? Function(String?)? validator}) {
+        TextEditingController? editingController,
+        required void Function(String)? isChanged,
+        TextInputType textType = TextInputType.text,
+        bool hideText = false,
+        String label = "",
+        bool enabled = true,
+        FloatingLabelBehavior floatingBehaviour = FloatingLabelBehavior.auto,
+        String? Function(String?)? validator}) {
     return TextFormField(
       enabled: enabled,
       validator: validator,

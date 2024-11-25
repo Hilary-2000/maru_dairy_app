@@ -4,6 +4,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:local_auth/local_auth.dart';
 import 'package:maru/packages/api_connection.dart';
 import 'package:maru/packages/maru_theme.dart';
 import 'package:maru/pages/technician/account.dart';
@@ -146,9 +147,9 @@ class _technicianDashboardState extends State<technicianDashboard> {
                           "Home",
                           style: index == 0
                               ? customs.primaryTextStyle(
-                                  size: 12, fontweight: FontWeight.bold)
+                              size: 12, fontweight: FontWeight.bold)
                               : customs.secondaryTextStyle(
-                                  size: 12, fontweight: FontWeight.bold),
+                              size: 12, fontweight: FontWeight.bold),
                         )
                       ],
                     ),
@@ -177,9 +178,9 @@ class _technicianDashboardState extends State<technicianDashboard> {
                           "History",
                           style: index == 1
                               ? customs.primaryTextStyle(
-                                  size: 12, fontweight: FontWeight.bold)
+                              size: 12, fontweight: FontWeight.bold)
                               : customs.secondaryTextStyle(
-                                  size: 12, fontweight: FontWeight.bold),
+                              size: 12, fontweight: FontWeight.bold),
                         )
                       ],
                     ),
@@ -208,9 +209,9 @@ class _technicianDashboardState extends State<technicianDashboard> {
                           "Account",
                           style: index == 2
                               ? customs.primaryTextStyle(
-                                  size: 12, fontweight: FontWeight.bold)
+                              size: 12, fontweight: FontWeight.bold)
                               : customs.secondaryTextStyle(
-                                  size: 12, fontweight: FontWeight.bold),
+                              size: 12, fontweight: FontWeight.bold),
                         )
                       ],
                     ),
@@ -324,9 +325,9 @@ class _TechnicianDashboardState extends State<TechnicianDashboard> {
           full_name = data['data'][0]['fullname'];
           greetings = data['greetings'];
           profile_photo =
-              (data['data'][0]['profile_photo'] as String).trim().length > 0
-                  ? data['data'][0]['profile_photo']
-                  : profile_photo;
+          (data['data'][0]['profile_photo'] as String).trim().length > 0
+              ? data['data'][0]['profile_photo']
+              : profile_photo;
         });
 
         //get the graphical data
@@ -592,10 +593,16 @@ class _TechnicianDashboardState extends State<TechnicianDashboard> {
                                 fontSize: 16,
                                 size: Sizes.sm,
                                 text: "Find Technician",
-                                onPressed: () {
-                                  customs.maruSnackBar(
-                                      context: context, text: "Coming soon!");
-                                }),
+                                onPressed: () async {
+                                  LocalAuthentication auth = LocalAuthentication();
+                                  bool proceed = await customs.BiometricAuthenticate(auth: auth, context: context, auth_msg: "Please authenticate to find technician!");
+                                  if(proceed){
+                                    customs.maruSnackBarSuccess(context: context, text: "Authenticated successfully!");
+                                  }else{
+                                    customs.maruSnackBarDanger(context: context, text: "Authenticated failed!");
+                                  }
+                                }
+                            ),
                           ],
                         )
                       ],
@@ -639,7 +646,7 @@ class _TechnicianDashboardState extends State<TechnicianDashboard> {
                   child: Card(
                     color: customs.whiteColor,
                     margin:
-                        const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                    const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
                     child: Row(
                       children: [
                         Skeleton.keep(
@@ -648,7 +655,7 @@ class _TechnicianDashboardState extends State<TechnicianDashboard> {
                                 vertical: 20.0, horizontal: 10.0),
                             child: CircleAvatar(
                               backgroundColor:
-                                  customs.successColor.withOpacity(0.2),
+                              customs.successColor.withOpacity(0.2),
                               radius: 30,
                               child: Icon(
                                 Icons.water_drop_outlined,
@@ -675,7 +682,7 @@ class _TechnicianDashboardState extends State<TechnicianDashboard> {
                                 Text(
                                   "$period_title",
                                   style:
-                                      customs.darkTextStyle(size: 12),
+                                  customs.darkTextStyle(size: 12),
                                 )
                               ],
                             )
@@ -739,24 +746,24 @@ class _TechnicianDashboardState extends State<TechnicianDashboard> {
                               BarChartData(
                                   barTouchData: BarTouchData(
                                       touchTooltipData: BarTouchTooltipData(
-                                    getTooltipColor: (group) =>
+                                        getTooltipColor: (group) =>
                                         Colors.transparent,
-                                    tooltipPadding: EdgeInsets.zero,
-                                    tooltipMargin: 2,
-                                    getTooltipItem: (
-                                      BarChartGroupData group,
-                                      int groupIndex,
-                                      BarChartRodData rod,
-                                      int rodIndex,
-                                    ) {
-                                      return BarTooltipItem(
-                                        "${rod.toY.round()} Ltrs",
-                                        customs.darkTextStyle(
-                                            size: 12,
-                                            fontweight: FontWeight.bold),
-                                      );
-                                    },
-                                  )),
+                                        tooltipPadding: EdgeInsets.zero,
+                                        tooltipMargin: 2,
+                                        getTooltipItem: (
+                                            BarChartGroupData group,
+                                            int groupIndex,
+                                            BarChartRodData rod,
+                                            int rodIndex,
+                                            ) {
+                                          return BarTooltipItem(
+                                            "${rod.toY.round()} Ltrs",
+                                            customs.darkTextStyle(
+                                                size: 12,
+                                                fontweight: FontWeight.bold),
+                                          );
+                                        },
+                                      )),
                                   borderData: FlBorderData(
                                       show: true,
                                       border: Border(
@@ -768,7 +775,7 @@ class _TechnicianDashboardState extends State<TechnicianDashboard> {
                                   gridData: FlGridData(
                                     show: true,
                                     checkToShowHorizontalLine: (value) =>
-                                        value % 10 == 0,
+                                    value % 10 == 0,
                                     getDrawingHorizontalLine: (value) => FlLine(
                                       color: customs.secondaryShade_2,
                                       strokeWidth: 1,
@@ -821,11 +828,11 @@ class _TechnicianDashboardState extends State<TechnicianDashboard> {
                                     ),
                                     rightTitles: AxisTitles(
                                         sideTitles:
-                                            SideTitles(showTitles: false)),
+                                        SideTitles(showTitles: false)),
                                     topTitles: AxisTitles(
                                         sideTitles: SideTitles(
-                                      showTitles: false,
-                                    )),
+                                          showTitles: false,
+                                        )),
                                   )), // Optional
                             ),
                           ),
@@ -859,7 +866,7 @@ class _TechnicianDashboardState extends State<TechnicianDashboard> {
                   child: Card(
                     color: customs.whiteColor,
                     margin:
-                        const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                    const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
                     child: Row(
                       children: [
                         Skeleton.keep(
@@ -868,7 +875,7 @@ class _TechnicianDashboardState extends State<TechnicianDashboard> {
                                 vertical: 20.0, horizontal: 10.0),
                             child: CircleAvatar(
                               backgroundColor:
-                                  customs.successColor.withOpacity(0.2),
+                              customs.successColor.withOpacity(0.2),
                               radius: 30,
                               child: Icon(
                                 Icons.people_alt_outlined,
@@ -895,7 +902,7 @@ class _TechnicianDashboardState extends State<TechnicianDashboard> {
                                 Text(
                                   "$period_title",
                                   style:
-                                      customs.darkTextStyle(size: 12),
+                                  customs.darkTextStyle(size: 12),
                                 )
                               ],
                             )
@@ -959,24 +966,24 @@ class _TechnicianDashboardState extends State<TechnicianDashboard> {
                               BarChartData(
                                   barTouchData: BarTouchData(
                                       touchTooltipData: BarTouchTooltipData(
-                                    getTooltipColor: (group) =>
+                                        getTooltipColor: (group) =>
                                         Colors.transparent,
-                                    tooltipPadding: EdgeInsets.zero,
-                                    tooltipMargin: 2,
-                                    getTooltipItem: (
-                                      BarChartGroupData group,
-                                      int groupIndex,
-                                      BarChartRodData rod,
-                                      int rodIndex,
-                                    ) {
-                                      return BarTooltipItem(
-                                        "${rod.toY.round()}",
-                                        customs.darkTextStyle(
-                                            size: 12,
-                                            fontweight: FontWeight.bold),
-                                      );
-                                    },
-                                  )),
+                                        tooltipPadding: EdgeInsets.zero,
+                                        tooltipMargin: 2,
+                                        getTooltipItem: (
+                                            BarChartGroupData group,
+                                            int groupIndex,
+                                            BarChartRodData rod,
+                                            int rodIndex,
+                                            ) {
+                                          return BarTooltipItem(
+                                            "${rod.toY.round()}",
+                                            customs.darkTextStyle(
+                                                size: 12,
+                                                fontweight: FontWeight.bold),
+                                          );
+                                        },
+                                      )),
                                   borderData: FlBorderData(
                                       show: true,
                                       border: Border(
@@ -988,7 +995,7 @@ class _TechnicianDashboardState extends State<TechnicianDashboard> {
                                   gridData: FlGridData(
                                     show: true,
                                     checkToShowHorizontalLine: (value) =>
-                                        value % 10 == 0,
+                                    value % 10 == 0,
                                     getDrawingHorizontalLine: (value) => FlLine(
                                       color: customs.secondaryShade_2,
                                       strokeWidth: 1,
@@ -1041,11 +1048,11 @@ class _TechnicianDashboardState extends State<TechnicianDashboard> {
                                     ),
                                     rightTitles: AxisTitles(
                                         sideTitles:
-                                            SideTitles(showTitles: false)),
+                                        SideTitles(showTitles: false)),
                                     topTitles: AxisTitles(
                                         sideTitles: SideTitles(
-                                      showTitles: false,
-                                    )),
+                                          showTitles: false,
+                                        )),
                                   )), // Optional
                             ),
                           ),

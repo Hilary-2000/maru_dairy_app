@@ -596,6 +596,35 @@ class ApiConnection{
     }
   }
 
+
+  // get member data
+  Future<String> authenticatePassword({required String password}) async{
+    var client = rq.Client();
+    var url = Uri.https(apiLink,"/api/user/authenticate");
+    var body = jsonEncode({
+      "password" : password
+    });
+    FlutterSecureStorage storage = new FlutterSecureStorage();
+    String? token = await storage.read(key: "token");
+    try{
+      var response = await client.post(
+          url,
+          headers: {
+            'Content-Type': 'application/json',
+            'maru-authentication-code' : token!
+          },
+          body: body
+      ).timeout(Duration(seconds: 60));
+      return response.body.length > 0 ? (response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body) : "{\"success\":false, \"message\":\"No response!\"}";
+    }on TimeoutException {
+      return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
+    } catch(e){
+      return "{\"success\":false, \"message\":\"$e\"}";
+    }finally{
+      client.close();
+    }
+  }
+
   // get member data
   Future<String> updateMemberDetails(var datapass) async{
     var client = rq.Client();

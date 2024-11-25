@@ -931,7 +931,7 @@ class _memberDashState extends State<memberDash> {
                                             "${daysOfWeek[int.parse(meta.formattedValue)]}",
                                             textAlign: TextAlign.center,
                                             style: customs.darkTextStyle(
-                                                size: 12,
+                                                size: 10,
                                                 fontweight: FontWeight.bold),
                                           ),
                                         );

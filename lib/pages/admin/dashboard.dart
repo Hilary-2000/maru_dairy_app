@@ -1207,20 +1207,23 @@ class _AdminDashboardState extends State<AdminDashboard> {
                                         )),
                                     bottomTitles: AxisTitles(
                                         axisNameWidget: Center(
-                                            child: Text("Days",
+                                            child: Text("",
                                                 style: customs.primaryTextStyle(
                                                     size: 12))),
                                         sideTitles: SideTitles(
                                           showTitles: true,
                                           reservedSize: 20,
                                           getTitlesWidget: (value, meta) {
-                                            return Text(
-                                              daysOfWeek[int.parse(
-                                                  meta.formattedValue)],
-                                              textAlign: TextAlign.center,
-                                              style: customs.darkTextStyle(
-                                                  size: 12,
-                                                  fontweight: FontWeight.bold),
+                                            return Transform.rotate(
+                                              angle: -30 * (3.1415927 / 180),
+                                              child: Text(
+                                                daysOfWeek[int.parse(
+                                                    meta.formattedValue)],
+                                                textAlign: TextAlign.center,
+                                                style: customs.darkTextStyle(
+                                                    size: 10,
+                                                    fontweight: FontWeight.bold),
+                                              ),
                                             );
                                           },
                                         )),
@@ -1240,10 +1243,11 @@ class _AdminDashboardState extends State<AdminDashboard> {
                   ),
                 ),
                 SizedBox(
-                    width: width * 0.7,
-                    child: Divider(
-                      height: 10,
-                    )),
+                  width: width * 0.7,
+                  child: Divider(
+                    height: 10,
+                  )
+                ),
                 // SHOW THE FARMER WHO GAVE MILK STATISTICS
                 Container(
                   padding: const EdgeInsets.all(10),
@@ -1395,20 +1399,23 @@ class _AdminDashboardState extends State<AdminDashboard> {
                                       )),
                                   bottomTitles: AxisTitles(
                                       axisNameWidget: Center(
-                                          child: Text("Days",
+                                          child: Text("",
                                               style: customs.primaryTextStyle(
                                                   size: 12))),
                                       sideTitles: SideTitles(
                                         showTitles: true,
                                         reservedSize: 20,
                                         getTitlesWidget: (value, meta) {
-                                          return Text(
-                                            daysOfWeek[
-                                                int.parse(meta.formattedValue)],
-                                            textAlign: TextAlign.center,
-                                            style: customs.darkTextStyle(
-                                                size: 12,
-                                                fontweight: FontWeight.bold),
+                                          return Transform.rotate(
+                                            angle: -30 * (3.1415927 / 180),
+                                            child: Text(
+                                              daysOfWeek[
+                                                  int.parse(meta.formattedValue)],
+                                              textAlign: TextAlign.center,
+                                              style: customs.darkTextStyle(
+                                                  size: 10,
+                                                  fontweight: FontWeight.bold),
+                                            ),
                                           );
                                         },
                                       )),
@@ -1621,20 +1628,23 @@ class _AdminDashboardState extends State<AdminDashboard> {
                                         )),
                                     bottomTitles: AxisTitles(
                                         axisNameWidget: Center(
-                                            child: Text("Days",
+                                            child: Text("",
                                                 style: customs.primaryTextStyle(
                                                     size: 12))),
                                         sideTitles: SideTitles(
                                           showTitles: true,
                                           reservedSize: 20,
                                           getTitlesWidget: (value, meta) {
-                                            return Text(
-                                              daysOfWeek[int.parse(
-                                                  meta.formattedValue)],
-                                              textAlign: TextAlign.center,
-                                              style: customs.darkTextStyle(
-                                                  size: 12,
-                                                  fontweight: FontWeight.bold),
+                                            return Transform.rotate(
+                                              angle: -30 * (3.1415927 / 180),
+                                              child: Text(
+                                                daysOfWeek[int.parse(
+                                                    meta.formattedValue)],
+                                                textAlign: TextAlign.center,
+                                                style: customs.darkTextStyle(
+                                                    size: 10,
+                                                    fontweight: FontWeight.bold),
+                                              ),
                                             );
                                           },
                                         )),
