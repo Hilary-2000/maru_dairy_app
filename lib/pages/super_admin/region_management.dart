@@ -172,7 +172,7 @@ class _RegionManagementState extends State<RegionManagement> {
                                       trackOutlineColor: WidgetStateProperty.all<Color>(customs.primaryColor),
                                       onChanged: (bool value) async {
                                         LocalAuthentication auth = LocalAuthentication();
-                                        bool proceed = await customs.BiometricAuthenticate(auth: auth, context: context, auth_msg: "Please authenticate to find technician!");
+                                        bool proceed = await customs.BiometricAuthenticate(auth: auth, context: context, auth_msg: "Please Authenticate!");
                                         if(proceed){
                                           setState(() {
                                             _isLightMode[items['region_id']] = value;
@@ -458,7 +458,7 @@ class _EditRegionsState extends State<EditRegions> {
                                     onPressed: () async {
                                       if (_formKey.currentState!.validate()){
                                         LocalAuthentication auth = LocalAuthentication();
-                                        bool proceed = await customThemes.BiometricAuthenticate(auth: auth, context: context, auth_msg: "Please authenticate to find technician!");
+                                        bool proceed = await customThemes.BiometricAuthenticate(auth: auth, context: context, auth_msg: "Please authenticate to update region!");
                                         if(proceed){
                                           setState((){
                                             saveLoader = true;
@@ -560,7 +560,7 @@ class _DeleteRegionsState extends State<DeleteRegions> {
                                   disabled: saveLoader,
                                   onPressed: () async {
                                     LocalAuthentication auth = LocalAuthentication();
-                                    bool proceed = await customThemes.BiometricAuthenticate(auth: auth, context: context, auth_msg: "Please authenticate to find technician!");
+                                    bool proceed = await customThemes.BiometricAuthenticate(auth: auth, context: context, auth_msg: "Please authenticate to delete region!");
                                     if(proceed){
                                       setState((){
                                         saveLoader = true;
@@ -678,7 +678,7 @@ class _AddRegionsState extends State<AddRegions> {
                                     onPressed: () async {
                                       if (_formKey.currentState!.validate()){
                                         LocalAuthentication auth = LocalAuthentication();
-                                        bool proceed = await customThemes.BiometricAuthenticate(auth: auth, context: context, auth_msg: "Please authenticate to find technician!");
+                                        bool proceed = await customThemes.BiometricAuthenticate(auth: auth, context: context, auth_msg: "Please authenticate to add a region!");
                                         if(proceed){
                                           setState((){
                                             saveLoader = true;

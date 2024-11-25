@@ -659,7 +659,7 @@ class _EditTechnicianState extends State<EditTechnician> {
                                       onPressed: () async {
                                         if (_formKey.currentState!.validate()){
                                           LocalAuthentication auth = LocalAuthentication();
-                                          bool proceed = await customs.BiometricAuthenticate(auth: auth, context: context, auth_msg: "Please authenticate to find technician!");
+                                          bool proceed = await customs.BiometricAuthenticate(auth: auth, context: context, auth_msg: "Please authenticate to update technician data!");
                                           if(proceed){
                                             setState(() {
                                               save_loader = true;

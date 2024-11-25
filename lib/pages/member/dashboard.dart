@@ -714,7 +714,7 @@ class _memberDashState extends State<memberDash> {
                                 text: "View Membership",
                                 onPressed: () async {
                                   LocalAuthentication auth = LocalAuthentication();
-                                  bool proceed = await customs.BiometricAuthenticate(auth: auth, context: context, auth_msg: "Please authenticate to find technician!");
+                                  bool proceed = await customs.BiometricAuthenticate(auth: auth, context: context, auth_msg: "Please authenticate to view your membership!");
                                   if(proceed){
                                     Navigator.pushNamed(
                                       context, "/member_membership",

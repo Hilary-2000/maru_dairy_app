@@ -504,7 +504,7 @@ class _NewAdministratorState extends State<NewAdministrator> {
                                       onPressed: () async {
                                         if (_formKey.currentState!.validate()){
                                           LocalAuthentication auth = LocalAuthentication();
-                                          bool proceed = await customs.BiometricAuthenticate(auth: auth, context: context, auth_msg: "Please authenticate to find technician!");
+                                          bool proceed = await customs.BiometricAuthenticate(auth: auth, context: context, auth_msg: "Please authenticate to register new administrator!");
                                           if(proceed){
                                             setState(() {
                                               save_loader = true;

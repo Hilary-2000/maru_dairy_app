@@ -104,6 +104,9 @@ class CustomThemes{
         case 'AuthenticationFailed':
           authenticated = await _askForPassword('Authentication failed! Provide your login password.', context);
           break;
+        case 'auth_in_progress':
+          print("Doing!");
+          break;
         default:
           authenticated = await _askForPassword('Provide your login password to proceed!', context);
           break;
@@ -167,7 +170,7 @@ class CustomThemes{
   String message_split(String name){
     String abbr = "";
     abbr = name.length > 30 ? name.substring(0, 30)+"..." : name;
-    return abbr;
+    return abbr.toUpperCase();
   }
 
   // change to camel case

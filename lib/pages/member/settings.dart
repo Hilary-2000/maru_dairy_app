@@ -182,7 +182,7 @@ class _MemberSettingsState extends State<MemberSettings> {
                               subtitle: Text("View your membership status", style: customs.secondaryTextStyle(size: 12),),
                               onTap: () async {
                                 LocalAuthentication auth = LocalAuthentication();
-                                bool proceed = await customs.BiometricAuthenticate(auth: auth, context: context, auth_msg: "Please authenticate to find technician!");
+                                bool proceed = await customs.BiometricAuthenticate(auth: auth, context: context, auth_msg: "Please authenticate to view your membership!");
                                 if(proceed){
                                   Navigator.pushNamed(context, "/member_membership",
                                       arguments: {"member_id" : member_data['user_id']});

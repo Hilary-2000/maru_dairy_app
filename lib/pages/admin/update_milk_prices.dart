@@ -342,7 +342,7 @@ class _UpdateMilkPricesState extends State<UpdateMilkPrices> {
                                     showLoader: save_n_publish,
                                     onPressed: () async {
                                       LocalAuthentication auth = LocalAuthentication();
-                                      bool proceed = await customs.BiometricAuthenticate(auth: auth, context: context, auth_msg: "Please authenticate to find technician!");
+                                      bool proceed = await customs.BiometricAuthenticate(auth: auth, context: context, auth_msg: "Please authenticate to publish milk prices!");
                                       if(proceed){
                                         setState(() {
                                           save_n_publish = true;
@@ -383,7 +383,7 @@ class _UpdateMilkPricesState extends State<UpdateMilkPrices> {
                                     showLoader: save_n_publish,
                                     onPressed: () async {
                                       LocalAuthentication auth = LocalAuthentication();
-                                      bool proceed = await customs.BiometricAuthenticate(auth: auth, context: context, auth_msg: "Please authenticate to find technician!");
+                                      bool proceed = await customs.BiometricAuthenticate(auth: auth, context: context, auth_msg: "Please authenticate to update milk prices!");
                                       if(proceed){
                                         setState(() {
                                           save_n_publish = true;

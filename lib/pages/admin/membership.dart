@@ -1098,7 +1098,7 @@ class _rejectEarningsState extends State<rejectEarnings> {
                                   disabled: saveLoader,
                                   onPressed: () async {
                                     LocalAuthentication auth = LocalAuthentication();
-                                    bool proceed = await customThemes.BiometricAuthenticate(auth: auth, context: context, auth_msg: "Please authenticate to find technician!");
+                                    bool proceed = await customThemes.BiometricAuthenticate(auth: auth, context: context, auth_msg: "Please authenticate to confirm payments!");
                                     if(proceed){
                                       setState((){
                                         saveLoader = true;
@@ -1486,7 +1486,7 @@ class _editEarningsState extends State<_editEarnings> {
                                     disabled: saveLoader,
                                     onPressed: () async {
                                       LocalAuthentication auth = LocalAuthentication();
-                                      bool proceed = await customThemes.BiometricAuthenticate(auth: auth, context: context, auth_msg: "Please authenticate to find technician!");
+                                      bool proceed = await customThemes.BiometricAuthenticate(auth: auth, context: context, auth_msg: "Please authenticate to nullify payments!");
                                       if(proceed){
                                         setState((){
                                           saveLoader = true;

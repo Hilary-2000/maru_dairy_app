@@ -201,7 +201,7 @@ class _ChangeMemberPasswordState extends State<ChangeMemberPassword> {
                                     if (_formKey.currentState!.validate()){
                                       if(password_1.text == password_2.text){
                                         LocalAuthentication auth = LocalAuthentication();
-                                        bool proceed = await customs.BiometricAuthenticate(auth: auth, context: context, auth_msg: "Please authenticate to find technician!");
+                                        bool proceed = await customs.BiometricAuthenticate(auth: auth, context: context, auth_msg: "Please authenticate to change your password!");
                                         if(proceed){
                                           //proceed and save the password
                                           ApiConnection apiConnection = new ApiConnection();

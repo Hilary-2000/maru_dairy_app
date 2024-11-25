@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:local_auth/local_auth.dart';
+import 'package:maru/packages/maru_theme.dart';
 import 'package:maru/pages/admin/admin_profile.dart';
 import 'package:maru/pages/admin/admin_qr_code_finder.dart';
 import 'package:maru/pages/admin/dashboard.dart';
@@ -68,67 +70,167 @@ Future<void> main() async {
   //   DeviceOrientation.portraitUp,
   // ]);
 
+  runApp(MaruApp());
+}
 
-  runApp(MaterialApp(
-    initialRoute: "/",
-    navigatorKey: navigatorKey,
-    routes: {
-      "/": (context) => const Maru(),
-      "/login": (context) => const Login(),
-      "/landing_page": (context) => const LoginOrSignup(),
-      "/sign_up": (context) => const signUp(),
-      "/forgot_password": (context) => const forgotPassword(),
-      "/member_dashboard": (context) => const memberDashboard(),
-      "/admin_dashboard": (context) => const adminDashboard(),
-      "/technician_dashboard": (context) => const technicianDashboard(),
-      "/super_admin_dashboard": (context) => const superAdminDashboard(),
-      "/member_history": (context) => const memberHistory(),
-      "/member_view_profile": (context) => const MemberProfile(),
-      "/member_edit_profile": (context) => const EditProfile(),
-      "/change_member_password": (context) => const ChangeMemberPassword(),
-      "/member_membership": (context) => const MemberMembership(),
-      "/member_inbox": (context) => const MemberInbox(),
-      "/member_milk_details": (context) => const MemberMilkDetails(),
-      "/member_qr_code": (context) => const MemberQrcode(),
-      "/read_member_notification": (context) => const ReadMemberNotification(),
-      "/technician_collect_milk": (context) => const CollectMilk(),
-      "/technician_capture_milk_data": (context) => const CaptureMilkData(),
-      "/edit_member_milk_data": (context) => const EditMemberMilkData(),
-      "/technician_profile": (context) => const TechnicianProfile(),
-      "/find_member_scanner": (context) => const TechnicianQrScanner(),
-      "/edit_technician_profile": (context) => const EditTechnicianProfile(),
-      "/admin_qr_code_finder": (context) => const AdminQrCodeFinder(),
-      "/admin_inquiry_inbox": (context) => const InquiryInbox(),
-      "/change_milk_price": (context) => const EditMilkPrice(),
-      "/select_member_to_send_message": (context) => const SelectMemberMessage(),
-      "/admin_member_details": (context) => const MemberDetails(),
-      "/admin_edit_member_details": (context) => const MemberDetailsEdit(),
-      "/decline_or_confirmed_collection": (context) => const ConfirmedDeclinedCollection(),
-      "/admin_member_history": (context) => const MemberHistory(),
-      "/new_member": (context) => const NewMember(),
-      "/admin_profile": (context) => const AdminProfile(),
-      "/admin_edit_profile": (context) => const AdminEditProfile(),
-      "/milk_prices": (context) => const MilkPrices(),
-      "/update_milk_prices": (context) => const UpdateMilkPrices(),
-      "/admin_member_membership": (context) => const Membership(),
-      "/manage_technicians": (context) => const Technicians(),
-      "/technician_details": (context) => const TechnicianDetails(),
-      "/edit_technician": (context) => const EditTechnician(),
-      "/new_technician": (context)=> const NewTechnician(),
-      "/administrators": (context) => const AdministratorList(),
-      "/admin_details" : (context) => const AdministratorDetails(),
-      "/edit_administrator" : (context) => const EditAdministrator(),
-      "/new_administrator" : (context) => const NewAdministrator(),
-      "/super_admin_list" : (context) => const SuperAdminList(),
-      "/super_admin_details": (context) => const SuperAdminDetails(),
-      "/edit_super_admin_details" : (context) => const EditSuperAdminDetails(),
-      "/new_super_admin" : (context) => const NewSuperAdministrator(),
-      "/generate_admin_report": (context) => const GenerateReports(),
-      "/member_reports" : (context) => const MemberReports(),
-      "/technician_reports" : (context) => const TechnicianReport(),
-      "/deduction_management" : (context) => const DeductionManagement(),
-      "/region_management" : (context) => const RegionManagement(),
-      "/member_chat" : (context) => const ChatAdministrators(),
-    },
-  ));
+
+class MaruApp extends StatefulWidget {
+  @override
+  State<MaruApp> createState() => _MaruAppState();
+}
+
+class _MaruAppState extends State<MaruApp> with WidgetsBindingObserver {
+  final LocalAuthentication _auth = LocalAuthentication();
+  CustomThemes customThemes = CustomThemes();
+  bool _authenticated = true;
+  bool _isAuthenticating = false;
+
+  final Set<String> excempted_routes = {
+    '/',
+    '/login',
+    '/landing_page',
+    '/sign_up',
+    "/forgot_password",
+
+    // Add other routes that require authentication
+  };
+
+  @override
+  void initState(){
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+    // authenticate user
+
+    // Check the current route
+    print(navigatorKey.currentContext);
+    final currentRoute = navigatorKey.currentContext != null ? ModalRoute.of(navigatorKey.currentContext!)?.settings.name : "/";
+    print(currentRoute ?? "Null");
+
+    // Authenticate when app comes back to foreground
+    if(!excempted_routes.contains(currentRoute)){
+      _authenticate();
+    }
+  }
+
+  @override
+  Future<void> didChangeAppLifecycleState(AppLifecycleState state) async {
+    debugPrint("AppLifecycleState: $state");
+
+    if (state == AppLifecycleState.inactive){
+      print("Inactivity....");
+      // _authenticated = true;
+    }
+
+    if (state == AppLifecycleState.resumed) {
+      print("resumed....");
+      if (!_authenticated && !_isAuthenticating) {
+        // Check the current route
+        final currentRoute = ModalRoute.of(navigatorKey.currentContext!)?.settings.name;
+
+        // Authenticate when app comes back to foreground
+        if(!excempted_routes.contains(currentRoute)){
+          await _authenticate();
+        }
+      }
+    }
+
+    if (state == AppLifecycleState.paused || state == AppLifecycleState.hidden) {
+      print("paused....");
+      setState(() {
+        _authenticated = false; // Reset authentication status
+      });
+    }
+  }
+
+  Future<void> _authenticate() async {
+    setState(() {
+      _isAuthenticating = true;
+    });
+      _authenticated = await customThemes.BiometricAuthenticate(auth: _auth, context: context, auth_msg: "Please authenticate to login!"); // Authenticate on app launch
+    setState(() {
+      _isAuthenticating = false;
+    });
+    if(!_authenticated){
+      SystemNavigator.pop();
+    }
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return MaterialApp(
+      initialRoute: "/",
+      navigatorKey: navigatorKey,
+      routes: {
+        "/": (context) => Maru(),
+        "/login": (context) => const Login(),
+        "/landing_page": (context) => const LoginOrSignup(),
+        "/sign_up": (context) => const signUp(),
+        "/forgot_password": (context) => const forgotPassword(),
+        "/member_dashboard": (context) => const memberDashboard(),
+        "/admin_dashboard": (context) => const adminDashboard(),
+        "/technician_dashboard": (context) => const technicianDashboard(),
+        "/super_admin_dashboard": (context) => const superAdminDashboard(),
+        "/member_history": (context) => const memberHistory(),
+        "/member_view_profile": (context) => const MemberProfile(),
+        "/member_edit_profile": (context) => const EditProfile(),
+        "/change_member_password": (context) => const ChangeMemberPassword(),
+        "/member_membership": (context) => const MemberMembership(),
+        "/member_inbox": (context) => const MemberInbox(),
+        "/member_milk_details": (context) => const MemberMilkDetails(),
+        "/member_qr_code": (context) => const MemberQrcode(),
+        "/read_member_notification": (context) => const ReadMemberNotification(),
+        "/technician_collect_milk": (context) => const CollectMilk(),
+        "/technician_capture_milk_data": (context) => const CaptureMilkData(),
+        "/edit_member_milk_data": (context) => const EditMemberMilkData(),
+        "/technician_profile": (context) => const TechnicianProfile(),
+        "/find_member_scanner": (context) => const TechnicianQrScanner(),
+        "/edit_technician_profile": (context) => const EditTechnicianProfile(),
+        "/admin_qr_code_finder": (context) => const AdminQrCodeFinder(),
+        "/admin_inquiry_inbox": (context) => const InquiryInbox(),
+        "/change_milk_price": (context) => const EditMilkPrice(),
+        "/select_member_to_send_message": (context) => const SelectMemberMessage(),
+        "/admin_member_details": (context) => const MemberDetails(),
+        "/admin_edit_member_details": (context) => const MemberDetailsEdit(),
+        "/decline_or_confirmed_collection": (context) => const ConfirmedDeclinedCollection(),
+        "/admin_member_history": (context) => const MemberHistory(),
+        "/new_member": (context) => const NewMember(),
+        "/admin_profile": (context) => const AdminProfile(),
+        "/admin_edit_profile": (context) => const AdminEditProfile(),
+        "/milk_prices": (context) => const MilkPrices(),
+        "/update_milk_prices": (context) => const UpdateMilkPrices(),
+        "/admin_member_membership": (context) => const Membership(),
+        "/manage_technicians": (context) => const Technicians(),
+        "/technician_details": (context) => const TechnicianDetails(),
+        "/edit_technician": (context) => const EditTechnician(),
+        "/new_technician": (context)=> const NewTechnician(),
+        "/administrators": (context) => const AdministratorList(),
+        "/admin_details" : (context) => const AdministratorDetails(),
+        "/edit_administrator" : (context) => const EditAdministrator(),
+        "/new_administrator" : (context) => const NewAdministrator(),
+        "/super_admin_list" : (context) => const SuperAdminList(),
+        "/super_admin_details": (context) => const SuperAdminDetails(),
+        "/edit_super_admin_details" : (context) => const EditSuperAdminDetails(),
+        "/new_super_admin" : (context) => const NewSuperAdministrator(),
+        "/generate_admin_report": (context) => const GenerateReports(),
+        "/member_reports" : (context) => const MemberReports(),
+        "/technician_reports" : (context) => const TechnicianReport(),
+        "/deduction_management" : (context) => const DeductionManagement(),
+        "/region_management" : (context) => const RegionManagement(),
+        "/member_chat" : (context) => const ChatAdministrators(),
+      },
+    );
+  }
 }

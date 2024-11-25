@@ -433,7 +433,7 @@ class _MemberDetailsState extends State<MemberDetails> {
                                     text: "Membership",
                                     onPressed: () async {
                                       LocalAuthentication auth = LocalAuthentication();
-                                      bool proceed = await customs.BiometricAuthenticate(auth: auth, context: context, auth_msg: "Please authenticate to find technician!");
+                                      bool proceed = await customs.BiometricAuthenticate(auth: auth, context: context, auth_msg: "Please authenticate to view  \"${customs.toCamelCase(memberData['fullname'])}\" membership!");
                                       if(proceed){
                                         Navigator.pushNamed(context, "/admin_member_membership", arguments: {"member_id": (memberData != null ? memberData['user_id'] ?? "-0" : "-0"), "member_data": memberData});
                                       }else{
@@ -682,7 +682,7 @@ class _AddTodoPopupCardState extends State<_AddTodoPopupCard> {
                                   disabled: saveLoader,
                                   onPressed: () async {
                                     LocalAuthentication auth = LocalAuthentication();
-                                    bool proceed = await customThemes.BiometricAuthenticate(auth: auth, context: context, auth_msg: "Please authenticate to find technician!");
+                                    bool proceed = await customThemes.BiometricAuthenticate(auth: auth, context: context, auth_msg: "Please authenticate to delete \"${customThemes.toCamelCase(widget.member_data['fullname'])}\"!");
                                     if(proceed){
                                       setState((){
                                         saveLoader = true;
