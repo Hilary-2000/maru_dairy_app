@@ -6,6 +6,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:maru/packages/api_connection.dart';
 import 'package:maru/packages/maru_theme.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:intl/intl.dart';
@@ -42,6 +43,12 @@ class _TechnicianReportState extends State<TechnicianReport> {
   List<DropdownMenuItem<String>> regions = [];
 
 
+
+  Future <void> downloadPdf_2() async{
+    // Navigate to the in-app browser with the URL as an argument
+    await Navigator.pushNamed( context, '/inAppBrowser', arguments: pdfUrl, );
+  }
+
   void openPDF() {
     if (localFilePath != null) {
       OpenFile.open(localFilePath!);
@@ -51,12 +58,9 @@ class _TechnicianReportState extends State<TechnicianReport> {
   }
 
   Future<bool> _requestPermission() async {
-    // Check the status of the permission
-    var status = await Permission.manageExternalStorage.status;
-
+    var status = await Permission.storage.status;
     if (status.isDenied || status.isRestricted || status.isPermanentlyDenied) {
-      // If permission is denied, request it
-      if (await Permission.manageExternalStorage.request().isGranted) {
+      if (await Permission.storage.request().isGranted) {
         print("Permission granted.");
         return true;
       } else {
@@ -64,48 +68,39 @@ class _TechnicianReportState extends State<TechnicianReport> {
         return false;
       }
     }
-    // If already granted, return true
     return true;
   }
 
   Future<void> downloadPDF() async {
     setState(() {
       downloading = true;
-      buttonMessage = "Requesting Permission...";
+      buttonMessage = "Request Permission...";
     });
-
-    // Request storage permissions
     if (await _requestPermission()) {
       try {
         final response = await http.get(Uri.parse(pdfUrl));
         if (response.statusCode == 200) {
-          // Get the directory for the external storage
-          final directory = Directory('/storage/emulated/0/Download/MaruDairy');
-
-          // Create the directory if it doesn't exist
-          if (!await directory.exists()) {
-            await directory.create(recursive: true);
-          }
-
-          // Set the file path
-          final filePath = '${directory.path}/${reportType}-details.pdf';
-
-          // Write the file
-          final file = File(filePath);
-          await file.writeAsBytes(response.bodyBytes);
-
-          // Set the file path and update UI
-          setState(() {
-            localFilePath = filePath;
-            downloaded = true;
-          });
-
-          // Check if the file exists and show a success message
-          if (await file.exists()) {
-            customs.maruSnackBarSuccess(context: context, text: "Receipt downloaded successfully!");
-            print("File saved at: $filePath");
-          } else {
-            customs.maruSnackBarDanger(context: context, text: "Failed to save the receipt!");
+          final directory = await getExternalStorageDirectory();
+          if(directory != null){
+            final downloadDir = Directory('${directory.path}/Download/MaruDairy');
+            if (!await downloadDir.exists()) {
+              await downloadDir.create(recursive: true);
+            }
+            final filePath = '${downloadDir.path}/${reportType}-details.pdf';
+            final file = File(filePath);
+            await file.writeAsBytes(response.bodyBytes);
+            setState(() {
+              localFilePath = filePath;
+              downloaded = true;
+            });
+            if (await file.exists()) {
+              customs.maruSnackBarSuccess(context: context, text: "Receipt downloaded successfully!");
+              print("File saved at: $filePath");
+            } else {
+              customs.maruSnackBarDanger(context: context, text: "Failed to save the receipt!");
+            }
+          }else {
+            customs.maruSnackBarDanger(context: context, text: "Invalid directory!");
           }
         } else {
           customs.maruSnackBarDanger(context: context, text: "Couldn't download the receipt!");
@@ -116,7 +111,6 @@ class _TechnicianReportState extends State<TechnicianReport> {
     } else {
       customs.maruSnackBarDanger(context: context, text: "Storage permission is required to download the receipt.");
     }
-
     setState(() {
       downloading = false;
     });
@@ -630,7 +624,7 @@ class _TechnicianReportState extends State<TechnicianReport> {
                                       });
 
                                       // download pdf
-                                      await downloadPDF();
+                                      await downloadPdf_2();
 
                                       setState(() {
                                         downloading = false;
@@ -638,7 +632,7 @@ class _TechnicianReportState extends State<TechnicianReport> {
                                       });
 
                                       // open the file
-                                      openPDF();
+                                      // openPDF();
 
                                       // openning
                                       setState(() {

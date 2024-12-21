@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:local_auth/local_auth.dart';
+import 'package:maru/packages/in_app_browser.dart';
 import 'package:maru/packages/maru_theme.dart';
 import 'package:maru/pages/admin/admin_profile.dart';
 import 'package:maru/pages/admin/admin_qr_code_finder.dart';
@@ -230,6 +231,7 @@ class _MaruAppState extends State<MaruApp> with WidgetsBindingObserver {
         "/deduction_management" : (context) => const DeductionManagement(),
         "/region_management" : (context) => const RegionManagement(),
         "/member_chat" : (context) => const ChatAdministrators(),
+        "/inAppBrowser" : (context) => InAppBrowser()
       },
     );
   }

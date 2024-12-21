@@ -291,7 +291,7 @@ class _AdminInquiriesState extends State<AdminInquiries>{
                                                 leading: CircleAvatar(
                                                   backgroundColor: customs.primaryShade,
                                                   child: Text(
-                                                    "${customs.nameAbbr(chat['fullname'])}",
+                                                    "${customs.nameAbbr(chat['fullname'] ?? "N.A")}",
                                                     style: customs.primaryTextStyle(
                                                       size: 18,
                                                       fontweight: FontWeight.bold,
@@ -299,7 +299,7 @@ class _AdminInquiriesState extends State<AdminInquiries>{
                                                   ),
                                                 ),
                                                 title: Text(
-                                                  "${customs.toCamelCase(chat['fullname'])}",
+                                                  "${chat['fullname'] != null ? customs.toCamelCase(chat['fullname'] ?? "N/A") : "N/A"}",
                                                   style: customs.darkTextStyle(size: 14, fontweight: new_message ? FontWeight.bold : FontWeight.normal),
                                                 ),
                                                 subtitle: Text(

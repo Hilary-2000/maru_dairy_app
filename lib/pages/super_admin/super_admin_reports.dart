@@ -44,22 +44,35 @@ class _SuperAdminReportsState extends State<SuperAdminReports> {
     }
   }
 
+  // request permission
   Future<bool> _requestPermission() async {
-    // Check the status of the permission
-    var status = await Permission.manageExternalStorage.status;
-
-    if (status.isDenied || status.isRestricted || status.isPermanentlyDenied) {
-      // If permission is denied, request it
-      if (await Permission.manageExternalStorage.request().isGranted) {
+    var status = await Permission.storage.status;
+    print("Permission : ${status}");
+    if (status.isDenied) {
+      if (await Permission.storage.request().isGranted) {
         print("Permission granted.");
         return true;
       } else {
-        print("Permission denied.");
+        print("Permission denied!");
         return false;
       }
+    } else if (status.isPermanentlyDenied) {
+      // Direct the user to app settings
+        openAppSettings();
+        return false;
+    } else if (status.isRestricted) {
+      // Handle restricted permission state
+        print("Permission is restricted.");
+        return false;
     }
     // If already granted, return true
     return true;
+  }
+
+
+  Future <void> downloadPdf_2() async{
+    // Navigate to the in-app browser with the URL as an argument
+    await Navigator.pushNamed( context, '/inAppBrowser', arguments: pdfUrl, );
   }
 
   Future<void> downloadPDF() async {
@@ -576,7 +589,7 @@ class _SuperAdminReportsState extends State<SuperAdminReports> {
                                         });
 
                                         // download pdf
-                                        await downloadPDF();
+                                        await downloadPdf_2();
 
                                         setState(() {
                                           downloading = false;
@@ -584,7 +597,7 @@ class _SuperAdminReportsState extends State<SuperAdminReports> {
                                         });
 
                                         // open the file
-                                        openPDF();
+                                        // openPDF();
 
                                         // openning
                                         setState(() {

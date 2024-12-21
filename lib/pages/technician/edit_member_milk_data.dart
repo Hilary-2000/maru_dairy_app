@@ -338,7 +338,7 @@ class _EditMemberMilkDataState extends State<EditMemberMilkData> {
 
           setState(() {
             milkEditHistory = history;
-            memberName = res['collection']['fullname'] != null ? toCamelCase(res['collection']['fullname'].toString()) : "DELETED USER";
+            memberName = res['collection']['fullname'] != null ? toCamelCase(res['collection']['fullname'].toString()) : "DELETED MEMBER";
             collection_id = res['collection']['collection_id'].toString();
             memberShipNumber = res['collection']['membership'] != null ? res['collection']['membership'].toString() : "-";
             collection_amount = res['collection']['collection_amount'].toString()+" Litres";
@@ -524,7 +524,7 @@ class _EditMemberMilkDataState extends State<EditMemberMilkData> {
                                   ),
                                   Text(
                                     customs.toCamelCase(memberName),
-                                    style: memberName == "DELETED USER" ? customs.dangerTextStyle(
+                                    style: memberName == "DELETED MEMBER" ? customs.dangerTextStyle(
                                         size: 20, fontweight: FontWeight.bold) : customs.darkTextStyle(
                                         size: 20, fontweight: FontWeight.bold),
                                   ),
@@ -692,7 +692,7 @@ class _EditMemberMilkDataState extends State<EditMemberMilkData> {
                           child: CircleAvatar(
                               radius: 44,
                               backgroundColor: colors_shade[index % colors_shade.length],
-                              child: Text(customs.nameAbbr(memberName == "DELETED USER" ? "-" : memberName), style: textStylesTitle[index % textStylesTitle.length],)
+                              child: Text(customs.nameAbbr(memberName == "DELETED MEMBER" ? "-" : memberName), style: textStylesTitle[index % textStylesTitle.length],)
                           ),
                         ),
                       ),

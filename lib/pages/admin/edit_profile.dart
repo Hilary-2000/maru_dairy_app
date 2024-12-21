@@ -100,7 +100,7 @@ class _AdminEditProfileState extends State<AdminEditProfile> {
       int totalBytes = response.contentLength ?? 0;
       int bytesTransferred = 0;
 
-      response.stream.listen(
+      await response.stream.listen(
             (chunk) {
           bytesTransferred += chunk.length;
           setState(() {
@@ -112,7 +112,7 @@ class _AdminEditProfileState extends State<AdminEditProfile> {
           final responseBody = await response.stream.bytesToString();
 
           if (response.statusCode == 200) {
-            // customs.maruSnackBarSuccess(context: context, text: "Upload successful: $responseBody");
+            customs.maruSnackBarSuccess(context: context, text: "Upload successful: $responseBody");
             setState(() {
               progress = 1.0;
             });

@@ -1258,12 +1258,9 @@ class _editEarningsState extends State<_editEarnings> {
   }
 
   Future<bool> _requestPermission() async {
-    // Check the status of the permission
-    var status = await Permission.manageExternalStorage.status;
-
+    var status = await Permission.storage.status;
     if (status.isDenied || status.isRestricted || status.isPermanentlyDenied) {
-      // If permission is denied, request it
-      if (await Permission.manageExternalStorage.request().isGranted) {
+      if (await Permission.storage.request().isGranted) {
         print("Permission granted.");
         return true;
       } else {
@@ -1271,7 +1268,6 @@ class _editEarningsState extends State<_editEarnings> {
         return false;
       }
     }
-    // If already granted, return true
     return true;
   }
 
