@@ -484,10 +484,12 @@ class _EditDeductionState extends State<EditDeduction> {
 
   void didChangeDependencies(){
     super.didChangeDependencies();
-    setState(() {
-      init = !init;
-      deductionAmountController.text = widget.deduction_data['deduction_name'];
-    });
+    if(!init){
+      setState(() {
+        init = !init;
+        deductionAmountController.text = widget.deduction_data['deduction_name'];
+      });
+    }
   }
 
   bool saveLoader = false;

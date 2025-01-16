@@ -397,10 +397,12 @@ class _EditRegionsState extends State<EditRegions> {
 
   void didChangeDependencies(){
     super.didChangeDependencies();
-    setState(() {
-      init = !init;
-      regionNameController.text = widget.region_data['region_name'];
-    });
+    if(!init){
+      setState(() {
+        init = !init;
+        regionNameController.text = widget.region_data['region_name'];
+      });
+    }
   }
 
   bool saveLoader = false;
@@ -433,7 +435,12 @@ class _EditRegionsState extends State<EditRegions> {
                             padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                             width: width,
                             child: customThemes.maruTextFormField(
-                              isChanged: (value){},
+                              isChanged: (value){
+                                print(value);
+                                setState(() {
+                                  regionNameController.text = value;
+                                });
+                              },
                               hintText: "Region Name",
                               editingController: regionNameController,
                               validator: (value){

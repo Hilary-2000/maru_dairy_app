@@ -134,6 +134,7 @@ class _EditAdministratorState extends State<EditAdministrator> {
             // gender dv
             genderDV = res['administrator']['gender'] ?? "";
             regionDV = res['administrator']['region'] ?? "";
+            regionDV = regionDV.length > 3 ? "" : regionDV;
             status = "${res['administrator']['status'] ?? ""}";
           });
         } else {

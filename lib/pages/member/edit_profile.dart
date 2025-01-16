@@ -200,6 +200,7 @@ class _EditProfileState extends State<EditProfile> {
           location.text = member_data['residence'] ?? "";
           genderDV = member_data['gender'] ?? "";
           regionDV = member_data['region'] ?? "";
+          regionDV = regionDV.length > 3 ? "" : regionDV;
           FullName.text = member_data['fullname'] ?? "";
         });
       }else{

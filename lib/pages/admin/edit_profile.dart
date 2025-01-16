@@ -234,6 +234,7 @@ class _AdminEditProfileState extends State<AdminEditProfile> {
           location.text = admin_data != null ? (admin_data['residence'] ?? "") : "";
           genderDV = admin_data != null ? (admin_data['gender'] ?? "") : "";
           regionDV = admin_data != null ? (admin_data['region'] ?? "") : "";
+          regionDV = regionDV.length > 3 ? "" : regionDV;
           FullName.text = admin_data != null ? (admin_data['fullname'] ?? "") : "";
           admin_username.text = admin_data != null ? admin_data['username'] ?? "" : "";
         });
