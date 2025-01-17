@@ -44,7 +44,6 @@ class _EditTechnicianProfileState extends State<EditTechnicianProfile> {
   TextEditingController emailAddress = TextEditingController();
   TextEditingController areaResidence = TextEditingController();
   TextEditingController nationalId = TextEditingController();
-  TextEditingController regionName = TextEditingController();
 
   void initState() {
     // TODO: implement initState
@@ -222,7 +221,6 @@ class _EditTechnicianProfileState extends State<EditTechnicianProfile> {
           emailAddress.text = email;
           areaResidence.text = residence;
           nationalId.text = national_id;
-          regionName.text = res['technician_data']['region_name'].toString();
         });
       }
     }
@@ -615,32 +613,6 @@ class _EditTechnicianProfileState extends State<EditTechnicianProfile> {
                                         FloatingLabelBehavior.always,
                                     hintText: "Thika, Kiambu County",
                                   editingController: areaResidence
-                                ),
-                                Divider(
-                                  color: customs.secondaryShade_2,
-                                )
-                              ],
-                            ),
-                          ),
-                          Container(
-                            width: width * 0.9,
-                            margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "Region:",
-                                  style: customs.darkTextStyle(
-                                      size: 12, fontweight: FontWeight.bold),
-                                ),
-                                customs.maruTextField(
-                                  isChanged: (value) {},
-                                  textType: TextInputType.text,
-                                  floatingBehaviour:
-                                  FloatingLabelBehavior.always,
-                                  hintText: "e.g, Njebi",
-                                  editingController: regionName,
-                                  enabled: false
                                 ),
                                 Divider(
                                   color: customs.secondaryShade_2,

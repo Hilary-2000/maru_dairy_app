@@ -1722,6 +1722,36 @@ class ApiConnection{
   }
 
   // get member data
+  Future<String> updateTechnicianRegion({required String technician_id, required String regions}) async{
+    print("Regions passed : ${regions}");
+    var client = rq.Client();
+    var url = Uri.http(apiLink,"/api/technician/update/regions");
+    var body = jsonEncode({
+      "user_id": technician_id,
+      "regions": regions
+    });
+    FlutterSecureStorage storage = new FlutterSecureStorage();
+    String? token = await storage.read(key: "token");
+    try{
+      var response = await client.post(
+          url,
+          headers: {
+            'Content-Type': 'application/json',
+            'maru-authentication-code' : token!
+          },
+          body: body
+      ).timeout(Duration(seconds: 60));
+      return response.body.length > 0 ? (response.body.substring(response.body.length-1) != "}" ? response.body+"}" : response.body) : "{\"success\":false, \"message\":\"No response!\"}";
+    }on TimeoutException {
+      return "{\"success\":false, \"message\":\"No connection!\"}";// Handle the timeout exception
+    } catch(e){
+      return "{\"success\":false, \"message\":\"Check your connection and try again!\"}";
+    }finally{
+      client.close();
+    }
+  }
+
+  // get member data
   Future<String> updateRegion({required String region_id, required String region_name}) async{
     var client = rq.Client();
     var url = Uri.http(apiLink,"/api/admin/region/update");

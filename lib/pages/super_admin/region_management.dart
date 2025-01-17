@@ -364,7 +364,6 @@ class _RegionManagementState extends State<RegionManagement> {
                 if(result != null){
                   if(result['success']){
                     customs.maruSnackBarSuccess(context: context, text: result['message']);
-
                     // REFRESH DEDUCTIONS
                     getRegions();
                   }else{

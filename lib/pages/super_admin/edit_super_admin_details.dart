@@ -140,6 +140,7 @@ class _EditSuperAdminDetailsState extends State<EditSuperAdminDetails> {
             // gender dv
             genderDV = res['super_admin']['gender'] ?? "";
             regionDV = res['super_admin']['region'] ?? "";
+            regionDV = regionDV.length > 3 ? "" : regionDV;
             status = "${res['super_admin']['status'] ?? ""}";
           });
         } else {

@@ -33,7 +33,7 @@ class _EditTechnicianState extends State<EditTechnician> {
   TextEditingController idController = TextEditingController();
   TextEditingController locationController = TextEditingController();
 
-  var regionDV = "";
+  List<dynamic> regionDV = [];
   bool _init = false;
 
   List<DropdownMenuItem<String>> regions = [];
@@ -136,7 +136,7 @@ class _EditTechnicianState extends State<EditTechnician> {
 
             // gender dv
             genderDV = res['technician_data']['gender'] ?? "";
-            regionDV = isValid ? res['technician_data']['region'] ?? "" : "";
+            regionDV = customs.isValidJson("${res['technician_data']['region']}") ? jsonDecode("${res['technician_data']['region']}") : [];
             status = "${res['technician_data']['status'] ?? ""}";
           });
         } else {
@@ -151,7 +151,7 @@ class _EditTechnicianState extends State<EditTechnician> {
 
             // gender dv
             genderDV = res['gender'];
-            regionDV = res['region'];
+            regionDV = [];
           });
 
           customs.maruSnackBarDanger(context: context, text: res['message']);
@@ -563,24 +563,64 @@ class _EditTechnicianState extends State<EditTechnician> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      "Region:",
+                                      "Region Managed:",
                                       style: customs.darkTextStyle(
                                           size: 12, fontweight: FontWeight.bold),
                                     ),
-                                    customs.maruDropdownButtonFormField(
-                                        defaultValue: regionDV,
-                                        onChange: (value) {
-                                          setState(() {
-                                            regionDV = value!;
-                                          });
-                                        },
-                                        items: regions,
-                                        validator: (value) {
-                                          if(value == null || value.isEmpty){
-                                            return "Select region";
-                                          }
-                                          return null;
-                                        }),
+                                    Container(
+                                      decoration:
+                                      BoxDecoration(
+                                        border: Border.all(
+                                          color: customs.darkColor, // Border color
+                                          width: 1.0,         // Border width
+                                        ),
+                                        borderRadius: BorderRadius.circular(10), // Optional: Add rounded corners
+                                      ),
+                                      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+                                      child: Row(
+                                        children: [
+                                          Text(
+                                              "${(regionDV.toString().length>2 ? regionDV.length : 0)} region(s)",
+                                              style: customs.darkTextStyle(
+                                                  size: 16, fontweight: FontWeight.bold
+                                              )
+                                          ),
+                                          Spacer(),
+                                          GestureDetector(
+                                            onTap: ()async {
+                                              var result = await Navigator.of(context).push(HeroDialogRoute(builder: (context) {
+                                                return  EditRegions(region_data: regions, fullname : fullnameController.text, member_region: regionDV, user_id : "${technicianData['user_id']}");
+                                              }));
+                                              if(result != null){
+                                                if(result['success']){
+                                                  customs.maruSnackBarSuccess(context: context, text: result['message']);
+                                                  // REFRESH THE MEMBER DATA
+                                                  getMemberData();
+                                                }else{
+                                                  customs.maruSnackBarDanger(context: context, text: result['message']);
+                                                }
+                                              }else{
+                                                // customs.maruSnackBarDanger(context: context, text: "Cancelled!");
+                                              }
+                                            },
+                                            child: Hero(
+                                              tag: "modify_region",
+                                              child: Material(
+                                                child: Row(
+                                                  children: [
+                                                    Icon(FontAwesomeIcons.pencil, color: customs.primaryColor, size: 12,),
+                                                    SizedBox(width: 2,),
+                                                    Text("Edit", style: customs.primaryTextStyle(
+                                                      size: 14, underline: true, fontweight: FontWeight.bold
+                                                    ),)
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
                                     Divider(
                                       color: customs.secondaryShade_2,
                                     )
@@ -671,7 +711,7 @@ class _EditTechnicianState extends State<EditTechnician> {
                                               "phone_number": phone_controller.text,
                                               "email": emailController.text,
                                               "residence": locationController.text,
-                                              "region": regionDV,
+                                              // "region": regionDV,
                                               "national_id": idController.text,
                                               "gender": genderDV,
                                               "status": status
@@ -713,4 +753,350 @@ class _EditTechnicianState extends State<EditTechnician> {
       )),
     );
   }
+}
+
+class EditRegions extends StatefulWidget {
+  var region_data = null;
+  String fullname;
+  var member_region = [];
+  String user_id;
+  EditRegions({super.key, required this.region_data, required this.fullname, required this.member_region, required this.user_id});
+
+  @override
+  State<EditRegions> createState() => _EditRegionsState();
+}
+
+class _EditRegionsState extends State<EditRegions> {
+  CustomThemes customThemes = new CustomThemes();
+  bool init = false;
+  TextEditingController regionNameController = TextEditingController();
+  var regions = [];
+  var _isRegionSelected = {};
+  String hero_tags = "";
+  bool load_regions = false;
+
+  void didChangeDependencies()async{
+    super.didChangeDependencies();
+    if(!init){
+      await getRegions();
+      print("$_isRegionSelected");
+      setState(() {
+        init = !init;
+        //regionNameController.text = widget.region_data['region_name'];
+      });
+    }
+  }
+
+  bool isPresent(String region_id){
+    for(int index = 0; index < widget.member_region.length; index++){
+      if("$region_id" == "${widget.member_region[index]}"){
+        return true;
+      }
+    }
+    return false;
+  }
+
+  // get deductions
+  Future<void> getRegions() async {
+    setState(() {
+      load_regions = true;
+    });
+    ApiConnection apiConnection = ApiConnection();
+    var response = await apiConnection.getRegions();
+    if(customThemes.isValidJson(response)){
+      var res = jsonDecode(response);
+      if(res['success']){
+        setState(() {
+          regions = res['regions'];
+          for(int index = 0; index < regions.length; index++){
+            _isRegionSelected["${regions[index]['region_id']}"] = isPresent("${regions[index]['region_id']}");
+          }
+        });
+      }else{
+        setState(() {
+          regions = [];
+        });
+      }
+    }else{
+      setState(() {
+        regions = [];
+      });
+    }
+    setState(() {
+      load_regions = false;
+    });
+  }
+
+
+  bool saveLoader = false;
+  final _formKey = GlobalKey<FormState>();
+  @override
+  Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(32.0),
+        child: Hero(
+          tag: "modify_region",
+          child: Material(
+            color: customThemes.whiteColor,
+            elevation: 2,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text("Update \"${widget.fullname}\" Region", style: customThemes.darkTextStyle(size: 15, fontweight: FontWeight.bold),),
+                    SizedBox(height: 10,),
+                    // the regions
+                    Container(
+                      padding: EdgeInsets.symmetric(vertical: 10),
+                      margin: EdgeInsets.symmetric(horizontal: 10),
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: customThemes.darkColor, // Border color
+                          width: 1.0,         // Border width
+                        ),
+                        borderRadius: BorderRadius.circular(10), // Optional: Add rounded corners
+                      ),
+                      child: SafeArea(
+                          child: LayoutBuilder(
+                          builder: (context, constraints) {
+                            double width = constraints.maxWidth;
+                            double height = 200;
+                            return load_regions ?
+                            Container(
+                              child: Center(
+                                child: Container(
+                                  height: 100,
+                                  child: Column(
+                                    children: [
+                                      SpinKitCircle(
+                                        color: customThemes.primaryColor,
+                                        size: 50.0,
+                                      ),
+                                      Text("Loading regions...", style: customThemes.primaryTextStyle(size: 12, fontweight: FontWeight.bold),)
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            )
+                                :
+                            Container(
+                              width: width,
+                              decoration: const BoxDecoration(
+                                color: Colors.white,
+                              ),
+                              child: Column(
+                                children: [
+                                  Container(
+                                    width: width,
+                                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+                                    child: Text("Select Region to Manage:", style: customThemes.darkTextStyle(size: 15, fontweight: FontWeight.bold),),
+                                  ),
+                                  Container(width: width * 0.8, child: Divider(color: customThemes.secondaryShade_2,)),
+                                  Container(
+                                    width: width,
+                                    height: height,
+                                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                                    child: regions.length > 0 ? ListView.builder(
+                                        itemCount: regions.length,
+                                        itemBuilder: (context, index){
+                                          var items = regions[index];
+                                          return Container(
+                                            margin: EdgeInsets.symmetric(vertical: 3, horizontal: 5),
+                                            padding: EdgeInsets.symmetric(vertical: 5),
+                                            decoration: BoxDecoration(
+                                                color: customThemes.secondaryShade_2.withOpacity(0.2),
+                                                borderRadius: BorderRadius.circular(10)
+                                            ),
+                                            child: Material(
+                                              color: Colors.transparent,
+                                              child: ListTile(
+                                                leading: Transform.scale(
+                                                    scale: 0.7,
+                                                    child: Switch(
+                                                      value: _isRegionSelected["${items['region_id']}"],
+                                                      activeTrackColor: customThemes.primaryColor,
+                                                      inactiveThumbColor: customThemes.primaryColor,
+                                                      inactiveTrackColor: customThemes.whiteColor,
+                                                      trackOutlineColor: WidgetStateProperty.all<Color>(customThemes.primaryColor),
+                                                      onChanged: (bool value) async {
+                                                        setState(() {
+                                                          _isRegionSelected["${items['region_id']}"] = value;
+                                                        });
+                                                      },
+                                                    )
+                                                ),
+                                                dense: true,
+                                                style: ListTileStyle.drawer,
+                                                title: Text( "${items['region_name']}", style: customThemes.secondaryTextStyle(size: 14, fontweight: FontWeight.bold)),
+                                                onTap: (){
+                                                },
+                                              ),
+                                            ),
+                                          );
+                                        }
+                                    ) : Column(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      children: [
+                                        Container(
+                                          margin: EdgeInsets.only(top: 30),
+                                          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                                          width: width - 50,
+                                          height: 200,
+                                          decoration: BoxDecoration(
+                                              color: customThemes.whiteColor,
+                                              borderRadius: BorderRadius.circular(20),
+                                              boxShadow: [
+                                                BoxShadow(color: customThemes.secondaryShade_2, blurRadius: 1, blurStyle: BlurStyle.normal),
+                                                BoxShadow(color: customThemes.secondaryShade_2, blurRadius: 1, blurStyle: BlurStyle.normal),
+                                                BoxShadow(color: customThemes.secondaryShade_2, blurRadius: 1, blurStyle: BlurStyle.normal),
+                                              ]
+                                          ),
+                                          child: Column(
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            children: [
+                                              Text("No regions found!", style: customThemes.primaryTextStyle(size: 20, fontweight: FontWeight.bold),),
+                                              Spacer(),
+                                              SizedBox(
+                                                width: width,
+                                                child: Image(
+                                                  image: AssetImage("assets/images/search.jpg"),
+                                                  height: width/4,
+                                                  width: width/4,
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                height: 25,
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                        )
+                      ),
+                    ),
+                    SizedBox(height: 10,),
+                    Container(
+                      padding: EdgeInsets.symmetric(horizontal: 10),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Flexible(
+                            child: Container(
+                              width: width/3,
+                              child: customThemes.maruButton(
+                                  text: "Update",
+                                  showLoader: saveLoader,
+                                  disabled: saveLoader,
+                                  onPressed: () async {
+                                    LocalAuthentication auth = LocalAuthentication();
+                                    bool proceed = await customThemes.BiometricAuthenticate(auth: auth, context: context, auth_msg: "Please authenticate to update region!");
+                                    if(proceed){
+                                      setState((){
+                                        saveLoader = true;
+                                      });
+                                      ApiConnection apiConn = ApiConnection();
+                                      var response = await apiConn.updateTechnicianRegion(technician_id: widget.user_id, regions: _isRegionSelected.toString());
+                                      if(customThemes.isValidJson(response)){
+                                        var res = jsonDecode(response);
+                                        print(res);
+                                        if(res['success']){
+                                          Navigator.pop(context, res);
+                                        }else{
+                                          Navigator.pop(context, res);
+                                        }
+                                      }
+                                      setState((){
+                                        saveLoader = false;
+                                      });
+                                    }else{
+                                      customThemes.maruSnackBarDanger(context: context, text: "Authenticated failed!");
+                                    }
+                                  },
+                                  type: Type.success
+                              ),
+                            ),
+                          ),
+                          Flexible(
+                            child: Container(
+                              width: width/3,
+                              child: customThemes.marOutlineuButton(
+                                  text: "Cancel",
+                                  showLoader: saveLoader,
+                                  disabled: saveLoader,
+                                  onPressed: (){
+                                    // Navigator.pop(context, {"success" : false, "message" : "Cancelled!"});
+                                    Navigator.pop(context);
+                                  },
+                                  type: Type.secondary
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+
+
+class HeroDialogRoute<T> extends PageRoute<T> {
+  /// {@macro hero_dialog_route}
+  HeroDialogRoute({
+    required WidgetBuilder builder,
+    RouteSettings? settings,
+    bool fullscreenDialog = false,
+  })  : _builder = builder,
+        super(settings: settings, fullscreenDialog: fullscreenDialog);
+
+  final WidgetBuilder _builder;
+
+  @override
+  bool get opaque => false;
+
+  @override
+  bool get barrierDismissible => true;
+
+  @override
+  Duration get transitionDuration => const Duration(milliseconds: 300);
+
+  @override
+  bool get maintainState => true;
+
+  @override
+  Color get barrierColor => Colors.black54;
+
+  @override
+  Widget buildTransitions(BuildContext context, Animation<double> animation,
+      Animation<double> secondaryAnimation, Widget child) {
+    return child;
+  }
+
+  @override
+  Widget buildPage(BuildContext context, Animation<double> animation,
+      Animation<double> secondaryAnimation) {
+    return _builder(context);
+  }
+
+  @override
+  String get barrierLabel => 'Popup dialog open';
 }

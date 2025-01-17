@@ -22,10 +22,12 @@ class _TechnicianDetailsState extends State<TechnicianDetails> {
   String collection = "0 Litres Collected";
   bool loading = false;
   bool _init = false;
+  List<dynamic>regionDV = [];
 
   Future<void> getTechnicianData() async {
     setState(() {
       loading = true;
+      regionDV = [];
     });
     // get the arguments
     args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
@@ -37,19 +39,20 @@ class _TechnicianDetailsState extends State<TechnicianDetails> {
       });
       ApiConnection apiConnection = new ApiConnection();
       var response = await apiConnection.technicianDetails(arguments['technician_id'].toString());
+      print(response);
       if(customs.isValidJson(response)){
         var res = jsonDecode(response);
         if(res['success']){
           setState(() {
             technicianData = res['technician_data'];
             collection = "${res['total_collection']} Litres Collected";
+            regionDV = customs.isValidJson("${res['technician_data']['region']}") ? jsonDecode("${res['technician_data']['region']}") : [];
           });
         }else{
           setState(() {
             technicianData = null;
             collection = "0 Litres Collected";
           });
-
           customs.maruSnackBarDanger(context: context, text: res['message']);
         }
       }else{
@@ -397,12 +400,12 @@ class _TechnicianDetailsState extends State<TechnicianDetails> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  "Region:",
+                                  "Region Managed:",
                                   style: customs.darkTextStyle(
                                       size: 12, fontweight: FontWeight.bold),
                                 ),
                                 Text(
-                                  technicianData != null ? customs.toCamelCase(technicianData['region_name'] ?? "N/A") : "N/A",
+                                    "${(regionDV.toString().length>2 ? regionDV.length : 0)} region(s)",
                                   style: customs.secondaryTextStyle(size: 16),
                                 ),
                                 Divider(

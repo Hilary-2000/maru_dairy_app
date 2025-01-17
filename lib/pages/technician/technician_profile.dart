@@ -29,6 +29,7 @@ class _TechnicianProfileState extends State<TechnicianProfile> {
   String collection_days = "0";
   String litresCollected = "0";
   String profile = "";
+  List<dynamic> regions = [];
 
   void initState() {
     // TODO: implement initState
@@ -83,6 +84,7 @@ class _TechnicianProfileState extends State<TechnicianProfile> {
           litresCollected = res['technician_data']['collection_amount'].toString();
           region = res['technician_data']['region_name'].toString();
           profile = res['technician_data']['profile_photo'].toString();
+          regions = res['regions'];
         });
       }else{
 
@@ -404,10 +406,23 @@ class _TechnicianProfileState extends State<TechnicianProfile> {
                                   style: customs.darkTextStyle(
                                       size: 12, fontweight: FontWeight.bold),
                                 ),
+                                (regions.length > 0 ?
+                                ListView.builder(
+                                    shrinkWrap: true,
+                                    itemCount: regions.length,
+                                    itemBuilder: (context, index){
+                                      var items = regions[index];
+                                      return Text(
+                                        ". ${items['region_name']}",
+                                        style: customs.secondaryTextStyle(size: 16),
+                                      );
+                                    }
+                                )
+                                    :
                                 Text(
-                                  "$region",
+                                  "No regions set!",
                                   style: customs.secondaryTextStyle(size: 16),
-                                ),
+                                )),
                                 Divider(
                                   color: customs.secondaryShade_2,
                                 )
