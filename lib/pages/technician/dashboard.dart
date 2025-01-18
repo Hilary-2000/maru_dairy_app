@@ -430,6 +430,7 @@ class _TechnicianDashboardState extends State<TechnicianDashboard> {
     return customs.refreshIndicator(
       onRefresh: () async {
         await loadTechnicianData();
+        HapticFeedback.lightImpact();
       },
       child: SafeArea(child: LayoutBuilder(
         builder: (context, constraints) {

@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:maru/packages/api_connection.dart';
 import 'package:maru/packages/maru_theme.dart';
@@ -462,9 +463,10 @@ class _TechnicianHistoryState extends State<TechnicianHistory> {
   Widget build(BuildContext context) {
     return customs.refreshIndicator(
       onRefresh: () async{
+        HapticFeedback.lightImpact();
         await loadTechnicianHistory(context);
         widget.getNotifications();
-
+        HapticFeedback.lightImpact();
       },
       child: SafeArea(child: LayoutBuilder(
         builder: (context, constraints) {

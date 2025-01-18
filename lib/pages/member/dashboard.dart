@@ -557,6 +557,7 @@ class _memberDashState extends State<memberDash> {
     return customs.refreshIndicator(
       onRefresh: () async{
         await memberDashboard(drop_down);
+        HapticFeedback.lightImpact();
       },
       child: SafeArea(child: LayoutBuilder(
         builder: (context, constraints) {

@@ -819,7 +819,10 @@ class _AdminDashboardState extends State<AdminDashboard> {
   @override
   Widget build(BuildContext context) {
     return customs.refreshIndicator(
-      onRefresh: getAdminDash,
+      onRefresh: ()async{
+        await getAdminDash();
+        HapticFeedback.lightImpact();
+      },
       child: SafeArea(child: LayoutBuilder(
         builder: (context, constraints) {
           double width = constraints.maxWidth;

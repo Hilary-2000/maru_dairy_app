@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -110,6 +111,7 @@ class _AdminInquiriesState extends State<AdminInquiries>{
       onRefresh: () async{
         await getChats();
         widget.getNotifications();
+        HapticFeedback.lightImpact();
       },
       child: SafeArea(child: LayoutBuilder(
         builder: (context, constraints) {

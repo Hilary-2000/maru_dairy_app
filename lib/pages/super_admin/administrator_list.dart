@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:maru/packages/api_connection.dart';
 import 'package:maru/packages/maru_theme.dart';
 import 'package:skeletonizer/skeletonizer.dart';
@@ -115,7 +116,10 @@ class _AdministratorListState extends State<AdministratorList> {
   @override
   Widget build(BuildContext context) {
     return customs.refreshIndicator(
-      onRefresh: getAdministrators,
+      onRefresh: ()async{
+        await getAdministrators();
+        HapticFeedback.lightImpact();
+      },
       child: Scaffold(
         backgroundColor: customs.whiteColor,
         appBar: AppBar(

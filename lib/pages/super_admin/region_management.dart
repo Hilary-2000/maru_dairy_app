@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:local_auth/local_auth.dart';
@@ -72,7 +73,10 @@ class _RegionManagementState extends State<RegionManagement> {
   @override
   Widget build(BuildContext context) {
     return customs.refreshIndicator(
-      onRefresh: getRegions,
+      onRefresh: ()async{
+        await getRegions();
+        HapticFeedback.lightImpact();
+      },
       child: Scaffold(
         backgroundColor: customs.whiteColor,
         appBar: AppBar(

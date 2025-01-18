@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:maru/packages/api_connection.dart';
@@ -71,7 +72,10 @@ class _DeductionManagementState extends State<DeductionManagement> {
   @override
   Widget build(BuildContext context) {
     return customs.refreshIndicator(
-      onRefresh: getDeductions,
+      onRefresh: ()async{
+        await getDeductions();
+        HapticFeedback.lightImpact();
+      },
       child: Scaffold(
         backgroundColor: customs.whiteColor,
         appBar: AppBar(

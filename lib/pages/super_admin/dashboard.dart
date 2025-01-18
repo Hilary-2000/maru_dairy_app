@@ -827,6 +827,7 @@ class _SuperAdminDashState extends State<SuperAdminDash> {
     return customs.refreshIndicator(
       onRefresh: () async{
         await getAdminDash();
+        HapticFeedback.lightImpact();
       },
       child: SafeArea(child: LayoutBuilder(
         builder: (context, constraints) {

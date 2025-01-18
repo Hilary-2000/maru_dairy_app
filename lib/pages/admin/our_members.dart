@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:maru/packages/api_connection.dart';
 import 'package:maru/packages/maru_theme.dart';
 import 'package:skeletonizer/skeletonizer.dart';
@@ -504,7 +505,10 @@ class _OurMembersState extends State<OurMembers> {
   @override
   Widget build(BuildContext context) {
     return customs.refreshIndicator(
-      onRefresh: getMembers,
+      onRefresh: ()async{
+        await getMembers();
+        HapticFeedback.lightImpact();
+      },
       child: SafeArea(child: LayoutBuilder(
         builder: (context, constraints) {
           double width = constraints.maxWidth;

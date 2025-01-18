@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:maru/packages/api_connection.dart';
 import 'package:maru/packages/maru_theme.dart';
@@ -319,7 +320,10 @@ class _memberHistoryState extends State<memberHistory> {
   @override
   Widget build(BuildContext context) {
     return customs.refreshIndicator(
-      onRefresh: getCollectionHistory,
+      onRefresh: ()async{
+        await getCollectionHistory();
+        HapticFeedback.lightImpact();
+      },
       child: SafeArea(child: LayoutBuilder(
         builder: (context, constraints) {
           double width = constraints.maxWidth;

@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:maru/packages/api_connection.dart';
 import 'package:maru/packages/maru_theme.dart';
 import 'package:skeletonizer/skeletonizer.dart';
@@ -116,6 +117,7 @@ class _TechniciansState extends State<Technicians> {
     return customs.refreshIndicator(
       onRefresh: ()async{
         await getTechnician();
+        HapticFeedback.lightImpact();
       },
       child: Scaffold(
         backgroundColor: customs.whiteColor,
