@@ -554,415 +554,420 @@ class _memberDashState extends State<memberDash> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(child: LayoutBuilder(
-      builder: (context, constraints) {
-        double width = constraints.maxWidth;
-        double height = constraints.maxHeight;
-        double calculatedWidth = width / 2 - 170;
-        calculatedWidth = calculatedWidth > 0 ? calculatedWidth : 0;
-        return Container(
-          height: height,
-          width: width,
-          decoration: BoxDecoration(
-            color: customs.secondaryShade_2.withOpacity(0.2),
-          ),
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                const SizedBox(
-                  height: 10.0,
-                ),
-                Skeletonizer(
-                  enabled: loading,
-                  child: Card(
+    return customs.refreshIndicator(
+      onRefresh: () async{
+        await memberDashboard(drop_down);
+      },
+      child: SafeArea(child: LayoutBuilder(
+        builder: (context, constraints) {
+          double width = constraints.maxWidth;
+          double height = constraints.maxHeight;
+          double calculatedWidth = width / 2 - 170;
+          calculatedWidth = calculatedWidth > 0 ? calculatedWidth : 0;
+          return Container(
+            height: height,
+            width: width,
+            decoration: BoxDecoration(
+              color: customs.secondaryShade_2.withOpacity(0.2),
+            ),
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  const SizedBox(
+                    height: 10.0,
+                  ),
+                  Skeletonizer(
+                    enabled: loading,
+                    child: Card(
+                      color: customs.whiteColor,
+                      margin:
+                          const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                      child: Row(
+                        children: <Widget>[
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 10, horizontal: 10),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text(
+                                  "$greetings",
+                                  style: customs.primaryTextStyle(
+                                      size: 16,
+                                      fontweight: FontWeight.normal),
+                                ),
+                                SizedBox(
+                                  height: height * 0.005,
+                                ),
+                                Text(
+                                  toCamelCase(member_data != null ? member_data['fullname'] ?? "N/A" : "N/A"),
+                                  style: customs.successTextStyle(
+                                      size: 20,
+                                      fontweight: FontWeight.bold),
+                                )
+                              ],
+                            ),
+                          ),
+                          const Spacer(),
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 10, horizontal: 10),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                GestureDetector(
+                                  child: CircleAvatar(
+                                    radius: 34,
+                                    backgroundColor: customs.primaryShade,
+                                    child: ClipOval(
+                                      child: (member_data != null) ?
+                                      Image.network(
+                                        "${customs.apiURLDomain}${member_data['profile_photo']}",
+                                        fit: BoxFit.cover,
+                                        width: double.infinity,
+                                        height: double.infinity,
+                                        loadingBuilder: (context, child, loadingProgress) {
+                                          if (loadingProgress == null) return child;
+                                          return Center(
+                                            child: CircularProgressIndicator(
+                                              color: customs.primaryColor,
+                                              backgroundColor: customs.secondaryShade_2,
+                                              value: loadingProgress.expectedTotalBytes != null
+                                                  ? loadingProgress.cumulativeBytesLoaded /
+                                                  loadingProgress.expectedTotalBytes!
+                                                  : null,
+                                            ),
+                                          );
+                                        },
+                                        errorBuilder: (context, error, stackTrace) {
+                                          return Image.asset(
+                                            "assets/images/placeholderImg.jpg",
+                                            fit: BoxFit.cover,
+                                            width: double.infinity,
+                                            height: double.infinity,
+                                          );
+                                        },
+                                      )
+                                          :
+                                      Image.asset(
+                                        // profile.length > 0 ? profile : "assets/images/placeholderImg.jpg",
+                                        "assets/images/placeholderImg.jpg",
+                                        fit: BoxFit.cover,
+                                        width: double.infinity,
+                                        height: double.infinity,
+                                      ),
+                                    ),
+                                  ),
+                                  onTap: () {
+                                    Navigator.pushNamed(
+                                        context, "/new_member"
+                                    );
+                                  },
+                                ),
+                                SizedBox(
+                                  height: height * 0.01,
+                                ),
+                                Skeleton.ignore(
+                                  child: Container(
+                                    padding: const EdgeInsets.all(2),
+                                    decoration: BoxDecoration(
+                                        color: customs.infoColor,
+                                        borderRadius: BorderRadius.circular(5.0)),
+                                    child: Text(
+                                      member_data != null ? "${member_data['membership'] ?? "N/A"}" : "N/A",
+                                      style: customs.darkTextStyle(
+                                          size: 10, fontweight: FontWeight.bold),
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: height * 0.01,
+                  ),
+                  Card(
                     color: customs.whiteColor,
                     margin:
                         const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                    child: Row(
-                      children: <Widget>[
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 10, horizontal: 10),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Text(
-                                "$greetings",
-                                style: customs.primaryTextStyle(
-                                    size: 16,
-                                    fontweight: FontWeight.normal),
-                              ),
-                              SizedBox(
-                                height: height * 0.005,
-                              ),
-                              Text(
-                                toCamelCase(member_data != null ? member_data['fullname'] ?? "N/A" : "N/A"),
-                                style: customs.successTextStyle(
-                                    size: 20,
-                                    fontweight: FontWeight.bold),
-                              )
-                            ],
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 10, horizontal: 10.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Quick Actions",
+                            style: customs.primaryTextStyle(
+                                size: 12,
+                                underline: true,
+                                fontweight: FontWeight.bold),
                           ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              customs.maruButton(
+                                  showArrow: true,
+                                  iconSize: 15,
+                                  fontSize: 16,
+                                  size: Sizes.sm,
+                                  text: "View Membership",
+                                  onPressed: () async {
+                                    LocalAuthentication auth = LocalAuthentication();
+                                    bool proceed = await customs.BiometricAuthenticate(auth: auth, context: context, auth_msg: "Please authenticate to view your membership!");
+                                    if(proceed){
+                                      Navigator.pushNamed(
+                                        context, "/member_membership",
+                                        arguments: {
+                                          "member_id" : member_data['user_id']
+                                        }
+                                      );
+                                    }else{
+                                      customs.maruSnackBarDanger(context: context, text: "Authenticated failed!");
+                                    }
+                                  }),
+                              customs.maruButton(
+                                  showArrow: true,
+                                  iconSize: 15,
+                                  fontSize: 16,
+                                  size: Sizes.sm,
+                                  text: "Inquire",
+                                  onPressed: () {
+                                    // Navigator.pushNamed(context, "/member_inbox");
+                                    int index = 2;
+                                    widget.updateIndex(index);
+                                  }),
+                            ],
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: height * 0.005,
+                  ),
+                  Container(
+                    padding: const EdgeInsets.all(10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Text(
+                          "Collection Stats",
+                          style: customs.darkTextStyle(size: 18, underline: true, fontweight: FontWeight.bold),
                         ),
                         const Spacer(),
                         Container(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 10, horizontal: 10),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              GestureDetector(
-                                child: CircleAvatar(
-                                  radius: 34,
-                                  backgroundColor: customs.primaryShade,
-                                  child: ClipOval(
-                                    child: (member_data != null) ?
-                                    Image.network(
-                                      "${customs.apiURLDomain}${member_data['profile_photo']}",
-                                      fit: BoxFit.cover,
-                                      width: double.infinity,
-                                      height: double.infinity,
-                                      loadingBuilder: (context, child, loadingProgress) {
-                                        if (loadingProgress == null) return child;
-                                        return Center(
-                                          child: CircularProgressIndicator(
-                                            color: customs.primaryColor,
-                                            backgroundColor: customs.secondaryShade_2,
-                                            value: loadingProgress.expectedTotalBytes != null
-                                                ? loadingProgress.cumulativeBytesLoaded /
-                                                loadingProgress.expectedTotalBytes!
-                                                : null,
-                                          ),
-                                        );
-                                      },
-                                      errorBuilder: (context, error, stackTrace) {
-                                        return Image.asset(
-                                          "assets/images/placeholderImg.jpg",
-                                          fit: BoxFit.cover,
-                                          width: double.infinity,
-                                          height: double.infinity,
-                                        );
-                                      },
-                                    )
-                                        :
-                                    Image.asset(
-                                      // profile.length > 0 ? profile : "assets/images/placeholderImg.jpg",
-                                      "assets/images/placeholderImg.jpg",
-                                      fit: BoxFit.cover,
-                                      width: double.infinity,
-                                      height: double.infinity,
-                                    ),
-                                  ),
-                                ),
-                                onTap: () {
-                                  Navigator.pushNamed(
-                                      context, "/new_member"
-                                  );
-                                },
-                              ),
-                              SizedBox(
-                                height: height * 0.01,
-                              ),
-                              Skeleton.ignore(
-                                child: Container(
-                                  padding: const EdgeInsets.all(2),
-                                  decoration: BoxDecoration(
-                                      color: customs.infoColor,
-                                      borderRadius: BorderRadius.circular(5.0)),
-                                  child: Text(
-                                    member_data != null ? "${member_data['membership'] ?? "N/A"}" : "N/A",
-                                    style: customs.darkTextStyle(
-                                        size: 10, fontweight: FontWeight.bold),
-                                  ),
-                                ),
-                              )
-                            ],
+                          width: width * 0.25,
+                          child: customs.maruDropDownButton(
+                            defaultValue: drop_down,
+                            hintText: "Select days",
+                            items: dayFilter,
+                            onChange: (value) {
+                              setState(() {
+                                drop_down = value!;
+                                // member dashboard
+                                memberDashboard(drop_down);
+                              });
+                            },
                           ),
                         )
                       ],
                     ),
                   ),
-                ),
-                SizedBox(
-                  height: height * 0.01,
-                ),
-                Card(
-                  color: customs.whiteColor,
-                  margin:
-                      const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 10, horizontal: 10.0),
+                  Skeletonizer(
+                    enabled: loading,
+                    child: Card(
+                      color: customs.whiteColor,
+                      margin:
+                          const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                      child: Row(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 20.0, horizontal: 10.0),
+                            child: CircleAvatar(
+                              backgroundColor:
+                                  customs.successColor.withOpacity(0.2),
+                              radius: 30,
+                              child: Icon(
+                                Icons.water_drop_outlined,
+                                size: 24,
+                                color: customs.successColor,
+                              ),
+                            ),
+                          ),
+                          Column(
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "$total_collection Ltrs",
+                                    style: customs.darkTextStyle(
+                                        size: 16,
+                                        fontweight: FontWeight.bold),
+                                  ),
+                                  const SizedBox(
+                                    height: 5,
+                                  ),
+                                  Text(
+                                    "$duration",
+                                    style:
+                                        customs.darkTextStyle(size: 12),
+                                  )
+                                ],
+                              )
+                            ],
+                          ),
+                          Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Center(
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    Icon(
+                                      trajectory == "constant" ? Icons.linear_scale : (trajectory == "increase" ? Icons.arrow_drop_up : Icons.arrow_drop_down),
+                                      color: trajectory == "constant" ? customs.darkColor : (trajectory == "increase" ? customs.successColor : customs.dangerColor),
+                                    ),
+                                    Text(
+                                      "$growth%",
+                                      style: trajectory != "constant" ? (trajectory == "increase" ? customs.successTextStyle(size: 12,fontweight: FontWeight.bold) : customs.dangerTextStyle(size: 12,fontweight: FontWeight.bold)) : customs.darkTextStyle(size: 12,fontweight: FontWeight.bold),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: height * 0.005,
+                  ),
+                  Container(
+                    padding: const EdgeInsets.fromLTRB(10, 10, 0, 10),
+                    margin:
+                        const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10.0),
+                      color: customs.whiteColor,
+                    ),
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "Quick Actions",
-                          style: customs.primaryTextStyle(
+                          "MILK COLLECTION STATS",
+                          style: customs.darkTextStyle(
                               size: 12,
                               underline: true,
                               fontweight: FontWeight.bold),
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            customs.maruButton(
-                                showArrow: true,
-                                iconSize: 15,
-                                fontSize: 16,
-                                size: Sizes.sm,
-                                text: "View Membership",
-                                onPressed: () async {
-                                  LocalAuthentication auth = LocalAuthentication();
-                                  bool proceed = await customs.BiometricAuthenticate(auth: auth, context: context, auth_msg: "Please authenticate to view your membership!");
-                                  if(proceed){
-                                    Navigator.pushNamed(
-                                      context, "/member_membership",
-                                      arguments: {
-                                        "member_id" : member_data['user_id']
-                                      }
+                        SizedBox(
+                          height: 30,
+                        ),
+                        AspectRatio(
+                          aspectRatio: 2.0,
+                          child: BarChart(
+                            BarChartData(
+                                barTouchData: BarTouchData(
+                                    touchTooltipData: BarTouchTooltipData(
+                                  getTooltipColor: (group) => Colors.transparent,
+                                  tooltipPadding: EdgeInsets.zero,
+                                  tooltipMargin: 2,
+                                  getTooltipItem: (
+                                    BarChartGroupData group,
+                                    int groupIndex,
+                                    BarChartRodData rod,
+                                    int rodIndex,
+                                  ) {
+                                    return BarTooltipItem(
+                                      "${rod.toY.round()} Ltrs",
+                                      customs.darkTextStyle(
+                                          size: 12, fontweight: FontWeight.bold),
                                     );
-                                  }else{
-                                    customs.maruSnackBarDanger(context: context, text: "Authenticated failed!");
-                                  }
-                                }),
-                            customs.maruButton(
-                                showArrow: true,
-                                iconSize: 15,
-                                fontSize: 16,
-                                size: Sizes.sm,
-                                text: "Inquire",
-                                onPressed: () {
-                                  // Navigator.pushNamed(context, "/member_inbox");
-                                  int index = 2;
-                                  widget.updateIndex(index);
-                                }),
-                          ],
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: height * 0.005,
-                ),
-                Container(
-                  padding: const EdgeInsets.all(10),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Text(
-                        "Collection Stats",
-                        style: customs.darkTextStyle(size: 18, underline: true, fontweight: FontWeight.bold),
-                      ),
-                      const Spacer(),
-                      Container(
-                        width: width * 0.25,
-                        child: customs.maruDropDownButton(
-                          defaultValue: drop_down,
-                          hintText: "Select days",
-                          items: dayFilter,
-                          onChange: (value) {
-                            setState(() {
-                              drop_down = value!;
-                              // member dashboard
-                              memberDashboard(drop_down);
-                            });
-                          },
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-                Skeletonizer(
-                  enabled: loading,
-                  child: Card(
-                    color: customs.whiteColor,
-                    margin:
-                        const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                    child: Row(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 20.0, horizontal: 10.0),
-                          child: CircleAvatar(
-                            backgroundColor:
-                                customs.successColor.withOpacity(0.2),
-                            radius: 30,
-                            child: Icon(
-                              Icons.water_drop_outlined,
-                              size: 24,
-                              color: customs.successColor,
-                            ),
-                          ),
-                        ),
-                        Column(
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "$total_collection Ltrs",
-                                  style: customs.darkTextStyle(
-                                      size: 16,
-                                      fontweight: FontWeight.bold),
-                                ),
-                                const SizedBox(
-                                  height: 5,
-                                ),
-                                Text(
-                                  "$duration",
-                                  style:
-                                      customs.darkTextStyle(size: 12),
-                                )
-                              ],
-                            )
-                          ],
-                        ),
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Center(
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  Icon(
-                                    trajectory == "constant" ? Icons.linear_scale : (trajectory == "increase" ? Icons.arrow_drop_up : Icons.arrow_drop_down),
-                                    color: trajectory == "constant" ? customs.darkColor : (trajectory == "increase" ? customs.successColor : customs.dangerColor),
-                                  ),
-                                  Text(
-                                    "$growth%",
-                                    style: trajectory != "constant" ? (trajectory == "increase" ? customs.successTextStyle(size: 12,fontweight: FontWeight.bold) : customs.dangerTextStyle(size: 12,fontweight: FontWeight.bold)) : customs.darkTextStyle(size: 12,fontweight: FontWeight.bold),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: height * 0.005,
-                ),
-                Container(
-                  padding: const EdgeInsets.fromLTRB(10, 10, 0, 10),
-                  margin:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10.0),
-                    color: customs.whiteColor,
-                  ),
-                  child: Column(
-                    children: [
-                      Text(
-                        "MILK COLLECTION STATS",
-                        style: customs.darkTextStyle(
-                            size: 12,
-                            underline: true,
-                            fontweight: FontWeight.bold),
-                      ),
-                      SizedBox(
-                        height: 30,
-                      ),
-                      AspectRatio(
-                        aspectRatio: 2.0,
-                        child: BarChart(
-                          BarChartData(
-                              barTouchData: BarTouchData(
-                                  touchTooltipData: BarTouchTooltipData(
-                                getTooltipColor: (group) => Colors.transparent,
-                                tooltipPadding: EdgeInsets.zero,
-                                tooltipMargin: 2,
-                                getTooltipItem: (
-                                  BarChartGroupData group,
-                                  int groupIndex,
-                                  BarChartRodData rod,
-                                  int rodIndex,
-                                ) {
-                                  return BarTooltipItem(
-                                    "${rod.toY.round()} Ltrs",
-                                    customs.darkTextStyle(
-                                        size: 12, fontweight: FontWeight.bold),
-                                  );
-                                },
-                              )),
-                              borderData: FlBorderData(
-                                  show: true,
-                                  border: Border(
-                                    left: BorderSide(
-                                        color: customs.primaryColor, width: 1),
-                                  )),
-                              barGroups: barGroupData,
-                              gridData: FlGridData(
-                                show: true,
-                                checkToShowHorizontalLine: (value) =>
-                                    value % 10 == 0,
-                                getDrawingHorizontalLine: (value) => FlLine(
-                                  color: customs.secondaryShade_2,
-                                  strokeWidth: 1,
-                                ),
-                                drawVerticalLine: false,
-                              ),
-                              titlesData: FlTitlesData(
-                                leftTitles: AxisTitles(
-                                    axisNameWidget: Center(
-                                        child: Text("Quantity in Ltrs",
-                                            style: customs.primaryTextStyle(
-                                                size: 12))),
-                                    sideTitles: SideTitles(
-                                      showTitles: true,
-                                      reservedSize: 20,
-                                      getTitlesWidget: (value, meta) {
-                                        return Text(
-                                          meta.formattedValue,
-                                          textAlign: TextAlign.center,
-                                          style: customs.darkTextStyle(
-                                              size: 10,
-                                              fontweight: FontWeight.bold),
-                                        );
-                                      },
+                                  },
+                                )),
+                                borderData: FlBorderData(
+                                    show: true,
+                                    border: Border(
+                                      left: BorderSide(
+                                          color: customs.primaryColor, width: 1),
                                     )),
-                                bottomTitles: AxisTitles(
-                                    axisNameWidget: Center(
-                                        child: Text("",
-                                            style: customs.primaryTextStyle(
-                                                size: 12, fontweight: FontWeight.bold))),
-                                    sideTitles: SideTitles(
-                                      showTitles: true,
-                                      reservedSize: 15,
-                                      getTitlesWidget: (value, meta) {
-                                        return Transform.rotate(
-                                          angle: -30 * (3.1415927 / 180),
-                                          child: Text(
-                                            "${daysOfWeek[int.parse(meta.formattedValue)]}",
+                                barGroups: barGroupData,
+                                gridData: FlGridData(
+                                  show: true,
+                                  checkToShowHorizontalLine: (value) =>
+                                      value % 10 == 0,
+                                  getDrawingHorizontalLine: (value) => FlLine(
+                                    color: customs.secondaryShade_2,
+                                    strokeWidth: 1,
+                                  ),
+                                  drawVerticalLine: false,
+                                ),
+                                titlesData: FlTitlesData(
+                                  leftTitles: AxisTitles(
+                                      axisNameWidget: Center(
+                                          child: Text("Quantity in Ltrs",
+                                              style: customs.primaryTextStyle(
+                                                  size: 12))),
+                                      sideTitles: SideTitles(
+                                        showTitles: true,
+                                        reservedSize: 20,
+                                        getTitlesWidget: (value, meta) {
+                                          return Text(
+                                            meta.formattedValue,
                                             textAlign: TextAlign.center,
                                             style: customs.darkTextStyle(
                                                 size: 10,
                                                 fontweight: FontWeight.bold),
-                                          ),
-                                        );
-                                      },
-                                    )),
-                                rightTitles: AxisTitles(
-                                    sideTitles: SideTitles(showTitles: false)),
-                                topTitles: AxisTitles(
-                                    sideTitles: SideTitles(
-                                  showTitles: false,
-                                )),
-                              )), // Optional
+                                          );
+                                        },
+                                      )),
+                                  bottomTitles: AxisTitles(
+                                      axisNameWidget: Center(
+                                          child: Text("",
+                                              style: customs.primaryTextStyle(
+                                                  size: 12, fontweight: FontWeight.bold))),
+                                      sideTitles: SideTitles(
+                                        showTitles: true,
+                                        reservedSize: 15,
+                                        getTitlesWidget: (value, meta) {
+                                          return Transform.rotate(
+                                            angle: -30 * (3.1415927 / 180),
+                                            child: Text(
+                                              "${daysOfWeek[int.parse(meta.formattedValue)]}",
+                                              textAlign: TextAlign.center,
+                                              style: customs.darkTextStyle(
+                                                  size: 10,
+                                                  fontweight: FontWeight.bold),
+                                            ),
+                                          );
+                                        },
+                                      )),
+                                  rightTitles: AxisTitles(
+                                      sideTitles: SideTitles(showTitles: false)),
+                                  topTitles: AxisTitles(
+                                      sideTitles: SideTitles(
+                                    showTitles: false,
+                                  )),
+                                )), // Optional
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                )
-              ],
+                      ],
+                    ),
+                  )
+                ],
+              ),
             ),
-          ),
-        );
-      },
-    ));
+          );
+        },
+      )),
+    );
   }
 }

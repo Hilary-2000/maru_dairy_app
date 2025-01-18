@@ -460,258 +460,265 @@ class _TechnicianHistoryState extends State<TechnicianHistory> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(child: LayoutBuilder(
-      builder: (context, constraints) {
-        double width = constraints.maxWidth;
-        double height = constraints.maxHeight;
-        double calculatedWidth = width / 2 - 170;
-        calculatedWidth = calculatedWidth > 0 ? calculatedWidth : 0;
-        return Container(
-          height: height,
-          width: width,
-          decoration: BoxDecoration(
-              color: customs.secondaryShade_2.withOpacity(0.2)
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 10),
-                child: Text("Collection History", style: customs.darkTextStyle(size: 20, fontweight: FontWeight.bold),),
-              ),
-              Card(
-                shadowColor: customs.primaryShade.withOpacity(0.5),
-                elevation: 2,
-                color: customs.whiteColor,
-                margin:
-                const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                child: Container(
-                  margin: const EdgeInsets.all(10),
+    return customs.refreshIndicator(
+      onRefresh: () async{
+        await loadTechnicianHistory(context);
+        widget.getNotifications();
+
+      },
+      child: SafeArea(child: LayoutBuilder(
+        builder: (context, constraints) {
+          double width = constraints.maxWidth;
+          double height = constraints.maxHeight;
+          double calculatedWidth = width / 2 - 170;
+          calculatedWidth = calculatedWidth > 0 ? calculatedWidth : 0;
+          return Container(
+            height: height,
+            width: width,
+            decoration: BoxDecoration(
+                color: customs.secondaryShade_2.withOpacity(0.2)
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  child: Text("Collection History", style: customs.darkTextStyle(size: 20, fontweight: FontWeight.bold),),
+                ),
+                Card(
+                  shadowColor: customs.primaryShade.withOpacity(0.5),
+                  elevation: 2,
                   color: customs.whiteColor,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Today:",
-                        style: customs.secondaryTextStyle(
-                            size: 12, fontweight: FontWeight.bold),
-                      ),
-                      Skeletonizer(
-                        enabled: loading,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            GestureDetector(
-                              onTap: (){
-                                Navigator.pushNamed(context, "/decline_or_confirmed_collection", arguments: {"collection_status" : "1"});
-                              },
-                              child: Container(
-                                height: 100,
-                                width: width * 0.40,
-                                padding: const EdgeInsets.all(8.0),
-                                margin: const EdgeInsets.fromLTRB(0, 10.0, 0, 0),
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10.0),
-                                    color: customs.secondaryShade_2),
-                                child: Row(
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    children: [
-                                      Container(
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(20),
-                                          color: Colors.grey[200],
-                                        ),
-                                        padding: const EdgeInsets.all(5),
-                                        child: Icon(
-                                          Icons.water_drop_outlined,
-                                          color: customs.successColor,
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        width: 5,
-                                      ),
-                                      Column(
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            "Confirmed",
-                                            style: customs.secondaryTextStyle(
-                                                size: 12,
-                                                fontweight: FontWeight.bold),
-                                          ),
-                                          const SizedBox(
-                                            height: 5.0,
-                                          ),
-                                          Text(
-                                            "$confirmedCollection Collection(s)",
-                                            style: customs.darkTextStyle(
-                                                size: 12),
-                                          ),
-                                          SizedBox(height: 8,),
-                                          Row(
-                                            children: [
-                                              Text("View", style: customs.primaryTextStyle(size: 12, underline: false),),
-                                              Icon(Icons.keyboard_double_arrow_right, color: customs.primaryColor, size: 16,)
-                                            ],
-                                          )
-                                        ],
-                                      )
-                                    ]),
-                              ),
-                            ),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            GestureDetector(
-                              onTap: (){
-                                Navigator.pushNamed(context, "/decline_or_confirmed_collection", arguments: {"collection_status" : "0"});
-                              },
-                              child: Container(
-                                height: 100,
-                                width: width * 0.40,
-                                padding: const EdgeInsets.all(8.0),
-                                margin: const EdgeInsets.fromLTRB(0, 10.0, 0, 0),
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10.0),
-                                    color: customs.secondaryShade_2),
-                                child: Row(
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    children: [
-                                      Container(
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(20),
-                                          color: Colors.grey[200],
-                                        ),
-                                        padding: const EdgeInsets.all(5),
-                                        child: Icon(
-                                          Icons.water_drop_outlined,
-                                          color: customs.dangerColor,
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        width: 5,
-                                      ),
-                                      Column(
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            "Rejected/Pending",
-                                            style: customs.secondaryTextStyle(
-                                                size: 12,
-                                                fontweight: FontWeight.bold),
-                                          ),
-                                          const SizedBox(
-                                            height: 5.0,
-                                          ),
-                                          Text(
-                                            "$notConfirmedCollection collection(s)",
-                                            style: customs.darkTextStyle(
-                                                size: 12),
-                                          ),
-                                          SizedBox(height: 8,),
-                                          Row(
-                                            children: [
-                                              Text("View", style: customs.primaryTextStyle(size: 12, underline: false),),
-                                              Icon(Icons.keyboard_double_arrow_right, color: customs.primaryColor, size: 16,)
-                                            ],
-                                          )
-                                        ],
-                                      )
-                                    ]),
-                              ),
-                            ),
-                          ],
+                  margin:
+                  const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                  child: Container(
+                    margin: const EdgeInsets.all(10),
+                    color: customs.whiteColor,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Today:",
+                          style: customs.secondaryTextStyle(
+                              size: 12, fontweight: FontWeight.bold),
                         ),
-                      )
+                        Skeletonizer(
+                          enabled: loading,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              GestureDetector(
+                                onTap: (){
+                                  Navigator.pushNamed(context, "/decline_or_confirmed_collection", arguments: {"collection_status" : "1"});
+                                },
+                                child: Container(
+                                  height: 100,
+                                  width: width * 0.40,
+                                  padding: const EdgeInsets.all(8.0),
+                                  margin: const EdgeInsets.fromLTRB(0, 10.0, 0, 0),
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10.0),
+                                      color: customs.secondaryShade_2),
+                                  child: Row(
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      children: [
+                                        Container(
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(20),
+                                            color: Colors.grey[200],
+                                          ),
+                                          padding: const EdgeInsets.all(5),
+                                          child: Icon(
+                                            Icons.water_drop_outlined,
+                                            color: customs.successColor,
+                                          ),
+                                        ),
+                                        const SizedBox(
+                                          width: 5,
+                                        ),
+                                        Column(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              "Confirmed",
+                                              style: customs.secondaryTextStyle(
+                                                  size: 12,
+                                                  fontweight: FontWeight.bold),
+                                            ),
+                                            const SizedBox(
+                                              height: 5.0,
+                                            ),
+                                            Text(
+                                              "$confirmedCollection Collection(s)",
+                                              style: customs.darkTextStyle(
+                                                  size: 12),
+                                            ),
+                                            SizedBox(height: 8,),
+                                            Row(
+                                              children: [
+                                                Text("View", style: customs.primaryTextStyle(size: 12, underline: false),),
+                                                Icon(Icons.keyboard_double_arrow_right, color: customs.primaryColor, size: 16,)
+                                              ],
+                                            )
+                                          ],
+                                        )
+                                      ]),
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              GestureDetector(
+                                onTap: (){
+                                  Navigator.pushNamed(context, "/decline_or_confirmed_collection", arguments: {"collection_status" : "0"});
+                                },
+                                child: Container(
+                                  height: 100,
+                                  width: width * 0.40,
+                                  padding: const EdgeInsets.all(8.0),
+                                  margin: const EdgeInsets.fromLTRB(0, 10.0, 0, 0),
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10.0),
+                                      color: customs.secondaryShade_2),
+                                  child: Row(
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      children: [
+                                        Container(
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(20),
+                                            color: Colors.grey[200],
+                                          ),
+                                          padding: const EdgeInsets.all(5),
+                                          child: Icon(
+                                            Icons.water_drop_outlined,
+                                            color: customs.dangerColor,
+                                          ),
+                                        ),
+                                        const SizedBox(
+                                          width: 5,
+                                        ),
+                                        Column(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              "Rejected/Pending",
+                                              style: customs.secondaryTextStyle(
+                                                  size: 12,
+                                                  fontweight: FontWeight.bold),
+                                            ),
+                                            const SizedBox(
+                                              height: 5.0,
+                                            ),
+                                            Text(
+                                              "$notConfirmedCollection collection(s)",
+                                              style: customs.darkTextStyle(
+                                                  size: 12),
+                                            ),
+                                            SizedBox(height: 8,),
+                                            Row(
+                                              children: [
+                                                Text("View", style: customs.primaryTextStyle(size: 12, underline: false),),
+                                                Icon(Icons.keyboard_double_arrow_right, color: customs.primaryColor, size: 16,)
+                                              ],
+                                            )
+                                          ],
+                                        )
+                                      ]),
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                      horizontal: (width * 0.2), vertical: 10),
+                  child: Divider(
+                    color: customs.secondaryShade_2,
+                    height: 0.1,
+                    thickness: 0.5,
+                  ),
+                ),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10),
+                  child: Row(children: [
+                    Spacer(),
+                    Container(
+                      width: width * 0.30,
+                      child: customs.maruDropDownButton(
+                        defaultValue: drop_down,
+                        hintText: "Select days",
+                        items: dayFilter,
+                        onChange: (value) {
+                          setState(() {
+                            drop_down = value!;
+                          });
+                          loadTechnicianHistory(context);
+                        },
+                      ),
+                    ),
+                  ]),
+                ),
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Container(
+                          width: width * 0.8,
+                          child: customs.maruSearchTextField(
+                              isChanged: (value){
+                                findKeyWord(value);
+                              },
+                              label: "Type to Search",
+                              hintText: "Enter keyword")
+                      ),
+                      Spacer(),
+                      Container(
+                        margin: EdgeInsets.fromLTRB(0, 0, 5, 0),
+                        child: CircleAvatar(
+                          backgroundColor: customs.successShade_2,
+                          child: IconButton(
+                            onPressed: () async {
+                              await Navigator.pushNamed(context, "/technician_collect_milk");
+                              loadTechnicianHistory(context);
+                            },
+                            icon: Icon(Icons.add, color: customs.successColor,),
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ),
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(
-                    horizontal: (width * 0.2), vertical: 10),
-                child: Divider(
-                  color: customs.secondaryShade_2,
-                  height: 0.1,
-                  thickness: 0.5,
-                ),
-              ),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10),
-                child: Row(children: [
-                  Spacer(),
-                  Container(
-                    width: width * 0.30,
-                    child: customs.maruDropDownButton(
-                      defaultValue: drop_down,
-                      hintText: "Select days",
-                      items: dayFilter,
-                      onChange: (value) {
-                        setState(() {
-                          drop_down = value!;
-                        });
-                        loadTechnicianHistory(context);
-                      },
+                Container(
+                  margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                  height: height - 322,
+                  decoration: BoxDecoration(
+                    color: customs.whiteColor,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  // color: Colors.red,
+                  child: Skeletonizer(
+                    enabled: loading,
+                    child: ListView(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      children: collectionHistory,
                     ),
                   ),
-                ]),
-              ),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Container(
-                        width: width * 0.8,
-                        child: customs.maruSearchTextField(
-                            isChanged: (value){
-                              findKeyWord(value);
-                            },
-                            label: "Type to Search",
-                            hintText: "Enter keyword")
-                    ),
-                    Spacer(),
-                    Container(
-                      margin: EdgeInsets.fromLTRB(0, 0, 5, 0),
-                      child: CircleAvatar(
-                        backgroundColor: customs.successShade_2,
-                        child: IconButton(
-                          onPressed: () async {
-                            await Navigator.pushNamed(context, "/technician_collect_milk");
-                            loadTechnicianHistory(context);
-                          },
-                          icon: Icon(Icons.add, color: customs.successColor,),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Container(
-                margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                height: height - 322,
-                decoration: BoxDecoration(
-                  color: customs.whiteColor,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                padding: const EdgeInsets.symmetric(vertical: 10),
-                // color: Colors.red,
-                child: Skeletonizer(
-                  enabled: loading,
-                  child: ListView(
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                    children: collectionHistory,
-                  ),
-                ),
-              )
-            ],
-          ),
-        );
-      },
-    ));
+                )
+              ],
+            ),
+          );
+        },
+      )),
+    );
   }
 }

@@ -987,6 +987,17 @@ class CustomThemes{
       ),
     );
   }
+  RefreshIndicator refreshIndicator({
+    required Widget child,
+    required Future<void> Function() onRefresh,
+  }){
+    return RefreshIndicator(
+        backgroundColor: primaryColor,
+        color: whiteColor,
+        child: child,
+        onRefresh: onRefresh
+    );
+  }
 }
 
 class PasswordDialog extends StatefulWidget {

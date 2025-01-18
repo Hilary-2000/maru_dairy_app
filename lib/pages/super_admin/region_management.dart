@@ -71,308 +71,311 @@ class _RegionManagementState extends State<RegionManagement> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: customs.whiteColor,
-      appBar: AppBar(
+    return customs.refreshIndicator(
+      onRefresh: getRegions,
+      child: Scaffold(
         backgroundColor: customs.whiteColor,
-        elevation: 1,
-        title: Builder(builder: (context) {
-          double screenWidth = MediaQuery.of(context).size.width;
-          return Container(
-            width: screenWidth,
-            child: Center(
-              child: Container(
-                width: 250,
-                child: Row(
-                  children: [
-                    SizedBox(
-                      height: 70,
-                      child:
-                      Image(image: AssetImage("assets/images/maru-nobg.png")),
-                    ),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    Text(
-                      "Maru Dairy Co-op",
-                      style: customs.primaryTextStyle(
-                          size: 20, fontweight: FontWeight.bold),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          );
-        }),
-      ),
-      body: SafeArea(child: LayoutBuilder(
-        builder: (context, constraints) {
-          double width = constraints.maxWidth;
-          double height = constraints.maxHeight;
-          double calculatedWidth = width / 2 - 170;
-          calculatedWidth = calculatedWidth > 0 ? calculatedWidth : 0;
-          return load_regions ?
-          Container(
-            child: Center(
-              child: Container(
-                height: 100,
-                child: Column(
-                  children: [
-                    SpinKitCircle(
-                      color: customs.primaryColor,
-                      size: 50.0,
-                    ),
-                    Text("Loading regions...", style: customs.primaryTextStyle(size: 12, fontweight: FontWeight.bold),)
-                  ],
-                ),
-              ),
-            ),
-          )
-              :
-          Container(
-            height: height,
-            width: width,
-            decoration: const BoxDecoration(
-              color: Colors.white,
-            ),
-            child: Column(
-              children: [
-                Container(
-                  width: width,
-                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                  child: Text("Region Management", style: customs.darkTextStyle(size: 15, fontweight: FontWeight.bold),),
-                ),
-                Container(width: width * 0.8, child: Divider(color: customs.secondaryShade_2,)),
-                Container(
-                  width: width,
-                  height: height - 57,
-                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                  child: regions.length > 0 ? ListView.builder(
-                      itemCount: regions.length,
-                      itemBuilder: (context, index){
-                        var items = regions[index];
-                        return Container(
-                          margin: EdgeInsets.symmetric(vertical: 3, horizontal: 5),
-                          padding: EdgeInsets.symmetric(vertical: 5),
-                          decoration: BoxDecoration(
-                              color: customs.secondaryShade_2.withOpacity(0.2),
-                              borderRadius: BorderRadius.circular(10)
-                          ),
-                          child: Hero(
-                            tag: "modify_region_${items['region_id']}",
-                            child: Material(
-                              color: Colors.transparent,
-                              child: ListTile(
-                                leading: Transform.scale(
-                                    scale: 0.7,
-                                    child: Switch(
-                                      value: _isLightMode[items['region_id']],
-                                      activeTrackColor: customs.primaryColor,
-                                      inactiveThumbColor: customs.primaryColor,
-                                      trackOutlineColor: WidgetStateProperty.all<Color>(customs.primaryColor),
-                                      onChanged: (bool value) async {
-                                        LocalAuthentication auth = LocalAuthentication();
-                                        bool proceed = await customs.BiometricAuthenticate(auth: auth, context: context, auth_msg: "Please Authenticate!");
-                                        if(proceed){
-                                          setState(() {
-                                            _isLightMode[items['region_id']] = value;
-                                          });
-                                          //change the deduction status
-                                          ApiConnection apiConn = ApiConnection();
-                                          String status = _isLightMode[items['region_id']] ? "1" : "0";
-                                          var response = await apiConn.changeRegionStatus(region_id: "${items['region_id']}", region_status: status);
-                                          if(customs.isValidJson(response)){
-                                            var res = jsonDecode(response);
-                                            if(res['success']){
-                                              customs.maruSnackBarSuccess(context: context, text: res['message']);
-                                              // REFRESH DEDUCTIONS
-                                              getRegions();
-                                            }else{
-                                              customs.maruSnackBarDanger(context: context, text: res['message']);
-                                            }
-                                          }
-                                        }else{
-                                          customs.maruSnackBarDanger(context: context, text: "Authenticated failed!");
-                                        }
-                                      },
-                                    )
-                                ),
-                                dense: true,
-                                style: ListTileStyle.drawer,
-                                title: Text( "${items['region_name']}", style: customs.secondaryTextStyle(size: 14, fontweight: FontWeight.bold)),
-                                trailing: PopupMenuButton<String>(
-                                  icon: Icon(FontAwesomeIcons.ellipsisVertical, size: 15),
-                                  onSelected: (String result) async {
-                                    // Handle the selection here
-                                    if(result == "edit"){
-                                      var result = await Navigator.of(context).push(HeroDialogRoute(builder: (context) {
-                                        return  EditRegions(region_data: items);
-                                      }));
-                                      if(result != null){
-                                        if(result['success']){
-                                          customs.maruSnackBarSuccess(context: context, text: result['message']);
-                                          // REFRESH DEDUCTIONS
-                                          getRegions();
-                                        }else{
-                                          customs.maruSnackBarDanger(context: context, text: result['message']);
-                                        }
-                                      }else{
-                                        // customs.maruSnackBarDanger(context: context, text: "Cancelled!");
-                                      }
-                                    }else if(result == "delete"){
-                                      var result = await Navigator.of(context).push(HeroDialogRoute(builder: (context) {
-                                        return  DeleteRegions(region_data: items);
-                                      }));
-                                      if(result != null){
-                                        if(result['success']){
-                                          customs.maruSnackBarSuccess(context: context, text: result['message']);
-
-                                          // REFRESH DEDUCTIONS
-                                          getRegions();
-                                        }else{
-                                          customs.maruSnackBarDanger(context: context, text: result['message']);
-                                        }
-                                      }else{
-                                        // customs.maruSnackBarDanger(context: context, text: "Cancelled!");
-                                      }
-                                    }
-                                  },
-                                  color: customs.whiteColor,
-                                  itemBuilder: (BuildContext context) =>
-                                  <PopupMenuEntry<String>>[
-                                    PopupMenuItem<String>(
-                                      value: 'edit',
-                                      height: 15,
-                                      padding: EdgeInsets.symmetric(horizontal: 5),
-                                      child: Container(
-                                        padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                                        margin: EdgeInsets.zero,
-                                        child: Row(
-                                          mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                          children: [
-                                            Icon(
-                                              FontAwesomeIcons.pencil,
-                                              size: 13,
-                                              color: customs.secondaryColor,
-                                            ),
-                                            Text(
-                                              ' Edit',
-                                              style: customs.secondaryTextStyle(
-                                                  size: 12,
-                                                  fontweight: FontWeight.bold
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                    PopupMenuDivider(height: 1),
-                                    PopupMenuItem<String>(
-                                      value: 'delete',
-                                      height: 15,
-                                      padding: EdgeInsets.symmetric(horizontal: 5),
-                                      child: Container(
-                                        padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                                        margin: EdgeInsets.zero,
-                                        child: Row(
-                                          mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                          children: [
-                                            Icon(
-                                              FontAwesomeIcons.trash,
-                                              size: 13,
-                                              color: customs.dangerColor,
-                                            ),
-                                            Text(
-                                              ' Delete',
-                                              style: customs.dangerTextStyle(
-                                                  size: 12,
-                                                  fontweight: FontWeight.bold
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                onTap: (){
-                                },
-                              ),
-                            ),
-                          ),
-                        );
-                      }
-                  ) : Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.center,
+        appBar: AppBar(
+          backgroundColor: customs.whiteColor,
+          elevation: 1,
+          title: Builder(builder: (context) {
+            double screenWidth = MediaQuery.of(context).size.width;
+            return Container(
+              width: screenWidth,
+              child: Center(
+                child: Container(
+                  width: 250,
+                  child: Row(
                     children: [
-                      Container(
-                        margin: EdgeInsets.only(top: 30),
-                        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                        width: width - 50,
-                        height: 200,
-                        decoration: BoxDecoration(
-                            color: customs.whiteColor,
-                            borderRadius: BorderRadius.circular(20),
-                            boxShadow: [
-                              BoxShadow(color: customs.secondaryShade_2, blurRadius: 1, blurStyle: BlurStyle.normal),
-                              BoxShadow(color: customs.secondaryShade_2, blurRadius: 1, blurStyle: BlurStyle.normal),
-                              BoxShadow(color: customs.secondaryShade_2, blurRadius: 1, blurStyle: BlurStyle.normal),
-                            ]
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text("No regions found!", style: customs.primaryTextStyle(size: 20, fontweight: FontWeight.bold),),
-                            Spacer(),
-                            SizedBox(
-                              width: width,
-                              child: Image(
-                                image: AssetImage("assets/images/search.jpg"),
-                                height: width/4,
-                                width: width/4,
-                              ),
-                            ),
-                            SizedBox(
-                              height: 25,
-                            )
-                          ],
-                        ),
+                      SizedBox(
+                        height: 70,
+                        child:
+                        Image(image: AssetImage("assets/images/maru-nobg.png")),
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Text(
+                        "Maru Dairy Co-op",
+                        style: customs.primaryTextStyle(
+                            size: 20, fontweight: FontWeight.bold),
                       ),
                     ],
                   ),
                 ),
-              ],
-            ),
-          );
-        },
-      )),
-      floatingActionButton: CircleAvatar(
-        backgroundColor: customs.primaryShade_2,
-        child: Material(
-          color: Colors.transparent,
-          child: Hero(
-            tag: "add_region",
-            child: IconButton(
-              icon: Icon(Icons.add_circle_rounded, color: customs.primaryColor,),
-              onPressed: () async {
-                var result = await Navigator.of(context).push(HeroDialogRoute(builder: (context) {
-                  return  AddRegions();
-                }));
-                if(result != null){
-                  if(result['success']){
-                    customs.maruSnackBarSuccess(context: context, text: result['message']);
-                    // REFRESH DEDUCTIONS
-                    getRegions();
+              ),
+            );
+          }),
+        ),
+        body: SafeArea(child: LayoutBuilder(
+          builder: (context, constraints) {
+            double width = constraints.maxWidth;
+            double height = constraints.maxHeight;
+            double calculatedWidth = width / 2 - 170;
+            calculatedWidth = calculatedWidth > 0 ? calculatedWidth : 0;
+            return load_regions ?
+            Container(
+              child: Center(
+                child: Container(
+                  height: 100,
+                  child: Column(
+                    children: [
+                      SpinKitCircle(
+                        color: customs.primaryColor,
+                        size: 50.0,
+                      ),
+                      Text("Loading regions...", style: customs.primaryTextStyle(size: 12, fontweight: FontWeight.bold),)
+                    ],
+                  ),
+                ),
+              ),
+            )
+                :
+            Container(
+              height: height,
+              width: width,
+              decoration: const BoxDecoration(
+                color: Colors.white,
+              ),
+              child: Column(
+                children: [
+                  Container(
+                    width: width,
+                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                    child: Text("Region Management", style: customs.darkTextStyle(size: 15, fontweight: FontWeight.bold),),
+                  ),
+                  Container(width: width * 0.8, child: Divider(color: customs.secondaryShade_2,)),
+                  Container(
+                    width: width,
+                    height: height - 57,
+                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                    child: regions.length > 0 ? ListView.builder(
+                        itemCount: regions.length,
+                        itemBuilder: (context, index){
+                          var items = regions[index];
+                          return Container(
+                            margin: EdgeInsets.symmetric(vertical: 3, horizontal: 5),
+                            padding: EdgeInsets.symmetric(vertical: 5),
+                            decoration: BoxDecoration(
+                                color: customs.secondaryShade_2.withOpacity(0.2),
+                                borderRadius: BorderRadius.circular(10)
+                            ),
+                            child: Hero(
+                              tag: "modify_region_${items['region_id']}",
+                              child: Material(
+                                color: Colors.transparent,
+                                child: ListTile(
+                                  leading: Transform.scale(
+                                      scale: 0.7,
+                                      child: Switch(
+                                        value: _isLightMode[items['region_id']],
+                                        activeTrackColor: customs.primaryColor,
+                                        inactiveThumbColor: customs.primaryColor,
+                                        trackOutlineColor: WidgetStateProperty.all<Color>(customs.primaryColor),
+                                        onChanged: (bool value) async {
+                                          LocalAuthentication auth = LocalAuthentication();
+                                          bool proceed = await customs.BiometricAuthenticate(auth: auth, context: context, auth_msg: "Please Authenticate!");
+                                          if(proceed){
+                                            setState(() {
+                                              _isLightMode[items['region_id']] = value;
+                                            });
+                                            //change the deduction status
+                                            ApiConnection apiConn = ApiConnection();
+                                            String status = _isLightMode[items['region_id']] ? "1" : "0";
+                                            var response = await apiConn.changeRegionStatus(region_id: "${items['region_id']}", region_status: status);
+                                            if(customs.isValidJson(response)){
+                                              var res = jsonDecode(response);
+                                              if(res['success']){
+                                                customs.maruSnackBarSuccess(context: context, text: res['message']);
+                                                // REFRESH DEDUCTIONS
+                                                getRegions();
+                                              }else{
+                                                customs.maruSnackBarDanger(context: context, text: res['message']);
+                                              }
+                                            }
+                                          }else{
+                                            customs.maruSnackBarDanger(context: context, text: "Authenticated failed!");
+                                          }
+                                        },
+                                      )
+                                  ),
+                                  dense: true,
+                                  style: ListTileStyle.drawer,
+                                  title: Text( "${items['region_name']}", style: customs.secondaryTextStyle(size: 14, fontweight: FontWeight.bold)),
+                                  trailing: PopupMenuButton<String>(
+                                    icon: Icon(FontAwesomeIcons.ellipsisVertical, size: 15),
+                                    onSelected: (String result) async {
+                                      // Handle the selection here
+                                      if(result == "edit"){
+                                        var result = await Navigator.of(context).push(HeroDialogRoute(builder: (context) {
+                                          return  EditRegions(region_data: items);
+                                        }));
+                                        if(result != null){
+                                          if(result['success']){
+                                            customs.maruSnackBarSuccess(context: context, text: result['message']);
+                                            // REFRESH DEDUCTIONS
+                                            getRegions();
+                                          }else{
+                                            customs.maruSnackBarDanger(context: context, text: result['message']);
+                                          }
+                                        }else{
+                                          // customs.maruSnackBarDanger(context: context, text: "Cancelled!");
+                                        }
+                                      }else if(result == "delete"){
+                                        var result = await Navigator.of(context).push(HeroDialogRoute(builder: (context) {
+                                          return  DeleteRegions(region_data: items);
+                                        }));
+                                        if(result != null){
+                                          if(result['success']){
+                                            customs.maruSnackBarSuccess(context: context, text: result['message']);
+
+                                            // REFRESH DEDUCTIONS
+                                            getRegions();
+                                          }else{
+                                            customs.maruSnackBarDanger(context: context, text: result['message']);
+                                          }
+                                        }else{
+                                          // customs.maruSnackBarDanger(context: context, text: "Cancelled!");
+                                        }
+                                      }
+                                    },
+                                    color: customs.whiteColor,
+                                    itemBuilder: (BuildContext context) =>
+                                    <PopupMenuEntry<String>>[
+                                      PopupMenuItem<String>(
+                                        value: 'edit',
+                                        height: 15,
+                                        padding: EdgeInsets.symmetric(horizontal: 5),
+                                        child: Container(
+                                          padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                                          margin: EdgeInsets.zero,
+                                          child: Row(
+                                            mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                            children: [
+                                              Icon(
+                                                FontAwesomeIcons.pencil,
+                                                size: 13,
+                                                color: customs.secondaryColor,
+                                              ),
+                                              Text(
+                                                ' Edit',
+                                                style: customs.secondaryTextStyle(
+                                                    size: 12,
+                                                    fontweight: FontWeight.bold
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                      PopupMenuDivider(height: 1),
+                                      PopupMenuItem<String>(
+                                        value: 'delete',
+                                        height: 15,
+                                        padding: EdgeInsets.symmetric(horizontal: 5),
+                                        child: Container(
+                                          padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                                          margin: EdgeInsets.zero,
+                                          child: Row(
+                                            mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                            children: [
+                                              Icon(
+                                                FontAwesomeIcons.trash,
+                                                size: 13,
+                                                color: customs.dangerColor,
+                                              ),
+                                              Text(
+                                                ' Delete',
+                                                style: customs.dangerTextStyle(
+                                                    size: 12,
+                                                    fontweight: FontWeight.bold
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  onTap: (){
+                                  },
+                                ),
+                              ),
+                            ),
+                          );
+                        }
+                    ) : Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Container(
+                          margin: EdgeInsets.only(top: 30),
+                          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                          width: width - 50,
+                          height: 200,
+                          decoration: BoxDecoration(
+                              color: customs.whiteColor,
+                              borderRadius: BorderRadius.circular(20),
+                              boxShadow: [
+                                BoxShadow(color: customs.secondaryShade_2, blurRadius: 1, blurStyle: BlurStyle.normal),
+                                BoxShadow(color: customs.secondaryShade_2, blurRadius: 1, blurStyle: BlurStyle.normal),
+                                BoxShadow(color: customs.secondaryShade_2, blurRadius: 1, blurStyle: BlurStyle.normal),
+                              ]
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text("No regions found!", style: customs.primaryTextStyle(size: 20, fontweight: FontWeight.bold),),
+                              Spacer(),
+                              SizedBox(
+                                width: width,
+                                child: Image(
+                                  image: AssetImage("assets/images/search.jpg"),
+                                  height: width/4,
+                                  width: width/4,
+                                ),
+                              ),
+                              SizedBox(
+                                height: 25,
+                              )
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        )),
+        floatingActionButton: CircleAvatar(
+          backgroundColor: customs.primaryShade_2,
+          child: Material(
+            color: Colors.transparent,
+            child: Hero(
+              tag: "add_region",
+              child: IconButton(
+                icon: Icon(Icons.add_circle_rounded, color: customs.primaryColor,),
+                onPressed: () async {
+                  var result = await Navigator.of(context).push(HeroDialogRoute(builder: (context) {
+                    return  AddRegions();
+                  }));
+                  if(result != null){
+                    if(result['success']){
+                      customs.maruSnackBarSuccess(context: context, text: result['message']);
+                      // REFRESH DEDUCTIONS
+                      getRegions();
+                    }else{
+                      customs.maruSnackBarDanger(context: context, text: result['message']);
+                    }
                   }else{
-                    customs.maruSnackBarDanger(context: context, text: result['message']);
+                    // customs.maruSnackBarDanger(context: context, text: "Cancelled!");
                   }
-                }else{
-                  // customs.maruSnackBarDanger(context: context, text: "Cancelled!");
-                }
-              },
+                },
+              ),
             ),
           ),
         ),

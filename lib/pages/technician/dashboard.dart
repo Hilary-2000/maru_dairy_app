@@ -303,7 +303,7 @@ class _TechnicianDashboardState extends State<TechnicianDashboard> {
     }
   }
 
-  void loadTechnicianData() async {
+  Future<void> loadTechnicianData() async {
     setState(() {
       _loading = true;
       _loadingDash = true;
@@ -331,7 +331,7 @@ class _TechnicianDashboardState extends State<TechnicianDashboard> {
         });
 
         //get the graphical data
-        getDashboardData(drop_down);
+        await getDashboardData(drop_down);
       } else {
         customs.maruSnackBarDanger(context: context, text: data['message']);
       }
@@ -341,7 +341,7 @@ class _TechnicianDashboardState extends State<TechnicianDashboard> {
     }
   }
 
-  void getDashboardData(String period) async {
+  Future <void> getDashboardData(String period) async {
     setState(() {
       _loadingDash = true;
     });
@@ -427,645 +427,650 @@ class _TechnicianDashboardState extends State<TechnicianDashboard> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(child: LayoutBuilder(
-      builder: (context, constraints) {
-        double width = constraints.maxWidth;
-        double height = constraints.maxHeight;
-        double calculatedWidth = width / 2 - 170;
-        calculatedWidth = calculatedWidth > 0 ? calculatedWidth : 0;
-        return Container(
-          height: height,
-          width: width,
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              colors: [
-                Color.fromRGBO(230, 245, 248, 1),
-                Color.fromRGBO(255, 255, 255, 1),
-                Color.fromRGBO(227, 228, 229, 1)
-              ],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
+    return customs.refreshIndicator(
+      onRefresh: () async {
+        await loadTechnicianData();
+      },
+      child: SafeArea(child: LayoutBuilder(
+        builder: (context, constraints) {
+          double width = constraints.maxWidth;
+          double height = constraints.maxHeight;
+          double calculatedWidth = width / 2 - 170;
+          calculatedWidth = calculatedWidth > 0 ? calculatedWidth : 0;
+          return Container(
+            height: height,
+            width: width,
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  Color.fromRGBO(230, 245, 248, 1),
+                  Color.fromRGBO(255, 255, 255, 1),
+                  Color.fromRGBO(227, 228, 229, 1)
+                ],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
             ),
-          ),
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                const SizedBox(
-                  height: 10.0,
-                ),
-                Skeletonizer(
-                  enabled: _loading,
-                  child: Card(
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  const SizedBox(
+                    height: 10.0,
+                  ),
+                  Skeletonizer(
+                    enabled: _loading,
+                    child: Card(
+                      color: customs.whiteColor,
+                      margin: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                      child: Row(
+                        children: <Widget>[
+                          Container(
+                            padding: EdgeInsets.symmetric(
+                                vertical: 10, horizontal: 10),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text(
+                                  "$greetings,",
+                                  style: customs.primaryTextStyle(
+                                      size: 16,
+                                      fontweight: FontWeight.normal),
+                                ),
+                                SizedBox(
+                                  height: height * 0.005,
+                                ),
+                                SizedBox(
+                                  width: width * 0.5,
+                                  child: Text(
+                                    "$full_name",
+                                    style: customs.successTextStyle(
+                                        size: 20,
+                                        fontweight: FontWeight.bold),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                          Spacer(),
+                          Container(
+                            padding: EdgeInsets.symmetric(
+                                vertical: 10, horizontal: 10),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                CircleAvatar(
+                                  radius: 34,
+                                  backgroundColor: customs.primaryShade,
+                                  child: ClipOval(
+                                    child: (profile_photo.isNotEmpty) ?
+                                    Image.network(
+                                      "${customs.apiURLDomain}$profile_photo",
+                                      fit: BoxFit.cover,
+                                      width: double.infinity,
+                                      height: double.infinity,
+                                      loadingBuilder: (context, child, loadingProgress) {
+                                        if (loadingProgress == null) return child;
+                                        return Center(
+                                          child: CircularProgressIndicator(
+                                            color: customs.primaryColor,
+                                            backgroundColor: customs.secondaryShade_2,
+                                            value: loadingProgress.expectedTotalBytes != null
+                                                ? loadingProgress.cumulativeBytesLoaded /
+                                                loadingProgress.expectedTotalBytes!
+                                                : null,
+                                          ),
+                                        );
+                                      },
+                                      errorBuilder: (context, error, stackTrace) {
+                                        return Image.asset(
+                                          "assets/images/placeholderImg.jpg",
+                                          fit: BoxFit.cover,
+                                          width: double.infinity,
+                                          height: double.infinity,
+                                        );
+                                      },
+                                    )
+                                        :
+                                    Image.asset(
+                                      // profile.length > 0 ? profile : "assets/images/placeholderImg.jpg",
+                                      "assets/images/placeholderImg.jpg",
+                                      fit: BoxFit.cover,
+                                      width: double.infinity,
+                                      height: double.infinity,
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: height * 0.01,
+                                ),
+                                Skeleton.ignore(
+                                  child: Container(
+                                    color: customs.secondaryColor,
+                                    child: Text(
+                                      "Collection Technician",
+                                      style: customs.whiteTextStyle(size: 10),
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: height * 0.01,
+                  ),
+                  Card(
                     color: customs.whiteColor,
                     margin: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                    child: Row(
-                      children: <Widget>[
-                        Container(
-                          padding: EdgeInsets.symmetric(
-                              vertical: 10, horizontal: 10),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Text(
-                                "$greetings,",
-                                style: customs.primaryTextStyle(
-                                    size: 16,
-                                    fontweight: FontWeight.normal),
-                              ),
-                              SizedBox(
-                                height: height * 0.005,
-                              ),
-                              SizedBox(
-                                width: width * 0.5,
-                                child: Text(
-                                  "$full_name",
-                                  style: customs.successTextStyle(
-                                      size: 20,
-                                      fontweight: FontWeight.bold),
-                                ),
-                              )
-                            ],
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 10, horizontal: 10.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Quick Actions",
+                            style: customs.primaryTextStyle(
+                                size: 10,
+                                underline: true,
+                                fontweight: FontWeight.bold),
                           ),
-                        ),
-                        Spacer(),
-                        Container(
-                          padding: EdgeInsets.symmetric(
-                              vertical: 10, horizontal: 10),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.end,
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
-                              CircleAvatar(
-                                radius: 34,
-                                backgroundColor: customs.primaryShade,
-                                child: ClipOval(
-                                  child: (profile_photo.isNotEmpty) ?
-                                  Image.network(
-                                    "${customs.apiURLDomain}$profile_photo",
-                                    fit: BoxFit.cover,
-                                    width: double.infinity,
-                                    height: double.infinity,
-                                    loadingBuilder: (context, child, loadingProgress) {
-                                      if (loadingProgress == null) return child;
-                                      return Center(
-                                        child: CircularProgressIndicator(
-                                          color: customs.primaryColor,
-                                          backgroundColor: customs.secondaryShade_2,
-                                          value: loadingProgress.expectedTotalBytes != null
-                                              ? loadingProgress.cumulativeBytesLoaded /
-                                              loadingProgress.expectedTotalBytes!
-                                              : null,
-                                        ),
-                                      );
-                                    },
-                                    errorBuilder: (context, error, stackTrace) {
-                                      return Image.asset(
-                                        "assets/images/placeholderImg.jpg",
-                                        fit: BoxFit.cover,
-                                        width: double.infinity,
-                                        height: double.infinity,
-                                      );
-                                    },
-                                  )
-                                      :
-                                  Image.asset(
-                                    // profile.length > 0 ? profile : "assets/images/placeholderImg.jpg",
-                                    "assets/images/placeholderImg.jpg",
-                                    fit: BoxFit.cover,
-                                    width: double.infinity,
-                                    height: double.infinity,
-                                  ),
-                                ),
+                              customs.maruButton(
+                                  showArrow: true,
+                                  iconSize: 15,
+                                  fontSize: 16,
+                                  size: Sizes.sm,
+                                  text: "Collect Milk",
+                                  onPressed: () {
+                                    Navigator.pushNamed(
+                                        context, "/technician_collect_milk");
+                                  }),
+                              customs.maruButton(
+                                  showArrow: true,
+                                  iconSize: 15,
+                                  fontSize: 16,
+                                  size: Sizes.sm,
+                                  text: "Find Technician",
+                                  onPressed: () async {
+                                    // LocalAuthentication auth = LocalAuthentication();
+                                    // bool proceed = await customs.BiometricAuthenticate(auth: auth, context: context, auth_msg: "Please authenticate to find technician!");
+                                    // if(proceed){
+                                    //   customs.maruSnackBarSuccess(context: context, text: "Authenticated successfully!");
+                                    // }else{
+                                    //   customs.maruSnackBarDanger(context: context, text: "Authenticated failed!");
+                                    // }
+                                  }
                               ),
-                              SizedBox(
-                                height: height * 0.01,
-                              ),
-                              Skeleton.ignore(
-                                child: Container(
-                                  color: customs.secondaryColor,
-                                  child: Text(
-                                    "Collection Technician",
-                                    style: customs.whiteTextStyle(size: 10),
-                                  ),
-                                ),
-                              )
                             ],
-                          ),
-                        )
-                      ],
+                          )
+                        ],
+                      ),
                     ),
                   ),
-                ),
-                SizedBox(
-                  height: height * 0.01,
-                ),
-                Card(
-                  color: customs.whiteColor,
-                  margin: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 10, horizontal: 10.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                  SizedBox(
+                    height: height * 0.005,
+                  ),
+                  Container(
+                    padding: const EdgeInsets.all(10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         Text(
-                          "Quick Actions",
-                          style: customs.primaryTextStyle(
-                              size: 10,
-                              underline: true,
-                              fontweight: FontWeight.bold),
+                          "Collection Stats",
+                          style: customs.darkTextStyle(size: 18, underline: true),
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            customs.maruButton(
-                                showArrow: true,
-                                iconSize: 15,
-                                fontSize: 16,
-                                size: Sizes.sm,
-                                text: "Collect Milk",
-                                onPressed: () {
-                                  Navigator.pushNamed(
-                                      context, "/technician_collect_milk");
-                                }),
-                            customs.maruButton(
-                                showArrow: true,
-                                iconSize: 15,
-                                fontSize: 16,
-                                size: Sizes.sm,
-                                text: "Find Technician",
-                                onPressed: () async {
-                                  // LocalAuthentication auth = LocalAuthentication();
-                                  // bool proceed = await customs.BiometricAuthenticate(auth: auth, context: context, auth_msg: "Please authenticate to find technician!");
-                                  // if(proceed){
-                                  //   customs.maruSnackBarSuccess(context: context, text: "Authenticated successfully!");
-                                  // }else{
-                                  //   customs.maruSnackBarDanger(context: context, text: "Authenticated failed!");
-                                  // }
-                                }
-                            ),
-                          ],
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: height * 0.005,
-                ),
-                Container(
-                  padding: const EdgeInsets.all(10),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Text(
-                        "Collection Stats",
-                        style: customs.darkTextStyle(size: 18, underline: true),
-                      ),
-                      const Spacer(),
-                      Container(
-                        width: width * 0.25,
-                        child: customs.maruDropDownButton(
-                          defaultValue: drop_down,
-                          hintText: "Select days",
-                          items: dayFilter,
-                          onChange: (value) {
-                            setState(() {
-                              drop_down = value!;
-                            });
-                            getDashboardData(drop_down);
-                          },
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-                // SHOW THE COLLECTION IN LITERS
-                Skeletonizer(
-                  enabled: _loadingDash,
-                  child: Card(
-                    color: customs.whiteColor,
-                    margin:
-                    const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                    child: Row(
-                      children: [
-                        Skeleton.keep(
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 20.0, horizontal: 10.0),
-                            child: CircleAvatar(
-                              backgroundColor:
-                              customs.successColor.withOpacity(0.2),
-                              radius: 30,
-                              child: Icon(
-                                Icons.water_drop_outlined,
-                                size: 24,
-                                color: customs.successColor,
-                              ),
-                            ),
-                          ),
-                        ),
-                        Column(
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "$total_litres Ltrs",
-                                  style: customs.darkTextStyle(
-                                      size: 16,
-                                      fontweight: FontWeight.bold),
-                                ),
-                                const SizedBox(
-                                  height: 5,
-                                ),
-                                Text(
-                                  "$period_title",
-                                  style:
-                                  customs.darkTextStyle(size: 12),
-                                )
-                              ],
-                            )
-                          ],
-                        ),
-                        Expanded(
-                          child: Skeleton.ignore(
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Center(
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    Icon(
-                                      collection_status == "stagnant" ? Icons.linear_scale : collection_status == "increase" ? Icons.arrow_drop_up : Icons.arrow_drop_up,
-                                      color: collection_status == "stagnant" ? customs.darkColor : collection_status == "increase" ? customs.successColor : customs.dangerColor,
-                                    ),
-                                    Text(
-                                      "$collection_percentage%",
-                                      style:collection_status == "stagnant" ? customs.darkTextStyle(size: 12, fontweight: FontWeight.bold) : collection_status == "increase" ? customs.successTextStyle(size: 12, fontweight: FontWeight.bold) : customs.dangerTextStyle(size: 12, fontweight: FontWeight.bold),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
+                        const Spacer(),
+                        Container(
+                          width: width * 0.25,
+                          child: customs.maruDropDownButton(
+                            defaultValue: drop_down,
+                            hintText: "Select days",
+                            items: dayFilter,
+                            onChange: (value) {
+                              setState(() {
+                                drop_down = value!;
+                              });
+                              getDashboardData(drop_down);
+                            },
                           ),
                         )
                       ],
                     ),
                   ),
-                ),
-                SizedBox(
-                  height: height * 0.005,
-                ),
-                Skeletonizer(
-                  enabled: _loadingDash,
-                  child: Skeleton.leaf(
-                    child: Container(
-                      padding: const EdgeInsets.fromLTRB(10, 10, 0, 10),
-                      margin: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 10),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10.0),
-                        color: customs.whiteColor,
-                      ),
-                      child: Column(
+                  // SHOW THE COLLECTION IN LITERS
+                  Skeletonizer(
+                    enabled: _loadingDash,
+                    child: Card(
+                      color: customs.whiteColor,
+                      margin:
+                      const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                      child: Row(
                         children: [
-                          Text(
-                            "MILK COLLECTION STATS",
-                            style: customs.darkTextStyle(
-                                size: 18,
-                                underline: true,
-                                fontweight: FontWeight.bold),
+                          Skeleton.keep(
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 20.0, horizontal: 10.0),
+                              child: CircleAvatar(
+                                backgroundColor:
+                                customs.successColor.withOpacity(0.2),
+                                radius: 30,
+                                child: Icon(
+                                  Icons.water_drop_outlined,
+                                  size: 24,
+                                  color: customs.successColor,
+                                ),
+                              ),
+                            ),
                           ),
-                          SizedBox(
-                            height: 30,
-                          ),
-                          AspectRatio(
-                            aspectRatio: 2.0,
-                            child: BarChart(
-                              BarChartData(
-                                  barTouchData: BarTouchData(
-                                      touchTooltipData: BarTouchTooltipData(
-                                        getTooltipColor: (group) =>
-                                        Colors.transparent,
-                                        tooltipPadding: EdgeInsets.zero,
-                                        tooltipMargin: 2,
-                                        getTooltipItem: (
-                                            BarChartGroupData group,
-                                            int groupIndex,
-                                            BarChartRodData rod,
-                                            int rodIndex,
-                                            ) {
-                                          return BarTooltipItem(
-                                            "${rod.toY.round()} Ltrs",
-                                            customs.darkTextStyle(
-                                                size: 12,
-                                                fontweight: FontWeight.bold),
-                                          );
-                                        },
-                                      )),
-                                  borderData: FlBorderData(
-                                      show: true,
-                                      border: Border(
-                                        left: BorderSide(
-                                            color: customs.primaryColor,
-                                            width: 1),
-                                      )),
-                                  barGroups: _barChartGroupData,
-                                  gridData: FlGridData(
-                                    show: true,
-                                    checkToShowHorizontalLine: (value) =>
-                                    value % 10 == 0,
-                                    getDrawingHorizontalLine: (value) => FlLine(
-                                      color: customs.secondaryShade_2,
-                                      strokeWidth: 1,
-                                    ),
-                                    drawVerticalLine: false,
+                          Column(
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "$total_litres Ltrs",
+                                    style: customs.darkTextStyle(
+                                        size: 16,
+                                        fontweight: FontWeight.bold),
                                   ),
-                                  titlesData: FlTitlesData(
-                                    leftTitles: AxisTitles(
-                                        axisNameWidget: Center(
-                                            child: Text("Quantity in Ltrs",
-                                                style: customs.primaryTextStyle(
-                                                    size: 12))),
-                                        sideTitles: SideTitles(
-                                          showTitles: true,
-                                          reservedSize: 20,
-                                          getTitlesWidget: (value, meta) {
-                                            return Text(
-                                              meta.formattedValue,
-                                              textAlign: TextAlign.center,
-                                              style: customs.darkTextStyle(
+                                  const SizedBox(
+                                    height: 5,
+                                  ),
+                                  Text(
+                                    "$period_title",
+                                    style:
+                                    customs.darkTextStyle(size: 12),
+                                  )
+                                ],
+                              )
+                            ],
+                          ),
+                          Expanded(
+                            child: Skeleton.ignore(
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Center(
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      Icon(
+                                        collection_status == "stagnant" ? Icons.linear_scale : collection_status == "increase" ? Icons.arrow_drop_up : Icons.arrow_drop_up,
+                                        color: collection_status == "stagnant" ? customs.darkColor : collection_status == "increase" ? customs.successColor : customs.dangerColor,
+                                      ),
+                                      Text(
+                                        "$collection_percentage%",
+                                        style:collection_status == "stagnant" ? customs.darkTextStyle(size: 12, fontweight: FontWeight.bold) : collection_status == "increase" ? customs.successTextStyle(size: 12, fontweight: FontWeight.bold) : customs.dangerTextStyle(size: 12, fontweight: FontWeight.bold),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: height * 0.005,
+                  ),
+                  Skeletonizer(
+                    enabled: _loadingDash,
+                    child: Skeleton.leaf(
+                      child: Container(
+                        padding: const EdgeInsets.fromLTRB(10, 10, 0, 10),
+                        margin: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 10),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10.0),
+                          color: customs.whiteColor,
+                        ),
+                        child: Column(
+                          children: [
+                            Text(
+                              "MILK COLLECTION STATS",
+                              style: customs.darkTextStyle(
+                                  size: 18,
+                                  underline: true,
+                                  fontweight: FontWeight.bold),
+                            ),
+                            SizedBox(
+                              height: 30,
+                            ),
+                            AspectRatio(
+                              aspectRatio: 2.0,
+                              child: BarChart(
+                                BarChartData(
+                                    barTouchData: BarTouchData(
+                                        touchTooltipData: BarTouchTooltipData(
+                                          getTooltipColor: (group) =>
+                                          Colors.transparent,
+                                          tooltipPadding: EdgeInsets.zero,
+                                          tooltipMargin: 2,
+                                          getTooltipItem: (
+                                              BarChartGroupData group,
+                                              int groupIndex,
+                                              BarChartRodData rod,
+                                              int rodIndex,
+                                              ) {
+                                            return BarTooltipItem(
+                                              "${rod.toY.round()} Ltrs",
+                                              customs.darkTextStyle(
                                                   size: 12,
                                                   fontweight: FontWeight.bold),
                                             );
                                           },
                                         )),
-                                    bottomTitles: AxisTitles(
-                                        axisNameWidget: Padding(
-                                          padding: const EdgeInsets.only(top:16.0),
-                                          child: Center(
-                                              child: Text("Days of the week",
+                                    borderData: FlBorderData(
+                                        show: true,
+                                        border: Border(
+                                          left: BorderSide(
+                                              color: customs.primaryColor,
+                                              width: 1),
+                                        )),
+                                    barGroups: _barChartGroupData,
+                                    gridData: FlGridData(
+                                      show: true,
+                                      checkToShowHorizontalLine: (value) =>
+                                      value % 10 == 0,
+                                      getDrawingHorizontalLine: (value) => FlLine(
+                                        color: customs.secondaryShade_2,
+                                        strokeWidth: 1,
+                                      ),
+                                      drawVerticalLine: false,
+                                    ),
+                                    titlesData: FlTitlesData(
+                                      leftTitles: AxisTitles(
+                                          axisNameWidget: Center(
+                                              child: Text("Quantity in Ltrs",
                                                   style: customs.primaryTextStyle(
                                                       size: 12))),
-                                        ),
-                                        sideTitles: SideTitles(
-                                          showTitles: true,
-                                          reservedSize: 10,
-                                          getTitlesWidget: (value, meta) {
-                                            return Transform.rotate(
-                                              angle: -30 * (3.1415927 / 180),
-                                              child: Text(
-                                                "${daysOfWeek[int.parse(meta.formattedValue)]}",
+                                          sideTitles: SideTitles(
+                                            showTitles: true,
+                                            reservedSize: 20,
+                                            getTitlesWidget: (value, meta) {
+                                              return Text(
+                                                meta.formattedValue,
                                                 textAlign: TextAlign.center,
                                                 style: customs.darkTextStyle(
                                                     size: 12,
                                                     fontweight: FontWeight.bold),
-                                              ),
-                                            );
-                                          },
-                                        )
-                                    ),
-                                    rightTitles: AxisTitles(
-                                        sideTitles:
-                                        SideTitles(showTitles: false)),
-                                    topTitles: AxisTitles(
-                                        sideTitles: SideTitles(
-                                          showTitles: false,
-                                        )),
-                                  )), // Optional
+                                              );
+                                            },
+                                          )),
+                                      bottomTitles: AxisTitles(
+                                          axisNameWidget: Padding(
+                                            padding: const EdgeInsets.only(top:16.0),
+                                            child: Center(
+                                                child: Text("Days of the week",
+                                                    style: customs.primaryTextStyle(
+                                                        size: 12))),
+                                          ),
+                                          sideTitles: SideTitles(
+                                            showTitles: true,
+                                            reservedSize: 10,
+                                            getTitlesWidget: (value, meta) {
+                                              return Transform.rotate(
+                                                angle: -30 * (3.1415927 / 180),
+                                                child: Text(
+                                                  "${daysOfWeek[int.parse(meta.formattedValue)]}",
+                                                  textAlign: TextAlign.center,
+                                                  style: customs.darkTextStyle(
+                                                      size: 12,
+                                                      fontweight: FontWeight.bold),
+                                                ),
+                                              );
+                                            },
+                                          )
+                                      ),
+                                      rightTitles: AxisTitles(
+                                          sideTitles:
+                                          SideTitles(showTitles: false)),
+                                      topTitles: AxisTitles(
+                                          sideTitles: SideTitles(
+                                            showTitles: false,
+                                          )),
+                                    )), // Optional
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                      width: width * 0.7,
+                      child: Divider(
+                        height: 10,
+                      )),
+                  // SHOW THE FARMER WHO GAVE MILK STATISTICS
+                  Container(
+                    padding: const EdgeInsets.all(10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Text(
+                          "Farmer Stats",
+                          style: customs.darkTextStyle(size: 12, underline: true),
+                        ),
+                        const Spacer()
+                      ],
+                    ),
+                  ),
+                  Skeletonizer(
+                    enabled: _loadingDash,
+                    child: Card(
+                      color: customs.whiteColor,
+                      margin:
+                      const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                      child: Row(
+                        children: [
+                          Skeleton.keep(
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 20.0, horizontal: 10.0),
+                              child: CircleAvatar(
+                                backgroundColor:
+                                customs.successColor.withOpacity(0.2),
+                                radius: 30,
+                                child: Icon(
+                                  Icons.people_alt_outlined,
+                                  size: 24,
+                                  color: customs.successColor,
+                                ),
+                              ),
                             ),
                           ),
+                          Column(
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "$total_farmers Farmers",
+                                    style: customs.darkTextStyle(
+                                        size: 16,
+                                        fontweight: FontWeight.bold),
+                                  ),
+                                  const SizedBox(
+                                    height: 5,
+                                  ),
+                                  Text(
+                                    "$period_title",
+                                    style:
+                                    customs.darkTextStyle(size: 12),
+                                  )
+                                ],
+                              )
+                            ],
+                          ),
+                          Expanded(
+                            child: Skeleton.ignore(
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Center(
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      Icon(
+                                        farmer_status == "stagnant" ? Icons.linear_scale : farmer_status == "increase" ? Icons.arrow_drop_up : Icons.arrow_drop_up,
+                                        color: farmer_status == "stagnant" ? customs.darkColor : farmer_status == "increase" ? customs.successColor : customs.dangerColor,
+                                      ),
+                                      Text(
+                                        "$farmer_percentage%",
+                                        style: farmer_status == "stagnant" ? customs.darkTextStyle(size: 12, fontweight: FontWeight.bold) : farmer_status == "increase" ? customs.successTextStyle(size: 12, fontweight: FontWeight.bold) : customs.dangerTextStyle(size: 12, fontweight: FontWeight.bold),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          )
                         ],
                       ),
                     ),
                   ),
-                ),
-                SizedBox(
-                    width: width * 0.7,
-                    child: Divider(
-                      height: 10,
-                    )),
-                // SHOW THE FARMER WHO GAVE MILK STATISTICS
-                Container(
-                  padding: const EdgeInsets.all(10),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Text(
-                        "Farmer Stats",
-                        style: customs.darkTextStyle(size: 12, underline: true),
-                      ),
-                      const Spacer()
-                    ],
+                  SizedBox(
+                    height: height * 0.005,
                   ),
-                ),
-                Skeletonizer(
-                  enabled: _loadingDash,
-                  child: Card(
-                    color: customs.whiteColor,
-                    margin:
-                    const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                    child: Row(
-                      children: [
-                        Skeleton.keep(
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 20.0, horizontal: 10.0),
-                            child: CircleAvatar(
-                              backgroundColor:
-                              customs.successColor.withOpacity(0.2),
-                              radius: 30,
-                              child: Icon(
-                                Icons.people_alt_outlined,
-                                size: 24,
-                                color: customs.successColor,
-                              ),
-                            ),
-                          ),
+                  Skeletonizer(
+                    enabled: _loadingDash,
+                    child: Skeleton.leaf(
+                      child: Container(
+                        padding: const EdgeInsets.fromLTRB(10, 10, 0, 10),
+                        margin: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 10),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10.0),
+                          color: customs.whiteColor,
                         ),
-                        Column(
+                        child: Column(
                           children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "$total_farmers Farmers",
-                                  style: customs.darkTextStyle(
-                                      size: 16,
-                                      fontweight: FontWeight.bold),
-                                ),
-                                const SizedBox(
-                                  height: 5,
-                                ),
-                                Text(
-                                  "$period_title",
-                                  style:
-                                  customs.darkTextStyle(size: 12),
-                                )
-                              ],
-                            )
-                          ],
-                        ),
-                        Expanded(
-                          child: Skeleton.ignore(
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Center(
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    Icon(
-                                      farmer_status == "stagnant" ? Icons.linear_scale : farmer_status == "increase" ? Icons.arrow_drop_up : Icons.arrow_drop_up,
-                                      color: farmer_status == "stagnant" ? customs.darkColor : farmer_status == "increase" ? customs.successColor : customs.dangerColor,
-                                    ),
-                                    Text(
-                                      "$farmer_percentage%",
-                                      style: farmer_status == "stagnant" ? customs.darkTextStyle(size: 12, fontweight: FontWeight.bold) : farmer_status == "increase" ? customs.successTextStyle(size: 12, fontweight: FontWeight.bold) : customs.dangerTextStyle(size: 12, fontweight: FontWeight.bold),
-                                    ),
-                                  ],
-                                ),
-                              ),
+                            Text(
+                              "No. OF FARMERS",
+                              style: customs.darkTextStyle(
+                                  size: 12,
+                                  underline: true,
+                                  fontweight: FontWeight.bold),
                             ),
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: height * 0.005,
-                ),
-                Skeletonizer(
-                  enabled: _loadingDash,
-                  child: Skeleton.leaf(
-                    child: Container(
-                      padding: const EdgeInsets.fromLTRB(10, 10, 0, 10),
-                      margin: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 10),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10.0),
-                        color: customs.whiteColor,
-                      ),
-                      child: Column(
-                        children: [
-                          Text(
-                            "No. OF FARMERS",
-                            style: customs.darkTextStyle(
-                                size: 12,
-                                underline: true,
-                                fontweight: FontWeight.bold),
-                          ),
-                          SizedBox(
-                            height: 30,
-                          ),
-                          AspectRatio(
-                            aspectRatio: 2.0,
-                            child: BarChart(
-                              BarChartData(
-                                  barTouchData: BarTouchData(
-                                      touchTooltipData: BarTouchTooltipData(
-                                        getTooltipColor: (group) =>
-                                        Colors.transparent,
-                                        tooltipPadding: EdgeInsets.zero,
-                                        tooltipMargin: 2,
-                                        getTooltipItem: (
-                                            BarChartGroupData group,
-                                            int groupIndex,
-                                            BarChartRodData rod,
-                                            int rodIndex,
-                                            ) {
-                                          return BarTooltipItem(
-                                            "${rod.toY.round()}",
-                                            customs.darkTextStyle(
-                                                size: 12,
-                                                fontweight: FontWeight.bold),
-                                          );
-                                        },
-                                      )),
-                                  borderData: FlBorderData(
-                                      show: true,
-                                      border: Border(
-                                        left: BorderSide(
-                                            color: customs.primaryColor,
-                                            width: 1),
-                                      )),
-                                  barGroups: _farmerChartGroupData,
-                                  gridData: FlGridData(
-                                    show: true,
-                                    checkToShowHorizontalLine: (value) =>
-                                    value % 10 == 0,
-                                    getDrawingHorizontalLine: (value) => FlLine(
-                                      color: customs.secondaryShade_2,
-                                      strokeWidth: 1,
-                                    ),
-                                    drawVerticalLine: false,
-                                  ),
-                                  titlesData: FlTitlesData(
-                                    leftTitles: AxisTitles(
-                                        axisNameWidget: Center(
-                                            child: Text("Number of Farmers",
-                                                style: customs.primaryTextStyle(
-                                                    size: 12))),
-                                        sideTitles: SideTitles(
-                                          showTitles: true,
-                                          reservedSize: 20,
-                                          getTitlesWidget: (value, meta) {
-                                            return Text(
-                                              meta.formattedValue,
-                                              textAlign: TextAlign.center,
-                                              style: customs.darkTextStyle(
+                            SizedBox(
+                              height: 30,
+                            ),
+                            AspectRatio(
+                              aspectRatio: 2.0,
+                              child: BarChart(
+                                BarChartData(
+                                    barTouchData: BarTouchData(
+                                        touchTooltipData: BarTouchTooltipData(
+                                          getTooltipColor: (group) =>
+                                          Colors.transparent,
+                                          tooltipPadding: EdgeInsets.zero,
+                                          tooltipMargin: 2,
+                                          getTooltipItem: (
+                                              BarChartGroupData group,
+                                              int groupIndex,
+                                              BarChartRodData rod,
+                                              int rodIndex,
+                                              ) {
+                                            return BarTooltipItem(
+                                              "${rod.toY.round()}",
+                                              customs.darkTextStyle(
                                                   size: 12,
                                                   fontweight: FontWeight.bold),
                                             );
                                           },
                                         )),
-                                    bottomTitles: AxisTitles(
-                                        axisNameWidget: Padding(
-                                          padding: const EdgeInsets.only(top:16.0),
-                                          child: Center(
-                                              child: Text("Days of the week",
+                                    borderData: FlBorderData(
+                                        show: true,
+                                        border: Border(
+                                          left: BorderSide(
+                                              color: customs.primaryColor,
+                                              width: 1),
+                                        )),
+                                    barGroups: _farmerChartGroupData,
+                                    gridData: FlGridData(
+                                      show: true,
+                                      checkToShowHorizontalLine: (value) =>
+                                      value % 10 == 0,
+                                      getDrawingHorizontalLine: (value) => FlLine(
+                                        color: customs.secondaryShade_2,
+                                        strokeWidth: 1,
+                                      ),
+                                      drawVerticalLine: false,
+                                    ),
+                                    titlesData: FlTitlesData(
+                                      leftTitles: AxisTitles(
+                                          axisNameWidget: Center(
+                                              child: Text("Number of Farmers",
                                                   style: customs.primaryTextStyle(
                                                       size: 12))),
-                                        ),
-                                        sideTitles: SideTitles(
-                                          showTitles: true,
-                                          reservedSize: 10,
-                                          getTitlesWidget: (value, meta) {
-                                            return Transform.rotate(
-                                              angle: -30 * (3.1415927 / 180),
-                                              child: Text(
-                                                "${daysOfWeek[int.parse(meta.formattedValue)]}",
+                                          sideTitles: SideTitles(
+                                            showTitles: true,
+                                            reservedSize: 20,
+                                            getTitlesWidget: (value, meta) {
+                                              return Text(
+                                                meta.formattedValue,
                                                 textAlign: TextAlign.center,
                                                 style: customs.darkTextStyle(
                                                     size: 12,
                                                     fontweight: FontWeight.bold),
-                                              ),
-                                            );
-                                          },
-                                        )
-                                    ),
-                                    rightTitles: AxisTitles(
-                                        sideTitles:
-                                        SideTitles(showTitles: false)),
-                                    topTitles: AxisTitles(
-                                        sideTitles: SideTitles(
-                                          showTitles: false,
-                                        )),
-                                  )), // Optional
+                                              );
+                                            },
+                                          )),
+                                      bottomTitles: AxisTitles(
+                                          axisNameWidget: Padding(
+                                            padding: const EdgeInsets.only(top:16.0),
+                                            child: Center(
+                                                child: Text("Days of the week",
+                                                    style: customs.primaryTextStyle(
+                                                        size: 12))),
+                                          ),
+                                          sideTitles: SideTitles(
+                                            showTitles: true,
+                                            reservedSize: 10,
+                                            getTitlesWidget: (value, meta) {
+                                              return Transform.rotate(
+                                                angle: -30 * (3.1415927 / 180),
+                                                child: Text(
+                                                  "${daysOfWeek[int.parse(meta.formattedValue)]}",
+                                                  textAlign: TextAlign.center,
+                                                  style: customs.darkTextStyle(
+                                                      size: 12,
+                                                      fontweight: FontWeight.bold),
+                                                ),
+                                              );
+                                            },
+                                          )
+                                      ),
+                                      rightTitles: AxisTitles(
+                                          sideTitles:
+                                          SideTitles(showTitles: false)),
+                                      topTitles: AxisTitles(
+                                          sideTitles: SideTitles(
+                                            showTitles: false,
+                                          )),
+                                    )), // Optional
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                )
-              ],
+                  )
+                ],
+              ),
             ),
-          ),
-        );
-      },
-    ));
+          );
+        },
+      )),
+    );
   }
 }

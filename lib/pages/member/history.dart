@@ -318,212 +318,215 @@ class _memberHistoryState extends State<memberHistory> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(child: LayoutBuilder(
-      builder: (context, constraints) {
-        double width = constraints.maxWidth;
-        double height = constraints.maxHeight;
-        double calculatedWidth = width / 2 - 170;
-        calculatedWidth = calculatedWidth > 0 ? calculatedWidth : 0;
-        return Container(
-          height: height,
-          width: width,
-          decoration: BoxDecoration(
-            color: customs.secondaryShade_2.withOpacity(0.2)
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 10),
-                child: Text("History", style: customs.darkTextStyle(size: 20, fontweight: FontWeight.bold),),
-              ),
-              Card(
-                shadowColor: customs.primaryShade.withOpacity(0.5),
-                elevation: 2,
-                color: customs.whiteColor,
-                margin:
-                    const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                child: Container(
-                  margin: const EdgeInsets.all(10),
+    return customs.refreshIndicator(
+      onRefresh: getCollectionHistory,
+      child: SafeArea(child: LayoutBuilder(
+        builder: (context, constraints) {
+          double width = constraints.maxWidth;
+          double height = constraints.maxHeight;
+          double calculatedWidth = width / 2 - 170;
+          calculatedWidth = calculatedWidth > 0 ? calculatedWidth : 0;
+          return Container(
+            height: height,
+            width: width,
+            decoration: BoxDecoration(
+              color: customs.secondaryShade_2.withOpacity(0.2)
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  child: Text("History", style: customs.darkTextStyle(size: 20, fontweight: FontWeight.bold),),
+                ),
+                Card(
+                  shadowColor: customs.primaryShade.withOpacity(0.5),
+                  elevation: 2,
                   color: customs.whiteColor,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "This Month:",
-                        style: customs.secondaryTextStyle(
-                            size: 12, fontweight: FontWeight.bold),
-                      ),
-                      Skeletonizer(
-                        enabled: loading,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Container(
-                              height: 100,
-                              width: width * 0.40,
-                              padding: const EdgeInsets.all(8.0),
-                              margin: const EdgeInsets.fromLTRB(0, 10.0, 0, 0),
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10.0),
-                                  color: customs.secondaryShade_2),
-                              child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Container(
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(20),
-                                        color: Colors.grey[200],
-                                      ),
-                                      padding: const EdgeInsets.all(5),
-                                      child: Icon(
-                                        FontAwesomeIcons.handHoldingDollar,
-                                        color: customs.successColor,
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                      width: 5,
-                                    ),
-                                    Column(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          "Est. Pay",
-                                          style: customs.secondaryTextStyle(
-                                              size: width * 0.035,
-                                              fontweight: FontWeight.bold),
-                                        ),
-                                        const SizedBox(
-                                          height: 5.0,
-                                        ),
-                                        Text(
-                                          "$litres_collected",
-                                          style: customs.darkTextStyle(
-                                              size: width * 0.028),
-                                        ),
-                                      ],
-                                    )
-                                  ]),
-                            ),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            Container(
-                              height: 100,
-                              width: width * 0.40,
-                              padding: const EdgeInsets.all(8.0),
-                              margin: const EdgeInsets.fromLTRB(0, 10.0, 0, 0),
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10.0),
-                                  color: customs.secondaryShade_2),
-                              child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Container(
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(20),
-                                        color: Colors.grey[200],
-                                      ),
-                                      padding: const EdgeInsets.all(5),
-                                      child: Icon(
-                                        Icons.water_drop_outlined,
-                                        color: customs.infoColor,
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                      width: 5,
-                                    ),
-                                    Column(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          "Acc. Litres",
-                                          style: customs.secondaryTextStyle(
-                                              size: width * 0.035,
-                                              fontweight: FontWeight.bold),
-                                        ),
-                                        const SizedBox(
-                                          height: 5.0,
-                                        ),
-                                        Text(
-                                          "$accumulated_litres Litres",
-                                          style: customs.darkTextStyle(
-                                              size: width * 0.028),
-                                        ),
-                                      ],
-                                    )
-                                  ]),
-                            ),
-                          ],
+                  margin:
+                      const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                  child: Container(
+                    margin: const EdgeInsets.all(10),
+                    color: customs.whiteColor,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "This Month:",
+                          style: customs.secondaryTextStyle(
+                              size: 12, fontweight: FontWeight.bold),
                         ),
-                      )
-                    ],
-                  ),
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(
-                    horizontal: (width * 0.2), vertical: 10),
-                child: Divider(
-                  color: customs.secondaryShade_2,
-                  height: 0.1,
-                  thickness: 0.5,
-                ),
-              ),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                child: Row(children: [
-                  Text(
-                    "Last 30 days",
-                    textAlign: TextAlign.left,
-                    style:
-                        customs.secondaryTextStyle(size: 12, underline: true),
-                  ),
-                ]),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  const SizedBox(),
-                  Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 10.0),
-                    width: width * 0.6,
-                    child: customs.maruSearchTextField(
-                      isChanged: (value) {
-                        findKeyWord(value);
-                      },
-                      editingController: searchMember,
-                      hintText: "Search",
-                      // label: "Search"
+                        Skeletonizer(
+                          enabled: loading,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Container(
+                                height: 100,
+                                width: width * 0.40,
+                                padding: const EdgeInsets.all(8.0),
+                                margin: const EdgeInsets.fromLTRB(0, 10.0, 0, 0),
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                    color: customs.secondaryShade_2),
+                                child: Row(
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      Container(
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(20),
+                                          color: Colors.grey[200],
+                                        ),
+                                        padding: const EdgeInsets.all(5),
+                                        child: Icon(
+                                          FontAwesomeIcons.handHoldingDollar,
+                                          color: customs.successColor,
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        width: 5,
+                                      ),
+                                      Column(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            "Est. Pay",
+                                            style: customs.secondaryTextStyle(
+                                                size: width * 0.035,
+                                                fontweight: FontWeight.bold),
+                                          ),
+                                          const SizedBox(
+                                            height: 5.0,
+                                          ),
+                                          Text(
+                                            "$litres_collected",
+                                            style: customs.darkTextStyle(
+                                                size: width * 0.028),
+                                          ),
+                                        ],
+                                      )
+                                    ]),
+                              ),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              Container(
+                                height: 100,
+                                width: width * 0.40,
+                                padding: const EdgeInsets.all(8.0),
+                                margin: const EdgeInsets.fromLTRB(0, 10.0, 0, 0),
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                    color: customs.secondaryShade_2),
+                                child: Row(
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      Container(
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(20),
+                                          color: Colors.grey[200],
+                                        ),
+                                        padding: const EdgeInsets.all(5),
+                                        child: Icon(
+                                          Icons.water_drop_outlined,
+                                          color: customs.infoColor,
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        width: 5,
+                                      ),
+                                      Column(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            "Acc. Litres",
+                                            style: customs.secondaryTextStyle(
+                                                size: width * 0.035,
+                                                fontweight: FontWeight.bold),
+                                          ),
+                                          const SizedBox(
+                                            height: 5.0,
+                                          ),
+                                          Text(
+                                            "$accumulated_litres Litres",
+                                            style: customs.darkTextStyle(
+                                                size: width * 0.028),
+                                          ),
+                                        ],
+                                      )
+                                    ]),
+                              ),
+                            ],
+                          ),
+                        )
+                      ],
                     ),
                   ),
-                ],
-              ),
-              Skeletonizer(
-                enabled: loading,
-                child: Container(
-                  margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                  height: height - 285,
-                  decoration: BoxDecoration(
-                    color: customs.whiteColor,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  padding: const EdgeInsets.symmetric(vertical: 10),
-                  // color: Colors.red,
-                  child: ListView(
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                    children: collections,
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                      horizontal: (width * 0.2), vertical: 10),
+                  child: Divider(
+                    color: customs.secondaryShade_2,
+                    height: 0.1,
+                    thickness: 0.5,
                   ),
                 ),
-              )
-            ],
-          ),
-        );
-      },
-    ));
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                  child: Row(children: [
+                    Text(
+                      "Last 30 days",
+                      textAlign: TextAlign.left,
+                      style:
+                          customs.secondaryTextStyle(size: 12, underline: true),
+                    ),
+                  ]),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    const SizedBox(),
+                    Container(
+                      margin: const EdgeInsets.symmetric(horizontal: 10.0),
+                      width: width * 0.6,
+                      child: customs.maruSearchTextField(
+                        isChanged: (value) {
+                          findKeyWord(value);
+                        },
+                        editingController: searchMember,
+                        hintText: "Search",
+                        // label: "Search"
+                      ),
+                    ),
+                  ],
+                ),
+                Skeletonizer(
+                  enabled: loading,
+                  child: Container(
+                    margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                    height: height - 285,
+                    decoration: BoxDecoration(
+                      color: customs.whiteColor,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    // color: Colors.red,
+                    child: ListView(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      children: collections,
+                    ),
+                  ),
+                )
+              ],
+            ),
+          );
+        },
+      )),
+    );
   }
 }

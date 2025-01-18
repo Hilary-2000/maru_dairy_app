@@ -503,72 +503,75 @@ class _OurMembersState extends State<OurMembers> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(child: LayoutBuilder(
-      builder: (context, constraints) {
-        double width = constraints.maxWidth;
-        double height = constraints.maxHeight;
-        double calculatedWidth = width / 2 - 170;
-        calculatedWidth = calculatedWidth > 0 ? calculatedWidth : 0;
-        return Container(
-          height: height,
-          width: width,
-          color: customs.secondaryShade_2.withOpacity(0.2),
-          child: Column(
-            children: [
-              Container(
-                width: width,
-                margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                child: Text("Our Members", style: customs.secondaryTextStyle(size: 20, fontweight: FontWeight.bold, underline: true),),
-              ),
-              Container(
-                margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Container(
-                      width: width * 0.7,
-                      child: customs.maruSearchTextField(
-                          isChanged: (value) {
-                            findKeyWord(value);
-                          },
-                          editingController: searchMember,
-                          hintText: "Start typing to search!"),
-                    ),
-                    IconButton(onPressed: (){
-                      customs.maruSnackBar(context: context, text: "That`s the filter, it will be ready when the app is in production");
-                    }, icon: Icon(Icons.filter_list)),
-                    IconButton(onPressed: (){Navigator.pushNamed(context, "/admin_qr_code_finder");}, icon: Icon(Icons.qr_code, size: 30,))
-                  ],
+    return customs.refreshIndicator(
+      onRefresh: getMembers,
+      child: SafeArea(child: LayoutBuilder(
+        builder: (context, constraints) {
+          double width = constraints.maxWidth;
+          double height = constraints.maxHeight;
+          double calculatedWidth = width / 2 - 170;
+          calculatedWidth = calculatedWidth > 0 ? calculatedWidth : 0;
+          return Container(
+            height: height,
+            width: width,
+            color: customs.secondaryShade_2.withOpacity(0.2),
+            child: Column(
+              children: [
+                Container(
+                  width: width,
+                  margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                  child: Text("Our Members", style: customs.secondaryTextStyle(size: 20, fontweight: FontWeight.bold, underline: true),),
                 ),
-              ),
-              Container(
-                width: width * 0.5,
-                margin: const EdgeInsets.symmetric(vertical: 5),
-                child: Divider(
-                  color: customs.secondaryShade_2,
-                ),
-              ),
-              Skeletonizer(
-                enabled: loading,
-                child: Container(
-                  width: width * 0.95,
-                  padding: const EdgeInsets.all(8),
-                  height: height - 125,
-                  decoration: BoxDecoration(
-                      color: customs.whiteColor,
-                      borderRadius: BorderRadius.circular(15)),
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: members,
-                    ),
+                Container(
+                  margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Container(
+                        width: width * 0.7,
+                        child: customs.maruSearchTextField(
+                            isChanged: (value) {
+                              findKeyWord(value);
+                            },
+                            editingController: searchMember,
+                            hintText: "Start typing to search!"),
+                      ),
+                      IconButton(onPressed: (){
+                        customs.maruSnackBar(context: context, text: "That`s the filter, it will be ready when the app is in production");
+                      }, icon: Icon(Icons.filter_list)),
+                      IconButton(onPressed: (){Navigator.pushNamed(context, "/admin_qr_code_finder");}, icon: Icon(Icons.qr_code, size: 30,))
+                    ],
                   ),
                 ),
-              )
-            ],
-          ),
-        );
-      },
-    ));
+                Container(
+                  width: width * 0.5,
+                  margin: const EdgeInsets.symmetric(vertical: 5),
+                  child: Divider(
+                    color: customs.secondaryShade_2,
+                  ),
+                ),
+                Skeletonizer(
+                  enabled: loading,
+                  child: Container(
+                    width: width * 0.95,
+                    padding: const EdgeInsets.all(8),
+                    height: height - 125,
+                    decoration: BoxDecoration(
+                        color: customs.whiteColor,
+                        borderRadius: BorderRadius.circular(15)),
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: members,
+                      ),
+                    ),
+                  ),
+                )
+              ],
+            ),
+          );
+        },
+      )),
+    );
   }
 }

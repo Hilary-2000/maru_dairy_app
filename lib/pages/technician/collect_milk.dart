@@ -285,7 +285,7 @@ class _CollectMilkState extends State<CollectMilk> {
     }
   }
 
-  void getMembers(BuildContext context) async{
+  Future <void> getMembers(BuildContext context) async{
     setState(() {
       searchMember.text = "";
       loadMembers = true;
@@ -477,106 +477,111 @@ class _CollectMilkState extends State<CollectMilk> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: customs.whiteColor,
-      appBar: AppBar(
+    return customs.refreshIndicator(
+      onRefresh: ()async{
+        getMembers(context);
+      },
+      child: Scaffold(
         backgroundColor: customs.whiteColor,
-        elevation: 1,
-        title: Builder(builder: (context) {
-          double screenWidth = MediaQuery.of(context).size.width;
-          return Container(
-            width: screenWidth,
-            child: Center(
-              child: Container(
-                width: 250,
-                child: Row(
-                  children: [
-                    SizedBox(
-                      height: 70,
-                      child:
-                      Image(image: AssetImage("assets/images/maru-nobg.png")),
-                    ),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    Text(
-                      "Maru Dairy Co-op",
-                      style: customs.primaryTextStyle(
-                          size: 20, fontweight: FontWeight.bold),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          );
-        }),
-      ),
-      body: SafeArea(child: LayoutBuilder(
-        builder: (context, constraints) {
-          double width = constraints.maxWidth;
-          double height = constraints.maxHeight;
-          double calculatedWidth = width / 2 - 170;
-          calculatedWidth = calculatedWidth > 0 ? calculatedWidth : 0;
-          return Container(
-            height: height,
-            width: width,
-            color: customs.secondaryShade_2.withOpacity(0.2),
-            child: Column(
-              children: [
-                Container(
-                  width : width*0.9,
-                  margin: EdgeInsets.symmetric(vertical: 5),
-                  padding: EdgeInsets.symmetric(vertical: 5),
-                  child: Text("Select member", style: customs.darkTextStyle(size: 16, fontweight: FontWeight.bold))
-                ),
-                Container(
-                  margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+        appBar: AppBar(
+          backgroundColor: customs.whiteColor,
+          elevation: 1,
+          title: Builder(builder: (context) {
+            double screenWidth = MediaQuery.of(context).size.width;
+            return Container(
+              width: screenWidth,
+              child: Center(
+                child: Container(
+                  width: 250,
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Container(
-                        width: width * 0.7,
-                        child: customs.maruSearchTextField(
-                          editingController: searchMember,
-                            isChanged: (value) {
-                              findKeyWord(value);
-                            },
-                            hintText: "Start typing to search!"
-                        ),
+                      SizedBox(
+                        height: 70,
+                        child:
+                        Image(image: AssetImage("assets/images/maru-nobg.png")),
                       ),
-                      IconButton(onPressed: (){Navigator.pushNamed(context, "/find_member_scanner");}, icon: Icon(Icons.qr_code, size: 30,))
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Text(
+                        "Maru Dairy Co-op",
+                        style: customs.primaryTextStyle(
+                            size: 20, fontweight: FontWeight.bold),
+                      ),
                     ],
                   ),
                 ),
-                Container(
-                  width: width * 0.5,
-                  margin: const EdgeInsets.symmetric(vertical: 5),
-                  child: Divider(
-                    color: customs.secondaryShade_2,
+              ),
+            );
+          }),
+        ),
+        body: SafeArea(child: LayoutBuilder(
+          builder: (context, constraints) {
+            double width = constraints.maxWidth;
+            double height = constraints.maxHeight;
+            double calculatedWidth = width / 2 - 170;
+            calculatedWidth = calculatedWidth > 0 ? calculatedWidth : 0;
+            return Container(
+              height: height,
+              width: width,
+              color: customs.secondaryShade_2.withOpacity(0.2),
+              child: Column(
+                children: [
+                  Container(
+                    width : width*0.9,
+                    margin: EdgeInsets.symmetric(vertical: 5),
+                    padding: EdgeInsets.symmetric(vertical: 5),
+                    child: Text("Select member", style: customs.darkTextStyle(size: 16, fontweight: FontWeight.bold))
                   ),
-                ),
-                Container(
-                  width: width * 0.95,
-                  padding: const EdgeInsets.all(8),
-                  height: height - 130,
-                  decoration: BoxDecoration(
-                      color: customs.whiteColor,
-                      borderRadius: BorderRadius.circular(15)),
-                  child: SingleChildScrollView(
-                    child: Skeletonizer(
-                      enabled: loadMembers,
-                      child: Column(
-                        children: memberList,
-                      ),
+                  Container(
+                    margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Container(
+                          width: width * 0.7,
+                          child: customs.maruSearchTextField(
+                            editingController: searchMember,
+                              isChanged: (value) {
+                                findKeyWord(value);
+                              },
+                              hintText: "Start typing to search!"
+                          ),
+                        ),
+                        IconButton(onPressed: (){Navigator.pushNamed(context, "/find_member_scanner");}, icon: Icon(Icons.qr_code, size: 30,))
+                      ],
                     ),
                   ),
-                )
-              ],
-            ),
-          );
-        },
-      )),
+                  Container(
+                    width: width * 0.5,
+                    margin: const EdgeInsets.symmetric(vertical: 5),
+                    child: Divider(
+                      color: customs.secondaryShade_2,
+                    ),
+                  ),
+                  Container(
+                    width: width * 0.95,
+                    padding: const EdgeInsets.all(8),
+                    height: height - 130,
+                    decoration: BoxDecoration(
+                        color: customs.whiteColor,
+                        borderRadius: BorderRadius.circular(15)),
+                    child: SingleChildScrollView(
+                      child: Skeletonizer(
+                        enabled: loadMembers,
+                        child: Column(
+                          children: memberList,
+                        ),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            );
+          },
+        )),
+      ),
     );
   }
 }

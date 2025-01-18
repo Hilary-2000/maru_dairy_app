@@ -818,733 +818,507 @@ class _AdminDashboardState extends State<AdminDashboard> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(child: LayoutBuilder(
-      builder: (context, constraints) {
-        double width = constraints.maxWidth;
-        double height = constraints.maxHeight;
-        double calculatedWidth = width / 2 - 170;
-        calculatedWidth = calculatedWidth > 0 ? calculatedWidth : 0;
-        return Container(
-          height: height,
-          width: width,
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              colors: [
-                Color.fromRGBO(230, 245, 248, 1),
-                Color.fromRGBO(255, 255, 255, 1),
-                Color.fromRGBO(227, 228, 229, 1)
-              ],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
+    return customs.refreshIndicator(
+      onRefresh: getAdminDash,
+      child: SafeArea(child: LayoutBuilder(
+        builder: (context, constraints) {
+          double width = constraints.maxWidth;
+          double height = constraints.maxHeight;
+          double calculatedWidth = width / 2 - 170;
+          calculatedWidth = calculatedWidth > 0 ? calculatedWidth : 0;
+          return Container(
+            height: height,
+            width: width,
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  Color.fromRGBO(230, 245, 248, 1),
+                  Color.fromRGBO(255, 255, 255, 1),
+                  Color.fromRGBO(227, 228, 229, 1)
+                ],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
             ),
-          ),
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                const SizedBox(
-                  height: 10.0,
-                ),
-                Skeletonizer(
-                  enabled: loading,
-                  child: Card(
-                    color: customs.whiteColor,
-                    margin: const EdgeInsets.symmetric(
-                        vertical: 10, horizontal: 10),
-                    child: Row(
-                      children: <Widget>[
-                        Container(
-                          width: width*0.73,
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 10, horizontal: 10),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Text(
-                                "$greetings,",
-                                style: customs.primaryTextStyle(
-                                    size: 16,
-                                    fontweight: FontWeight.normal),
-                              ),
-                              SizedBox(
-                                height: height * 0.005,
-                              ),
-                              Text(
-                                member_data != null
-                                    ? customs.toCamelCase(member_data['fullname'])
-                                    : "N/A",
-                                style: customs.successTextStyle(
-                                    size: 20,
-                                    fontweight: FontWeight.bold
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                        const Spacer(),
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 10, horizontal: 10),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              CircleAvatar(
-                                radius: 34,
-                                backgroundColor: customs.primaryShade,
-                                child: ClipOval(
-                                  child: (member_data != null) ?
-                                  Image.network(
-                                    "${customs.apiURLDomain}${member_data['profile_photo']}",
-                                    fit: BoxFit.cover,
-                                    width: double.infinity,
-                                    height: double.infinity,
-                                    loadingBuilder: (context, child, loadingProgress) {
-                                      if (loadingProgress == null) return child;
-                                      return Center(
-                                        child: CircularProgressIndicator(
-                                          color: customs.primaryColor,
-                                          backgroundColor: customs.secondaryShade_2,
-                                          value: loadingProgress.expectedTotalBytes != null
-                                              ? loadingProgress.cumulativeBytesLoaded /
-                                              loadingProgress.expectedTotalBytes!
-                                              : null,
-                                        ),
-                                      );
-                                    },
-                                    errorBuilder: (context, error, stackTrace) {
-                                      return Image.asset(
-                                        "assets/images/placeholderImg.jpg",
-                                        fit: BoxFit.cover,
-                                        width: double.infinity,
-                                        height: double.infinity,
-                                      );
-                                    },
-                                  )
-                                      :
-                                  Image.asset(
-                                    // profile.length > 0 ? profile : "assets/images/placeholderImg.jpg",
-                                    "assets/images/placeholderImg.jpg",
-                                    fit: BoxFit.cover,
-                                    width: double.infinity,
-                                    height: double.infinity,
-                                  ),
-                                ),
-                              ),
-                              SizedBox(
-                                height: height * 0.01,
-                              ),
-                              Skeleton.ignore(
-                                child: Container(
-                                  color: customs.warningColor,
-                                  child: Text(
-                                    "Administrator",
-                                    style: customs.whiteTextStyle(size: 10),
-                                  ),
-                                ),
-                              )
-                            ],
-                          ),
-                        )
-                      ],
-                    ),
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  const SizedBox(
+                    height: 10.0,
                   ),
-                ),
-                SizedBox(
-                  height: height * 0.01,
-                ),
-                Card(
-                  color: customs.whiteColor,
-                  margin:
-                      const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 10, horizontal: 10.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Quick Actions",
-                          style: customs.primaryTextStyle(
-                              size: 10,
-                              underline: true,
-                              fontweight: FontWeight.bold),
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            customs.maruButton(
-                                showArrow: true,
-                                iconSize: 15,
-                                fontSize: 16,
-                                size: Sizes.sm,
-                                text: "Our Members",
-                                onPressed: () {
-                                  setState(() {
-                                    index = 1;
-                                    widget.updateIndex(index);
-                                  });
-                                }),
-                            customs.maruButton(
-                                showArrow: true,
-                                iconSize: 15,
-                                fontSize: 16,
-                                size: Sizes.sm,
-                                text: "Collection History",
-                                onPressed: () {
-                                  index = 2;
-                                  widget.updateIndex(index);
-                                }),
-                          ],
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: height * 0.005,
-                ),
-                Container(
-                  padding: const EdgeInsets.all(10),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Text(
-                        "Collection Stats",
-                        style: customs.darkTextStyle(size: 12, underline: true),
-                      ),
-                      const Spacer(),
-                      Container(
-                        width: width * 0.25,
-                        child: customs.maruDropDownButton(
-                          defaultValue: drop_down,
-                          hintText: "Select days",
-                          items: dayFilter,
-                          onChange: (value) {
-                            setState(() {
-                              drop_down = value!;
-                            });
-
-                            // get the admin dashboard
-                            getAdminDash();
-                          },
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-                // SHOW THE COLLECTION IN LITERS
-                Skeletonizer(
-                  enabled: loading,
-                  child: Card(
-                    color: customs.whiteColor,
-                    margin:
-                        const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                    child: Row(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 20.0, horizontal: 10.0),
-                          child: CircleAvatar(
-                            backgroundColor: customs.successColor.withOpacity(0.2),
-                            radius: 30,
-                            child: Icon(
-                              Icons.water_drop_outlined,
-                              size: 24,
-                              color: customs.successColor,
-                            ),
-                          ),
-                        ),
-                        Column(
-                          children: [
-                            Column(
+                  Skeletonizer(
+                    enabled: loading,
+                    child: Card(
+                      color: customs.whiteColor,
+                      margin: const EdgeInsets.symmetric(
+                          vertical: 10, horizontal: 10),
+                      child: Row(
+                        children: <Widget>[
+                          Container(
+                            width: width*0.73,
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 10, horizontal: 10),
+                            child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
+                              children: <Widget>[
                                 Text(
-                                  "$collection_count Ltrs",
-                                  style: customs.darkTextStyle(
+                                  "$greetings,",
+                                  style: customs.primaryTextStyle(
                                       size: 16,
-                                      fontweight: FontWeight.bold),
+                                      fontweight: FontWeight.normal),
                                 ),
-                                const SizedBox(
-                                  height: 5,
+                                SizedBox(
+                                  height: height * 0.005,
                                 ),
                                 Text(
-                                  "$report_period",
-                                  style: customs.darkTextStyle(size: 12),
+                                  member_data != null
+                                      ? customs.toCamelCase(member_data['fullname'])
+                                      : "N/A",
+                                  style: customs.successTextStyle(
+                                      size: 20,
+                                      fontweight: FontWeight.bold
+                                  ),
                                 )
                               ],
-                            )
-                          ],
-                        ),
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Center(
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  Icon(
-                                    collection_status == "constant"
-                                        ? Icons.linear_scale
-                                        : collection_status == "increase"
-                                            ? Icons.arrow_drop_up
-                                            : Icons.arrow_drop_down,
-                                    color: collection_status == "constant"
-                                        ? customs.darkColor
-                                        : collection_status == "increase"
-                                            ? customs.successColor
-                                            : customs.dangerColor,
-                                  ),
-                                  Text(
-                                    collection_percentage,
-                                    style: collection_status == "constant"
-                                        ? customs.darkTextStyle(
-                                            size: 12,
-                                            fontweight: FontWeight.bold)
-                                        : (collection_status == "increase"
-                                            ? customs.successTextStyle(
-                                                size: 12,
-                                                fontweight: FontWeight.bold)
-                                            : customs.dangerTextStyle(
-                                                size: 12,
-                                                fontweight: FontWeight.bold)),
-                                  ),
-                                ],
-                              ),
                             ),
                           ),
-                        )
-                      ],
+                          const Spacer(),
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 10, horizontal: 10),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                CircleAvatar(
+                                  radius: 34,
+                                  backgroundColor: customs.primaryShade,
+                                  child: ClipOval(
+                                    child: (member_data != null) ?
+                                    Image.network(
+                                      "${customs.apiURLDomain}${member_data['profile_photo']}",
+                                      fit: BoxFit.cover,
+                                      width: double.infinity,
+                                      height: double.infinity,
+                                      loadingBuilder: (context, child, loadingProgress) {
+                                        if (loadingProgress == null) return child;
+                                        return Center(
+                                          child: CircularProgressIndicator(
+                                            color: customs.primaryColor,
+                                            backgroundColor: customs.secondaryShade_2,
+                                            value: loadingProgress.expectedTotalBytes != null
+                                                ? loadingProgress.cumulativeBytesLoaded /
+                                                loadingProgress.expectedTotalBytes!
+                                                : null,
+                                          ),
+                                        );
+                                      },
+                                      errorBuilder: (context, error, stackTrace) {
+                                        return Image.asset(
+                                          "assets/images/placeholderImg.jpg",
+                                          fit: BoxFit.cover,
+                                          width: double.infinity,
+                                          height: double.infinity,
+                                        );
+                                      },
+                                    )
+                                        :
+                                    Image.asset(
+                                      // profile.length > 0 ? profile : "assets/images/placeholderImg.jpg",
+                                      "assets/images/placeholderImg.jpg",
+                                      fit: BoxFit.cover,
+                                      width: double.infinity,
+                                      height: double.infinity,
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: height * 0.01,
+                                ),
+                                Skeleton.ignore(
+                                  child: Container(
+                                    color: customs.warningColor,
+                                    child: Text(
+                                      "Administrator",
+                                      style: customs.whiteTextStyle(size: 10),
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
                     ),
                   ),
-                ),
-                SizedBox(
-                  height: height * 0.005,
-                ),
-                Skeletonizer(
-                  enabled: loading,
-                  child: Skeleton.leaf(
+                  SizedBox(
+                    height: height * 0.01,
+                  ),
+                  Card(
+                    color: customs.whiteColor,
+                    margin:
+                        const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                     child: Container(
-                      padding: const EdgeInsets.fromLTRB(10, 10, 0, 10),
-                      margin: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 10),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10.0),
-                        color: customs.whiteColor,
-                      ),
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 10, horizontal: 10.0),
                       child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "MILK COLLECTION STATS",
-                            style: customs.darkTextStyle(
-                                size: 12,
+                            "Quick Actions",
+                            style: customs.primaryTextStyle(
+                                size: 10,
                                 underline: true,
                                 fontweight: FontWeight.bold),
                           ),
-                          SizedBox(
-                            height: 30,
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              customs.maruButton(
+                                  showArrow: true,
+                                  iconSize: 15,
+                                  fontSize: 16,
+                                  size: Sizes.sm,
+                                  text: "Our Members",
+                                  onPressed: () {
+                                    setState(() {
+                                      index = 1;
+                                      widget.updateIndex(index);
+                                    });
+                                  }),
+                              customs.maruButton(
+                                  showArrow: true,
+                                  iconSize: 15,
+                                  fontSize: 16,
+                                  size: Sizes.sm,
+                                  text: "Collection History",
+                                  onPressed: () {
+                                    index = 2;
+                                    widget.updateIndex(index);
+                                  }),
+                            ],
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: height * 0.005,
+                  ),
+                  Container(
+                    padding: const EdgeInsets.all(10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Text(
+                          "Collection Stats",
+                          style: customs.darkTextStyle(size: 12, underline: true),
+                        ),
+                        const Spacer(),
+                        Container(
+                          width: width * 0.25,
+                          child: customs.maruDropDownButton(
+                            defaultValue: drop_down,
+                            hintText: "Select days",
+                            items: dayFilter,
+                            onChange: (value) {
+                              setState(() {
+                                drop_down = value!;
+                              });
+
+                              // get the admin dashboard
+                              getAdminDash();
+                            },
                           ),
-                          AspectRatio(
-                            aspectRatio: 2.0,
-                            child: BarChart(
-                              BarChartData(
-                                  barTouchData: BarTouchData(
-                                      touchTooltipData: BarTouchTooltipData(
-                                    getTooltipColor: (group) =>
-                                        Colors.transparent,
-                                    tooltipPadding: EdgeInsets.zero,
-                                    tooltipMargin: 2,
-                                    getTooltipItem: (
-                                      BarChartGroupData group,
-                                      int groupIndex,
-                                      BarChartRodData rod,
-                                      int rodIndex,
-                                    ) {
-                                      return BarTooltipItem(
-                                        "${rod.toY.round()} Ltrs",
-                                        customs.darkTextStyle(
-                                            size: 8,
-                                            fontweight: FontWeight.bold),
-                                      );
-                                    },
-                                  )),
-                                  borderData: FlBorderData(
-                                      show: true,
-                                      border: Border(
-                                        left: BorderSide(
-                                            color: customs.primaryColor,
-                                            width: 1),
-                                      )),
-                                  barGroups: collectionPlot,
-                                  gridData: FlGridData(
-                                    show: true,
-                                    checkToShowHorizontalLine: (value) =>
-                                        value % 10 == 0,
-                                    getDrawingHorizontalLine: (value) => FlLine(
-                                      color: customs.secondaryShade_2,
-                                      strokeWidth: 1,
-                                    ),
-                                    drawVerticalLine: false,
+                        )
+                      ],
+                    ),
+                  ),
+                  // SHOW THE COLLECTION IN LITERS
+                  Skeletonizer(
+                    enabled: loading,
+                    child: Card(
+                      color: customs.whiteColor,
+                      margin:
+                          const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                      child: Row(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 20.0, horizontal: 10.0),
+                            child: CircleAvatar(
+                              backgroundColor: customs.successColor.withOpacity(0.2),
+                              radius: 30,
+                              child: Icon(
+                                Icons.water_drop_outlined,
+                                size: 24,
+                                color: customs.successColor,
+                              ),
+                            ),
+                          ),
+                          Column(
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "$collection_count Ltrs",
+                                    style: customs.darkTextStyle(
+                                        size: 16,
+                                        fontweight: FontWeight.bold),
                                   ),
-                                  titlesData: FlTitlesData(
-                                    leftTitles: AxisTitles(
-                                        axisNameWidget: Center(
-                                            child: Text("Quantity in Ltrs",
-                                                style: customs.primaryTextStyle(
-                                                    size: 12))),
-                                        sideTitles: SideTitles(
-                                          showTitles: true,
-                                          reservedSize: 20,
-                                          getTitlesWidget: (value, meta) {
-                                            return Text(
-                                              meta.formattedValue,
-                                              textAlign: TextAlign.center,
-                                              style: customs.darkTextStyle(
-                                                  size: 10,
-                                                  fontweight: FontWeight.bold),
-                                            );
-                                          },
+                                  const SizedBox(
+                                    height: 5,
+                                  ),
+                                  Text(
+                                    "$report_period",
+                                    style: customs.darkTextStyle(size: 12),
+                                  )
+                                ],
+                              )
+                            ],
+                          ),
+                          Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Center(
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    Icon(
+                                      collection_status == "constant"
+                                          ? Icons.linear_scale
+                                          : collection_status == "increase"
+                                              ? Icons.arrow_drop_up
+                                              : Icons.arrow_drop_down,
+                                      color: collection_status == "constant"
+                                          ? customs.darkColor
+                                          : collection_status == "increase"
+                                              ? customs.successColor
+                                              : customs.dangerColor,
+                                    ),
+                                    Text(
+                                      collection_percentage,
+                                      style: collection_status == "constant"
+                                          ? customs.darkTextStyle(
+                                              size: 12,
+                                              fontweight: FontWeight.bold)
+                                          : (collection_status == "increase"
+                                              ? customs.successTextStyle(
+                                                  size: 12,
+                                                  fontweight: FontWeight.bold)
+                                              : customs.dangerTextStyle(
+                                                  size: 12,
+                                                  fontweight: FontWeight.bold)),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: height * 0.005,
+                  ),
+                  Skeletonizer(
+                    enabled: loading,
+                    child: Skeleton.leaf(
+                      child: Container(
+                        padding: const EdgeInsets.fromLTRB(10, 10, 0, 10),
+                        margin: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 10),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10.0),
+                          color: customs.whiteColor,
+                        ),
+                        child: Column(
+                          children: [
+                            Text(
+                              "MILK COLLECTION STATS",
+                              style: customs.darkTextStyle(
+                                  size: 12,
+                                  underline: true,
+                                  fontweight: FontWeight.bold),
+                            ),
+                            SizedBox(
+                              height: 30,
+                            ),
+                            AspectRatio(
+                              aspectRatio: 2.0,
+                              child: BarChart(
+                                BarChartData(
+                                    barTouchData: BarTouchData(
+                                        touchTooltipData: BarTouchTooltipData(
+                                      getTooltipColor: (group) =>
+                                          Colors.transparent,
+                                      tooltipPadding: EdgeInsets.zero,
+                                      tooltipMargin: 2,
+                                      getTooltipItem: (
+                                        BarChartGroupData group,
+                                        int groupIndex,
+                                        BarChartRodData rod,
+                                        int rodIndex,
+                                      ) {
+                                        return BarTooltipItem(
+                                          "${rod.toY.round()} Ltrs",
+                                          customs.darkTextStyle(
+                                              size: 8,
+                                              fontweight: FontWeight.bold),
+                                        );
+                                      },
+                                    )),
+                                    borderData: FlBorderData(
+                                        show: true,
+                                        border: Border(
+                                          left: BorderSide(
+                                              color: customs.primaryColor,
+                                              width: 1),
                                         )),
-                                    bottomTitles: AxisTitles(
-                                        axisNameWidget: Center(
-                                            child: Text("",
-                                                style: customs.primaryTextStyle(
-                                                    size: 12))),
-                                        sideTitles: SideTitles(
-                                          showTitles: true,
-                                          reservedSize: 20,
-                                          getTitlesWidget: (value, meta) {
-                                            return Transform.rotate(
-                                              angle: -30 * (3.1415927 / 180),
-                                              child: Text(
-                                                daysOfWeek[int.parse(
-                                                    meta.formattedValue)],
+                                    barGroups: collectionPlot,
+                                    gridData: FlGridData(
+                                      show: true,
+                                      checkToShowHorizontalLine: (value) =>
+                                          value % 10 == 0,
+                                      getDrawingHorizontalLine: (value) => FlLine(
+                                        color: customs.secondaryShade_2,
+                                        strokeWidth: 1,
+                                      ),
+                                      drawVerticalLine: false,
+                                    ),
+                                    titlesData: FlTitlesData(
+                                      leftTitles: AxisTitles(
+                                          axisNameWidget: Center(
+                                              child: Text("Quantity in Ltrs",
+                                                  style: customs.primaryTextStyle(
+                                                      size: 12))),
+                                          sideTitles: SideTitles(
+                                            showTitles: true,
+                                            reservedSize: 20,
+                                            getTitlesWidget: (value, meta) {
+                                              return Text(
+                                                meta.formattedValue,
                                                 textAlign: TextAlign.center,
                                                 style: customs.darkTextStyle(
                                                     size: 10,
                                                     fontweight: FontWeight.bold),
-                                              ),
-                                            );
-                                          },
-                                        )),
-                                    rightTitles: AxisTitles(
-                                        sideTitles:
-                                            SideTitles(showTitles: false)),
-                                    topTitles: AxisTitles(
-                                        sideTitles: SideTitles(
-                                      showTitles: false,
-                                    )),
-                                  )), // Optional
+                                              );
+                                            },
+                                          )),
+                                      bottomTitles: AxisTitles(
+                                          axisNameWidget: Center(
+                                              child: Text("",
+                                                  style: customs.primaryTextStyle(
+                                                      size: 12))),
+                                          sideTitles: SideTitles(
+                                            showTitles: true,
+                                            reservedSize: 20,
+                                            getTitlesWidget: (value, meta) {
+                                              return Transform.rotate(
+                                                angle: -30 * (3.1415927 / 180),
+                                                child: Text(
+                                                  daysOfWeek[int.parse(
+                                                      meta.formattedValue)],
+                                                  textAlign: TextAlign.center,
+                                                  style: customs.darkTextStyle(
+                                                      size: 10,
+                                                      fontweight: FontWeight.bold),
+                                                ),
+                                              );
+                                            },
+                                          )),
+                                      rightTitles: AxisTitles(
+                                          sideTitles:
+                                              SideTitles(showTitles: false)),
+                                      topTitles: AxisTitles(
+                                          sideTitles: SideTitles(
+                                        showTitles: false,
+                                      )),
+                                    )), // Optional
+                              ),
                             ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    width: width * 0.7,
+                    child: Divider(
+                      height: 10,
+                    )
+                  ),
+                  // SHOW THE FARMER WHO GAVE MILK STATISTICS
+                  Container(
+                    padding: const EdgeInsets.all(10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Text(
+                          "Farmer Stats",
+                          style: customs.darkTextStyle(size: 12, underline: true),
+                        ),
+                        const Spacer()
+                      ],
+                    ),
+                  ),
+                  Skeletonizer(
+                    enabled: loading,
+                    child: Card(
+                      color: customs.whiteColor,
+                      margin:
+                          const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                      child: Row(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 20.0, horizontal: 10.0),
+                            child: CircleAvatar(
+                              backgroundColor:
+                                  customs.successColor.withOpacity(0.2),
+                              radius: 30,
+                              child: Icon(
+                                Icons.people_alt_outlined,
+                                size: 24,
+                                color: customs.successColor,
+                              ),
+                            ),
+                          ),
+                          Column(
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "$member_present_count Farmers Registered",
+                                    style: customs.darkTextStyle(
+                                        size: 16,
+                                        fontweight: FontWeight.bold),
+                                  ),
+                                  const SizedBox(
+                                    height: 5,
+                                  ),
+                                  Text(
+                                    "$report_period",
+                                    style:
+                                        customs.darkTextStyle(size: 12),
+                                  )
+                                ],
+                              )
+                            ],
                           ),
                         ],
                       ),
                     ),
                   ),
-                ),
-                SizedBox(
-                  width: width * 0.7,
-                  child: Divider(
-                    height: 10,
-                  )
-                ),
-                // SHOW THE FARMER WHO GAVE MILK STATISTICS
-                Container(
-                  padding: const EdgeInsets.all(10),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Text(
-                        "Farmer Stats",
-                        style: customs.darkTextStyle(size: 12, underline: true),
-                      ),
-                      const Spacer()
-                    ],
+                  SizedBox(
+                    height: height * 0.005,
                   ),
-                ),
-                Skeletonizer(
-                  enabled: loading,
-                  child: Card(
-                    color: customs.whiteColor,
-                    margin:
-                        const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                    child: Row(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 20.0, horizontal: 10.0),
-                          child: CircleAvatar(
-                            backgroundColor:
-                                customs.successColor.withOpacity(0.2),
-                            radius: 30,
-                            child: Icon(
-                              Icons.people_alt_outlined,
-                              size: 24,
-                              color: customs.successColor,
-                            ),
-                          ),
-                        ),
-                        Column(
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "$member_present_count Farmers Registered",
-                                  style: customs.darkTextStyle(
-                                      size: 16,
-                                      fontweight: FontWeight.bold),
-                                ),
-                                const SizedBox(
-                                  height: 5,
-                                ),
-                                Text(
-                                  "$report_period",
-                                  style:
-                                      customs.darkTextStyle(size: 12),
-                                )
-                              ],
-                            )
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: height * 0.005,
-                ),
-                Skeletonizer(
-                  enabled: loading,
-                  child: Container(
-                    padding: const EdgeInsets.fromLTRB(10, 10, 0, 10),
-                    margin: const EdgeInsets.symmetric(
-                        horizontal: 10, vertical: 10),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10.0),
-                      color: customs.whiteColor,
-                    ),
-                    child: Column(
-                      children: [
-                        Text(
-                          "No. OF FARMERS REGISTERED",
-                          style: customs.darkTextStyle(
-                              size: 12,
-                              underline: true,
-                              fontweight: FontWeight.bold),
-                        ),
-                        SizedBox(
-                          height: 30,
-                        ),
-                        AspectRatio(
-                          aspectRatio: 2.0,
-                          child: BarChart(
-                            BarChartData(
-                                barTouchData: BarTouchData(
-                                    touchTooltipData: BarTouchTooltipData(
-                                  getTooltipColor: (group) =>
-                                      Colors.transparent,
-                                  tooltipPadding: EdgeInsets.zero,
-                                  tooltipMargin: 2,
-                                  getTooltipItem: (
-                                    BarChartGroupData group,
-                                    int groupIndex,
-                                    BarChartRodData rod,
-                                    int rodIndex,
-                                  ) {
-                                    return BarTooltipItem(
-                                      "${rod.toY.round()}",
-                                      customs.darkTextStyle(
-                                          size: 8, fontweight: FontWeight.bold),
-                                    );
-                                  },
-                                )),
-                                borderData: FlBorderData(
-                                    show: true,
-                                    border: Border(
-                                      left: BorderSide(
-                                          color: customs.primaryColor,
-                                          width: 1),
-                                    )),
-                                barGroups: membersPresentPlot,
-                                gridData: FlGridData(
-                                  show: true,
-                                  checkToShowHorizontalLine: (value) =>
-                                      value % 10 == 0,
-                                  getDrawingHorizontalLine: (value) => FlLine(
-                                    color: customs.secondaryShade_2,
-                                    strokeWidth: 1,
-                                  ),
-                                  drawVerticalLine: false,
-                                ),
-                                titlesData: FlTitlesData(
-                                  leftTitles: AxisTitles(
-                                      axisNameWidget: Center(
-                                          child: Text("Number of Farmers",
-                                              style: customs.primaryTextStyle(
-                                                  size: 12))),
-                                      sideTitles: SideTitles(
-                                        showTitles: true,
-                                        reservedSize: 20,
-                                        getTitlesWidget: (value, meta) {
-                                          return Text(
-                                            meta.formattedValue,
-                                            textAlign: TextAlign.center,
-                                            style: customs.darkTextStyle(
-                                                size: 10,
-                                                fontweight: FontWeight.bold),
-                                          );
-                                        },
-                                      )),
-                                  bottomTitles: AxisTitles(
-                                      axisNameWidget: Center(
-                                          child: Text("",
-                                              style: customs.primaryTextStyle(
-                                                  size: 12))),
-                                      sideTitles: SideTitles(
-                                        showTitles: true,
-                                        reservedSize: 20,
-                                        getTitlesWidget: (value, meta) {
-                                          return Transform.rotate(
-                                            angle: -30 * (3.1415927 / 180),
-                                            child: Text(
-                                              daysOfWeek[
-                                                  int.parse(meta.formattedValue)],
-                                              textAlign: TextAlign.center,
-                                              style: customs.darkTextStyle(
-                                                  size: 10,
-                                                  fontweight: FontWeight.bold),
-                                            ),
-                                          );
-                                        },
-                                      )),
-                                  rightTitles: AxisTitles(
-                                      sideTitles:
-                                          SideTitles(showTitles: false)),
-                                  topTitles: AxisTitles(
-                                      sideTitles: SideTitles(
-                                    showTitles: false,
-                                  )),
-                                )), // Optional
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                SizedBox(
-                    width: width * 0.7,
-                    child: Divider(
-                      height: 10,
-                    )),
-                // SHOW THE FARMER WHO GAVE MILK STATISTICS
-                Container(
-                  padding: const EdgeInsets.all(10),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Text(
-                        "New Member Stats",
-                        style: customs.darkTextStyle(size: 12, underline: true),
-                      ),
-                      const Spacer()
-                    ],
-                  ),
-                ),
-                Skeletonizer(
-                  enabled: loading,
-                  child: Card(
-                    color: customs.whiteColor,
-                    margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                    child: Row(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 20.0, horizontal: 10.0),
-                          child: CircleAvatar(
-                            backgroundColor:
-                                customs.successColor.withOpacity(0.2),
-                            radius: 30,
-                            child: Icon(
-                              Icons.people_alt_outlined,
-                              size: 24,
-                              color: customs.successColor,
-                            ),
-                          ),
-                        ),
-                        Column(
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "$members_registered_count New Members",
-                                  style: customs.darkTextStyle(
-                                      size: 16,
-                                      fontweight: FontWeight.bold),
-                                ),
-                                const SizedBox(
-                                  height: 5,
-                                ),
-                                Text(
-                                  "$report_period",
-                                  style:
-                                      customs.darkTextStyle(size: 12),
-                                )
-                              ],
-                            )
-                          ],
-                        ),
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Center(
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  Icon(
-                                    member_status == "constant"
-                                        ? Icons.linear_scale
-                                        : member_status == "increase"
-                                            ? Icons.arrow_drop_up
-                                            : Icons.arrow_drop_down,
-                                    color: member_status == "constant"
-                                        ? customs.darkColor
-                                        : member_status == "increase"
-                                            ? customs.successColor
-                                            : customs.dangerColor,
-                                  ),
-                                  Text(
-                                    member_percentage,
-                                    style: member_status == "constant"
-                                        ? customs.darkTextStyle(
-                                            size: 12,
-                                            fontweight: FontWeight.bold)
-                                        : (member_status == "increase"
-                                            ? customs.successTextStyle(
-                                                size: 12,
-                                                fontweight: FontWeight.bold)
-                                            : customs.dangerTextStyle(
-                                                size: 12,
-                                                fontweight: FontWeight.bold)),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: height * 0.005,
-                ),
-                Skeletonizer(
-                  enabled: loading,
-                  child: Skeleton.leaf(
+                  Skeletonizer(
+                    enabled: loading,
                     child: Container(
                       padding: const EdgeInsets.fromLTRB(10, 10, 0, 10),
                       margin: const EdgeInsets.symmetric(
@@ -1556,7 +1330,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                       child: Column(
                         children: [
                           Text(
-                            "No. OF NEW MEMBERS",
+                            "No. OF FARMERS REGISTERED",
                             style: customs.darkTextStyle(
                                 size: 12,
                                 underline: true,
@@ -1584,8 +1358,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                                       return BarTooltipItem(
                                         "${rod.toY.round()}",
                                         customs.darkTextStyle(
-                                            size: 8,
-                                            fontweight: FontWeight.bold),
+                                            size: 8, fontweight: FontWeight.bold),
                                       );
                                     },
                                   )),
@@ -1596,7 +1369,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                                             color: customs.primaryColor,
                                             width: 1),
                                       )),
-                                  barGroups: newMembersPlot,
+                                  barGroups: membersPresentPlot,
                                   gridData: FlGridData(
                                     show: true,
                                     checkToShowHorizontalLine: (value) =>
@@ -1638,8 +1411,8 @@ class _AdminDashboardState extends State<AdminDashboard> {
                                             return Transform.rotate(
                                               angle: -30 * (3.1415927 / 180),
                                               child: Text(
-                                                daysOfWeek[int.parse(
-                                                    meta.formattedValue)],
+                                                daysOfWeek[
+                                                    int.parse(meta.formattedValue)],
                                                 textAlign: TextAlign.center,
                                                 style: customs.darkTextStyle(
                                                     size: 10,
@@ -1662,12 +1435,242 @@ class _AdminDashboardState extends State<AdminDashboard> {
                       ),
                     ),
                   ),
-                )
-              ],
+                  SizedBox(
+                      width: width * 0.7,
+                      child: Divider(
+                        height: 10,
+                      )),
+                  // SHOW THE FARMER WHO GAVE MILK STATISTICS
+                  Container(
+                    padding: const EdgeInsets.all(10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Text(
+                          "New Member Stats",
+                          style: customs.darkTextStyle(size: 12, underline: true),
+                        ),
+                        const Spacer()
+                      ],
+                    ),
+                  ),
+                  Skeletonizer(
+                    enabled: loading,
+                    child: Card(
+                      color: customs.whiteColor,
+                      margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                      child: Row(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 20.0, horizontal: 10.0),
+                            child: CircleAvatar(
+                              backgroundColor:
+                                  customs.successColor.withOpacity(0.2),
+                              radius: 30,
+                              child: Icon(
+                                Icons.people_alt_outlined,
+                                size: 24,
+                                color: customs.successColor,
+                              ),
+                            ),
+                          ),
+                          Column(
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "$members_registered_count New Members",
+                                    style: customs.darkTextStyle(
+                                        size: 16,
+                                        fontweight: FontWeight.bold),
+                                  ),
+                                  const SizedBox(
+                                    height: 5,
+                                  ),
+                                  Text(
+                                    "$report_period",
+                                    style:
+                                        customs.darkTextStyle(size: 12),
+                                  )
+                                ],
+                              )
+                            ],
+                          ),
+                          Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Center(
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    Icon(
+                                      member_status == "constant"
+                                          ? Icons.linear_scale
+                                          : member_status == "increase"
+                                              ? Icons.arrow_drop_up
+                                              : Icons.arrow_drop_down,
+                                      color: member_status == "constant"
+                                          ? customs.darkColor
+                                          : member_status == "increase"
+                                              ? customs.successColor
+                                              : customs.dangerColor,
+                                    ),
+                                    Text(
+                                      member_percentage,
+                                      style: member_status == "constant"
+                                          ? customs.darkTextStyle(
+                                              size: 12,
+                                              fontweight: FontWeight.bold)
+                                          : (member_status == "increase"
+                                              ? customs.successTextStyle(
+                                                  size: 12,
+                                                  fontweight: FontWeight.bold)
+                                              : customs.dangerTextStyle(
+                                                  size: 12,
+                                                  fontweight: FontWeight.bold)),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: height * 0.005,
+                  ),
+                  Skeletonizer(
+                    enabled: loading,
+                    child: Skeleton.leaf(
+                      child: Container(
+                        padding: const EdgeInsets.fromLTRB(10, 10, 0, 10),
+                        margin: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 10),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10.0),
+                          color: customs.whiteColor,
+                        ),
+                        child: Column(
+                          children: [
+                            Text(
+                              "No. OF NEW MEMBERS",
+                              style: customs.darkTextStyle(
+                                  size: 12,
+                                  underline: true,
+                                  fontweight: FontWeight.bold),
+                            ),
+                            SizedBox(
+                              height: 30,
+                            ),
+                            AspectRatio(
+                              aspectRatio: 2.0,
+                              child: BarChart(
+                                BarChartData(
+                                    barTouchData: BarTouchData(
+                                        touchTooltipData: BarTouchTooltipData(
+                                      getTooltipColor: (group) =>
+                                          Colors.transparent,
+                                      tooltipPadding: EdgeInsets.zero,
+                                      tooltipMargin: 2,
+                                      getTooltipItem: (
+                                        BarChartGroupData group,
+                                        int groupIndex,
+                                        BarChartRodData rod,
+                                        int rodIndex,
+                                      ) {
+                                        return BarTooltipItem(
+                                          "${rod.toY.round()}",
+                                          customs.darkTextStyle(
+                                              size: 8,
+                                              fontweight: FontWeight.bold),
+                                        );
+                                      },
+                                    )),
+                                    borderData: FlBorderData(
+                                        show: true,
+                                        border: Border(
+                                          left: BorderSide(
+                                              color: customs.primaryColor,
+                                              width: 1),
+                                        )),
+                                    barGroups: newMembersPlot,
+                                    gridData: FlGridData(
+                                      show: true,
+                                      checkToShowHorizontalLine: (value) =>
+                                          value % 10 == 0,
+                                      getDrawingHorizontalLine: (value) => FlLine(
+                                        color: customs.secondaryShade_2,
+                                        strokeWidth: 1,
+                                      ),
+                                      drawVerticalLine: false,
+                                    ),
+                                    titlesData: FlTitlesData(
+                                      leftTitles: AxisTitles(
+                                          axisNameWidget: Center(
+                                              child: Text("Number of Farmers",
+                                                  style: customs.primaryTextStyle(
+                                                      size: 12))),
+                                          sideTitles: SideTitles(
+                                            showTitles: true,
+                                            reservedSize: 20,
+                                            getTitlesWidget: (value, meta) {
+                                              return Text(
+                                                meta.formattedValue,
+                                                textAlign: TextAlign.center,
+                                                style: customs.darkTextStyle(
+                                                    size: 10,
+                                                    fontweight: FontWeight.bold),
+                                              );
+                                            },
+                                          )),
+                                      bottomTitles: AxisTitles(
+                                          axisNameWidget: Center(
+                                              child: Text("",
+                                                  style: customs.primaryTextStyle(
+                                                      size: 12))),
+                                          sideTitles: SideTitles(
+                                            showTitles: true,
+                                            reservedSize: 20,
+                                            getTitlesWidget: (value, meta) {
+                                              return Transform.rotate(
+                                                angle: -30 * (3.1415927 / 180),
+                                                child: Text(
+                                                  daysOfWeek[int.parse(
+                                                      meta.formattedValue)],
+                                                  textAlign: TextAlign.center,
+                                                  style: customs.darkTextStyle(
+                                                      size: 10,
+                                                      fontweight: FontWeight.bold),
+                                                ),
+                                              );
+                                            },
+                                          )),
+                                      rightTitles: AxisTitles(
+                                          sideTitles:
+                                              SideTitles(showTitles: false)),
+                                      topTitles: AxisTitles(
+                                          sideTitles: SideTitles(
+                                        showTitles: false,
+                                      )),
+                                    )), // Optional
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  )
+                ],
+              ),
             ),
-          ),
-        );
-      },
-    ));
+          );
+        },
+      )),
+    );
   }
 }

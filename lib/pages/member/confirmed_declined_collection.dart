@@ -449,119 +449,124 @@ class _ConfirmedDeclinedCollectionState extends State<ConfirmedDeclinedCollectio
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: customs.whiteColor,
-      appBar: AppBar(
+    return customs.refreshIndicator(
+      onRefresh: () async{
+        loadCollectionHistory(context);
+      },
+      child: Scaffold(
         backgroundColor: customs.whiteColor,
-        elevation: 1,
-        title: Builder(builder: (context) {
-          double screenWidth = MediaQuery.of(context).size.width;
-          return Container(
-            width: screenWidth,
-            child: Center(
-              child: Container(
-                width: 250,
-                child: Row(
-                  children: [
-                    SizedBox(
-                      height: 70,
-                      child:
-                      Image(image: AssetImage("assets/images/maru-nobg.png")),
-                    ),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    Text(
-                      "Maru Dairy Co-op",
-                      style: customs.primaryTextStyle(
-                          size: 20, fontweight: FontWeight.bold),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          );
-        }),
-      ),
-      body: SafeArea(child: LayoutBuilder(
-        builder: (context, constraints) {
-          double width = constraints.maxWidth;
-          double height = constraints.maxHeight;
-          double calculatedWidth = width / 2 - 170;
-          calculatedWidth = calculatedWidth > 0 ? calculatedWidth : 0;
-          return Container(
-            height: height,
-            width: width,
-            decoration: BoxDecoration(
-                color: customs.secondaryShade_2.withOpacity(0.2)
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10),
-                  child: Text(collectionStatus == "1" ? "Confirmed Collections" : (collectionStatus == "0" ? "Rejected/Pending Collection" : "Not-Confirmed Collection"), style: collectionStatus == "1" ? customs.successTextStyle(size: 20, fontweight: FontWeight.bold) : customs.secondaryTextStyle(size: 20, fontweight: FontWeight.bold),),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(
-                      horizontal: (width * 0.2), vertical: 10),
-                  child: Divider(
-                    color: customs.secondaryShade_2,
-                    height: 0.1,
-                    thickness: 0.5,
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                  child: Row(children: [
-                    Text(
-                      "Last 7 days",
-                      textAlign: TextAlign.left,
-                      style:
-                      customs.secondaryTextStyle(size: 12, underline: true),
-                    ),
-                  ]),
-                ),
-                Container(
-                  margin: EdgeInsets.symmetric(vertical: 10),
+        appBar: AppBar(
+          backgroundColor: customs.whiteColor,
+          elevation: 1,
+          title: Builder(builder: (context) {
+            double screenWidth = MediaQuery.of(context).size.width;
+            return Container(
+              width: screenWidth,
+              child: Center(
+                child: Container(
+                  width: 250,
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Container(
-                        width: width * 0.9,
-                          child: customs.maruSearchTextField(
-                              isChanged: (value){
-                                findKeyWord(value);
-                              },
-                              editingController: searchMember,
-                              label: "Type to Search",
-                              hintText: "Enter keyword")
-                      )
+                      SizedBox(
+                        height: 70,
+                        child:
+                        Image(image: AssetImage("assets/images/maru-nobg.png")),
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Text(
+                        "Maru Dairy Co-op",
+                        style: customs.primaryTextStyle(
+                            size: 20, fontweight: FontWeight.bold),
+                      ),
                     ],
                   ),
                 ),
-                Container(
-                  margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                  height: height - 140,
-                  decoration: BoxDecoration(
-                    color: customs.whiteColor,
-                    borderRadius: BorderRadius.circular(10),
+              ),
+            );
+          }),
+        ),
+        body: SafeArea(child: LayoutBuilder(
+          builder: (context, constraints) {
+            double width = constraints.maxWidth;
+            double height = constraints.maxHeight;
+            double calculatedWidth = width / 2 - 170;
+            calculatedWidth = calculatedWidth > 0 ? calculatedWidth : 0;
+            return Container(
+              height: height,
+              width: width,
+              decoration: BoxDecoration(
+                  color: customs.secondaryShade_2.withOpacity(0.2)
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 10),
+                    child: Text(collectionStatus == "1" ? "Confirmed Collections" : (collectionStatus == "0" ? "Rejected/Pending Collection" : "Not-Confirmed Collection"), style: collectionStatus == "1" ? customs.successTextStyle(size: 20, fontweight: FontWeight.bold) : customs.secondaryTextStyle(size: 20, fontweight: FontWeight.bold),),
                   ),
-                  padding: const EdgeInsets.symmetric(vertical: 10),
-                  // color: Colors.red,
-                  child: Skeletonizer(
-                    enabled: loading,
-                    child: ListView(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      children: collectionHistory,
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: (width * 0.2), vertical: 10),
+                    child: Divider(
+                      color: customs.secondaryShade_2,
+                      height: 0.1,
+                      thickness: 0.5,
                     ),
                   ),
-                )
-              ],
-            ),
-          );
-        },
-      )),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                    child: Row(children: [
+                      Text(
+                        "Last 7 days",
+                        textAlign: TextAlign.left,
+                        style:
+                        customs.secondaryTextStyle(size: 12, underline: true),
+                      ),
+                    ]),
+                  ),
+                  Container(
+                    margin: EdgeInsets.symmetric(vertical: 10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          width: width * 0.9,
+                            child: customs.maruSearchTextField(
+                                isChanged: (value){
+                                  findKeyWord(value);
+                                },
+                                editingController: searchMember,
+                                label: "Type to Search",
+                                hintText: "Enter keyword")
+                        )
+                      ],
+                    ),
+                  ),
+                  Container(
+                    margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                    height: height - 140,
+                    decoration: BoxDecoration(
+                      color: customs.whiteColor,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    // color: Colors.red,
+                    child: Skeletonizer(
+                      enabled: loading,
+                      child: ListView(
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        children: collectionHistory,
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            );
+          },
+        )),
+      ),
     );
   }
 }
