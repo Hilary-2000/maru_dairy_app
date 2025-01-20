@@ -48,14 +48,15 @@ class _AdministratorListState extends State<AdministratorList> {
     });
   }
 
-  void didChangeDependencies(){
+  Future<void> didChangeDependencies() async {
     super.didChangeDependencies();
 
     if(!_init){
+      await customs.initialize();
       // double width
       double width = MediaQuery.of(context).size.width;
       setState(() {
-        colors_shade = [customs.primaryShade, customs.secondaryShade, customs.warningShade, customs.darkShade, customs.successShade];
+        colors_shade = [customs.primaryShade, customs.secondaryShade.withOpacity(0.2), customs.warningShade, customs.successShade.withOpacity(0.2), customs.successShade.withOpacity(0.2)];
         textStyles = [
           customs.primaryTextStyle(
               size: 18, fontweight: FontWeight.bold
@@ -123,6 +124,9 @@ class _AdministratorListState extends State<AdministratorList> {
       child: Scaffold(
         backgroundColor: customs.whiteColor,
         appBar: AppBar(
+          iconTheme: IconThemeData(
+            color: customs.darkColor
+          ),
           backgroundColor: customs.whiteColor,
           elevation: 1,
           title: Builder(builder: (context) {
@@ -196,6 +200,7 @@ class _AdministratorListState extends State<AdministratorList> {
                   ),
                   Skeletonizer(
                     enabled: loading,
+                    effect: customs.maruShimmerEffect(),
                     child: Container(
                       width: width * 0.95,
                       padding: const EdgeInsets.all(8),
@@ -336,7 +341,7 @@ class _AdministratorListState extends State<AdministratorList> {
           },
         )),
         floatingActionButton: CircleAvatar(
-          backgroundColor: customs.secondaryShade_2,
+          backgroundColor: customs.secondaryShade.withOpacity(0.2),
           radius: 25,
           child: IconButton(
             onPressed: () async {

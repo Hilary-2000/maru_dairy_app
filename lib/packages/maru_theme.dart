@@ -2,10 +2,12 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:maru/packages/api_connection.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 enum Type { primary, secondary, warning, danger, info, dark, white, success }
 
@@ -14,13 +16,17 @@ enum Sizes { lg, md, sm, xm }
 class CustomThemes{
   String apiURLDomain = "http://192.168.88.234:8000";
   // String apiURLDomain = "https://maru.ladybirdsmis.com";
+  final FlutterSecureStorage _storage = const FlutterSecureStorage();
+  String color_mode = "light";
+
+
   // colors
   Color primaryColor = const Color.fromRGBO(1, 176, 241, 1);
   Color secondaryColor = const Color.fromRGBO(90, 98, 104, 1);
   Color dangerColor = const Color.fromRGBO(247, 14, 13, 1);
   Color warningColor = const Color.fromRGBO(255, 193, 7, 1);
   Color infoColor = const Color.fromRGBO(23, 162, 184, 1);
-  Color successColor = const Color.fromRGBO(40, 167, 69, 1);
+  Color successColor = const Color.fromRGBO(8, 157, 55, 1);
   Color whiteColor = const Color.fromRGBO(255, 255, 255, 1);
   Color darkColor = const Color.fromRGBO(0, 0, 0, 1);
 
@@ -41,9 +47,44 @@ class CustomThemes{
   Color dangerShade_2 = const Color.fromRGBO(251, 114, 114, 0.5);
   Color warningShade_2 = const Color.fromRGBO(240, 230, 172, 0.5);
   Color infoShade_2 = const Color.fromRGBO(149, 213, 223, 0.5);
-  Color successShade_2 = const Color.fromRGBO(159, 216, 172, 0.5);
+  Color successShade_2 = const Color.fromRGBO(8, 157, 55, 0.5);
   Color whiteShade_2 = const Color.fromRGBO(255, 255, 255, 0.5);
   Color darkShade_2 = const Color.fromRGBO(121, 121, 121, 0.5);
+
+  Future <void> initialize() async{
+    color_mode = (await _storage.read(key: 'bright_mode'))!;
+    print("Status : ${color_mode}");
+    // colors
+    primaryColor = const Color.fromRGBO(1, 176, 241, 1);
+    secondaryColor = color_mode == "light" ? const Color.fromRGBO(90, 98, 104, 1) : const Color.fromRGBO(210, 210, 210, 1);
+    dangerColor = const Color.fromRGBO(247, 14, 13, 1);
+    warningColor = const Color.fromRGBO(255, 193, 7, 1);
+    infoColor = const Color.fromRGBO(23, 162, 184, 1);
+    successColor = const Color.fromRGBO(40, 167, 69, 1);
+    whiteColor = color_mode == "light" ? const Color.fromRGBO(255, 255, 255, 1) : const Color.fromRGBO(41, 41, 41, 1);
+    darkColor = color_mode == "light" ? const Color.fromRGBO(41, 41, 41, 1) : const Color.fromRGBO(255, 255, 255, 1);
+
+//   light
+    primaryShade = const Color.fromRGBO(184, 232, 249, 1);
+    secondaryShade = color_mode == "light" ? const Color.fromRGBO(182, 186, 188, 1) : const Color.fromRGBO(210, 210, 210, 1);
+    dangerShade = const Color.fromRGBO(251, 114, 114, 1);
+    warningShade = const Color.fromRGBO(240, 230, 172, 1);
+    infoShade = const Color.fromRGBO(149, 213, 223, 1);
+    successShade = const Color.fromRGBO(159, 216, 172, 1);
+    whiteShade = color_mode == "light" ? const Color.fromRGBO(255, 255, 255, 1) : const Color.fromRGBO(121, 121, 121, 1);
+    darkShade = color_mode == "light" ? const Color.fromRGBO(121, 121, 121, 1) : const Color.fromRGBO(255, 255, 255, 1);
+
+
+//   light
+    primaryShade_2 = const Color.fromRGBO(184, 232, 249, 0.5);
+    secondaryShade_2 = color_mode == "light" ? const Color.fromRGBO(182, 186, 188, 0.5) : const Color.fromRGBO(210, 210, 210, 1);
+    dangerShade_2 = const Color.fromRGBO(251, 114, 114, 0.5);
+    warningShade_2 = const Color.fromRGBO(240, 230, 172, 0.5);
+    infoShade_2 = const Color.fromRGBO(149, 213, 223, 0.5);
+    successShade_2 = const Color.fromRGBO(159, 216, 172, 0.5);
+    whiteShade_2 = color_mode == "light" ? const Color.fromRGBO(255, 255, 255, 0.5) : const Color.fromRGBO(121, 121, 121, 0.5);
+    darkShade_2 = color_mode == "light" ? const Color.fromRGBO(121, 121, 121, 0.5) : const Color.fromRGBO(255, 255, 255, 0.5);
+  }
 
   TextStyle primaryTextStyle(
       {double size = 10, FontWeight fontweight = FontWeight.normal, bool underline = false}) {
@@ -473,7 +514,7 @@ class CustomThemes{
         break;
       case Type.danger:
         foreground = dangerColor;
-        background = whiteColor;
+        background = whiteShade_2;
         disabledForeground = dangerShade;
         disabledBackground = whiteShade;
         textStyle = dangerTextStyle;
@@ -723,6 +764,16 @@ class CustomThemes{
     );
   }
 
+
+
+  ShimmerEffect maruShimmerEffect(){
+    return ShimmerEffect(
+        baseColor: secondaryShade.withOpacity(0.2),
+        highlightColor: secondaryShade.withOpacity(0.2),
+        duration: const Duration(seconds: 1)
+    );
+  }
+
   TextFormField maruSearchTextField(
       {String? hintText,
         TextEditingController? editingController,
@@ -864,7 +915,7 @@ class CustomThemes{
           ),
           Container(
             width: 60,
-            child: IconButton(onPressed: passwordStatus, icon: Icon(hidePassword ? FontAwesomeIcons.eye : FontAwesomeIcons.eyeSlash), iconSize: 15,),
+            child: IconButton(onPressed: passwordStatus, icon: Icon(hidePassword ? FontAwesomeIcons.eye : FontAwesomeIcons.eyeSlash), iconSize: 15, color: secondaryShade,),
           )
         ],
       ),
@@ -887,6 +938,7 @@ class CustomThemes{
       keyboardType: textType,
       obscureText: hideText,
       controller: editingController,
+      style: darkTextStyle(size: 15),
       decoration: InputDecoration(
         label: Text(
           label,
@@ -939,6 +991,8 @@ class CustomThemes{
       style: darkTextStyle(size: 15),
       elevation: 0,
       decoration: InputDecoration(
+        fillColor: whiteColor,
+        filled: true,
         enabledBorder: OutlineInputBorder(
           borderSide: BorderSide(color: secondaryColor, width: 1),
           borderRadius: BorderRadius.circular(8),

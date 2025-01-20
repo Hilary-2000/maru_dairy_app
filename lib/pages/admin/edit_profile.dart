@@ -204,9 +204,10 @@ class _AdminEditProfileState extends State<AdminEditProfile> {
     super.didChangeDependencies();
 
     if(!_init){
+      await customs.initialize();
       await getRegions();
       // get member details
-      getAdminDetails();
+      await getAdminDetails();
 
       setState(() {
         _init = true;
@@ -253,8 +254,11 @@ class _AdminEditProfileState extends State<AdminEditProfile> {
   Widget build(BuildContext context) {
 
     return Scaffold(
-      backgroundColor: customs.primaryShade,
+      backgroundColor: customs.whiteColor,
       appBar: AppBar(
+        iconTheme: IconThemeData(
+          color: customs.darkColor
+        ),
         backgroundColor: customs.whiteColor,
         elevation: 1,
         title: Builder(builder: (context) {
@@ -295,16 +299,8 @@ class _AdminEditProfileState extends State<AdminEditProfile> {
           return Container(
             height: height,
             width: width,
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  Color.fromRGBO(230, 245, 248, 1),
-                  Color.fromRGBO(255, 255, 255, 1),
-                  Color.fromRGBO(227, 228, 229, 1)
-                ],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
+            decoration: BoxDecoration(
+              color: customs.secondaryShade_2.withOpacity(0.2),
             ),
             child: Column(
               children: [
@@ -315,6 +311,7 @@ class _AdminEditProfileState extends State<AdminEditProfile> {
                   child: SingleChildScrollView(
                     child: Skeletonizer(
                       enabled: loading,
+                      effect: customs.maruShimmerEffect(),
                       child: Form(
                         key: _formKey,
                         child: Column(
@@ -697,9 +694,6 @@ class _AdminEditProfileState extends State<AdminEditProfile> {
                                         }
                                         return null;
                                       }
-                                  ),
-                                  Divider(
-                                    color: customs.secondaryShade_2,
                                   )
                                 ],
                               ),

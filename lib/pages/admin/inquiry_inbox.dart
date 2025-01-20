@@ -40,6 +40,7 @@ class _InquiryInboxState extends State<InquiryInbox> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
+          backgroundColor: customs.whiteColor,
           title:  Text('Are you sure?', style: customs.darkTextStyle(size: 25),),
           content: Text(
             'Are you sure you want to delete chat(s)?', style: customs.darkTextStyle(size: 14, fontweight: FontWeight.normal),
@@ -64,6 +65,7 @@ class _InquiryInboxState extends State<InquiryInbox> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
+          backgroundColor: customs.whiteColor,
           title:  Text('Are you sure?', style: customs.darkTextStyle(size: 25),),
           content: Text(
             'Are you sure you want to clear all chat(s)? \nThis action is irreversible', style: customs.darkTextStyle(size: 14, fontweight: FontWeight.normal),
@@ -151,6 +153,7 @@ class _InquiryInboxState extends State<InquiryInbox> {
     super.didChangeDependencies();
 
     if(!init){
+      await customs.initialize();
       // set state
       setState(() {
         init = true;
@@ -240,6 +243,7 @@ class _InquiryInboxState extends State<InquiryInbox> {
                                     Navigator.pop(context);
                                   },
                                   icon: Icon(Icons.arrow_back_ios,
+                                  color: customs.darkColor,
                                   size: 20,)
                                 ),
                                 CircleAvatar(
@@ -262,7 +266,7 @@ class _InquiryInboxState extends State<InquiryInbox> {
                             style: customs.secondaryTextStyle(size: 12),
                           ),
                           trailing: PopupMenuButton<String>(
-                            icon: Icon(FontAwesomeIcons.ellipsisVertical, size: 18),
+                            icon: Icon(FontAwesomeIcons.ellipsisVertical, size: 18, color: customs.darkColor,),
                             onSelected: (String result) async {
                               // Handle the selection here
                               if(result == "member_info"){
@@ -270,11 +274,12 @@ class _InquiryInboxState extends State<InquiryInbox> {
                                 chats.forEach((dateKey, chatInfo){
                                   List chats = chatInfo['chats'];
                                   for(var chat in chats){
-                                    member_id = "${chat['chat_thread_id']}";
+                                    member_id = "${chat['chat_owner']}";
                                   }
                                 });
+                                print("Member id: ${member_id}");
 
-                                await Navigator.pushNamed(context, "/admin_member_details", arguments: {"index" : 0, "member_id": member_id});
+                                await Navigator.pushNamed(context, "/admin_member_details", arguments: {"index" : 1, "member_id": member_id});
                               }else if(result == "clear_chat"){
                                 bool clear_chat = await _confirmChatClearing() ?? false;
                                 if(clear_chat){
@@ -388,6 +393,7 @@ class _InquiryInboxState extends State<InquiryInbox> {
                                     icon: Icon(
                                       Icons.arrow_back_ios,
                                       size: 20,
+                                      color: customs.darkColor,
                                     )
                                 ),
                                 Text("${message_ids.length}", style: customs.secondaryTextStyle(size: 20, fontweight: FontWeight.bold),)
@@ -434,7 +440,7 @@ class _InquiryInboxState extends State<InquiryInbox> {
                                       }
                                     }
                                   },
-                                  icon: Icon(FontAwesomeIcons.trashCanArrowUp, size: 20,)
+                                  icon: Icon(FontAwesomeIcons.trashCanArrowUp, size: 20,color: customs.secondaryShade,)
                                 ),
                                 message_ids.length == 1 ? IconButton(
                                   onPressed: (){
@@ -451,7 +457,7 @@ class _InquiryInboxState extends State<InquiryInbox> {
                                     // copy the message to the clipboard
                                     copyToClipboard(context, message);
                                   },
-                                  icon: Icon(FontAwesomeIcons.copy, size: 20,)
+                                  icon: Icon(FontAwesomeIcons.copy, size: 20, color: customs.secondaryShade,)
                                 ) : SizedBox(),
                               ],
                             ),
@@ -532,7 +538,7 @@ class _InquiryInboxState extends State<InquiryInbox> {
                                                     width: width * 0.75,
                                                     padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                                                     decoration: BoxDecoration(
-                                                        color: customs.secondaryShade_2,
+                                                        color: customs.secondaryShade_2.withOpacity(0.2),
                                                         borderRadius: BorderRadius.circular(10)
                                                     ),
                                                     child: Column(
@@ -607,7 +613,7 @@ class _InquiryInboxState extends State<InquiryInbox> {
                                                     width: width * 0.75,
                                                     padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                                                     decoration: BoxDecoration(
-                                                        color: customs.primaryColor,
+                                                        color: customs.primaryColor.withOpacity(1),
                                                         borderRadius: BorderRadius.circular(10)
                                                     ),
                                                     child: Column(
@@ -744,7 +750,8 @@ class _InquiryInboxState extends State<InquiryInbox> {
                                   });
                                 }
                               },
-                              icon: Icon(Icons.send_rounded)
+                              icon: Icon(Icons.send_rounded),
+                              color: customs.darkColor,
                             )
                               :
                             SpinKitCircle(

@@ -851,6 +851,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                   ),
                   Skeletonizer(
                     enabled: loading,
+                    effect: customs.maruShimmerEffect(),
                     child: Card(
                       color: customs.whiteColor,
                       margin: const EdgeInsets.symmetric(
@@ -1040,6 +1041,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                   // SHOW THE COLLECTION IN LITERS
                   Skeletonizer(
                     enabled: loading,
+                    effect: customs.maruShimmerEffect(),
                     child: Card(
                       color: customs.whiteColor,
                       margin:
@@ -1128,6 +1130,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                   ),
                   Skeletonizer(
                     enabled: loading,
+                    effect: customs.maruShimmerEffect(),
                     child: Skeleton.leaf(
                       child: Container(
                         padding: const EdgeInsets.fromLTRB(10, 10, 0, 10),
@@ -1270,6 +1273,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                   ),
                   Skeletonizer(
                     enabled: loading,
+                    effect: customs.maruShimmerEffect(),
                     child: Card(
                       color: customs.whiteColor,
                       margin:
@@ -1322,6 +1326,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                   ),
                   Skeletonizer(
                     enabled: loading,
+                    effect: customs.maruShimmerEffect(),
                     child: Container(
                       padding: const EdgeInsets.fromLTRB(10, 10, 0, 10),
                       margin: const EdgeInsets.symmetric(
@@ -1460,6 +1465,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                   ),
                   Skeletonizer(
                     enabled: loading,
+                    effect: customs.maruShimmerEffect(),
                     child: Card(
                       color: customs.whiteColor,
                       margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
@@ -1549,6 +1555,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                   ),
                   Skeletonizer(
                     enabled: loading,
+                    effect: customs.maruShimmerEffect(),
                     child: Skeleton.leaf(
                       child: Container(
                         padding: const EdgeInsets.fromLTRB(10, 10, 0, 10),

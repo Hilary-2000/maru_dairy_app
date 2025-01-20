@@ -97,10 +97,12 @@ class _TechnicianHistoryState extends State<TechnicianHistory> {
     });
   }
 
-  void didChangeDependencies(){
+  Future<void> didChangeDependencies() async {
     super.didChangeDependencies();
 
     if(!_init){
+      // initialize
+      await customs.initialize();
       // run notification
       widget.getNotifications();
 
@@ -506,6 +508,7 @@ class _TechnicianHistoryState extends State<TechnicianHistory> {
                         ),
                         Skeletonizer(
                           enabled: loading,
+                          effect: customs.maruShimmerEffect(),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
@@ -520,14 +523,14 @@ class _TechnicianHistoryState extends State<TechnicianHistory> {
                                   margin: const EdgeInsets.fromLTRB(0, 10.0, 0, 0),
                                   decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(10.0),
-                                      color: customs.secondaryShade_2),
+                                      color: customs.secondaryShade_2.withOpacity(0.2)),
                                   child: Row(
                                       crossAxisAlignment: CrossAxisAlignment.center,
                                       children: [
                                         Container(
                                           decoration: BoxDecoration(
                                             borderRadius: BorderRadius.circular(20),
-                                            color: Colors.grey[200],
+                                            color: customs.secondaryShade_2.withOpacity(0.2),
                                           ),
                                           padding: const EdgeInsets.all(5),
                                           child: Icon(
@@ -583,14 +586,14 @@ class _TechnicianHistoryState extends State<TechnicianHistory> {
                                   margin: const EdgeInsets.fromLTRB(0, 10.0, 0, 0),
                                   decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(10.0),
-                                      color: customs.secondaryShade_2),
+                                      color: customs.secondaryShade_2.withOpacity(0.2)),
                                   child: Row(
                                       crossAxisAlignment: CrossAxisAlignment.center,
                                       children: [
                                         Container(
                                           decoration: BoxDecoration(
                                             borderRadius: BorderRadius.circular(20),
-                                            color: Colors.grey[200],
+                                            color: customs.secondaryShade_2.withOpacity(0.2),
                                           ),
                                           padding: const EdgeInsets.all(5),
                                           child: Icon(
@@ -686,7 +689,7 @@ class _TechnicianHistoryState extends State<TechnicianHistory> {
                       Container(
                         margin: EdgeInsets.fromLTRB(0, 0, 5, 0),
                         child: CircleAvatar(
-                          backgroundColor: customs.successShade_2,
+                          backgroundColor: customs.secondaryShade.withOpacity(0.2),
                           child: IconButton(
                             onPressed: () async {
                               await Navigator.pushNamed(context, "/technician_collect_milk");

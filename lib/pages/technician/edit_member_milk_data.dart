@@ -78,9 +78,10 @@ class _EditMemberMilkDataState extends State<EditMemberMilkData> {
 
 
   @override
-  void didChangeDependencies() {
+  Future<void> didChangeDependencies() async {
     super.didChangeDependencies();
     if(!_init){
+      await customs.initialize();
       double width = MediaQuery.of(context).size.width;
       setState(() {
         _init = true;
@@ -366,6 +367,9 @@ class _EditMemberMilkDataState extends State<EditMemberMilkData> {
     return Scaffold(
       backgroundColor: customs.whiteColor,
       appBar: AppBar(
+        iconTheme: IconThemeData(
+          color: customs.darkColor
+        ),
         backgroundColor: customs.whiteColor,
         elevation: 1,
         title: Builder(builder: (context) {
@@ -481,6 +485,7 @@ class _EditMemberMilkDataState extends State<EditMemberMilkData> {
                   ),
                   Skeletonizer(
                     enabled: loading,
+                    effect: customs.maruShimmerEffect(),
                     child: Stack(children: [
                       Container(
                         margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),

@@ -24,11 +24,12 @@ class _RegionManagementState extends State<RegionManagement> {
   bool load_regions = false;
 
   @override
-  void didChangeDependencies() {
+  Future<void> didChangeDependencies() async {
     // TODO: implement didChangeDependencies
     super.didChangeDependencies();
 
     if(!init){
+      await customs.initialize();
       setState(() {
         init = !init;
       });
@@ -80,6 +81,9 @@ class _RegionManagementState extends State<RegionManagement> {
       child: Scaffold(
         backgroundColor: customs.whiteColor,
         appBar: AppBar(
+          iconTheme: IconThemeData(
+            color: customs.darkColor
+          ),
           backgroundColor: customs.whiteColor,
           elevation: 1,
           title: Builder(builder: (context) {
@@ -138,8 +142,8 @@ class _RegionManagementState extends State<RegionManagement> {
             Container(
               height: height,
               width: width,
-              decoration: const BoxDecoration(
-                color: Colors.white,
+              decoration: BoxDecoration(
+                color: customs.whiteColor,
               ),
               child: Column(
                 children: [
@@ -207,7 +211,7 @@ class _RegionManagementState extends State<RegionManagement> {
                                   style: ListTileStyle.drawer,
                                   title: Text( "${items['region_name']}", style: customs.secondaryTextStyle(size: 14, fontweight: FontWeight.bold)),
                                   trailing: PopupMenuButton<String>(
-                                    icon: Icon(FontAwesomeIcons.ellipsisVertical, size: 15),
+                                    icon: Icon(FontAwesomeIcons.ellipsisVertical, size: 15, color: customs.darkColor,),
                                     onSelected: (String result) async {
                                       // Handle the selection here
                                       if(result == "edit"){
@@ -401,9 +405,10 @@ class _EditRegionsState extends State<EditRegions> {
   bool init = false;
   TextEditingController regionNameController = TextEditingController();
 
-  void didChangeDependencies(){
+  Future<void> didChangeDependencies() async {
     super.didChangeDependencies();
     if(!init){
+      await customThemes.initialize();
       setState(() {
         init = !init;
         regionNameController.text = widget.region_data['region_name'];
@@ -537,6 +542,19 @@ class _DeleteRegionsState extends State<DeleteRegions> {
   CustomThemes customThemes = new CustomThemes();
 
   bool saveLoader = false;
+  bool init = false;
+
+  Future<void> didChangeDependencies() async {
+    super.didChangeDependencies();
+
+    if(!init){
+      await customThemes.initialize();
+      setState(() {
+        init = !init;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -636,6 +654,19 @@ class _AddRegionsState extends State<AddRegions> {
   final _formKey = GlobalKey<FormState>();
 
   bool saveLoader = false;
+  bool init = false;
+
+  // add region
+  Future<void> didChangeDependencies() async {
+    super.didChangeDependencies();
+
+    if(!init){
+      await customThemes.initialize();
+      setState(() {
+        init = true;
+      });
+    }
+  }
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;

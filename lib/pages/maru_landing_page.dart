@@ -44,8 +44,23 @@ class _MaruState extends State<Maru> {
     }
   }
 
+  void checkLightMode()async{
+    // check if they dark or light mode and set accordingly
+    String? bright_mode = await _storage.read(key: 'bright_mode');
+    print("Bright mode : ${bright_mode}");
+    if(bright_mode == null){
+      final brightness = MediaQuery.of(context).platformBrightness;
+      print("Bright mode : ${brightness}");
+      String brightness_mode = brightness == Brightness.dark ? "dark" : "light";
+      _storage.write(key: "bright_mode", value: brightness_mode);
+    }
+  }
   void simulateRequest() async {
     print("3 seconds start now!");
+    // CHECK LIGHT MODE
+    checkLightMode();
+
+    // GET THE LOGIN TOKEN.
     String? token = await _storage.read(key: 'token');
     if(token != null){
       // get the user credentials

@@ -34,16 +34,17 @@ class _UpdateMilkPricesState extends State<UpdateMilkPrices> {
   DateTime minimum_date = DateTime.now();
 
   @override
-  void didChangeDependencies() {
+  Future<void> didChangeDependencies() async {
     super.didChangeDependencies();
 
     if(!_initialized){
-      //date format
-      date = DateFormat('EEE, d MMM yyyy').format(date_time);
-      getCurrentMilkDetails();
+      await customs.initialize();
       setState(() {
         _initialized = true;
       });
+      //date format
+      date = DateFormat('EEE, d MMM yyyy').format(date_time);
+      await getCurrentMilkDetails();
     }
   }
 
@@ -87,7 +88,7 @@ class _UpdateMilkPricesState extends State<UpdateMilkPrices> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: customs.primaryShade,
+      backgroundColor: customs.whiteColor,
       appBar: AppBar(
         backgroundColor: customs.whiteColor,
         elevation: 1,
@@ -153,6 +154,7 @@ class _UpdateMilkPricesState extends State<UpdateMilkPrices> {
                         ),
                         Skeletonizer(
                           enabled: loading,
+                          effect: customs.maruShimmerEffect(),
                           child: Container(
                             padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                             width: width,
@@ -174,6 +176,7 @@ class _UpdateMilkPricesState extends State<UpdateMilkPrices> {
                         ),
                         Skeletonizer(
                           enabled: loading,
+                          effect: customs.maruShimmerEffect(),
                           child: Container(
                             padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                             width: width,
@@ -194,6 +197,7 @@ class _UpdateMilkPricesState extends State<UpdateMilkPrices> {
                         ),
                         Skeletonizer(
                           enabled: loading,
+                          effect: customs.maruShimmerEffect(),
                           child: Container(
                             padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                             width: width,

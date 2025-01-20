@@ -33,13 +33,14 @@ class _AdminProfileState extends State<AdminProfile> {
     return capitalizedWords.join(' ');
   }
 
-  void didChangeDependencies(){
+  Future<void> didChangeDependencies() async {
     // change dependencies
     super.didChangeDependencies();
 
     if(!_init){
+      await customs.initialize();
       // get member details
-      getAdminDetails();
+      await getAdminDetails();
 
       // set state
       setState(() {
@@ -75,8 +76,11 @@ class _AdminProfileState extends State<AdminProfile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: customs.primaryShade,
+      backgroundColor: customs.whiteColor,
       appBar: AppBar(
+        iconTheme: IconThemeData(
+          color: customs.darkColor
+        ),
         backgroundColor: customs.whiteColor,
         elevation: 1,
         title: Builder(builder: (context) {
@@ -117,21 +121,14 @@ class _AdminProfileState extends State<AdminProfile> {
           return Container(
             height: height,
             width: width,
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  Color.fromRGBO(230, 245, 248, 1),
-                  Color.fromRGBO(255, 255, 255, 1),
-                  Color.fromRGBO(227, 228, 229, 1)
-                ],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
+            decoration: BoxDecoration(
+              color: customs.secondaryShade_2.withOpacity(0.2),
             ),
             child: Column(
               children: [
                 Skeletonizer(
                   enabled: loading,
+                  effect: customs.maruShimmerEffect(),
                   child: Container(
                     height: height - 5,
                     width: width,

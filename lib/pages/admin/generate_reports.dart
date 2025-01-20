@@ -170,14 +170,15 @@ class _GenerateReportsState extends State<GenerateReports> {
     return capitalizedWords.join(' ');
   }
 
-  void didChangeDependencies(){
+  Future<void> didChangeDependencies() async {
     // change dependencies
     super.didChangeDependencies();
 
     if(!_init){
+      await customs.initialize();
       // get member details
-      getAdminDetails();
-      getRegions();
+      await getAdminDetails();
+      await getRegions();
 
       // set state
       setState(() {
@@ -298,6 +299,9 @@ class _GenerateReportsState extends State<GenerateReports> {
     return Scaffold(
       backgroundColor: customs.primaryShade,
       appBar: AppBar(
+        iconTheme: IconThemeData(
+          color: customs.darkColor
+        ),
         backgroundColor: customs.whiteColor,
         elevation: 1,
         title: Builder(builder: (context) {
@@ -343,6 +347,7 @@ class _GenerateReportsState extends State<GenerateReports> {
             ),
             child: Skeletonizer(
               enabled: loading,
+              effect: customs.maruShimmerEffect(),
               child: Container(
                 height: height - 5,
                 width: width,
@@ -520,6 +525,7 @@ class _GenerateReportsState extends State<GenerateReports> {
                                       DateTime parsedDate = DateTime.parse(reformattedDate);
 
                                       BottomPicker.date(
+                                        backgroundColor: customs.whiteColor,
                                         pickerTitle: Text(
                                           'Select Start Date',
                                           style: customs.secondaryTextStyle(
@@ -590,6 +596,7 @@ class _GenerateReportsState extends State<GenerateReports> {
                                       DateTime parsedDate = DateTime.parse(reformattedDate);
 
                                       BottomPicker.date(
+                                        backgroundColor: customs.whiteColor,
                                         pickerTitle: Text(
                                           'Select End Date',
                                           style: customs.secondaryTextStyle(

@@ -183,10 +183,14 @@ class _OurMembersState extends State<OurMembers> {
     });
   }
 
-  void didChangeDependencies(){
+  Future<void> didChangeDependencies() async {
     super.didChangeDependencies();
 
     if(!_init){
+      await customs.initialize();
+      setState(() {
+        _init = true;
+      });
       // get notification
       widget.getNotifications;
 
@@ -464,11 +468,7 @@ class _OurMembersState extends State<OurMembers> {
       });
 
       //get the members
-      getMembers();
-
-      setState(() {
-        _init = true;
-      });
+      await getMembers();
     }
   }
 
@@ -557,6 +557,7 @@ class _OurMembersState extends State<OurMembers> {
                 ),
                 Skeletonizer(
                   enabled: loading,
+                  effect: customs.maruShimmerEffect(),
                   child: Container(
                     width: width * 0.95,
                     padding: const EdgeInsets.all(8),

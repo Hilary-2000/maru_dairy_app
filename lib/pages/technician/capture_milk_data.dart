@@ -93,6 +93,7 @@ class _CaptureMilkDataState extends State<CaptureMilkData> {
   void didChangeDependencies() async{
     super.didChangeDependencies();
     if(!_init){
+      await customs.initialize();
       setState(() {
         loading = true;
         bg_color = [customs.primaryColor, customs.secondaryColor, customs.warningColor, customs.darkColor, customs.successColor];
@@ -132,6 +133,9 @@ class _CaptureMilkDataState extends State<CaptureMilkData> {
     return Scaffold(
       backgroundColor: customs.whiteColor,
       appBar: AppBar(
+        iconTheme: IconThemeData(
+            color: customs.darkColor
+        ),
         backgroundColor: customs.whiteColor,
         elevation: 1,
         title: Builder(builder: (context) {
@@ -187,6 +191,7 @@ class _CaptureMilkDataState extends State<CaptureMilkData> {
                   ),
                   Skeletonizer(
                     enabled: loading,
+                    effect: customs.maruShimmerEffect(),
                     child: Stack(children: [
                       Container(
                         margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),

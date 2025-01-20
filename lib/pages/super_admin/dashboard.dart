@@ -61,6 +61,7 @@ class _superAdminDashboardState extends State<superAdminDashboard> {
 
   void initState(){
     super.initState();
+    customs.initialize();
     //get notification count
     getNotifications();
   }
@@ -103,6 +104,18 @@ class _superAdminDashboardState extends State<superAdminDashboard> {
     }
   }
 
+  Future<void> setColorMode(String color_mode) async {
+    setState(() {
+      customs.color_mode = color_mode;
+    });
+    print(color_mode);
+    await customs.initialize();
+    setState(() {
+      customs.color_mode = color_mode;
+    });
+    print("Dashboard color mode : ${customs.color_mode}");
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -116,7 +129,7 @@ class _superAdminDashboardState extends State<superAdminDashboard> {
       // admin inquiries
       AdminInquiries(getNotifications: getNotifications,),
       // Admin Account
-      SuperAdminAccounts(updateIndex: _updateIndex, getNotifications: getNotifications,)
+      SuperAdminAccounts(updateIndex: _updateIndex, getNotifications: getNotifications, setColorMode: setColorMode,)
     ];
     return PopScope(
       canPop: false,
@@ -173,10 +186,10 @@ class _superAdminDashboardState extends State<superAdminDashboard> {
           double width = MediaQuery.of(context).size.width;
           return Container(
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: customs.whiteColor,
               borderRadius: BorderRadius.circular(10.0), // Rounded corners
               border: Border.all(
-                color: Colors.white,
+                color: customs.whiteColor,
                 width: 2.0,
               ),
             ),
@@ -372,12 +385,12 @@ class _superAdminDashboardState extends State<superAdminDashboard> {
         floatingActionButton: index == 0
             ? (CircleAvatar(
           radius: 25,
-          backgroundColor: customs.secondaryShade_2,
+          backgroundColor: customs.secondaryShade.withOpacity(0.2),
           child: IconButton(
             icon: Icon(
               Icons.person_add_alt_outlined,
               size: 25,
-              color: customs.secondaryColor,
+              color: customs.secondaryShade,
             ),
             onPressed: () {
               Navigator.pushNamed(context, "/new_member");
@@ -405,7 +418,7 @@ class _superAdminDashboardState extends State<superAdminDashboard> {
             : (index == 1
             ? (CircleAvatar(
           radius: 25,
-          backgroundColor: customs.successShade_2,
+          backgroundColor: customs.successShade.withOpacity(0.2),
           child: IconButton(
             icon: Icon(
               Icons.person_add_alt_outlined,
@@ -473,6 +486,7 @@ class _SuperAdminDashState extends State<SuperAdminDash> {
     'Fri',
     'Sat'
   ];
+
 
   double _parseAmount(dynamic amount) {
     try {
@@ -553,11 +567,15 @@ class _SuperAdminDashState extends State<SuperAdminDash> {
     });
   }
 
-  void didChangeDependencies() {
+  Future<void> didChangeDependencies() async {
     super.didChangeDependencies();
 
     // get the admin dashboard
     if(!_init){
+      await customs.initialize();
+      setState(() {
+        _init = true;
+      });
       // get notifications
       widget.getNotifications;
 
@@ -738,7 +756,6 @@ class _SuperAdminDashState extends State<SuperAdminDash> {
         ];
       });
       getAdminDash();
-      _init = true;
     }
   }
 
@@ -838,16 +855,8 @@ class _SuperAdminDashState extends State<SuperAdminDash> {
           return Container(
             height: height,
             width: width,
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  Color.fromRGBO(230, 245, 248, 1),
-                  Color.fromRGBO(255, 255, 255, 1),
-                  Color.fromRGBO(227, 228, 229, 1)
-                ],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
+            decoration: BoxDecoration(
+                color: customs.secondaryShade.withOpacity(0.1),
             ),
             child: SingleChildScrollView(
               child: Column(
@@ -857,6 +866,7 @@ class _SuperAdminDashState extends State<SuperAdminDash> {
                   ),
                   Skeletonizer(
                     enabled: loading,
+                    effect: customs.maruShimmerEffect(),
                     child: Card(
                       color: customs.whiteColor,
                       margin: const EdgeInsets.symmetric(
@@ -947,7 +957,7 @@ class _SuperAdminDashState extends State<SuperAdminDash> {
                                     color: customs.dangerColor,
                                     child: Text(
                                       "Super-Admin",
-                                      style: customs.whiteTextStyle(size: 10),
+                                      style: customs.darkTextStyle(size: 10),
                                     ),
                                   ),
                                 )
@@ -1033,7 +1043,6 @@ class _SuperAdminDashState extends State<SuperAdminDash> {
                               setState(() {
                                 drop_down = value!;
                               });
-
                               // get the admin dashboard
                               getAdminDash();
                             },
@@ -1045,6 +1054,7 @@ class _SuperAdminDashState extends State<SuperAdminDash> {
                   // SHOW THE COLLECTION IN LITERS
                   Skeletonizer(
                     enabled: loading,
+                    effect: customs.maruShimmerEffect(),
                     child: Card(
                       color: customs.whiteColor,
                       margin:
@@ -1135,6 +1145,7 @@ class _SuperAdminDashState extends State<SuperAdminDash> {
                   ),
                   Skeletonizer(
                     enabled: loading,
+                    effect: customs.maruShimmerEffect(),
                     child: Skeleton.leaf(
                       child: Container(
                         padding: const EdgeInsets.fromLTRB(10, 10, 0, 10),
@@ -1276,6 +1287,7 @@ class _SuperAdminDashState extends State<SuperAdminDash> {
                   ),
                   Skeletonizer(
                     enabled: loading,
+                    effect: customs.maruShimmerEffect(),
                     child: Card(
                       color: customs.whiteColor,
                       margin:
@@ -1328,6 +1340,7 @@ class _SuperAdminDashState extends State<SuperAdminDash> {
                   ),
                   Skeletonizer(
                     enabled: loading,
+                    effect: customs.maruShimmerEffect(),
                     child: Container(
                       padding: const EdgeInsets.fromLTRB(10, 10, 0, 10),
                       margin: const EdgeInsets.symmetric(
@@ -1466,6 +1479,7 @@ class _SuperAdminDashState extends State<SuperAdminDash> {
                   ),
                   Skeletonizer(
                     enabled: loading,
+                    effect: customs.maruShimmerEffect(),
                     child: Card(
                       color: customs.whiteColor,
                       margin:
@@ -1556,6 +1570,7 @@ class _SuperAdminDashState extends State<SuperAdminDash> {
                   ),
                   Skeletonizer(
                     enabled: loading,
+                    effect: customs.maruShimmerEffect(),
                     child: Skeleton.leaf(
                       child: Container(
                         padding: const EdgeInsets.fromLTRB(10, 10, 0, 10),

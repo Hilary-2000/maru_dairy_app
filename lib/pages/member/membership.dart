@@ -150,6 +150,7 @@ class _MemberMembershipState extends State<MemberMembership> {
                   children: [
                     Skeletonizer(
                       enabled: loading,
+                      effect: customs.maruShimmerEffect(),
                       child: Container(
                         padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                         margin: EdgeInsets.symmetric(horizontal: 10),
@@ -222,6 +223,7 @@ class _MemberMembershipState extends State<MemberMembership> {
                     ),
                     Skeletonizer(
                       enabled: loading,
+                      effect: customs.maruShimmerEffect(),
                       child: Container(
                         padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                         margin: EdgeInsets.symmetric(horizontal: 10),
@@ -374,6 +376,7 @@ class _MemberMembershipState extends State<MemberMembership> {
                     ),
                     Skeletonizer(
                       enabled: loading,
+                      effect: customs.maruShimmerEffect(),
                       child: Container(
                         height: height - 300,
                         child: DefaultTabController(
@@ -1034,6 +1037,7 @@ class _editEarningsState extends State<_editEarnings> {
                 padding: const EdgeInsets.all(16.0),
                 child: Skeletonizer(
                   enabled: loading,
+                  effect: customThemes.maruShimmerEffect(),
                   child: SingleChildScrollView(
                     child: Column(
                       mainAxisSize: MainAxisSize.min,

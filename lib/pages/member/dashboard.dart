@@ -579,6 +579,7 @@ class _memberDashState extends State<memberDash> {
                   ),
                   Skeletonizer(
                     enabled: loading,
+                    effect: customs.maruShimmerEffect(),
                     child: Card(
                       color: customs.whiteColor,
                       margin:
@@ -782,6 +783,7 @@ class _memberDashState extends State<memberDash> {
                   ),
                   Skeletonizer(
                     enabled: loading,
+                    effect: customs.maruShimmerEffect(),
                     child: Card(
                       color: customs.whiteColor,
                       margin:

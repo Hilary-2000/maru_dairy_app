@@ -61,6 +61,7 @@ class _MemberDetailsEditState extends State<MemberDetailsEdit> {
     });
 
     if(!_init){
+      await customs.initialize();
       setState(() {
         _init = true;
       });
@@ -229,16 +230,8 @@ class _MemberDetailsEditState extends State<MemberDetailsEdit> {
           Container(
             height: height,
             width: width,
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  Color.fromRGBO(230, 245, 248, 1),
-                  Color.fromRGBO(255, 255, 255, 1),
-                  Color.fromRGBO(227, 228, 229, 1)
-                ],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
+            decoration: BoxDecoration(
+                color: customs.secondaryShade_2.withOpacity(0.2),
             ),
             child: Column(
               children: [
@@ -749,10 +742,7 @@ class _MemberDetailsEditState extends State<MemberDetailsEdit> {
                                           return "Enter member animal number";
                                         }
                                         return null;
-                                      }),
-                                  Divider(
-                                    color: customs.secondaryShade_2,
-                                  )
+                                      })
                                 ],
                               ),
                             ),

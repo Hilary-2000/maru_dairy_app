@@ -163,6 +163,7 @@ class _MemberMilkDetailsState extends State<MemberMilkDetails> {
                   SizedBox(height: height * 0.1,),
                   Skeletonizer(
                     enabled: loading,
+                    effect: customs.maruShimmerEffect(),
                     child: Stack(
                       children: [
                         Center(child: Container( width:width*0.7, child: const Divider(), padding: const EdgeInsets.symmetric(vertical: 10),)),
@@ -189,6 +190,7 @@ class _MemberMilkDetailsState extends State<MemberMilkDetails> {
                   ),
                   Skeletonizer(
                     enabled: loading,
+                    effect: customs.maruShimmerEffect(),
                     child: Center(
                       child: Text(collection_details != null ? (collection_details['time'] ?? "N/A") : "N/A", style: customs.secondaryTextStyle(size: 20, fontweight: FontWeight.bold),),
                     ),
@@ -196,6 +198,7 @@ class _MemberMilkDetailsState extends State<MemberMilkDetails> {
                   const SizedBox(height: 30,),
                   Skeletonizer(
                     enabled: loading,
+                    effect: customs.maruShimmerEffect(),
                     child: Container(
                       height: 230,
                       width: width * 0.9,

@@ -11,6 +11,18 @@ class LoginOrSignup extends StatefulWidget {
 class _LoginOrSignupState extends State<LoginOrSignup> {
 
   CustomThemes customThemes = CustomThemes();
+  bool init = false;
+
+  void didChangeDependencies(){
+    super.didChangeDependencies();
+
+    if(!init){
+      customThemes.initialize();
+      setState(() {
+        init = true;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,16 +33,8 @@ class _LoginOrSignupState extends State<LoginOrSignup> {
           double width = constraints.maxWidth;
           double height = constraints.maxHeight;
           return Container(
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  Color.fromRGBO(230, 245, 248, 1),
-                  Color.fromRGBO(255, 255, 255, 1),
-                  Color.fromRGBO(227, 228, 229, 1)
-                ],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
+            decoration: BoxDecoration(
+              color: customThemes.whiteColor
             ),
             height: height,
             padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),

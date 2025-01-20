@@ -24,6 +24,7 @@ class _LoginState extends State<Login> {
   ];
   bool? isChecked = true;
   bool? hidePassword = true;
+  bool init = false;
 
   late final TextEditingController _passwordController = TextEditingController();
   late final TextEditingController _usernameController = TextEditingController();
@@ -39,6 +40,17 @@ class _LoginState extends State<Login> {
     }
   }
   bool disableLogin = false;
+
+  Future<void> didChangeDependencies() async {
+    super.didChangeDependencies();
+
+    if(!init){
+      await customs.initialize();
+      setState(() {
+        init = true;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {// Access the arguments
@@ -59,16 +71,8 @@ class _LoginState extends State<Login> {
           return Container(
             height: height,
             width: width,
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  Color.fromRGBO(230, 245, 248, 1),
-                  Color.fromRGBO(255, 255, 255, 1),
-                  Color.fromRGBO(227, 228, 229, 1)
-                ],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
+            decoration: BoxDecoration(
+              color: customs.whiteColor
             ),
             child: SingleChildScrollView(
               child: Column(

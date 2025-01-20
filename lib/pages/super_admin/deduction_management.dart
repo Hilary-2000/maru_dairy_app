@@ -23,11 +23,12 @@ class _DeductionManagementState extends State<DeductionManagement> {
   bool load_deductions = false;
 
   @override
-  void didChangeDependencies() {
+  Future<void> didChangeDependencies() async {
     // TODO: implement didChangeDependencies
     super.didChangeDependencies();
 
     if(!init){
+      await customs.initialize();
       setState(() {
         init = !init;
       });
@@ -79,6 +80,7 @@ class _DeductionManagementState extends State<DeductionManagement> {
       child: Scaffold(
         backgroundColor: customs.whiteColor,
         appBar: AppBar(
+          iconTheme: IconThemeData(color: customs.darkColor),
           backgroundColor: customs.whiteColor,
           elevation: 1,
           title: Builder(builder: (context) {
@@ -137,8 +139,8 @@ class _DeductionManagementState extends State<DeductionManagement> {
             Container(
               height: height,
               width: width,
-              decoration: const BoxDecoration(
-                color: Colors.white,
+              decoration: BoxDecoration(
+                color: customs.whiteColor,
               ),
               child: Column(
                 children: [
@@ -200,7 +202,7 @@ class _DeductionManagementState extends State<DeductionManagement> {
                                   style: ListTileStyle.drawer,
                                   title: Text( "${items['deduction_name']}", style: customs.secondaryTextStyle(size: 14, fontweight: FontWeight.bold)),
                                   trailing: PopupMenuButton<String>(
-                                    icon: Icon(FontAwesomeIcons.ellipsisVertical, size: 15),
+                                    icon: Icon(FontAwesomeIcons.ellipsisVertical, size: 15, color: customs.darkColor,),
                                     onSelected: (String result) async {
                                       // Handle the selection here
                                       if(result == "edit"){
@@ -395,6 +397,17 @@ class DeleteDeduction extends StatefulWidget {
 
 class _DeleteDeductionState extends State<DeleteDeduction> {
   CustomThemes customThemes = new CustomThemes();
+  bool init = false;
+
+  Future<void> didChangeDependencies() async {
+    super.didChangeDependencies();
+    if(!init){
+      await customThemes.initialize();
+      setState(() {
+        init = true;
+      });
+    }
+  }
 
   bool saveLoader = false;
   @override
@@ -489,9 +502,10 @@ class _EditDeductionState extends State<EditDeduction> {
   bool init = false;
   TextEditingController deductionAmountController = TextEditingController();
 
-  void didChangeDependencies(){
+  Future<void> didChangeDependencies() async {
     super.didChangeDependencies();
     if(!init){
+      await customThemes.initialize();
       setState(() {
         init = !init;
         deductionAmountController.text = widget.deduction_data['deduction_name'];
@@ -612,7 +626,21 @@ class _AddDeductionsState extends State<AddDeductions> {
   TextEditingController deductionAmountController = TextEditingController();
 
   bool saveLoader = false;
+  bool init = false;
   final _formKey = GlobalKey<FormState>();
+  @override
+  Future<void> didChangeDependencies() async {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+
+    if(!init){
+      await customThemes.initialize();
+      setState(() {
+        init = true;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;

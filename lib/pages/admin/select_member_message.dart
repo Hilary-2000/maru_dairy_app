@@ -22,17 +22,18 @@ class _SelectMemberMessageState extends State<SelectMemberMessage> {
   List<Color> colors_shade = [];
   List<TextStyle> textStyles = [];
 
-  void didChangeDependencies(){
+  Future<void> didChangeDependencies() async {
     super.didChangeDependencies();
 
     if(!init){
+      await customs.initialize();
       if(mounted){
         setState(() {
           init = !init;
         });
 
         // set colors and shades
-        colors_shade = [customs.primaryShade, customs.secondaryShade, customs.warningShade, customs.darkShade, customs.successShade];
+        colors_shade = [customs.primaryShade, customs.secondaryShade.withOpacity(0.2), customs.warningShade, customs.secondaryShade.withOpacity(0.2), customs.secondaryShade.withOpacity(0.2)];
         textStyles = [
           customs.primaryTextStyle(
               size: 18, fontweight: FontWeight.bold
@@ -46,7 +47,7 @@ class _SelectMemberMessageState extends State<SelectMemberMessage> {
           customs.darkTextStyle(
               size: 18, fontweight: FontWeight.bold
           ),
-          customs.secondaryTextStyle(
+          customs.successTextStyle(
               size: 18, fontweight: FontWeight.bold
           ),
         ];
@@ -84,6 +85,7 @@ class _SelectMemberMessageState extends State<SelectMemberMessage> {
       backgroundColor: customs.whiteColor,
       appBar: AppBar(
         backgroundColor: customs.whiteColor,
+        iconTheme: IconThemeData(color: customs.darkColor),
         elevation: 1,
         title: Builder(builder: (context) {
           double screenWidth = MediaQuery.of(context).size.width;

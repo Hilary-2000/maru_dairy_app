@@ -257,10 +257,11 @@ class _ConfirmedDeclinedCollectionState extends State<ConfirmedDeclinedCollectio
     displayCollectionHistory(newHistory);
   }
 
-  void didChangeDependencies(){
+  Future<void> didChangeDependencies() async {
     super.didChangeDependencies();
     // set the technicians history
     if(!_init){
+      await customs.initialize();
       double width = MediaQuery.of(context).size.width;
       setState(() {
         _init = true;
@@ -458,6 +459,9 @@ class _ConfirmedDeclinedCollectionState extends State<ConfirmedDeclinedCollectio
       child: Scaffold(
         backgroundColor: customs.whiteColor,
         appBar: AppBar(
+          iconTheme: IconThemeData(
+            color: customs.darkColor
+          ),
           backgroundColor: customs.whiteColor,
           elevation: 1,
           title: Builder(builder: (context) {
@@ -557,6 +561,7 @@ class _ConfirmedDeclinedCollectionState extends State<ConfirmedDeclinedCollectio
                     // color: Colors.red,
                     child: Skeletonizer(
                       enabled: loading,
+                      effect: customs.maruShimmerEffect(),
                       child: ListView(
                         padding: const EdgeInsets.symmetric(horizontal: 10),
                         children: collectionHistory,

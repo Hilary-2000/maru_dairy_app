@@ -90,18 +90,18 @@ class _EditSuperAdminDetailsState extends State<EditSuperAdminDetails> {
 
   Future<void> didChangeDependencies() async {
     super.didChangeDependencies();
-    setState(() {
-      bg_color = [
-        customs.primaryColor,
-        customs.secondaryColor,
-        customs.warningColor,
-        customs.darkColor,
-        customs.successColor
-      ];
-    });
-
     if(!_init){
+      // initialize
+      await customs.initialize();
+
       setState(() {
+        bg_color = [
+          customs.primaryColor,
+          customs.secondaryColor,
+          customs.warningColor,
+          customs.darkColor,
+          customs.successColor
+        ];
         _init = true;
       });
 
@@ -290,8 +290,11 @@ class _EditSuperAdminDetailsState extends State<EditSuperAdminDetails> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: customs.primaryShade,
+      backgroundColor: customs.whiteColor,
       appBar: AppBar(
+        iconTheme: IconThemeData(
+          color: customs.darkColor
+        ),
         backgroundColor: customs.whiteColor,
         elevation: 1,
         title: Builder(builder: (context) {
@@ -332,21 +335,14 @@ class _EditSuperAdminDetailsState extends State<EditSuperAdminDetails> {
           return Container(
             height: height,
             width: width,
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  Color.fromRGBO(230, 245, 248, 1),
-                  Color.fromRGBO(255, 255, 255, 1),
-                  Color.fromRGBO(227, 228, 229, 1)
-                ],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
+            decoration: BoxDecoration(
+              color: customs.whiteColor
             ),
             child: Column(
               children: [
                 Skeletonizer(
                   enabled: loading,
+                  effect: customs.maruShimmerEffect(),
                   child: Container(
                     height: height - 5,
                     width: width,

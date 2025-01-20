@@ -362,6 +362,7 @@ class _memberHistoryState extends State<memberHistory> {
                         ),
                         Skeletonizer(
                           enabled: loading,
+                          effect: customs.maruShimmerEffect(),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
@@ -511,6 +512,7 @@ class _memberHistoryState extends State<memberHistory> {
                 ),
                 Skeletonizer(
                   enabled: loading,
+                  effect: customs.maruShimmerEffect(),
                   child: Container(
                     margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
                     height: height - 285,

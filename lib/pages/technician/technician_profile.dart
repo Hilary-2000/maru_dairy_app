@@ -152,6 +152,7 @@ class _TechnicianProfileState extends State<TechnicianProfile> {
             ),
             child: Skeletonizer(
               enabled: loading,
+              effect: customs.maruShimmerEffect(),
               child: Column(
                 children: [
                   Container(

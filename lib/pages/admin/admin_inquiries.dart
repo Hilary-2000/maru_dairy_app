@@ -31,10 +31,11 @@ class _AdminInquiriesState extends State<AdminInquiries>{
   }
 
   @override
-  void didChangeDependencies() {
+  Future<void> didChangeDependencies() async {
     super.didChangeDependencies();
 
     if (!init) {
+      await customs.initialize();
       // get notifications
       widget.getNotifications();
 
@@ -147,7 +148,7 @@ class _AdminInquiriesState extends State<AdminInquiries>{
                           width: width * 0.7,
                           child: Text("Inquiries", style: customs.darkTextStyle(size: 20, fontweight: FontWeight.bold),),
                         ),
-                        CircleAvatar(backgroundColor: customs.secondaryShade_2, child: IconButton(onPressed: (){}, icon: Icon(Icons.search), color: customs.secondaryColor,)),
+                        CircleAvatar(backgroundColor: customs.secondaryShade_2.withOpacity(0.2), child: IconButton(onPressed: (){}, icon: Icon(Icons.search), color: customs.secondaryColor,)),
                       ],
                     ),
                   )
@@ -173,6 +174,7 @@ class _AdminInquiriesState extends State<AdminInquiries>{
                               icon: Icon(
                                 Icons.arrow_back_ios,
                                 size: 20,
+                                color: customs.darkColor,
                               )
                           ),
                           Text("${selected_chat_ids.length}", style: customs.secondaryTextStyle(size: 20, fontweight: FontWeight.bold),)
@@ -208,7 +210,7 @@ class _AdminInquiriesState extends State<AdminInquiries>{
                                   }
                                 }
                               },
-                              icon: Icon(FontAwesomeIcons.trashCanArrowUp, size: 20,)
+                              icon: Icon(FontAwesomeIcons.trashCanArrowUp, size: 20, color: customs.secondaryShade,)
                           ),
                         ],
                       ),

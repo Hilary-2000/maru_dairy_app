@@ -37,10 +37,11 @@ class _MembershipState extends State<Membership> {
   bool initialized = false;
   bool loading = false;
 
-  void didChangeDependencies(){
+  Future<void> didChangeDependencies() async {
     super.didChangeDependencies();
 
     if(!initialized){
+      await customs.initialize();
       // get membership details
       getMembershipDetails();
       // set state
@@ -101,6 +102,9 @@ class _MembershipState extends State<Membership> {
     return Scaffold(
       backgroundColor: customs.whiteColor,
       appBar: AppBar(
+        iconTheme: IconThemeData(
+          color: customs.darkColor
+        ),
         backgroundColor: customs.whiteColor,
         elevation: 1,
         title: Builder(builder: (context) {
@@ -153,6 +157,7 @@ class _MembershipState extends State<Membership> {
                   children: [
                     Skeletonizer(
                       enabled: loading,
+                      effect: customs.maruShimmerEffect(),
                       child: Container(
                         padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                         margin: EdgeInsets.symmetric(horizontal: 10),
@@ -225,6 +230,7 @@ class _MembershipState extends State<Membership> {
                     ),
                     Skeletonizer(
                       enabled: loading,
+                      effect: customs.maruShimmerEffect(),
                       child: Container(
                         padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                         margin: EdgeInsets.symmetric(horizontal: 10),
@@ -377,6 +383,7 @@ class _MembershipState extends State<Membership> {
                     ),
                     Skeletonizer(
                       enabled: loading,
+                      effect: customs.maruShimmerEffect(),
                       child: Container(
                         height: height - 300,
                         child: DefaultTabController(
@@ -770,15 +777,18 @@ class _rejectEarningsState extends State<rejectEarnings> {
 
   void initState(){
     super.initState();
+  }
+
+  Future<void> didChangeDependencies() async {
+    super.didChangeDependencies();
 
     if(!init){
-      print("Initialize");
+      await customThemes.initialize();
       setState(() {
         howMuch.text = "0";
         init = true;
       });
-
-    //   get the deduction types
+      // get the deduction types
       getDeductions();
     }
   }
@@ -1246,11 +1256,12 @@ class _editEarningsState extends State<_editEarnings> {
     return "N/A";
   }
 
-  void initState(){
-    super.initState();
+  Future<void> didChangeDependencies() async {
+    super.didChangeDependencies();
 
     if(!init){
-      getEarningDetails();
+      await customThemes.initialize();
+      await getEarningDetails();
       setState(() {
         init = true;
       });
@@ -1379,6 +1390,7 @@ class _editEarningsState extends State<_editEarnings> {
                 padding: const EdgeInsets.all(16.0),
                 child: Skeletonizer(
                   enabled: loading,
+                  effect: customThemes.maruShimmerEffect(),
                   child: SingleChildScrollView(
                     child: Column(
                       mainAxisSize: MainAxisSize.min,

@@ -460,6 +460,7 @@ class _TechnicianDashboardState extends State<TechnicianDashboard> {
                   ),
                   Skeletonizer(
                     enabled: _loading,
+                    effect: customs.maruShimmerEffect(),
                     child: Card(
                       color: customs.whiteColor,
                       margin: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
@@ -648,6 +649,7 @@ class _TechnicianDashboardState extends State<TechnicianDashboard> {
                   // SHOW THE COLLECTION IN LITERS
                   Skeletonizer(
                     enabled: _loadingDash,
+                    effect: customs.maruShimmerEffect(),
                     child: Card(
                       color: customs.whiteColor,
                       margin:
@@ -724,6 +726,7 @@ class _TechnicianDashboardState extends State<TechnicianDashboard> {
                   ),
                   Skeletonizer(
                     enabled: _loadingDash,
+                    effect: customs.maruShimmerEffect(),
                     child: Skeleton.leaf(
                       child: Container(
                         padding: const EdgeInsets.fromLTRB(10, 10, 0, 10),
@@ -868,6 +871,7 @@ class _TechnicianDashboardState extends State<TechnicianDashboard> {
                   ),
                   Skeletonizer(
                     enabled: _loadingDash,
+                    effect: customs.maruShimmerEffect(),
                     child: Card(
                       color: customs.whiteColor,
                       margin:
@@ -944,6 +948,7 @@ class _TechnicianDashboardState extends State<TechnicianDashboard> {
                   ),
                   Skeletonizer(
                     enabled: _loadingDash,
+                    effect: customs.maruShimmerEffect(),
                     child: Skeleton.leaf(
                       child: Container(
                         padding: const EdgeInsets.fromLTRB(10, 10, 0, 10),

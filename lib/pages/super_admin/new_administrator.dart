@@ -163,6 +163,7 @@ class _NewAdministratorState extends State<NewAdministrator> {
               children: [
                 Skeletonizer(
                   enabled: loading,
+                  effect: customs.maruShimmerEffect(),
                   child: Container(
                     height: height - 5,
                     width: width,

@@ -317,6 +317,7 @@ class _EditProfileState extends State<EditProfile> {
                   child: SingleChildScrollView(
                     child: Skeletonizer(
                       enabled: loading,
+                      effect: customs.maruShimmerEffect(),
                       child: Form(
                         key: _formKey,
                         child: Column(

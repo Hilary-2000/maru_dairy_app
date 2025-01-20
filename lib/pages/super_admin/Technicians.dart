@@ -48,12 +48,10 @@ class _TechniciansState extends State<Technicians> {
     });
   }
 
-  void didChangeDependencies(){
+  Future<void> didChangeDependencies() async {
     super.didChangeDependencies();
 
     if(!_init){
-      // double width
-      double width = MediaQuery.of(context).size.width;
       setState(() {
         colors_shade = [customs.primaryShade, customs.secondaryShade, customs.warningShade, customs.darkShade, customs.successShade];
         textStyles = [
@@ -74,6 +72,9 @@ class _TechniciansState extends State<Technicians> {
           ),
         ];
       });
+
+      // initialize
+      await customs.initialize();
 
       //get the technician
       getTechnician();
@@ -122,6 +123,9 @@ class _TechniciansState extends State<Technicians> {
       child: Scaffold(
         backgroundColor: customs.whiteColor,
         appBar: AppBar(
+          iconTheme: IconThemeData(
+            color: customs.darkColor
+          ),
           backgroundColor: customs.whiteColor,
           elevation: 1,
           title: Builder(builder: (context) {
@@ -195,6 +199,7 @@ class _TechniciansState extends State<Technicians> {
                   ),
                   Skeletonizer(
                     enabled: loading,
+                    effect: customs.maruShimmerEffect(),
                     child: Container(
                       width: width * 0.95,
                       padding: const EdgeInsets.all(8),
@@ -335,7 +340,7 @@ class _TechniciansState extends State<Technicians> {
           },
         )),
         floatingActionButton: CircleAvatar(
-          backgroundColor: customs.secondaryShade_2,
+          backgroundColor: customs.secondaryShade.withOpacity(0.2),
           radius: 25,
           child: IconButton(
             onPressed: () async {

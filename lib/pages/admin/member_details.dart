@@ -37,6 +37,7 @@ class _MemberDetailsState extends State<MemberDetails> {
       setState(() {
         index = arguments['index'];
       });
+      print(arguments);
       ApiConnection apiConnection = new ApiConnection();
       var response = await apiConnection.adminMemberDetails(arguments['member_id'].toString());
       if(customs.isValidJson(response)){
@@ -69,7 +70,7 @@ class _MemberDetailsState extends State<MemberDetails> {
     });
   }
 
-  void didChangeDependencies(){
+  Future<void> didChangeDependencies() async {
     super.didChangeDependencies();
 
     if(!_init){
@@ -77,9 +78,10 @@ class _MemberDetailsState extends State<MemberDetails> {
         _init = true;
         bg_color = [customs.primaryColor, customs.secondaryColor, customs.warningColor, customs.darkColor, customs.successColor];
       });
+      await customs.initialize();
 
       //GET MEMBER DATA
-      getMemberData();
+      await getMemberData();
     }
   }
 
@@ -87,8 +89,11 @@ class _MemberDetailsState extends State<MemberDetails> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: customs.primaryShade,
+      backgroundColor: customs.whiteColor,
       appBar: AppBar(
+        iconTheme: IconThemeData(
+          color: customs.darkColor
+        ),
         backgroundColor: customs.whiteColor,
         elevation: 1,
         title: Builder(builder: (context) {
@@ -129,21 +134,14 @@ class _MemberDetailsState extends State<MemberDetails> {
           return Container(
             height: height,
             width: width,
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  Color.fromRGBO(230, 245, 248, 1),
-                  Color.fromRGBO(255, 255, 255, 1),
-                  Color.fromRGBO(227, 228, 229, 1)
-                ],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
+            decoration: BoxDecoration(
+                color: customs.secondaryShade_2.withOpacity(0.2),
             ),
             child: Column(
               children: [
                 Skeletonizer(
                   enabled: loading,
+                  effect: customs.maruShimmerEffect(),
                   child: Container(
                     height: height - 5,
                     width: width,
@@ -610,7 +608,7 @@ class _MemberDetailsState extends State<MemberDetails> {
         },
       )),
       floatingActionButton: CircleAvatar(
-        backgroundColor: customs.primaryShade_2,
+        backgroundColor: customs.secondaryShade.withOpacity(0.2),
         child: IconButton(
           icon: Icon(Icons.edit, color: customs.primaryColor,),
           onPressed: () async {
@@ -638,9 +636,20 @@ class _AddTodoPopupCardState extends State<_AddTodoPopupCard> {
   CustomThemes customThemes = new CustomThemes();
 
   bool saveLoader = false;
+  bool init = false;
 
   void initState(){
     super.initState();
+  }
+
+  Future<void> didChangeDependencies() async {
+    super.didChangeDependencies();
+    if(!init){
+      await customThemes.initialize();
+      setState(() {
+        init = !init;
+      });
+    }
   }
 
   @override

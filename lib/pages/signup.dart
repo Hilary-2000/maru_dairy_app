@@ -62,9 +62,10 @@ class _signUpState extends State<signUp> {
   }
 
   bool init = false;
-  void didChangeDependencies(){
+  Future<void> didChangeDependencies() async {
     super.didChangeDependencies();
     if(!init){
+      await customs.initialize();
       setState(() {
         init = true;
       });
@@ -135,16 +136,8 @@ class _signUpState extends State<signUp> {
           return Container(
             height: height,
             width: width,
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  Color.fromRGBO(230, 245, 248, 1),
-                  Color.fromRGBO(255, 255, 255, 1),
-                  Color.fromRGBO(227, 228, 229, 1)
-                ],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
+            decoration: BoxDecoration(
+              color: customs.whiteColor
             ),
             child: SingleChildScrollView(
               child: Column(

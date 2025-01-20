@@ -29,11 +29,12 @@ class _CollectMilkState extends State<CollectMilk> {
   }
 
   @override
-  void didChangeDependencies(){
+  Future<void> didChangeDependencies() async {
     super.didChangeDependencies();
-    double width = MediaQuery.of(context).size.width;
 
     if(!_init){
+      await customs.initialize();
+      double width = MediaQuery.of(context).size.width;
       // initialize the members
       setState(() {
         colors_shade = [customs.primaryShade, customs.secondaryShade, customs.warningShade, customs.darkShade, customs.successShade];
@@ -486,6 +487,9 @@ class _CollectMilkState extends State<CollectMilk> {
       child: Scaffold(
         backgroundColor: customs.whiteColor,
         appBar: AppBar(
+          iconTheme: IconThemeData(
+              color: customs.darkColor
+          ),
           backgroundColor: customs.whiteColor,
           elevation: 1,
           title: Builder(builder: (context) {
@@ -572,6 +576,7 @@ class _CollectMilkState extends State<CollectMilk> {
                     child: SingleChildScrollView(
                       child: Skeletonizer(
                         enabled: loadMembers,
+                        effect: customs.maruShimmerEffect(),
                         child: Column(
                           children: memberList,
                         ),
