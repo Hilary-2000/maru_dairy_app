@@ -79,6 +79,7 @@ class _memberDashboardState extends State<memberDashboard> {
   Future<void> didChangeDependencies() async {
     super.didChangeDependencies();
     if(!init){
+      await customs.initialize();
       setState(() {
         init = true;
       });
@@ -100,6 +101,19 @@ class _memberDashboardState extends State<memberDashboard> {
     }
   }
 
+  // set color mode
+  Future<void> setColorMode(String color_mode) async {
+    setState(() {
+      customs.color_mode = color_mode;
+    });
+    print(color_mode);
+    await customs.initialize();
+    setState(() {
+      customs.color_mode = color_mode;
+    });
+    print("Dashboard color mode : ${customs.color_mode}");
+  }
+
   @override
   Widget build(BuildContext context) {
     List<Widget> member_windows = [
@@ -110,7 +124,7 @@ class _memberDashboardState extends State<memberDashboard> {
       // THE MEMBER HISTORY
       notificationWindow(getNotifications: getNotifications, notification_count: notification_count,),
       // THE MEMBER PROFILE
-      MemberSettings(getNotifications: getNotifications,)
+      MemberSettings(getNotifications: getNotifications, setColorMode: setColorMode)
     ];
     return PopScope(
       canPop: false,
@@ -131,6 +145,9 @@ class _memberDashboardState extends State<memberDashboard> {
       child: Scaffold(
         backgroundColor: customs.whiteColor,
         appBar: AppBar(
+          iconTheme: IconThemeData(
+            color: customs.darkColor
+          ),
           backgroundColor: customs.whiteColor,
           elevation: 1,
           title: Builder(builder: (context) {
@@ -167,10 +184,10 @@ class _memberDashboardState extends State<memberDashboard> {
           double width = MediaQuery.of(context).size.width;
           return Container(
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: customs.whiteColor,
               borderRadius: BorderRadius.circular(10.0), // Rounded corners
               border: Border.all(
-                color: Colors.white,
+                color: customs.whiteColor,
                 width: 2.0,
               ),
             ),
@@ -402,9 +419,13 @@ class _memberDashState extends State<memberDash> {
     super.didChangeDependencies();
 
     if(!_init){
-      widget.getNotifications();
+      // initialize
+      customs.initialize();
       setState(() {
         _init = true;
+      });
+      widget.getNotifications();
+      setState(() {
         barGroupData = [
           BarChartGroupData(x: 1, barRods: [
             BarChartRodData(
@@ -569,7 +590,7 @@ class _memberDashState extends State<memberDash> {
             height: height,
             width: width,
             decoration: BoxDecoration(
-              color: customs.secondaryShade_2.withOpacity(0.2),
+              color: customs.secondaryShade.withOpacity(0.2),
             ),
             child: SingleChildScrollView(
               child: Column(

@@ -42,6 +42,7 @@ class _adminDashboardState extends State<adminDashboard> {
     super.didChangeDependencies();
 
     if(!init){
+      await customs.initialize();
       setState(() {
         init = true;
       });
@@ -79,6 +80,18 @@ class _adminDashboardState extends State<adminDashboard> {
 
   bool load_inquiries = false;
 
+  Future<void> setColorMode(String color_mode) async {
+    setState(() {
+      customs.color_mode = color_mode;
+    });
+    print(color_mode);
+    await customs.initialize();
+    setState(() {
+      customs.color_mode = color_mode;
+    });
+    print("Dashboard color mode : ${customs.color_mode}");
+  }
+
   @override
   Widget build(BuildContext context) {
     List<Widget> admin_dashboard = [
@@ -91,7 +104,7 @@ class _adminDashboardState extends State<adminDashboard> {
       // admin inquiries
       AdminInquiries(getNotifications: getNotifications,),
       // Admin Account
-      AdminAccount(updateIndex: _updateIndex, getNotifications: getNotifications,)
+      AdminAccount(updateIndex: _updateIndex, getNotifications: getNotifications,setColorMode: setColorMode,)
     ];
     Future<bool?> _showBackDialog() {
       return showDialog<bool>(
@@ -174,10 +187,10 @@ class _adminDashboardState extends State<adminDashboard> {
           double width = MediaQuery.of(context).size.width;
           return Container(
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: customs.whiteColor,
               borderRadius: BorderRadius.circular(10.0), // Rounded corners
               border: Border.all(
-                color: Colors.white,
+                color: customs.whiteColor,
                 width: 2.0,
               ),
             ),
@@ -371,7 +384,7 @@ class _adminDashboardState extends State<adminDashboard> {
         floatingActionButton: index == 0
             ? (CircleAvatar(
                 radius: 25,
-                backgroundColor: customs.secondaryShade_2,
+                backgroundColor: customs.secondaryShade.withOpacity(0.2),
                 child: IconButton(
                   icon: Icon(
                     Icons.person_add_alt_outlined,
@@ -401,7 +414,7 @@ class _adminDashboardState extends State<adminDashboard> {
                 : (index == 1
                     ? (CircleAvatar(
                         radius: 25,
-                        backgroundColor: customs.successShade_2,
+                        backgroundColor: customs.secondaryShade.withOpacity(0.2),
                         child: IconButton(
                           icon: Icon(
                             Icons.person_add_alt_outlined,
@@ -552,11 +565,12 @@ class _AdminDashboardState extends State<AdminDashboard> {
     });
   }
 
-  void didChangeDependencies() {
+  Future<void> didChangeDependencies() async {
     super.didChangeDependencies();
 
     // get the admin dashboard
     if(!_init){
+      await customs.initialize();
       setState(() {
         collectionPlot = [
           BarChartGroupData(x: 1, barRods: [
@@ -733,7 +747,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
           ])
         ];
       });
-      getAdminDash();
+      await getAdminDash();
       _init = true;
     }
   }
@@ -832,16 +846,8 @@ class _AdminDashboardState extends State<AdminDashboard> {
           return Container(
             height: height,
             width: width,
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  Color.fromRGBO(230, 245, 248, 1),
-                  Color.fromRGBO(255, 255, 255, 1),
-                  Color.fromRGBO(227, 228, 229, 1)
-                ],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
+            decoration: BoxDecoration(
+              color: customs.secondaryShade.withOpacity(0.2)
             ),
             child: SingleChildScrollView(
               child: Column(
@@ -943,7 +949,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                                     color: customs.warningColor,
                                     child: Text(
                                       "Administrator",
-                                      style: customs.whiteTextStyle(size: 10),
+                                      style: customs.whiteTextStyle(size: 10, fontweight: FontWeight.bold),
                                     ),
                                   ),
                                 )

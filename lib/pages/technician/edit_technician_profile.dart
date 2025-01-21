@@ -26,6 +26,7 @@ class _EditTechnicianProfileState extends State<EditTechnicianProfile> {
   FlutterSecureStorage _storage = FlutterSecureStorage();
 
   String name = "N/A";
+  bool init = false;
   String phone_number = "N/A";
   String email = "N/A";
   String residence = "N/A";
@@ -48,9 +49,19 @@ class _EditTechnicianProfileState extends State<EditTechnicianProfile> {
   void initState() {
     // TODO: implement initState
     super.initState();
+  }
 
-    // load technician details
-    loadTechnicianDetails();
+  Future<void> didChangeDependencies() async {
+    super.didChangeDependencies();
+
+    if(!init){
+      await customs.initialize();
+      setState(() {
+        init = true;
+      });
+      // load technician details
+      await loadTechnicianDetails();
+    }
   }
 
   bool isValidJson(String jsonString) {
@@ -246,6 +257,9 @@ class _EditTechnicianProfileState extends State<EditTechnicianProfile> {
     return Scaffold(
       backgroundColor: customs.primaryShade,
       appBar: AppBar(
+        iconTheme: IconThemeData(
+          color: customs.darkColor
+        ),
         backgroundColor: customs.whiteColor,
         elevation: 1,
         title: Builder(builder: (context) {
@@ -286,16 +300,8 @@ class _EditTechnicianProfileState extends State<EditTechnicianProfile> {
           return Container(
             height: height,
             width: width,
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  Color.fromRGBO(230, 245, 248, 1),
-                  Color.fromRGBO(255, 255, 255, 1),
-                  Color.fromRGBO(227, 228, 229, 1)
-                ],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
+            decoration: BoxDecoration(
+              color: customs.whiteColor
             ),
             child: Column(
               children: [
@@ -473,10 +479,12 @@ class _EditTechnicianProfileState extends State<EditTechnicianProfile> {
                                     child: Skeleton.ignore(
                                       child: CircleAvatar(
                                         radius: 15,
+                                        backgroundColor: customs.primaryColor.withOpacity(0.7),
                                         child: IconButton(
-                                          icon: const Icon(
+                                          icon: Icon(
                                             FontAwesomeIcons.penFancy,
-                                            size: 10,
+                                            size: 15,
+                                            color: customs.darkColor,
                                           ),
                                           onPressed: () async {
                                             // pick image
@@ -486,7 +494,7 @@ class _EditTechnicianProfileState extends State<EditTechnicianProfile> {
                                             //get the technician data
                                             await loadTechnicianDetails();
                                           },
-                                          color: customs.secondaryColor,
+                                          color: customs.secondaryColor.withOpacity(0.2),
                                         ),
                                       ),
                                     ),

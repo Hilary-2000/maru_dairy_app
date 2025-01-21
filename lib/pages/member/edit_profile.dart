@@ -167,14 +167,16 @@ class _EditProfileState extends State<EditProfile> {
     super.didChangeDependencies();
 
     if(!_init){
-      await getRegions();
-      // get member details
-      getMemberDetails();
-
       // setState
       setState(() {
         _init = true;
       });
+
+      await customs.initialize();
+      await getRegions();
+      // get member details
+      getMemberDetails();
+
     }
   }
 
@@ -255,8 +257,11 @@ class _EditProfileState extends State<EditProfile> {
     ];
 
     return Scaffold(
-      backgroundColor: customs.primaryShade,
+      backgroundColor: customs.whiteColor,
       appBar: AppBar(
+        iconTheme: IconThemeData(
+          color: customs.darkColor
+        ),
         backgroundColor: customs.whiteColor,
         elevation: 1,
         title: Builder(builder: (context) {
@@ -297,16 +302,8 @@ class _EditProfileState extends State<EditProfile> {
           return Container(
             height: height,
             width: width,
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  Color.fromRGBO(230, 245, 248, 1),
-                  Color.fromRGBO(255, 255, 255, 1),
-                  Color.fromRGBO(227, 228, 229, 1)
-                ],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
+            decoration: BoxDecoration(
+              color: customs.whiteColor
             ),
             child: Column(
               children: [
@@ -521,10 +518,12 @@ class _EditProfileState extends State<EditProfile> {
                                       child: Skeleton.ignore(
                                         child: CircleAvatar(
                                           radius: 15,
+                                          backgroundColor: customs.primaryColor.withOpacity(0.7),
                                           child: IconButton(
-                                            icon: const Icon(
+                                            icon: Icon(
                                               FontAwesomeIcons.penFancy,
-                                              size: 10,
+                                              size: 15,
+                                              color: customs.darkColor,
                                             ),
                                             onPressed: () async {
                                               // pick image

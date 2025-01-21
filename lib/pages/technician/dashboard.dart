@@ -21,16 +21,7 @@ class technicianDashboard extends StatefulWidget {
 class _technicianDashboardState extends State<technicianDashboard> {
   CustomThemes customs = CustomThemes();
   int index = 0;
-  List<Widget> technician_windows = [
-    // TECHNICIAN DASHBOARD
-    TechnicianDashboard(),
-
-    // TECHNICIAN HISTORY
-    TechnicianHistory(),
-
-    // ACCOUNT
-    TechnicianAccount(),
-  ];
+  bool init = false;
   Future<bool?> _showBackDialog() {
     return showDialog<bool>(
       context: context,
@@ -56,8 +47,43 @@ class _technicianDashboardState extends State<technicianDashboard> {
     );
   }
 
+  Future<void> setColorMode(String color_mode) async {
+    setState(() {
+      customs.color_mode = color_mode;
+    });
+    print(color_mode);
+    await customs.initialize();
+    setState(() {
+      customs.color_mode = color_mode;
+    });
+    print("Dashboard color mode : ${customs.color_mode}");
+  }
+
+  @override
+  Future<void> didChangeDependencies() async {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+
+    if(!init){
+      await customs.initialize();
+      setState(() {
+        init = !init;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    List<Widget> technician_windows = [
+      // TECHNICIAN DASHBOARD
+      TechnicianDashboard(),
+
+      // TECHNICIAN HISTORY
+      TechnicianHistory(),
+
+      // ACCOUNT
+      TechnicianAccount(setColorMode: setColorMode),
+    ];
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (bool didPop, Object? result) async {
@@ -113,10 +139,10 @@ class _technicianDashboardState extends State<technicianDashboard> {
           double width = MediaQuery.of(context).size.width;
           return Container(
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: customs.whiteColor,
               borderRadius: BorderRadius.circular(10.0), // Rounded corners
               border: Border.all(
-                color: Colors.white,
+                color: customs.whiteColor,
                 width: 2.0,
               ),
             ),
@@ -249,6 +275,7 @@ class _TechnicianDashboardState extends State<TechnicianDashboard> {
     const DropdownMenuItem(child: Text("1 Month"), value: "30 days"),
   ];
   CustomThemes customs = CustomThemes();
+  bool init = false;
   final FlutterSecureStorage _storage = const FlutterSecureStorage();
   List<String> daysOfWeek = [
     '',
@@ -260,6 +287,16 @@ class _TechnicianDashboardState extends State<TechnicianDashboard> {
     'Fri',
     'Sat'
   ];
+
+  Future<void> didChangeDependencies() async {
+    super.didChangeDependencies();
+    if(!init){
+      await customs.initialize();
+      setState(() {
+        init = true;
+      });
+    }
+  }
 
   double _parseAmount(dynamic amount) {
     try {
@@ -441,16 +478,8 @@ class _TechnicianDashboardState extends State<TechnicianDashboard> {
           return Container(
             height: height,
             width: width,
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  Color.fromRGBO(230, 245, 248, 1),
-                  Color.fromRGBO(255, 255, 255, 1),
-                  Color.fromRGBO(227, 228, 229, 1)
-                ],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
+            decoration: BoxDecoration(
+              color: customs.secondaryShade.withOpacity(0.2)
             ),
             child: SingleChildScrollView(
               child: Column(

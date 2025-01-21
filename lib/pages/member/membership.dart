@@ -34,16 +34,17 @@ class _MemberMembershipState extends State<MemberMembership> {
   bool initialized = false;
   bool loading = false;
 
-  void didChangeDependencies(){
+  Future<void> didChangeDependencies() async {
     super.didChangeDependencies();
 
     if(!initialized){
-      // get membership details
-      getMembershipDetails();
+      await customs.initialize();
       // set state
       setState(() {
         initialized = true;
       });
+      // get membership details
+      await getMembershipDetails();
     }
 
   }
@@ -93,11 +94,15 @@ class _MemberMembershipState extends State<MemberMembership> {
       });
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: customs.whiteColor,
       appBar: AppBar(
+        iconTheme: IconThemeData(
+          color: customs.darkColor
+        ),
         backgroundColor: customs.whiteColor,
         elevation: 1,
         title: Builder(builder: (context) {
@@ -429,7 +434,7 @@ class _MemberMembershipState extends State<MemberMembership> {
                                                           child: ListTile(
                                                             leading: CircleAvatar(
                                                               radius: 30,
-                                                              backgroundColor: customs.primaryShade_2,
+                                                              backgroundColor: customs.secondaryShade.withOpacity(0.4),
                                                               child: Icon(
                                                                 FontAwesomeIcons.dollarSign,
                                                                 size: 20,
@@ -536,7 +541,7 @@ class _MemberMembershipState extends State<MemberMembership> {
                                                             child: ListTile(
                                                               leading: CircleAvatar(
                                                                 radius: 30,
-                                                                backgroundColor: item['confirmed'] ? customs.successShade_2 : customs.secondaryShade_2,
+                                                                backgroundColor: item['confirmed'] ? customs.successShade_2.withOpacity(0.2) : customs.secondaryShade_2.withOpacity(0.2),
                                                                 child: Icon(
                                                                   FontAwesomeIcons.dollarSign,
                                                                   size: 20,
@@ -609,7 +614,7 @@ class _MemberMembershipState extends State<MemberMembership> {
                                                         child: ListTile(
                                                           leading: CircleAvatar(
                                                             radius: 30,
-                                                            backgroundColor: item['confirmed'] ? customs.successShade_2 : customs.secondaryShade_2,
+                                                            backgroundColor: item['confirmed'] ? customs.successShade_2.withOpacity(0.2) : customs.secondaryShade_2.withOpacity(0.2),
                                                             child: Icon(
                                                               FontAwesomeIcons.dollarSign,
                                                               size: 20,
@@ -747,10 +752,15 @@ class _rejectEarningsState extends State<rejectEarnings> {
 
   void initState(){
     super.initState();
+    howMuch.text = "0";
+  }
+
+  Future<void> didChangeDependencies() async {
+    super.didChangeDependencies();
 
     if(!init){
+      await customThemes.initialize();
       setState(() {
-        howMuch.text = "0";
         init = true;
       });
     }
@@ -973,14 +983,15 @@ class _editEarningsState extends State<_editEarnings> {
     return "N/A";
   }
 
-  void initState(){
-    super.initState();
+  Future<void> didChangeDependencies() async {
+    super.didChangeDependencies();
 
     if(!init){
-      getEarningDetails();
+      await customThemes.initialize();
       setState(() {
         init = true;
       });
+      getEarningDetails();
     }
   }
 

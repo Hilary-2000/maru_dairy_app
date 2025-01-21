@@ -85,20 +85,8 @@ class _EditMemberMilkDataState extends State<EditMemberMilkData> {
       double width = MediaQuery.of(context).size.width;
       setState(() {
         _init = true;
-        colors_shade = [
-          customs.primaryShade,
-          customs.secondaryShade,
-          customs.warningShade,
-          customs.darkShade,
-          customs.successShade
-        ];
-        fullcolor = [
-          customs.primaryColor,
-          customs.secondaryColor,
-          customs.warningColor,
-          customs.darkColor,
-          customs.successColor
-        ];
+        colors_shade = customs.colors;
+        fullcolor = customs.colors;
         textStylesTitle = [
           customs.primaryTextStyle(
               size: 30, fontweight: FontWeight.bold
@@ -428,7 +416,7 @@ class _EditMemberMilkDataState extends State<EditMemberMilkData> {
                         Hero(
                           tag: _heroAddTodo,
                           child: PopupMenuButton<String>(
-                            icon: Icon(FontAwesomeIcons.ellipsisVertical, size: 20,),
+                            icon: Icon(FontAwesomeIcons.ellipsisVertical, size: 20, color: customs.darkColor,),
                             onSelected: (String result) async {
                               // Handle the selection here
                               if(result == "delete"){
@@ -500,7 +488,7 @@ class _EditMemberMilkDataState extends State<EditMemberMilkData> {
                                   borderRadius: BorderRadius.only(
                                       topLeft: Radius.circular(8),
                                       topRight: Radius.circular(8)),
-                                  color: fullcolor[index % fullcolor.length]),
+                                  color: fullcolor[index % fullcolor.length].withOpacity(0.7)),
                             ),
                             Container(
                               padding: EdgeInsets.symmetric(
@@ -826,8 +814,18 @@ class _AddTodoPopupCard extends StatefulWidget {
 
 class _AddTodoPopupCardState extends State<_AddTodoPopupCard> {
   CustomThemes customThemes = new CustomThemes();
-
   bool saveLoader = false;
+  bool init = false;
+
+  Future<void> didChangeDependencies() async {
+    super.didChangeDependencies();
+    if(!init){
+      await customThemes.initialize();
+      setState(() {
+        init = true;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

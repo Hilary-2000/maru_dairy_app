@@ -68,10 +68,11 @@ class _AdministratorDetailsState extends State<AdministratorDetails> {
     });
   }
 
-  void didChangeDependencies(){
+  Future<void> didChangeDependencies() async {
     super.didChangeDependencies();
 
     if(!_init){
+      await customs.initialize();
       setState(() {
         _init = true;
         bg_color = [customs.primaryColor, customs.secondaryColor, customs.warningColor, customs.darkColor, customs.successColor];
@@ -86,8 +87,11 @@ class _AdministratorDetailsState extends State<AdministratorDetails> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: customs.primaryShade,
+      backgroundColor: customs.whiteColor,
       appBar: AppBar(
+        iconTheme: IconThemeData(
+          color: customs.darkColor
+        ),
         backgroundColor: customs.whiteColor,
         elevation: 1,
         title: Builder(builder: (context) {
@@ -128,16 +132,8 @@ class _AdministratorDetailsState extends State<AdministratorDetails> {
           return Container(
             height: height,
             width: width,
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  Color.fromRGBO(230, 245, 248, 1),
-                  Color.fromRGBO(255, 255, 255, 1),
-                  Color.fromRGBO(227, 228, 229, 1)
-                ],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
+            decoration: BoxDecoration(
+              color: customs.whiteColor
             ),
             child: Column(
               children: [
@@ -160,7 +156,7 @@ class _AdministratorDetailsState extends State<AdministratorDetails> {
                                     Hero(
                                       tag: _heroAddTodo,
                                       child: PopupMenuButton<String>(
-                                        icon: Icon(FontAwesomeIcons.ellipsisVertical, size: 20,),
+                                        icon: Icon(FontAwesomeIcons.ellipsisVertical, size: 20, color: customs.darkColor,),
                                         onSelected: (String result) async {
                                           // Handle the selection here
                                           if(result == "delete"){
@@ -483,9 +479,21 @@ class _AddTodoPopupCardState extends State<_AddTodoPopupCard> {
   CustomThemes customThemes = new CustomThemes();
 
   bool saveLoader = false;
+  bool init = false;
 
   void initState(){
     super.initState();
+  }
+
+  Future<void> didChangeDependencies() async {
+    super.didChangeDependencies();
+
+    if(!init){
+      await customThemes.initialize();
+      setState(() {
+        init = true;
+      });
+    }
   }
 
   @override
@@ -496,9 +504,6 @@ class _AddTodoPopupCardState extends State<_AddTodoPopupCard> {
         padding: const EdgeInsets.all(32.0),
         child: Hero(
           tag: _heroAddTodo,
-          // createRectTween: (begin, end) {
-          //   return CustomRectTween(begin: begin, end: end);
-          // },
           child: Material(
             color: customThemes.whiteColor,
             elevation: 2,

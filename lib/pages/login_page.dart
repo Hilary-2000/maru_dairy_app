@@ -63,7 +63,7 @@ class _LoginState extends State<Login> {
     }
 
     return Scaffold(
-      backgroundColor: customs.primaryShade,
+      backgroundColor: customs.whiteColor,
       body: SafeArea(child: LayoutBuilder(
         builder: (context, constraints) {
           double width = constraints.maxWidth;

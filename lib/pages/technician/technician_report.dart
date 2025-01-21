@@ -128,13 +128,17 @@ class _TechnicianReportState extends State<TechnicianReport> {
     const DropdownMenuItem(child: Text("Pending Collections"), value: "not_confirmed"),
   ];
 
-  void didChangeDependencies(){
+  Future<void> didChangeDependencies() async {
     // change dependencies
     super.didChangeDependencies();
 
     if(!_init){
+      await customs.initialize();
+      setState(() {
+        _init = true;
+      });
       // get member details
-      loadTechnicianDetails();
+      await loadTechnicianDetails();
       getRegions();
 
       // set state
@@ -271,6 +275,9 @@ class _TechnicianReportState extends State<TechnicianReport> {
     return Scaffold(
       backgroundColor: customs.primaryShade,
       appBar: AppBar(
+        iconTheme: IconThemeData(
+          color: customs.darkColor
+        ),
         backgroundColor: customs.whiteColor,
         elevation: 1,
         title: Builder(builder: (context) {
@@ -654,7 +661,7 @@ class _TechnicianReportState extends State<TechnicianReport> {
                           )
                       ),
                       SizedBox(
-                        height: height/4,
+                        height: height/5,
                       ),
                       Center(
                         child:

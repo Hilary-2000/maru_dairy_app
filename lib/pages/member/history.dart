@@ -43,12 +43,16 @@ class _memberHistoryState extends State<memberHistory> {
     // display
     displayHistory(newHistory);
   }
-  void didChangeDependencies(){
+  Future<void> didChangeDependencies() async {
     super.didChangeDependencies();
     // set the initials
     double width = MediaQuery.of(context).size.width;
 
     if(!_init){
+      await customs.initialize();
+      setState(() {
+        _init = true;
+      });
       widget.getNotifications();
       setState(() {
         collections = [
@@ -155,9 +159,6 @@ class _memberHistoryState extends State<memberHistory> {
       });
       // get collection
       getCollectionHistory();
-      setState(() {
-        _init = true;
-      });
     }
   }
 
@@ -373,14 +374,14 @@ class _memberHistoryState extends State<memberHistory> {
                                 margin: const EdgeInsets.fromLTRB(0, 10.0, 0, 0),
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(10.0),
-                                    color: customs.secondaryShade_2),
+                                    color: customs.secondaryShade_2.withOpacity(0.2)),
                                 child: Row(
                                     crossAxisAlignment: CrossAxisAlignment.center,
                                     children: [
                                       Container(
                                         decoration: BoxDecoration(
                                           borderRadius: BorderRadius.circular(20),
-                                          color: Colors.grey[200],
+                                          color: customs.secondaryShade_2.withOpacity(0.2),
                                         ),
                                         padding: const EdgeInsets.all(5),
                                         child: Icon(
@@ -424,14 +425,14 @@ class _memberHistoryState extends State<memberHistory> {
                                 margin: const EdgeInsets.fromLTRB(0, 10.0, 0, 0),
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(10.0),
-                                    color: customs.secondaryShade_2),
+                                    color: customs.secondaryShade_2.withOpacity(0.2)),
                                 child: Row(
                                     crossAxisAlignment: CrossAxisAlignment.center,
                                     children: [
                                       Container(
                                         decoration: BoxDecoration(
                                           borderRadius: BorderRadius.circular(20),
-                                          color: Colors.grey[200],
+                                          color: customs.secondaryShade_2.withOpacity(0.2),
                                         ),
                                         padding: const EdgeInsets.all(5),
                                         child: Icon(

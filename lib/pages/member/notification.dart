@@ -27,6 +27,7 @@ class _notificationWindowState extends State<notificationWindow> {
     super.didChangeDependencies();
 
     if(!init){
+      await customs.initialize();
       setState(() {
         init = true;
       });

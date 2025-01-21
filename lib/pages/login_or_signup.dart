@@ -13,11 +13,11 @@ class _LoginOrSignupState extends State<LoginOrSignup> {
   CustomThemes customThemes = CustomThemes();
   bool init = false;
 
-  void didChangeDependencies(){
+  Future<void> didChangeDependencies() async {
     super.didChangeDependencies();
 
     if(!init){
-      customThemes.initialize();
+      await customThemes.initialize();
       setState(() {
         init = true;
       });
@@ -27,7 +27,7 @@ class _LoginOrSignupState extends State<LoginOrSignup> {
   @override
   Widget build(BuildContext context) {
     return  Scaffold(
-      backgroundColor: customThemes.primaryShade,
+      backgroundColor: customThemes.whiteColor,
       body: LayoutBuilder(
         builder: (context, constraints) {
           double width = constraints.maxWidth;

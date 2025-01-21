@@ -56,7 +56,7 @@ class _AdministratorListState extends State<AdministratorList> {
       // double width
       double width = MediaQuery.of(context).size.width;
       setState(() {
-        colors_shade = [customs.primaryShade, customs.secondaryShade.withOpacity(0.2), customs.warningShade, customs.successShade.withOpacity(0.2), customs.successShade.withOpacity(0.2)];
+        colors_shade = customs.colors;
         textStyles = [
           customs.primaryTextStyle(
               size: 18, fontweight: FontWeight.bold

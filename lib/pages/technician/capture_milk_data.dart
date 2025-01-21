@@ -97,7 +97,7 @@ class _CaptureMilkDataState extends State<CaptureMilkData> {
       setState(() {
         loading = true;
         bg_color = [customs.primaryColor, customs.secondaryColor, customs.warningColor, customs.darkColor, customs.successColor];
-        colors_shade = [customs.primaryShade, customs.secondaryShade, customs.warningShade, customs.darkShade, customs.successShade];
+        colors_shade = customs.colors;
         textStyles = [
           customs.primaryTextStyle(
               size: 30,
@@ -206,7 +206,7 @@ class _CaptureMilkDataState extends State<CaptureMilkData> {
                                   borderRadius: BorderRadius.only(
                                       topLeft: Radius.circular(8),
                                       topRight: Radius.circular(8)),
-                                  color: bg_color[jsonDecode(jsonEncode(args))['index'] % bg_color.length]),
+                                  color: bg_color[jsonDecode(jsonEncode(args))['index'] % bg_color.length].withOpacity(0.2)),
                             ),
                             Container(
                               padding: EdgeInsets.symmetric(

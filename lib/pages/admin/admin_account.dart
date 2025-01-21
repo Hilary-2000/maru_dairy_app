@@ -9,7 +9,8 @@ import 'package:maru/packages/maru_theme.dart';
 class AdminAccount extends StatefulWidget {
   final void Function(int) updateIndex;
   final void Function() getNotifications;
-  const AdminAccount({super.key, required this.updateIndex, this.getNotifications = _defaultFunction });
+  final Future <void> Function(String) setColorMode;
+  const AdminAccount({super.key, required this.updateIndex, this.getNotifications = _defaultFunction, required this.setColorMode });
   static void _defaultFunction(){}
 
   @override
@@ -20,19 +21,22 @@ class _AdminAccountState extends State<AdminAccount> {
   CustomThemes customs = CustomThemes();
   final FlutterSecureStorage _storage = const FlutterSecureStorage();
   bool _isLightMode = true;
+  bool _isColorChanging = false;
   bool _isInitialized = false;
   int index = 1;
   String price = "Kes 0";
 
   @override
-  void didChangeDependencies() {
+  Future<void> didChangeDependencies() async {
     super.didChangeDependencies();
 
     if(!_isInitialized){
-      initializeAccount();
+      await customs.initialize();
       setState(() {
         _isInitialized = true;
       });
+      _isLightMode = customs.color_mode == "light" ? true : false;
+      await initializeAccount();
     }
   }
 
@@ -237,7 +241,7 @@ class _AdminAccountState extends State<AdminAccount> {
                             ListTile(
                               leading: CircleAvatar(
                                 radius: 30,
-                                backgroundColor: customs.secondaryShade_2,
+                                backgroundColor: customs.secondaryShade.withOpacity(0.2),
                                 child: Icon(
                                   FontAwesomeIcons.userDoctor,
                                   size: 20,
@@ -355,17 +359,36 @@ class _AdminAccountState extends State<AdminAccount> {
                               title: Text("Light Mode", style: customs.darkTextStyle(size: 14),),
                               onTap: (){
                               },
-                              trailing: Switch(
+                              trailing:  _isColorChanging != true ? Switch(
                                 value: _isLightMode,
                                 activeTrackColor: customs.primaryColor,
                                 inactiveThumbColor: customs.primaryColor,
+                                inactiveTrackColor: customs.whiteColor,
                                 trackOutlineColor: WidgetStateProperty.all<Color>(customs.primaryColor),
-                                onChanged: (bool value) {
+                                onChanged: (bool value) async {
                                   setState(() {
                                     _isLightMode = value;
+                                    _isColorChanging = true;
+                                    customs.color_mode = _isLightMode ? "light" : "dark";
+                                  });
+                                  print("Status : ${_isLightMode}");
+                                  // set color mode back to the main window
+                                  String color_status = _isLightMode ? "light" : "dark";
+
+                                  await _storage.write(key: "bright_mode", value: color_status);
+
+                                  // re-initialize customs
+                                  await customs.initialize();
+                                  await widget.setColorMode(color_status);
+
+                                  // await Future.delayed(Duration(seconds: 1));
+
+                                  // change status
+                                  setState(() {
+                                    _isColorChanging = false;
                                   });
                                 },
-                              ),
+                              ):Text("Loading...", style: customs.primaryTextStyle(size: 12),),
                             ),
                           ],
                         ),

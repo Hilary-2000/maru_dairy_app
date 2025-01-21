@@ -96,6 +96,7 @@ class _EditTechnicianState extends State<EditTechnician> {
     });
 
     if(!_init){
+      await customs.initialize();
       setState(() {
         _init = true;
       });
@@ -172,8 +173,11 @@ class _EditTechnicianState extends State<EditTechnician> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: customs.primaryShade,
+      backgroundColor: customs.whiteColor,
       appBar: AppBar(
+        iconTheme: IconThemeData(
+          color: customs.darkColor
+        ),
         backgroundColor: customs.whiteColor,
         elevation: 1,
         title: Builder(builder: (context) {
@@ -214,16 +218,8 @@ class _EditTechnicianState extends State<EditTechnician> {
           return Container(
             height: height,
             width: width,
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  Color.fromRGBO(230, 245, 248, 1),
-                  Color.fromRGBO(255, 255, 255, 1),
-                  Color.fromRGBO(227, 228, 229, 1)
-                ],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
+            decoration: BoxDecoration(
+              color: customs.whiteColor,
             ),
             child: Column(
               children: [
@@ -358,22 +354,6 @@ class _EditTechnicianState extends State<EditTechnician> {
                                             height: double.infinity,
                                           ),
                                         )
-                                      ),
-                                    ),
-                                  ),
-                                  Positioned(
-                                    left: (width * 0.5) + 15,
-                                    top: 125,
-                                    child: CircleAvatar(
-                                      radius: 15,
-                                      child: IconButton(
-                                        icon: Icon(
-                                          FontAwesomeIcons.penFancy,
-                                          size: 10,
-                                        ),
-                                        onPressed: () {
-                                        },
-                                        color: customs.secondaryColor,
                                       ),
                                     ),
                                   )
@@ -607,6 +587,7 @@ class _EditTechnicianState extends State<EditTechnician> {
                                             child: Hero(
                                               tag: "modify_region",
                                               child: Material(
+                                                color: Colors.transparent,
                                                 child: Row(
                                                   children: [
                                                     Icon(FontAwesomeIcons.pencil, color: customs.primaryColor, size: 12,),
@@ -683,9 +664,6 @@ class _EditTechnicianState extends State<EditTechnician> {
                                           }
                                           return null;
                                         }
-                                    ),
-                                    Divider(
-                                      color: customs.secondaryShade_2,
                                     )
                                   ],
                                 ),
@@ -779,12 +757,13 @@ class _EditRegionsState extends State<EditRegions> {
   void didChangeDependencies()async{
     super.didChangeDependencies();
     if(!init){
-      await getRegions();
-      print("$_isRegionSelected");
+      await customThemes.initialize();
       setState(() {
         init = !init;
         //regionNameController.text = widget.region_data['region_name'];
       });
+      await getRegions();
+      print("$_isRegionSelected");
     }
   }
 
@@ -887,8 +866,8 @@ class _EditRegionsState extends State<EditRegions> {
                                 :
                             Container(
                               width: width,
-                              decoration: const BoxDecoration(
-                                color: Colors.white,
+                              decoration: BoxDecoration(
+                                color: customThemes.whiteColor,
                               ),
                               child: Column(
                                 children: [

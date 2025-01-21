@@ -480,10 +480,12 @@ class _EditSuperAdminDetailsState extends State<EditSuperAdminDetails> {
                                     top: 125,
                                     child: CircleAvatar(
                                       radius: 15,
+                                      backgroundColor: customs.primaryColor.withOpacity(0.7),
                                       child: IconButton(
                                         icon: Icon(
+                                          color: customs.darkColor,
                                           FontAwesomeIcons.penFancy,
-                                          size: 10,
+                                          size: 15,
                                         ),
                                         onPressed: () async {
                                           await _pickImage();

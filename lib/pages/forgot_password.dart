@@ -18,11 +18,22 @@ class _forgotPasswordState extends State<forgotPassword> {
   final _formKey = GlobalKey<FormState>();
   TextEditingController username = TextEditingController();
   bool loadData = false;
+  bool initialize = false;
+
+  Future<void> didChangeDependencies() async {
+    super.didChangeDependencies();
+    if(!initialize){
+      await customs.initialize();
+      setState(() {
+        initialize = true;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: customs.primaryShade,
+      backgroundColor: customs.whiteColor,
       appBar: AppBar(
         backgroundColor: customs.whiteColor,
         elevation: 1,
@@ -62,16 +73,8 @@ class _forgotPasswordState extends State<forgotPassword> {
           return Container(
             height: height,
             width: width,
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  Color.fromRGBO(230, 245, 248, 1),
-                  Color.fromRGBO(255, 255, 255, 1),
-                  Color.fromRGBO(227, 228, 229, 1)
-                ],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
+            decoration: BoxDecoration(
+              color: customs.whiteColor
             ),
             child: SingleChildScrollView(
               child: Column(

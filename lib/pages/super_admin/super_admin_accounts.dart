@@ -41,7 +41,7 @@ class _SuperAdminAccountsState extends State<SuperAdminAccounts> {
       // get notifications
       widget.getNotifications();
 
-      initializeAccount();
+      await initializeAccount();
       setState(() {
         _isInitialized = true;
       });
@@ -422,8 +422,6 @@ class _SuperAdminAccountsState extends State<SuperAdminAccounts> {
                                   // re-initialize customs
                                   await customs.initialize();
                                   await widget.setColorMode(color_status);
-
-                                  // await Future.delayed(Duration(seconds: 1));
 
                                   // change status
                                   setState(() {

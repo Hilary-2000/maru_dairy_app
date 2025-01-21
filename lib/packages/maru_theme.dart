@@ -18,6 +18,7 @@ class CustomThemes{
   // String apiURLDomain = "https://maru.ladybirdsmis.com";
   final FlutterSecureStorage _storage = const FlutterSecureStorage();
   String color_mode = "light";
+  List<Color> colors = [];
 
 
   // colors
@@ -41,7 +42,7 @@ class CustomThemes{
   Color darkShade = const Color.fromRGBO(121, 121, 121, 1);
 
 
-//   light
+// light
   Color primaryShade_2 = const Color.fromRGBO(184, 232, 249, 0.5);
   Color secondaryShade_2 = const Color.fromRGBO(182, 186, 188, 0.5);
   Color dangerShade_2 = const Color.fromRGBO(251, 114, 114, 0.5);
@@ -50,6 +51,14 @@ class CustomThemes{
   Color successShade_2 = const Color.fromRGBO(8, 157, 55, 0.5);
   Color whiteShade_2 = const Color.fromRGBO(255, 255, 255, 0.5);
   Color darkShade_2 = const Color.fromRGBO(121, 121, 121, 0.5);
+
+  // CustomThemes._();
+  //
+  // static Future<CustomThemes> create() async {
+  //   final instance = CustomThemes._();
+  //   await instance.initialize();
+  //   return instance;
+  // }
 
   Future <void> initialize() async{
     color_mode = (await _storage.read(key: 'bright_mode'))!;
@@ -84,6 +93,7 @@ class CustomThemes{
     successShade_2 = const Color.fromRGBO(159, 216, 172, 0.5);
     whiteShade_2 = color_mode == "light" ? const Color.fromRGBO(255, 255, 255, 0.5) : const Color.fromRGBO(121, 121, 121, 0.5);
     darkShade_2 = color_mode == "light" ? const Color.fromRGBO(121, 121, 121, 0.5) : const Color.fromRGBO(255, 255, 255, 0.5);
+    colors = [primaryShade, secondaryShade.withOpacity(0.2), warningShade, successShade.withOpacity(0.2), successShade.withOpacity(0.2)];
   }
 
   TextStyle primaryTextStyle(
@@ -737,6 +747,7 @@ class CustomThemes{
       obscureText: hideText,
       enabled: enabled,
       controller: editingController,
+      style: darkTextStyle(size: 15),
       decoration: InputDecoration(
         label: Text(
           label,
@@ -949,7 +960,7 @@ class CustomThemes{
           size: 15,
         ),
         filled: true,
-        fillColor: enabled ? whiteColor : secondaryShade_2,
+        fillColor: enabled ? whiteColor : secondaryShade_2.withOpacity(0.3),
         isDense: true,
         floatingLabelBehavior: floatingBehaviour,
         focusedErrorBorder: OutlineInputBorder(

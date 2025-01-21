@@ -121,17 +121,21 @@ class _MemberReportsState extends State<MemberReports> {
     const DropdownMenuItem(child: Text("Payment Reports"), value: "payments"),
   ];
 
-  void didChangeDependencies(){
+  Future<void> didChangeDependencies() async {
     // change dependencies
     super.didChangeDependencies();
 
     if(!_init){
+      await customs.initialize();
+      setState(() {
+        _init = true;
+      });
+
       // get member details
-      getMemberDetails();
+      await getMemberDetails();
 
       // set state
       setState(() {
-        _init = true;
         min_date = DateTime.now().subtract(Duration(days: 30));
         start_date.text = addDaysOrMonthsToDate(dateTime: DateTime.now(), monthsToAdd: -1);
         end_date.text = createDate(dateTime: DateTime.now());
@@ -225,6 +229,9 @@ class _MemberReportsState extends State<MemberReports> {
     return Scaffold(
       backgroundColor: customs.primaryShade,
       appBar: AppBar(
+        iconTheme: IconThemeData(
+          color: customs.darkColor
+        ),
         backgroundColor: customs.whiteColor,
         elevation: 1,
         title: Builder(builder: (context) {

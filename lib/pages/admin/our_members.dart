@@ -447,7 +447,7 @@ class _OurMembersState extends State<OurMembers> {
           ),
         ];
 
-        colors_shade = [customs.primaryShade, customs.secondaryShade, customs.warningShade, customs.darkShade, customs.successShade];
+        colors_shade = customs.colors;
         textStyles = [
           customs.primaryTextStyle(
               size: 18, fontweight: FontWeight.bold

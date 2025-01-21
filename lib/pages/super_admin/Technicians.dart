@@ -52,8 +52,10 @@ class _TechniciansState extends State<Technicians> {
     super.didChangeDependencies();
 
     if(!_init){
+      // initialize
+      await customs.initialize();
       setState(() {
-        colors_shade = [customs.primaryShade, customs.secondaryShade, customs.warningShade, customs.darkShade, customs.successShade];
+        colors_shade = customs.colors;
         textStyles = [
           customs.primaryTextStyle(
               size: 18, fontweight: FontWeight.bold
@@ -72,9 +74,6 @@ class _TechniciansState extends State<Technicians> {
           ),
         ];
       });
-
-      // initialize
-      await customs.initialize();
 
       //get the technician
       getTechnician();

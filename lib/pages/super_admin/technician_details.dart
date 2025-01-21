@@ -162,7 +162,7 @@ class _TechnicianDetailsState extends State<TechnicianDetails> {
                                   Hero(
                                     tag: _heroAddTodo,
                                     child: PopupMenuButton<String>(
-                                      icon: Icon(FontAwesomeIcons.ellipsisVertical, size: 20,),
+                                      icon: Icon(FontAwesomeIcons.ellipsisVertical, size: 20, color: customs.darkColor,),
                                       onSelected: (String result) async {
                                         // Handle the selection here
                                         if(result == "delete"){
@@ -462,7 +462,7 @@ class _TechnicianDetailsState extends State<TechnicianDetails> {
         },
       )),
       floatingActionButton: CircleAvatar(
-        backgroundColor: customs.primaryShade_2,
+        backgroundColor: customs.secondaryShade.withOpacity(0.2),
         child: IconButton(
           icon: Icon(Icons.edit, color: customs.primaryColor,),
           onPressed: () async {

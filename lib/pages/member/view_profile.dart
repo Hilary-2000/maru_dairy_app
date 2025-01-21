@@ -33,16 +33,17 @@ class _MemberProfileState extends State<MemberProfile> {
     return capitalizedWords.join(' ');
   }
 
-  void didChangeDependencies(){
+  Future<void> didChangeDependencies() async {
     // change dependencies
     super.didChangeDependencies();
 
     if(!_init){
-      // get member details
-      getMemberDetails();
+      await customs.initialize();
       setState(() {
         _init = true;
       });
+      // get member details
+      await getMemberDetails();
     }
   }
 
@@ -68,8 +69,11 @@ class _MemberProfileState extends State<MemberProfile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: customs.primaryShade,
+      backgroundColor: customs.whiteColor,
       appBar: AppBar(
+        iconTheme: IconThemeData(
+          color: customs.darkColor
+        ),
         backgroundColor: customs.whiteColor,
         elevation: 1,
         title: Builder(builder: (context) {
@@ -110,16 +114,8 @@ class _MemberProfileState extends State<MemberProfile> {
           return Container(
             height: height,
             width: width,
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  Color.fromRGBO(230, 245, 248, 1),
-                  Color.fromRGBO(255, 255, 255, 1),
-                  Color.fromRGBO(227, 228, 229, 1)
-                ],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
+            decoration: BoxDecoration(
+              color: customs.whiteColor
             ),
             child: Column(
               children: [
@@ -477,9 +473,6 @@ class _MemberProfileState extends State<MemberProfile> {
                               Text(
                                 member_data != null ? member_data['membership'] ?? "N/A" : "N/A",
                                 style: customs.secondaryTextStyle(size: 16),
-                              ),
-                              Divider(
-                                color: customs.secondaryShade_2,
                               )
                             ],
                           ),

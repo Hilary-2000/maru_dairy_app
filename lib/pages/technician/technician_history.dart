@@ -269,7 +269,8 @@ class _TechnicianHistoryState extends State<TechnicianHistory> {
           ),
           Container(width: width * 0.5, child: Divider(color: customs.secondaryShade_2.withOpacity(0.2),),),
         ];
-        colors_shade = [customs.primaryShade, customs.secondaryShade, customs.warningShade, customs.darkShade, customs.successShade];
+        print(customs.colors);
+        colors_shade = customs.colors;
         textStyles = [
           customs.primaryTextStyle(
               size: 18, fontweight: FontWeight.bold

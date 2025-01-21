@@ -5,7 +5,8 @@ import 'package:maru/packages/api_connection.dart';
 import 'package:maru/packages/maru_theme.dart';
 
 class TechnicianAccount extends StatefulWidget {
-  const TechnicianAccount({super.key});
+  final Future <void> Function(String) setColorMode;
+  const TechnicianAccount({super.key, required this.setColorMode});
 
   @override
   State<TechnicianAccount> createState() => _TechnicianAccountState();
@@ -15,6 +16,20 @@ class _TechnicianAccountState extends State<TechnicianAccount> {
   CustomThemes customs = CustomThemes();
   final FlutterSecureStorage _storage = const FlutterSecureStorage();
   bool _isLightMode = true;
+  bool _isColorChanging = false;
+  bool init = false;
+
+  // did change dependencies.
+  Future<void> didChangeDependencies() async {
+    super.didChangeDependencies();
+    if(!init){
+      await customs.initialize();
+      setState(() {
+        _isLightMode = customs.color_mode == "light" ? true : false;
+        init = true;
+      });
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return SafeArea(child: LayoutBuilder(
@@ -188,17 +203,34 @@ class _TechnicianAccountState extends State<TechnicianAccount> {
                               title: Text("Light Mode", style: customs.darkTextStyle(size: 14),),
                               onTap: (){
                               },
-                              trailing: Switch(
+                              trailing: _isColorChanging != true ? Switch(
                                 value: _isLightMode,
                                 activeTrackColor: customs.primaryColor,
                                 inactiveThumbColor: customs.primaryColor,
+                                inactiveTrackColor: customs.whiteColor,
                                 trackOutlineColor: WidgetStateProperty.all<Color>(customs.primaryColor),
-                                onChanged: (bool value) {
+                                onChanged: (bool value) async{
                                   setState(() {
                                     _isLightMode = value;
+                                    _isColorChanging = true;
+                                    customs.color_mode = _isLightMode ? "light" : "dark";
+                                  });
+                                  print("Status : ${_isLightMode}");
+                                  // set color mode back to the main window
+                                  String color_status = _isLightMode ? "light" : "dark";
+
+                                  await _storage.write(key: "bright_mode", value: color_status);
+
+                                  // re-initialize customs
+                                  await customs.initialize();
+                                  await widget.setColorMode(color_status);
+
+                                  // change status
+                                  setState(() {
+                                    _isColorChanging = false;
                                   });
                                 },
-                              ),
+                              ) : Text("Loading...", style: customs.primaryTextStyle(size: 12),),
                             ),
                           ],
                         ),

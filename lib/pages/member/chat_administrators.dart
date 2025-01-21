@@ -147,10 +147,11 @@ class _ChatAdministratorsState extends State<ChatAdministrators> {
     WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToBottom());
   }
 
-  void didChangeDependencies(){
+  Future<void> didChangeDependencies() async {
     super.didChangeDependencies();
 
     if(!init){
+      await customs.initialize();
       // set state
       setState(() {
         init = true;
@@ -241,6 +242,7 @@ class _ChatAdministratorsState extends State<ChatAdministrators> {
                                       icon: Icon(
                                         Icons.arrow_back_ios,
                                         size: 20,
+                                        color: customs.darkColor,
                                       )
                                   ),
                                   CircleAvatar(
@@ -259,7 +261,7 @@ class _ChatAdministratorsState extends State<ChatAdministrators> {
                               style: customs.darkTextStyle(size: 14),
                             ),
                             trailing: PopupMenuButton<String>(
-                              icon: Icon(FontAwesomeIcons.ellipsisVertical, size: 18),
+                              icon: Icon(FontAwesomeIcons.ellipsisVertical, size: 18,color: customs.darkColor,),
                               onSelected: (String result) async {
                                 // Handle the selection here
                                 if(result == "member_info"){
@@ -358,6 +360,7 @@ class _ChatAdministratorsState extends State<ChatAdministrators> {
                                       icon: Icon(
                                         Icons.arrow_back_ios,
                                         size: 20,
+                                        color: customs.darkColor,
                                       )
                                   ),
                                   Text("${message_ids.length}", style: customs.secondaryTextStyle(size: 20, fontweight: FontWeight.bold),)
@@ -404,7 +407,7 @@ class _ChatAdministratorsState extends State<ChatAdministrators> {
                                           }
                                         }
                                       },
-                                      icon: Icon(FontAwesomeIcons.trashCanArrowUp, size: 20,)
+                                      icon: Icon(FontAwesomeIcons.trashCanArrowUp, size: 20, color: customs.darkColor)
                                   ),
                                   message_ids.length == 1 ? IconButton(
                                       onPressed: (){
@@ -421,7 +424,7 @@ class _ChatAdministratorsState extends State<ChatAdministrators> {
                                         // copy the message to the clipboard
                                         copyToClipboard(context, message);
                                       },
-                                      icon: Icon(FontAwesomeIcons.copy, size: 20,)
+                                      icon: Icon(FontAwesomeIcons.copy, size: 20,color: customs.darkColor)
                                   ) : SizedBox(),
                                 ],
                               ),
@@ -502,7 +505,7 @@ class _ChatAdministratorsState extends State<ChatAdministrators> {
                                                       width: width * 0.75,
                                                       padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                                                       decoration: BoxDecoration(
-                                                          color: customs.secondaryShade_2,
+                                                          color: customs.secondaryShade_2.withOpacity(0.2),
                                                           borderRadius: BorderRadius.circular(10)
                                                       ),
                                                       child: Column(
@@ -519,7 +522,7 @@ class _ChatAdministratorsState extends State<ChatAdministrators> {
                                                             mainAxisAlignment: MainAxisAlignment.end,
                                                             children: [
                                                               Text(
-                                                                "${customs.toCamelCase(chat['fullname'])} - ",
+                                                                "(${customs.toCamelCase(chat['fullname'])}) : ",
                                                                 style: customs.secondaryTextStyle(size: 10),
                                                                 textAlign: TextAlign.right,
                                                               ),
@@ -716,7 +719,7 @@ class _ChatAdministratorsState extends State<ChatAdministrators> {
                                     });
                                   }
                                 },
-                                icon: Icon(Icons.send_rounded)
+                                icon: Icon(Icons.send_rounded, color: customs.darkColor,)
                             )
                                 :
                             SpinKitCircle(

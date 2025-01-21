@@ -37,7 +37,7 @@ class _CollectMilkState extends State<CollectMilk> {
       double width = MediaQuery.of(context).size.width;
       // initialize the members
       setState(() {
-        colors_shade = [customs.primaryShade, customs.secondaryShade, customs.warningShade, customs.darkShade, customs.successShade];
+        colors_shade = customs.colors;
         textStyles = [
           customs.primaryTextStyle(
               size: 18, fontweight: FontWeight.bold

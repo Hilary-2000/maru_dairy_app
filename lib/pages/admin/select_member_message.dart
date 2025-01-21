@@ -33,7 +33,7 @@ class _SelectMemberMessageState extends State<SelectMemberMessage> {
         });
 
         // set colors and shades
-        colors_shade = [customs.primaryShade, customs.secondaryShade.withOpacity(0.2), customs.warningShade, customs.secondaryShade.withOpacity(0.2), customs.secondaryShade.withOpacity(0.2)];
+        colors_shade = customs.colors;
         textStyles = [
           customs.primaryTextStyle(
               size: 18, fontweight: FontWeight.bold
